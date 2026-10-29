@@ -17,17 +17,12 @@ si resta sulla **0.9.22 con SDL 1.2** e la si corregge. Target: solo Linux.
 Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 `HANDOFF.md` §1.
 
-## UI scalabile con la finestra (feature in corso)
+## UI scalabile con la finestra (rifiniture)
 
-Decisa il 2026-10-29: scala nativa dell'interfaccia, a fasi, sul branch
-`feature/ui-scaling` (parte da `build/host-debian13`). Le fasi 1 (schermata
-principale) e 2 (finestre di dialogo) sono fatte, vedi [ASIS.md](ASIS.md).
-Dettagli tecnici in `HANDOFF.md` §5bis.
+La scala nativa dell'interfaccia è completa (fasi 1-3, branch
+`feature/ui-scaling`), vedi [ASIS.md](ASIS.md). Dettagli tecnici in
+`HANDOFF.md` §5bis. Restano rifiniture e verifiche:
 
-- [ ] [P2] **Fase 3 — resto dell'interfaccia**: tastiera a schermo
-  (`src/onscreen_keyboard.c` e icone `img_osk*`, oggi non scalate di
-  proposito), cursori del mouse (bitmap a dimensione fissa, minuscoli su
-  HiDPI), schermata iniziale.
 - [ ] [P2] Pulsanti audio dei timbri (`r_sfx`) a scala > 1: da verificare
   con l'audio attivo (i test girano con `--nosound`).
 - [ ] [P3] Opzione `buttonsize=auto|N` (come l'upstream, dalla 0.9.27) per
@@ -43,18 +38,15 @@ Dettagli tecnici in `HANDOFF.md` §5bis.
 - [ ] [P3] Richiesta "Cancella" in Apri non provata automaticamente (un clic
   sbagliato sposterebbe un file nel Cestino): è la stessa funzione delle
   altre richieste, ma va provata a mano a scala > 1.
-- [ ] [P2] Unire `feature/ui-scaling` in `master` quando la fase 3 è
-  fatta, o anche prima, visto che a scala 1 non cambia nulla.
+- [ ] [P2] Unire `feature/ui-scaling` in `master`: la feature è completa
+  e a scala 1 non cambia nulla.
 
 ## Bug
 
-- [ ] [P1] **Strumenti Testo ed Etichetta non si attivano** sull'host:
-  dopo il clic resta il messaggio del Testo ma lo strumento non si
-  seleziona e il pannello dei font resta vuoto, anche dopo 40 s e un
-  secondo clic. Succede anche col binario originale, quindi è un problema
-  preesistente. Ipotesi: caricamento dei font (461 sull'host, scanner in
-  un processo separato, `FORKED_FONTS`) che non termina. Da verificare a
-  mano, fuori dai test automatici.
+- [ ] [P3] Capire perché il processo figlio dei font (`FORKED_FONTS`) va in
+  crash con sdl12-compat. Oggi è disattivato (commit `6d3f130`) e i font si
+  caricano in un thread. Serve `gdb` sull'host. Utile solo se si vuole
+  tornare al caricamento in un processo separato.
 
 ## Build e ambiente
 

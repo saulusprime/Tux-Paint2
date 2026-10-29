@@ -84,6 +84,21 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     la richiesta centrata);
   - la scelta di un colore dal selettore funziona anche a scala 2;
   - script `devtools/ui-test/dialogs.sh` (`a92db23`).
+- [x] 2026-10-29 — UI scalabile, fase 3: resto dell'interfaccia (`0c7bcf9`):
+  - cursori del mouse ingranditi di un fattore intero: 64×64 a scala 2,
+    con il punto attivo corretto (verificato via XFixes);
+  - schermata iniziale e barra di avanzamento scalate;
+  - tastiera a schermo: tasti, scritte e icone scalati; scrivere "ciao"
+    con la tastiera a scala 2 funziona;
+  - a 800×600 la schermata iniziale e tutte le schermate di prova sono
+    identiche al riferimento. **La UI scalabile è completa.**
+- [x] 2026-10-29 — Bug: Testo ed Etichetta non si attivavano (`6d3f130`):
+  - causa: il processo figlio che cerca i font (`FORKED_FONTS`, creato
+    con `fork()` all'avvio) va in crash (SIGSEGV) con sdl12-compat, quindi
+    Tux Paint riceve zero font;
+  - correzione: caricamento dei font in un thread;
+  - verificati Testo ed Etichetta a 800×600 (identici al riferimento
+    corretto) e a scala 2.
 - [x] 2026-10-29 — Bug: il ricolore del pulsante del colore personalizzato
   (`search_label_list`) scriveva oltre il bordo dell'immagine (ciclo fisso
   48×48) — corretto in `d346e60`.

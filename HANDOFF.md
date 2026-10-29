@@ -30,7 +30,8 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   - `build/host-debian13`, creato da `master`: correzioni di build,
     `dev.sh`, file di progetto;
   - `feature/ui-scaling`, creato da `build/host-debian13`: UI scalabile con
-    la finestra (fasi 1 e 2 fatte, §5bis). **È il branch attivo.**
+    la finestra (completa, §5bis) e correzione del caricamento dei font.
+    **È il branch attivo.**
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
 - **Compilazione**: **riuscita sull'host** (2026-10-29): build da zero in
@@ -48,12 +49,16 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   - `Makefile`: `-lm` aggiunto a `linux_ARCH_LINKS`.
   - `.gitignore` nuovo, per gli artefatti di build.
   - `dev.sh` nuovo: build, installazione e avvio per lo sviluppo (§4).
-  - Su `feature/ui-scaling` (`d346e60`, `321db8b`, più gli strumenti di
-    test in `devtools/ui-test/`): schermata principale e finestre di dialogo
-    scalate con la finestra (§5bis).
-- **Installato in `~/.local`**: la build di `feature/ui-scaling`. Restano
-  non scalati la tastiera a schermo, i cursori del mouse e la schermata
-  iniziale (fase 3).
+  - Su `feature/ui-scaling`:
+    - `d346e60`, `321db8b`, `0c7bcf9`: tutta l'interfaccia scalata con la
+      finestra (§5bis);
+    - strumenti di test in `devtools/ui-test/`;
+    - `6d3f130`: `FORKED_FONTS` disattivato in `src/fonts.h`, perché il
+      processo figlio dei font andava in crash con sdl12-compat e Testo ed
+      Etichetta non si attivavano. È indipendente dalla scala, quindi si
+      può riportare da solo con `cherry-pick`.
+- **Installato in `~/.local`**: la build di `feature/ui-scaling` (tutto
+  funzionante, compresi Testo ed Etichetta).
 - **Decisioni prese** (2026-10-29):
   - **Strategia**: si resta sulla **0.9.22 con SDL 1.2** e la si corregge.
     Niente riallineamento all'upstream né porting a SDL2, per ora.
@@ -288,9 +293,21 @@ righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
 
 - i pennelli nel selettore, che mostrano la dimensione reale della punta;
 - timbri, testo e disegni sulla tela, che sono contenuto e non interfaccia;
-- la schermata iniziale;
-- le icone della tastiera a schermo, perché la tastiera stessa non è
-  ancora scalata (fase 3).
+- il passo del mouse da tastiera e joystick (`handle_keymouse(..., 24)`).
+
+**Resto dell'interfaccia** (fase 3):
+
+- **Cursori**: `get_cursor()` ingrandisce le bitmap XBM di un fattore intero
+  `k = round(button_scale)`, con punto attivo `x·k + k/2`. Il buffer ora è
+  dinamico; prima era fisso a 128 byte, cioè al massimo 32×32.
+- **Schermata iniziale**: immagini con `loadimagerb()` e margini con
+  `SCALED()`. La barra di avanzamento (`src/progressbar.c`) ricava il
+  modulo dall'immagine: larghezza `img_progress->w / 2`, altezza
+  `img_progress->h`.
+- **Tastiera a schermo**: i tasti sono già i pulsanti piccoli scalati
+  (`img_btnsm_*`). In `src/onscreen_keyboard.c` il font
+  (`12 · altezza tasto / 24`) e il margine della scritta seguono la
+  dimensione del tasto; le icone `img_osk*` si caricano con `loadimagerb()`.
 
 **Invariante e test**: a scala 1 l'interfaccia deve restare identica al
 pixel. Gli strumenti sono in `devtools/ui-test/`:
@@ -303,14 +320,21 @@ pixel. Gli strumenti sono in `devtools/ui-test/`:
   `~/.cache/tuxpaint-test-canon`, che contiene due disegni salvati, così
   i dati in `~/.tuxpaint` non vengono toccati;
 - `compare.py` confronta due serie di catture;
-- `tp_session.py` è il motore: clic, trascinamenti e catture. Si
-  configura con le variabili `TP_BIN`, `TP_BUTTON`, `TP_ARGS` e
-  `TP_SCALE`.
+- `tp_session.py` è il motore. Azioni: `click`, `tool`, `drag`, `move`,
+  `wait`, `shot` (cattura della finestra) e `cursor` (salva il cursore
+  attuale via XFixes). Variabili:
+  - `TP_BIN`, `TP_BUTTON`, `TP_ARGS`, `TP_SCALE`;
+  - `TP_START_WAIT`: attesa iniziale, utile per la schermata d'avvio;
+  - `TP_LOG`: file sull'host dove scrivere l'output di Tux Paint;
+  - `TP_WRAP`: comando con cui avviarlo, es. `stdbuf -oL -eL` per avere
+    l'output non bufferizzato.
 
 Il binario di riferimento, cioè il codice prima della feature, è in un
 worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
-`build/host-debian13`. Si ricompila con `./dev.sh build` lì dentro e si
-rimuove con `git worktree remove ~/.cache/tuxpaint-baseline`.
+`build/host-debian13` (`ec9ebe3`) più la correzione dei font
+(`cherry-pick`, commit `584ca70` senza branch). Si ricompila con
+`./dev.sh build` lì dentro e si rimuove con
+`git worktree remove ~/.cache/tuxpaint-baseline`.
 
 **Insidie dei test automatici**:
 
@@ -331,19 +355,25 @@ rimuove con `git worktree remove ~/.cache/tuxpaint-baseline`.
   accorcia: per esempio 2400×1500 diventa 2400×1462.
 - Non automatizzare il pulsante "Cancella" di Apri: un clic sul "Sì"
   sposterebbe un file nel Cestino dell'utente.
+- La finestra di prova compare sullo schermo dell'utente. **Se l'utente usa
+  il mouse dentro la finestra durante una prova, la cattura si sporca**:
+  è successo una volta, con lo strumento Linee selezionato e linee
+  disegnate. Se un confronto fallisce, prima di cercare un bug guardare le
+  immagini e ripetere la prova.
+- Messaggi di Tux Paint persi: stdout è bufferizzato e il processo viene
+  chiuso con SIGKILL. Usare `TP_WRAP="stdbuf -oL -eL"` e `TP_LOG`.
 
 ## 6. Prossimi passi consigliati
 
-1. Indagare il bug di Testo ed Etichetta che non si attivano (`TODO.md`,
-   sezione Bug, P1).
-2. Provare a mano Tux Paint a finestra grande (`./dev.sh run
-   --windowsize=1600x1000`), compresi la richiesta "Cancella" e i pulsanti
-   audio dei timbri.
-3. UI scalabile, fase 3: tastiera a schermo, cursori, schermata iniziale.
-4. Decidere se unire `build/host-debian13` e `feature/ui-scaling` in
+1. Provare a mano Tux Paint a finestra grande (`./dev.sh run
+   --windowsize=1600x1000`, oppure a schermo intero), compresi la
+   richiesta "Cancella" e i pulsanti audio dei timbri.
+2. Decidere se unire `build/host-debian13` e `feature/ui-scaling` in
    `master`.
-5. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
+4. Rifiniture della UI scalabile (`TODO.md`): opzione `buttonsize`,
+   dimensione iniziale della finestra su HiDPI.
 
 ---
 
@@ -632,3 +662,51 @@ Aperto:
 - Fase 3: tastiera a schermo, cursori del mouse, schermata iniziale.
 - Da provare a mano: la richiesta "Cancella" e i pulsanti audio dei timbri.
 - Passo del mouse da tastiera non scalato (TODO, P3).
+
+### 2026-10-29 — UI scalabile, fase 3, e correzione di Testo ed Etichetta
+
+Fatto (branch `feature/ui-scaling`):
+- **Fase 3** (`0c7bcf9`): cursori, schermata iniziale con la barra di
+  avanzamento, tastiera a schermo (regole in §5bis).
+- Strumenti di test (`5fa458d`): azioni `move` e `cursor` (XFixes),
+  variabili `TP_START_WAIT`, `TP_LOG` e `TP_WRAP`.
+- **Bug di Testo ed Etichetta** (`6d3f130`), su scelta dell'utente:
+  - con `TP_WRAP="stdbuf -oL -eL"` è comparso il messaggio
+    `child killed by signal 11`: il processo figlio che cerca i font,
+    creato con `fork()` all'avvio (`FORKED_FONTS`), va in crash;
+  - Tux Paint riceve quindi zero font: in `mainloop` si finisce nel ramo
+    "Problem using fonts!", che rimette lo strumento precedente;
+  - sull'host non ci sono `gdb` né `coredumpctl`, quindi niente traccia
+    del crash. La causa probabile è la `fork()` di un processo che ha
+    già avviato SDL2/X11 con i suoi thread;
+  - correzione: `FORKED_FONTS` disattivato, i font si caricano in un
+    thread. Un esperimento temporaneo l'aveva già confermato prima del
+    commit.
+- La correzione è stata applicata con `cherry-pick` anche al binario di
+  riferimento, così i confronti coprono anche i pannelli di Testo ed
+  Etichetta.
+
+Verifiche:
+- **Cursori**: 32×32 a scala 1 e 64×64 a scala 2, con punto attivo
+  (4,28) → (9,57). La forma è corretta (mano, pennello).
+- **Schermata iniziale**: identica al riferimento a 800×600; a scala 2
+  loghi, scritte e barra di avanzamento sono raddoppiati.
+- **Tastiera a schermo a scala 2**: tasti, scritte e icone scalati. Clic
+  sulla tela e poi sui tasti c, i, a, o: compare "ciao" nel punto
+  cliccato.
+- **800×600**: le otto schermate della schermata principale (Testo ed
+  Etichetta ora funzionanti) e le nove dei dialoghi sono identiche al
+  riferimento.
+- **Scala 2**: Testo ed Etichetta con elenco dei font, scorrimento e
+  controlli corretti.
+- Build: 0 errori. Warning in `tuxpaint.c` invariati (52); in `fonts.c`
+  c'è una variabile inutilizzata in più (`font_scanner_pid`).
+
+Scoperte:
+- Una prova è stata sporcata dall'uso reale del mouse nella finestra di
+  test. Ripetuta, è risultata identica. Annotato tra le insidie (§5bis).
+
+Aperto:
+- Prove manuali: richiesta "Cancella", pulsanti audio dei timbri.
+- Rifiniture opzionali (TODO): `buttonsize`, finestra iniziale su HiDPI,
+  icone più nitide, passo del mouse da tastiera.
