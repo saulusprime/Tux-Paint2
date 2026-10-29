@@ -362,6 +362,19 @@ worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
   immagini e ripetere la prova.
 - Messaggi di Tux Paint persi: stdout è bufferizzato e il processo viene
   chiuso con SIGKILL. Usare `TP_WRAP="stdbuf -oL -eL"` e `TP_LOG`.
+- **Finestra di prova dietro altre finestre o mouse dell'utente in uso**:
+  i clic simulati possono finire altrove o perdersi. `tp_session.py` ora
+  porta in primo piano la finestra (`_NET_ACTIVE_WINDOW`) e, prima di
+  ogni azione del puntatore, verifica con `XQueryPointer` che Tux Paint
+  sia la finestra in cima. Se non lo è si ferma con "STOP", senza
+  cliccare. Se invece l'utente sta usando il mouse, i clic simulati
+  vengono ignorati o mescolati ai suoi: prima di una prova chiedere di
+  non toccare il mouse.
+- Crash senza `gdb`: `devtools/ui-test/segv_backtrace.c`, caricato con
+  `LD_PRELOAD` tramite `TP_WRAP`, stampa la pila delle chiamate al
+  segmentation fault, anche nei processi figli. Gli indirizzi si
+  traducono con `addr2line -f -e BINARIO 0xOFFSET` su un binario
+  compilato con `-g`.
 
 ## 6. Prossimi passi consigliati
 
@@ -710,3 +723,50 @@ Aperto:
 - Prove manuali: richiesta "Cancella", pulsanti audio dei timbri.
 - Rifiniture opzionali (TODO): `buttonsize`, finestra iniziale su HiDPI,
   icone più nitide, passo del mouse da tastiera.
+
+### 2026-10-29 — Analisi del crash del processo figlio dei font
+
+Richiesta dell'utente: analizzare il bug rimasto nel TODO, cioè perché il
+processo figlio che cerca i font (`FORKED_FONTS`) va in crash.
+
+Metodo, senza `gdb` sull'host:
+- worktree di debug `~/.cache/tuxpaint-debug`, da `feature/ui-scaling`
+  con `FORKED_FONTS` riattivato, compilato con `OPTFLAGS="-O0 -g"`;
+- `devtools/ui-test/segv_backtrace.c`, caricato con `LD_PRELOAD`: al
+  SIGSEGV stampa la pila delle chiamate;
+- indirizzi tradotti con `addr2line`.
+
+Risultato:
+- Pila del crash nel figlio: `main` → `setup` → `run_font_scanner`
+  (`src/fonts.c:1143`, cioè `exit(0)`) → `exit` → gestore di chiusura di
+  `libgallium-25.0.7` (Mesa) → `pthread_join` → SIGSEGV.
+- Quindi il figlio **completa** la scansione e **invia** i dati. Muore solo
+  all'uscita, perché `exit()` esegue i gestori `atexit` ereditati dal
+  genitore. Mesa ha registrato il suo quando SDL2 (sotto sdl12-compat) ha
+  attivato OpenGL; nel figlio fa `pthread_join()` su un thread che dopo la
+  `fork()` non esiste più.
+- Il genitore (`receive_some_font_info`) vede `WIFSIGNALED` e scarta dati
+  validi, per cui zero font.
+- Nel 2014, con SDL 1.2 originale, Mesa non veniva caricato: per questo
+  il bug non si vedeva.
+
+Correzione mirata provata (solo nel worktree di debug):
+- `exit(0)` → `_exit(0)` nel figlio. Dopo una `fork()` in un programma con
+  più thread, il figlio deve uscire con `_exit()`.
+- Risultato: nessun crash nel log.
+- Non verificato: che Testo mostri i font. Le prove automatiche sono
+  state disturbate: i clic simulati non arrivavano e sulla tela sono
+  comparsi tratti disegnati a mano, quindi qualcuno stava usando il mouse
+  nelle finestre di prova. Prove automatiche sospese.
+
+Altro:
+- `tp_session.py` reso più sicuro: porta in primo piano la finestra e
+  non clicca se Tux Paint non è la finestra in cima sotto il puntatore.
+- La prima prova del binario di debug non applicava la correzione:
+  `addr2line` indicava la riga 1144 (indirizzo di ritorno), mentre
+  `exit(0)` è alla 1143.
+
+Aperto (decisione dell'utente):
+- Sostituire la correzione attuale `6d3f130` (thread) con `_exit(0)` e
+  `FORKED_FONTS` attivo. Prima va verificata a mano:
+  `~/.cache/tuxpaint-debug/tuxpaint --windowed`, poi clic su Testo.

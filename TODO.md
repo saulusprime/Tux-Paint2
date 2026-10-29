@@ -43,10 +43,19 @@ La scala nativa dell'interfaccia è completa (fasi 1-3, branch
 
 ## Bug
 
-- [ ] [P3] Capire perché il processo figlio dei font (`FORKED_FONTS`) va in
-  crash con sdl12-compat. Oggi è disattivato (commit `6d3f130`) e i font si
-  caricano in un thread. Serve `gdb` sull'host. Utile solo se si vuole
-  tornare al caricamento in un processo separato.
+- [ ] [P2] **Crash del processo figlio dei font: causa trovata, scegliere la
+  correzione definitiva.** Il figlio (`FORKED_FONTS`) finisce la scansione
+  e invia i font, poi chiama `exit(0)` (`src/fonts.c:1143`). Così esegue
+  il gestore di chiusura di Mesa/libgallium ereditato dal genitore, che fa
+  `pthread_join()` su un thread inesistente nel figlio: SIGSEGV. Il
+  genitore vede il segnale e scarta i font. Dettagli in `HANDOFF.md`,
+  diario del 2026-10-29.
+  - Correzione mirata: `_exit(0)` nel figlio, con `FORKED_FONTS` di nuovo
+    attivo. Provata nel worktree di debug `~/.cache/tuxpaint-debug`: il
+    crash sparisce. **Manca la verifica che Testo mostri i font**: le prove
+    automatiche sono state disturbate dall'uso del mouse.
+  - Correzione attuale: `6d3f130`, caricamento in un thread. Funziona, ma
+    perde l'isolamento: un font difettoso fa cadere tutto Tux Paint.
 
 ## Build e ambiente
 

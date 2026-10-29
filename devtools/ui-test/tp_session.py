@@ -13,6 +13,10 @@ ACTION is one of:
   wait:SEC    sleep
   shot:NAME   capture the window to NAME.png
 Writes a tar archive of the PNGs to stdout.
+
+Safety: the window is activated first, and before every pointer action the
+script checks that Tux Paint is the topmost window under the pointer; if
+not (e.g. it opened behind another window), it stops without clicking.
 """
 import ctypes, io, os, subprocess, sys, tarfile, tempfile, time
 
@@ -39,8 +43,57 @@ class XFixesCursorImage(ctypes.Structure):
                 ("atom", ctypes.c_ulong), ("name", ctypes.c_char_p)]
 
 
+class XClientMessageEvent(ctypes.Structure):
+    _fields_ = [("type", ctypes.c_int), ("serial", ctypes.c_ulong),
+                ("send_event", ctypes.c_int), ("display", ctypes.c_void_p),
+                ("window", ctypes.c_ulong), ("message_type", ctypes.c_ulong),
+                ("format", ctypes.c_int), ("data", ctypes.c_long * 5),
+                ("pad", ctypes.c_long * 16)]  # XEvent is 24 longs
+
+
 xfixes.XFixesGetCursorImage.restype = ctypes.POINTER(XFixesCursorImage)
+x11.XDefaultRootWindow.restype = ctypes.c_ulong
+x11.XInternAtom.restype = ctypes.c_ulong
 dpy = ctypes.c_void_p(x11.XOpenDisplay(None))
+root = x11.XDefaultRootWindow(dpy)
+
+
+def toplevel(w):
+    """The child of the root window that contains window w (its frame)."""
+    r, parent, children, n = ctypes.c_ulong(), ctypes.c_ulong(), ctypes.POINTER(ctypes.c_ulong)(), ctypes.c_uint()
+    while True:
+        x11.XQueryTree(dpy, ctypes.c_ulong(w), ctypes.byref(r), ctypes.byref(parent),
+                       ctypes.byref(children), ctypes.byref(n))
+        if children:
+            x11.XFree(children)
+        if parent.value in (0, root):
+            return w
+        w = parent.value
+
+
+def under_pointer():
+    """The topmost top-level window under the pointer."""
+    r, child = ctypes.c_ulong(), ctypes.c_ulong()
+    i = ctypes.c_int()
+    mask = ctypes.c_uint()
+    x11.XQueryPointer(dpy, ctypes.c_ulong(root), ctypes.byref(r), ctypes.byref(child),
+                      ctypes.byref(i), ctypes.byref(i), ctypes.byref(i), ctypes.byref(i),
+                      ctypes.byref(mask))
+    return child.value
+
+
+def activate(w):
+    """Ask the window manager to raise and focus w (as a pager would)."""
+    ev = XClientMessageEvent()
+    ev.type = 33  # ClientMessage
+    ev.send_event = 1
+    ev.window = w
+    ev.message_type = x11.XInternAtom(dpy, b"_NET_ACTIVE_WINDOW", 0)
+    ev.format = 32
+    ev.data[0] = 2  # source: pager
+    x11.XSendEvent(dpy, ctypes.c_ulong(root), 0, (1 << 19) | (1 << 20), ctypes.byref(ev))
+    x11.XFlush(dpy)
+    time.sleep(0.5)
 
 log = open(os.environ["TP_LOG"], "w") if "TP_LOG" in os.environ else subprocess.DEVNULL
 wrapper = os.environ.get("TP_WRAP", "").split()  # e.g. "stdbuf -oL -eL"
@@ -74,6 +127,21 @@ try:
     if win is None:
         sys.exit("window not found")
     wid, wx, wy = win
+    frame = toplevel(int(wid, 16))
+    activate(int(wid, 16))
+
+    def pointer_to(x, y):
+        """Move the pointer; False if Tux Paint isn't the window under it."""
+        xtst.XTestFakeMotionEvent(dpy, -1, wx + x, wy + y, 0)
+        x11.XFlush(dpy)
+        time.sleep(0.2)
+        top = under_pointer()
+        if top != frame:
+            sys.stderr.write("STOP: at %d,%d the topmost window is 0x%x, not Tux Paint (0x%x); "
+                             "not clicking\n" % (x, y, top, frame))
+            return False
+        return True
+
     for act in actions:
         kind, _, arg = act.partition(":")
         if kind == "wait":
@@ -84,9 +152,8 @@ try:
                 x, y = (n % 2) * button + button // 2, title_h + (n // 2) * button + button // 2
             else:
                 x, y = (int(int(v) * scale) for v in arg.split(","))
-            xtst.XTestFakeMotionEvent(dpy, -1, wx + x, wy + y, 0)
-            x11.XFlush(dpy)
-            time.sleep(0.2)
+            if not pointer_to(x, y):
+                break
             xtst.XTestFakeButtonEvent(dpy, 1, 1, 0)
             x11.XFlush(dpy)
             time.sleep(0.1)
@@ -95,9 +162,8 @@ try:
             time.sleep(0.8)
         elif kind == "drag":
             x1, y1, x2, y2 = (int(int(v) * scale) for v in arg.split(","))
-            xtst.XTestFakeMotionEvent(dpy, -1, wx + x1, wy + y1, 0)
-            x11.XFlush(dpy)
-            time.sleep(0.2)
+            if not pointer_to(x1, y1) or not pointer_to(x2, y2) or not pointer_to(x1, y1):
+                break
             xtst.XTestFakeButtonEvent(dpy, 1, 1, 0)
             x11.XFlush(dpy)
             for i in range(1, 21):
@@ -110,9 +176,9 @@ try:
             time.sleep(0.8)
         elif kind == "move":
             x, y = (int(int(v) * scale) for v in arg.split(","))
-            xtst.XTestFakeMotionEvent(dpy, -1, wx + x, wy + y, 0)
-            x11.XFlush(dpy)
-            time.sleep(0.5)
+            if not pointer_to(x, y):
+                break
+            time.sleep(0.3)
         elif kind == "cursor":
             from PIL import Image
             ci = xfixes.XFixesGetCursorImage(dpy).contents
