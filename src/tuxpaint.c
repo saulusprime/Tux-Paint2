@@ -712,11 +712,11 @@ static grid_dims gd_colors;	/* was 17x1 */
 /* Extra height (and tool slots) beyond the original 7 rows of buttons */
 #define HEIGHTOFFSET ((buttons_tall - 7) * button_h)
 #define TOOLOFFSET ((buttons_tall - 7) * 2)
-#define PROMPTOFFSETX (WINDOW_WIDTH - 640) / 2
+#define PROMPTOFFSETX ((WINDOW_WIDTH - SCALED(640)) / 2)
 #define PROMPTOFFSETY (HEIGHTOFFSET / 2)
 
 #define THUMB_W (r_canvas.w / 4)
-#define THUMB_H ((r_canvas.h - 72) / 4)
+#define THUMB_H ((r_canvas.h - button_h / 2 - button_h) / 4)
 
 #ifdef NOKIA_770
 static int WINDOW_WIDTH = 800;
@@ -11758,16 +11758,16 @@ static int do_prompt_image_flash_snd(const char *const text,
 
   for (w = 0; w <= 96; w = w + 2)
   {
-    oox = ox - w;
-    ooy = oy - w;
+    oox = ox - SCALED(w);
+    ooy = oy - SCALED(w);
 
-    nx = PROMPT_LEFT + 96 - w + PROMPTOFFSETX;
-    ny = 94 + 96 - w + PROMPTOFFSETY;
+    nx = SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX;
+    ny = SCALED(94 + 96 - w) + PROMPTOFFSETY;
 
     dest.x = ((nx * w) + (oox * (96 - w))) / 96;
     dest.y = ((ny * w) + (ooy * (96 - w))) / 96;
-    dest.w = (PROMPT_W - 96 * 2) + w * 2;
-    dest.h = w * 2;
+    dest.w = SCALED((PROMPT_W - 96 * 2) + w * 2);
+    dest.h = SCALED(w * 2);
     SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 224 - w, 224 - w, 244 -w));
 
     SDL_UpdateRect(screen, dest.x, dest.y, dest.w, dest.h);
@@ -11786,8 +11786,8 @@ static int do_prompt_image_flash_snd(const char *const text,
 
 #ifndef NO_PROMPT_SHADOWS
   alpha_surf = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
-				    (PROMPT_W - 96 * 2) + (w - 4) * 2,
-				    (w - 4) * 2,
+				    SCALED((PROMPT_W - 96 * 2) + (w - 4) * 2),
+				    SCALED((w - 4) * 2),
 				    screen->format->BitsPerPixel,
 				    screen->format->Rmask,
 				    screen->format->Gmask,
@@ -11801,10 +11801,10 @@ static int do_prompt_image_flash_snd(const char *const text,
 
     for (i = 8; i > 0; i = i - 2)
     {
-      dest.x = PROMPT_LEFT + 96 - (w - 4) + i + PROMPTOFFSETX;
-      dest.y = 94 + 96 - (w - 4) + i + PROMPTOFFSETY;
-      dest.w = (PROMPT_W - 96 * 2) + (w - 4) * 2;
-      dest.h = (w - 4) * 2;
+      dest.x = SCALED(PROMPT_LEFT + 96 - (w - 4) + i) + PROMPTOFFSETX;
+      dest.y = SCALED(94 + 96 - (w - 4) + i) + PROMPTOFFSETY;
+      dest.w = SCALED((PROMPT_W - 96 * 2) + (w - 4) * 2);
+      dest.h = SCALED((w - 4) * 2);
 
       SDL_BlitSurface(alpha_surf, NULL, screen, &dest);
     }
@@ -11816,10 +11816,10 @@ static int do_prompt_image_flash_snd(const char *const text,
 
   w = w - 6;
 
-  dest.x = PROMPT_LEFT + 96 - w + PROMPTOFFSETX;
-  dest.y = 94 + 96 - w + PROMPTOFFSETY;
-  dest.w = (PROMPT_W - 96 * 2) + w * 2;
-  dest.h = w * 2;
+  dest.x = SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX;
+  dest.y = SCALED(94 + 96 - w) + PROMPTOFFSETY;
+  dest.w = SCALED((PROMPT_W - 96 * 2) + w * 2);
+  dest.h = SCALED(w * 2);
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
 
 
@@ -11832,9 +11832,9 @@ static int do_prompt_image_flash_snd(const char *const text,
 
   if (img1 != NULL)
   {
-    if (img1->h > 64 && img2 != NULL /* Only scale if it matters */)
+    if (img1->h > SCALED(64) && img2 != NULL /* Only scale if it matters */)
     {
-      img1b = thumbnail(img1, 80, 64, 1);
+      img1b = thumbnail(img1, SCALED(80), SCALED(64), 1);
       free_img1b = 1;
     }
     else
@@ -11859,37 +11859,37 @@ static int do_prompt_image_flash_snd(const char *const text,
   max_img_w = max(img1_w, max(img2_w, img3_w));
 
   if (max_img_w > 0)
-    offset = max_img_w + 8;
+    offset = max_img_w + SCALED(8);
 
 
   /* Draw the question: */
 
   if (need_right_to_left == 0)
   {
-    txt_left = (PROMPT_LEFT + 6) + PROMPTOFFSETX;
-    txt_right = (PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX - offset;
-    img_left = (PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX - max_img_w - 4;
-    btn_left = (PROMPT_LEFT + 6) + PROMPTOFFSETX;
-    txt_btn_left = txt_left + img_yes->w + 4;
+    txt_left = SCALED(PROMPT_LEFT + 6) + PROMPTOFFSETX;
+    txt_right = SCALED(PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX - offset;
+    img_left = SCALED(PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX - max_img_w - SCALED(4);
+    btn_left = SCALED(PROMPT_LEFT + 6) + PROMPTOFFSETX;
+    txt_btn_left = txt_left + img_yes->w + SCALED(4);
     txt_btn_right = txt_right;
   }
   else
   {
-    txt_left = (PROMPT_LEFT + 6) + PROMPTOFFSETX + offset;
-    txt_right = (PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX;
-    img_left = (PROMPT_LEFT + 6) + PROMPTOFFSETX + 4;
-    btn_left = (PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX - img_yes->w - 4;
+    txt_left = SCALED(PROMPT_LEFT + 6) + PROMPTOFFSETX + offset;
+    txt_right = SCALED(PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX;
+    img_left = SCALED(PROMPT_LEFT + 6) + PROMPTOFFSETX + SCALED(4);
+    btn_left = SCALED(PROMPT_LEFT + PROMPT_W - 5) + PROMPTOFFSETX - img_yes->w - SCALED(4);
     txt_btn_left = txt_left;
     txt_btn_right = btn_left;
   }
 
-  wordwrap_text(text, black, txt_left, 100 + PROMPTOFFSETY, txt_right, 1);
+  wordwrap_text(text, black, txt_left, SCALED(100) + PROMPTOFFSETY, txt_right, 1);
 
 
   /* Draw the images (if any, and if not animated): */
 
   img_x = img_left;
-  img_y = 100 + PROMPTOFFSETY + 4;
+  img_y = SCALED(100) + PROMPTOFFSETY + SCALED(4);
 
   if (img1b != NULL)
   {
@@ -11899,7 +11899,7 @@ static int do_prompt_image_flash_snd(const char *const text,
     SDL_BlitSurface(img1b, NULL, screen, &dest);
 
     if (!animate)
-      img_y = img_y + img1b->h + 4;
+      img_y = img_y + img1b->h + SCALED(4);
   }
 
   if (!animate)
@@ -11911,7 +11911,7 @@ static int do_prompt_image_flash_snd(const char *const text,
 
       SDL_BlitSurface(img2, NULL, screen, &dest);
 
-      img_y = img_y + img2->h + 4;
+      img_y = img_y + img2->h + SCALED(4);
     }
 
     if (img3 != NULL)
@@ -11921,7 +11921,7 @@ static int do_prompt_image_flash_snd(const char *const text,
 
       SDL_BlitSurface(img3, NULL, screen, &dest);
 
-      img_y = img_y + img3->h + 4;	/* unnecessary */
+      img_y = img_y + img3->h + SCALED(4);	/* unnecessary */
     }
   }
 
@@ -11929,14 +11929,14 @@ static int do_prompt_image_flash_snd(const char *const text,
   /* Draw yes button: */
 
   dest.x = btn_left;
-  dest.y = 178 + PROMPTOFFSETY;
+  dest.y = SCALED(178) + PROMPTOFFSETY;
   SDL_BlitSurface(img_yes, NULL, screen, &dest);
 
 
   /* (Bound to UTF8 domain, so always ask for UTF8 rendering!) */
 
   wordwrap_text(btn_yes, black, txt_btn_left,
-		183 + PROMPTOFFSETY, txt_btn_right, 1);
+		SCALED(183) + PROMPTOFFSETY, txt_btn_right, 1);
 
 
   /* Draw no button: */
@@ -11944,11 +11944,11 @@ static int do_prompt_image_flash_snd(const char *const text,
   if (strlen(btn_no) != 0)
   {
     dest.x = btn_left;
-    dest.y = 230 + PROMPTOFFSETY;
+    dest.y = SCALED(230) + PROMPTOFFSETY;
     SDL_BlitSurface(img_no, NULL, screen, &dest);
 
     wordwrap_text(btn_no, black, txt_btn_left,
-                  235 + PROMPTOFFSETY, txt_btn_right, 1);
+                  SCALED(235) + PROMPTOFFSETY, txt_btn_right, 1);
   }
 
 
@@ -12025,15 +12025,15 @@ static int do_prompt_image_flash_snd(const char *const text,
 	if (event.button.x >= btn_left &&
 	    event.button.x < btn_left + img_yes->w)
 	{
-	  if (event.button.y >= 178 + PROMPTOFFSETY &&
-	      event.button.y < 178 + PROMPTOFFSETY + img_yes->h)
+	  if (event.button.y >= SCALED(178) + PROMPTOFFSETY &&
+	      event.button.y < SCALED(178) + PROMPTOFFSETY + img_yes->h)
 	  {
 	    ans = 1;
 	    done = 1;
 	  }
 	  else if (strlen(btn_no) != 0 &&
-		   event.button.y >= 230 + PROMPTOFFSETY &&
-		   event.button.y < 230 + PROMPTOFFSETY + img_no->h)
+		   event.button.y >= SCALED(230) + PROMPTOFFSETY &&
+		   event.button.y < SCALED(230) + PROMPTOFFSETY + img_no->h)
 	  {
 	    ans = 0;
 	    done = 1;
@@ -12044,11 +12044,11 @@ static int do_prompt_image_flash_snd(const char *const text,
       {
 	if (event.button.x >= btn_left &&
 	    event.button.x < btn_left + img_yes->w &&
-	    ((event.button.y >= 178 + PROMPTOFFSETY &&
-	      event.button.y < 178 + img_yes->h + PROMPTOFFSETY) ||
+	    ((event.button.y >= SCALED(178) + PROMPTOFFSETY &&
+	      event.button.y < SCALED(178) + img_yes->h + PROMPTOFFSETY) ||
 	     (strlen(btn_no) != 0 &&
-	      event.button.y >= 230 + PROMPTOFFSETY &&
-	      event.button.y < 230 + img_yes->h + PROMPTOFFSETY)))
+	      event.button.y >= SCALED(230) + PROMPTOFFSETY &&
+	      event.button.y < SCALED(230) + img_yes->h + PROMPTOFFSETY)))
 	{
 	  do_setcursor(cursor_hand);
 	}
@@ -13892,10 +13892,10 @@ static int do_open(void)
 
               /* if too big, or too small in both dimensions, rescale it
                  (for now: using old thumbnail as source for high speed, low quality) */
-              if (img1->w > THUMB_W - 20 || img1->h > THUMB_H - 20
-                  || (img1->w < THUMB_W - 20 && img1->h < THUMB_H - 20))
+              if (img1->w > THUMB_W - SCALED(20) || img1->h > THUMB_H - SCALED(20)
+                  || (img1->w < THUMB_W - SCALED(20) && img1->h < THUMB_H - SCALED(20)))
               {
-                img2 = thumbnail(img1, THUMB_W - 20, THUMB_H - 20, 0);
+                img2 = thumbnail(img1, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0);
                 SDL_FreeSurface(img1);
                 img1 = img2;
               }
@@ -13950,7 +13950,7 @@ static int do_open(void)
                 /* Turn it into a thumbnail: */
 
                 img1 = SDL_DisplayFormatAlpha(img);
-                img2 = thumbnail2(img1, THUMB_W - 20, THUMB_H - 20, 0, 0);
+                img2 = thumbnail2(img1, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0, 0);
                 SDL_FreeSurface(img1);
 
                 show_progress_bar(screen);
@@ -14060,7 +14060,7 @@ static int do_open(void)
         {
           /* Erase screen: */
 
-          dest.x = 96;
+          dest.x = r_canvas.x;
           dest.y = 0;
           dest.w = r_canvas.w;
           dest.h = r_canvas.h;
@@ -14075,8 +14075,8 @@ static int do_open(void)
           {
             /* Draw cursor: */
 
-            dest.x = THUMB_W * ((i - cur) % 4) + 96;
-            dest.y = THUMB_H * ((i - cur) / 4) + 24;
+            dest.x = THUMB_W * ((i - cur) % 4) + r_canvas.x;
+            dest.y = THUMB_H * ((i - cur) / 4) + button_h / 2;
 
             if (i == which)
             {
@@ -14088,10 +14088,10 @@ static int do_open(void)
 
 
 
-            dest.x = THUMB_W * ((i - cur) % 4) + 96 + 10 +
-              (THUMB_W - 20 - thumbs[i]->w) / 2;
-            dest.y = THUMB_H * ((i - cur) / 4) + 24 + 10 +
-              (THUMB_H - 20 - thumbs[i]->h) / 2;
+            dest.x = THUMB_W * ((i - cur) % 4) + r_canvas.x + SCALED(10) +
+              (THUMB_W - SCALED(20) - thumbs[i]->w) / 2;
+            dest.y = THUMB_H * ((i - cur) / 4) + button_h / 2 + SCALED(10) +
+              (THUMB_H - SCALED(20) - thumbs[i]->h) / 2;
 
             if (thumbs[i] != NULL)
               SDL_BlitSurface(thumbs[i], NULL, screen, &dest);
@@ -14109,7 +14109,7 @@ static int do_open(void)
             SDL_BlitSurface(img_scroll_up_off, NULL, screen, &dest);
 
           dest.x = (WINDOW_WIDTH - img_scroll_up->w) / 2;
-          dest.y = r_canvas.h - 48;
+          dest.y = r_canvas.h - button_h;
 
           if (cur < num_files - 16)
             SDL_BlitSurface(img_scroll_down, NULL, screen, &dest);
@@ -14119,48 +14119,48 @@ static int do_open(void)
 
           /* "Open" button: */
 
-          dest.x = 96;
-          dest.y = r_canvas.h - 48;
+          dest.x = r_canvas.x;
+          dest.y = r_canvas.h - button_h;
           SDL_BlitSurface(img_open, NULL, screen, &dest);
 
-          dest.x = 96 + (48 - img_openlabels_open->w) / 2;
+          dest.x = r_canvas.x + (button_w - img_openlabels_open->w) / 2;
           dest.y = r_canvas.h - img_openlabels_open->h;
           SDL_BlitSurface(img_openlabels_open, NULL, screen, &dest);
 
 
           /* "Slideshow" button: */
 
-          dest.x = 96 + 48;
-          dest.y = r_canvas.h - 48;
+          dest.x = r_canvas.x + button_w;
+          dest.y = r_canvas.h - button_h;
           if (any_saved_files)
             SDL_BlitSurface(img_btn_up, NULL, screen, &dest);
           else
             SDL_BlitSurface(img_btn_off, NULL, screen, &dest);
 
-          dest.x = 96 + 48;
-          dest.y = r_canvas.h - 48;
+          dest.x = r_canvas.x + button_w;
+          dest.y = r_canvas.h - button_h;
           SDL_BlitSurface(img_slideshow, NULL, screen, &dest);
 
-          dest.x = 96 + 48 + (48 - img_openlabels_slideshow->w) / 2;
+          dest.x = r_canvas.x + button_w + (button_w - img_openlabels_slideshow->w) / 2;
           dest.y = r_canvas.h - img_openlabels_slideshow->h;
           SDL_BlitSurface(img_openlabels_slideshow, NULL, screen, &dest);
 
 
           /* "Back" button: */
 
-          dest.x = WINDOW_WIDTH - 96 - 48;
-          dest.y = r_canvas.h - 48;
+          dest.x = WINDOW_WIDTH - button_w * 3;
+          dest.y = r_canvas.h - button_h;
           SDL_BlitSurface(img_back, NULL, screen, &dest);
 
-          dest.x = WINDOW_WIDTH - 96 - 48 + (48 - img_openlabels_back->w) / 2;
+          dest.x = WINDOW_WIDTH - button_w * 3 + (button_w - img_openlabels_back->w) / 2;
           dest.y = r_canvas.h - img_openlabels_back->h;
           SDL_BlitSurface(img_openlabels_back, NULL, screen, &dest);
 
 
           /* "Erase" button: */
 
-          dest.x = WINDOW_WIDTH - 96 - 48 - 48;
-          dest.y = r_canvas.h - 48;
+          dest.x = WINDOW_WIDTH - button_w * 4;
+          dest.y = r_canvas.h - button_h;
 
           if (d_places[which] != PLACE_STARTERS_DIR &&
               d_places[which] != PLACE_PERSONAL_STARTERS_DIR)
@@ -14169,7 +14169,7 @@ static int do_open(void)
             SDL_BlitSurface(img_btn_off, NULL, screen, &dest);
 
           dest.x =
-            WINDOW_WIDTH - 96 - 48 - 48 + (48 - img_openlabels_erase->w) / 2;
+            WINDOW_WIDTH - button_w * 4 + (button_w - img_openlabels_erase->w) / 2;
           dest.y = r_canvas.h - img_openlabels_erase->h;
           SDL_BlitSurface(img_openlabels_erase, NULL, screen, &dest);
 
@@ -14287,16 +14287,16 @@ static int do_open(void)
         else if (event.type == SDL_MOUSEBUTTONDOWN &&
             valid_click(event.button.button))
         {
-          if (event.button.x >= 96 && event.button.x < WINDOW_WIDTH - 96 &&
-              event.button.y >= 24 &&
-              event.button.y < (r_canvas.h - 48))
+          if (event.button.x >= r_canvas.x && event.button.x < WINDOW_WIDTH - button_w * 2 &&
+              event.button.y >= button_h / 2 &&
+              event.button.y < (r_canvas.h - button_h))
           {
             /* Picked an icon! */
 
 	    int old_which = which;
 
-            which = ((event.button.x - 96) / (THUMB_W) +
-                (((event.button.y - 24) / THUMB_H) * 4)) + cur;
+            which = ((event.button.x - r_canvas.x) / (THUMB_W) +
+                (((event.button.y - button_h / 2) / THUMB_H) * 4)) + cur;
 
             if (which < num_files)
             {
@@ -14323,7 +14323,7 @@ static int do_open(void)
           else if (event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
               event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2)
           {
-            if (event.button.y < 24)
+            if (event.button.y < button_h / 2)
             {
               /* Up scroll button: */
 
@@ -14341,8 +14341,8 @@ static int do_open(void)
               if (which >= cur + 16)
                 which = which - 4;
             }
-            else if (event.button.y >= (r_canvas.h - 48) &&
-                event.button.y < (r_canvas.h - 24))
+            else if (event.button.y >= (r_canvas.h - button_h) &&
+                event.button.y < (r_canvas.h - button_h / 2))
             {
               /* Down scroll button: */
 
@@ -14361,8 +14361,8 @@ static int do_open(void)
                 which = which + 4;
             }
           }
-          else if (event.button.x >= 96 && event.button.x < 96 + 48 &&
-              event.button.y >= r_canvas.h - 48 &&
+          else if (event.button.x >= r_canvas.x && event.button.x < r_canvas.x + button_w &&
+              event.button.y >= r_canvas.h - button_h &&
               event.button.y < r_canvas.h)
           {
             /* Open */
@@ -14370,8 +14370,8 @@ static int do_open(void)
             done = 1;
             playsound(screen, 1, SND_CLICK, 1, SNDPOS_LEFT, SNDDIST_NEAR);
           }
-          else if (event.button.x >= 96 + 48 && event.button.x < 96 + 48 + 48 &&
-              event.button.y >= r_canvas.h - 48 &&
+          else if (event.button.x >= r_canvas.x + button_w && event.button.x < r_canvas.x + button_w * 2 &&
+              event.button.y >= r_canvas.h - button_h &&
               event.button.y < r_canvas.h &&
               any_saved_files == 1)
           {
@@ -14381,9 +14381,9 @@ static int do_open(void)
             slideshow = 1;
             playsound(screen, 1, SND_CLICK, 1, SNDPOS_LEFT, SNDDIST_NEAR);
           }
-          else if (event.button.x >= (WINDOW_WIDTH - 96 - 48) &&
-              event.button.x < (WINDOW_WIDTH - 96) &&
-              event.button.y >= r_canvas.h - 48 &&
+          else if (event.button.x >= (WINDOW_WIDTH - button_w * 3) &&
+              event.button.x < (WINDOW_WIDTH - button_w * 2) &&
+              event.button.y >= r_canvas.h - button_h &&
               event.button.y < r_canvas.h)
           {
             /* Back */
@@ -14392,9 +14392,9 @@ static int do_open(void)
             done = 1;
             playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
           }
-          else if (event.button.x >= (WINDOW_WIDTH - 96 - 48 - 48) &&
-              event.button.x < (WINDOW_WIDTH - 48 - 96) &&
-              event.button.y >= r_canvas.h - 48 &&
+          else if (event.button.x >= (WINDOW_WIDTH - button_w * 4) &&
+              event.button.x < (WINDOW_WIDTH - button_w * 3) &&
+              event.button.y >= r_canvas.h - button_h &&
               event.button.y < r_canvas.h &&
               d_places[which] != PLACE_STARTERS_DIR &&
               d_places[which] != PLACE_PERSONAL_STARTERS_DIR)
@@ -14438,7 +14438,7 @@ static int do_open(void)
         {
           /* Deal with mouse pointer shape! */
 
-          if (event.button.y < 24 &&
+          if (event.button.y < button_h / 2 &&
               event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
               event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2 &&
               cur > 0)
@@ -14447,8 +14447,8 @@ static int do_open(void)
 
             do_setcursor(cursor_up);
           }
-          else if (event.button.y >= (r_canvas.h - 48) &&
-              event.button.y < (r_canvas.h - 24) &&
+          else if (event.button.y >= (r_canvas.h - button_h) &&
+              event.button.y < (r_canvas.h - button_h / 2) &&
               event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
               event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2 &&
               cur < num_files - 16)
@@ -14457,25 +14457,25 @@ static int do_open(void)
 
             do_setcursor(cursor_down);
           }
-          else if (((event.button.x >= 96 && event.button.x < 96 + 48 + 48) ||
-                (event.button.x >= (WINDOW_WIDTH - 96 - 48) &&
-                 event.button.x < (WINDOW_WIDTH - 96)) ||
-                (event.button.x >= (WINDOW_WIDTH - 96 - 48 - 48) &&
-                 event.button.x < (WINDOW_WIDTH - 48 - 96) &&
+          else if (((event.button.x >= r_canvas.x && event.button.x < r_canvas.x + button_w * 2) ||
+                (event.button.x >= (WINDOW_WIDTH - button_w * 3) &&
+                 event.button.x < (WINDOW_WIDTH - button_w * 2)) ||
+                (event.button.x >= (WINDOW_WIDTH - button_w * 4) &&
+                 event.button.x < (WINDOW_WIDTH - button_w * 3) &&
                  d_places[which] != PLACE_STARTERS_DIR &&
                  d_places[which] != PLACE_PERSONAL_STARTERS_DIR)) &&
-              event.button.y >= r_canvas.h - 48 &&
+              event.button.y >= r_canvas.h - button_h &&
               event.button.y < r_canvas.h)
           {
             /* One of the command buttons: */
 
             do_setcursor(cursor_hand);
           }
-          else if (event.button.x >= 96 && event.button.x < WINDOW_WIDTH - 96 &&
-              event.button.y > 24 &&
-              event.button.y < r_canvas.h - 48 &&
-              ((((event.button.x - 96) / (THUMB_W) +
-                 (((event.button.y - 24) / THUMB_H) * 4)) +
+          else if (event.button.x >= r_canvas.x && event.button.x < WINDOW_WIDTH - button_w * 2 &&
+              event.button.y > button_h / 2 &&
+              event.button.y < r_canvas.h - button_h &&
+              ((((event.button.x - r_canvas.x) / (THUMB_W) +
+                 (((event.button.y - button_h / 2) / THUMB_H) * 4)) +
                 cur) < num_files))
           {
             /* One of the thumbnails: */
@@ -14519,8 +14519,8 @@ static int do_open(void)
                 PROMPT_ERASE_YES, PROMPT_ERASE_NO,
                 thumbs[which],
                 img_popup_arrow, img_trash, SND_AREYOUSURE,
-                WINDOW_WIDTH - 96 - 48 - 48 + 24,
-                r_canvas.h - 48 + 24))
+                WINDOW_WIDTH - button_w * 4 + button_w / 2,
+                r_canvas.h - button_h + button_h / 2))
           {
             snprintf(fname, sizeof(fname), "saved/%s%s",
                 d_names[which], d_exts[which]);
@@ -14948,10 +14948,10 @@ static int do_slideshow(void)
 	    {
 	      /* if too big, or too small in both dimensions, rescale it
 	         (for now: using old thumbnail as source for high speed, low quality) */
-	      if (img1->w > THUMB_W - 20 || img1->h > THUMB_H - 20
-		  || (img1->w < THUMB_W - 20 && img1->h < THUMB_H - 20))
+	      if (img1->w > THUMB_W - SCALED(20) || img1->h > THUMB_H - SCALED(20)
+		  || (img1->w < THUMB_W - SCALED(20) && img1->h < THUMB_H - SCALED(20)))
 	      {
-		img2 = thumbnail(img1, THUMB_W - 20, THUMB_H - 20, 0);
+		img2 = thumbnail(img1, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0);
 		SDL_FreeSurface(img1);
 		img1 = img2;
 	      }
@@ -15002,7 +15002,7 @@ static int do_slideshow(void)
 	      /* Turn it into a thumbnail: */
 
 	      img1 = SDL_DisplayFormatAlpha(img);
-	      img2 = thumbnail2(img1, THUMB_W - 20, THUMB_H - 20, 0, 0);
+	      img2 = thumbnail2(img1, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0, 0);
 	      SDL_FreeSurface(img1);
 
 	      show_progress_bar(screen);
@@ -15089,7 +15089,7 @@ static int do_slideshow(void)
     {
       /* Erase screen: */
 
-      dest.x = 96;
+      dest.x = r_canvas.x;
       dest.y = 0;
       dest.w = r_canvas.w;
       dest.h = r_canvas.h;
@@ -15103,8 +15103,8 @@ static int do_slideshow(void)
       {
 	/* Draw cursor: */
 
-	dest.x = THUMB_W * ((i - cur) % 4) + 96;
-	dest.y = THUMB_H * ((i - cur) / 4) + 24;
+	dest.x = THUMB_W * ((i - cur) % 4) + r_canvas.x;
+	dest.y = THUMB_H * ((i - cur) / 4) + button_h / 2;
 
 	if (i == which)
 	{
@@ -15116,10 +15116,10 @@ static int do_slideshow(void)
 
 	if (thumbs[i] != NULL)
 	{
-	  dest.x = THUMB_W * ((i - cur) % 4) + 96 + 10 +
-	    (THUMB_W - 20 - thumbs[i]->w) / 2;
-	  dest.y = THUMB_H * ((i - cur) / 4) + 24 + 10 +
-	    (THUMB_H - 20 - thumbs[i]->h) / 2;
+	  dest.x = THUMB_W * ((i - cur) % 4) + r_canvas.x + SCALED(10) +
+	    (THUMB_W - SCALED(20) - thumbs[i]->w) / 2;
+	  dest.y = THUMB_H * ((i - cur) / 4) + button_h / 2 + SCALED(10) +
+	    (THUMB_H - SCALED(20) - thumbs[i]->h) / 2;
 
 	  SDL_BlitSurface(thumbs[i], NULL, screen, &dest);
 	}
@@ -15134,10 +15134,10 @@ static int do_slideshow(void)
 
 	if (found != -1)
 	{
-	  dest.x = (THUMB_W * ((i - cur) % 4) + 96 + 10 +
-		    (THUMB_W - 20 - thumbs[i]->w) / 2) + thumbs[i]->w;
-	  dest.y = (THUMB_H * ((i - cur) / 4) + 24 + 10 +
-		    (THUMB_H - 20 - thumbs[i]->h) / 2) + thumbs[i]->h;
+	  dest.x = (THUMB_W * ((i - cur) % 4) + r_canvas.x + SCALED(10) +
+		    (THUMB_W - SCALED(20) - thumbs[i]->w) / 2) + thumbs[i]->w;
+	  dest.y = (THUMB_H * ((i - cur) / 4) + button_h / 2 + SCALED(10) +
+		    (THUMB_H - SCALED(20) - thumbs[i]->h) / 2) + thumbs[i]->h;
 
 	  draw_selection_digits(dest.x, dest.y, found + 1);
 	}
@@ -15155,7 +15155,7 @@ static int do_slideshow(void)
 	SDL_BlitSurface(img_scroll_up_off, NULL, screen, &dest);
 
       dest.x = (WINDOW_WIDTH - img_scroll_up->w) / 2;
-      dest.y = r_canvas.h - 48;
+      dest.y = r_canvas.h - button_h;
 
       if (cur < num_files - 16)
 	SDL_BlitSurface(img_scroll_down, NULL, screen, &dest);
@@ -15165,22 +15165,22 @@ static int do_slideshow(void)
 
       /* "Play" button: */
 
-      dest.x = 96;
-      dest.y = r_canvas.h - 48;
+      dest.x = r_canvas.x;
+      dest.y = r_canvas.h - button_h;
       SDL_BlitSurface(img_play, NULL, screen, &dest);
 
-      dest.x = 96 + (48 - img_openlabels_play->w) / 2;
+      dest.x = r_canvas.x + (button_w - img_openlabels_play->w) / 2;
       dest.y = r_canvas.h - img_openlabels_play->h;
       SDL_BlitSurface(img_openlabels_play, NULL, screen, &dest);
 
 
       /* "Back" button: */
 
-      dest.x = WINDOW_WIDTH - 96 - 48;
-      dest.y = r_canvas.h - 48;
+      dest.x = WINDOW_WIDTH - button_w * 3;
+      dest.y = r_canvas.h - button_h;
       SDL_BlitSurface(img_back, NULL, screen, &dest);
 
-      dest.x = WINDOW_WIDTH - 96 - 48 + (48 - img_openlabels_back->w) / 2;
+      dest.x = WINDOW_WIDTH - button_w * 3 + (button_w - img_openlabels_back->w) / 2;
       dest.y = r_canvas.h - img_openlabels_back->h;
       SDL_BlitSurface(img_openlabels_back, NULL, screen, &dest);
 
@@ -15188,8 +15188,8 @@ static int do_slideshow(void)
       /* Speed control: */
 
       speeds = 10;
-      x_per = 96.0 / speeds;
-      y_per = 48.0 / speeds;
+      x_per = (float) button_w * 2 / speeds;
+      y_per = (float) button_h / speeds;
 
       for (i = 0; i < speeds; i++)
       {
@@ -15201,15 +15201,15 @@ static int do_slideshow(void)
         else
 	  btn = thumbnail(img_btn_up, xx, yy, 0);
 
-        blnk = thumbnail(img_btn_off, xx, 48 - yy, 0);
+        blnk = thumbnail(img_btn_off, xx, button_h - yy, 0);
 
         /* FIXME: Check for NULL! */
 
-        dest.x = 96 + 48 + (i * x_per);
-        dest.y = r_canvas.h - 48;
+        dest.x = r_canvas.x + button_w + (i * x_per);
+        dest.y = r_canvas.h - button_h;
         SDL_BlitSurface(blnk, NULL, screen, &dest);
 
-        dest.x = 96 + 48 + (i * x_per);
+        dest.x = r_canvas.x + button_w + (i * x_per);
         dest.y = r_canvas.h - (y_per * i);
         SDL_BlitSurface(btn, NULL, screen, &dest);
 
@@ -15248,7 +15248,7 @@ static int do_slideshow(void)
 	
 
 	dest.x = button_w * 3;
-	dest.y = r_canvas.h - 48;
+	dest.y = r_canvas.h - button_h;
 	dest.w = button_w * 2;
 	dest.h = button_h;
 	 
@@ -15261,8 +15261,8 @@ static int do_slideshow(void)
 	  //	  done = 1;
 	  //	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_LEFT, SNDDIST_NEAR);
 	  event.type = SDL_MOUSEBUTTONDOWN;
-	  event.button.x = button_w * 2 + 5;
-	  event.button.y = r_canvas.h - 48 + 5;
+	  event.button.x = button_w * 2 + SCALED(5);
+	  event.button.y = r_canvas.h - button_h + SCALED(5);
 	  event.button.button = 1;
 	  SDL_PushEvent(&event);
 
@@ -15280,14 +15280,14 @@ static int do_slideshow(void)
       else if (event.type == SDL_MOUSEBUTTONDOWN &&
 	       valid_click(event.button.button))
       {
-	if (event.button.x >= 96 && event.button.x < WINDOW_WIDTH - 96 &&
-	    event.button.y >= 24 &&
-	    event.button.y < (r_canvas.h - 48))
+	if (event.button.x >= r_canvas.x && event.button.x < WINDOW_WIDTH - button_w * 2 &&
+	    event.button.y >= button_h / 2 &&
+	    event.button.y < (r_canvas.h - button_h))
 	{
 	  /* Picked an icon! */
 
-	  which = ((event.button.x - 96) / (THUMB_W) +
-		   (((event.button.y - 24) / THUMB_H) * 4)) + cur;
+	  which = ((event.button.x - r_canvas.x) / (THUMB_W) +
+		   (((event.button.y - button_h / 2) / THUMB_H) * 4)) + cur;
 
 	  if (which < num_files)
 	  {
@@ -15324,7 +15324,7 @@ static int do_slideshow(void)
 	else if (event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
 		 event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2)
 	{
-	  if (event.button.y < 24)
+	  if (event.button.y < button_h / 2)
 	  {
 	    /* Up scroll button: */
 
@@ -15341,8 +15341,8 @@ static int do_slideshow(void)
 	    if (which >= cur + 16)
 	      which = which - 4;
 	  }
-	  else if (event.button.y >= (r_canvas.h - 48) &&
-		   event.button.y < (r_canvas.h - 24))
+	  else if (event.button.y >= (r_canvas.h - button_h) &&
+		   event.button.y < (r_canvas.h - button_h / 2))
 	  {
 	    /* Down scroll button: */
 
@@ -15360,8 +15360,8 @@ static int do_slideshow(void)
 	      which = which + 4;
 	  }
 	}
-	else if (event.button.x >= 96 && event.button.x < 96 + 48 &&
-		 event.button.y >= r_canvas.h - 48 &&
+	else if (event.button.x >= r_canvas.x && event.button.x < r_canvas.x + button_w &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* Play */
@@ -15397,8 +15397,8 @@ static int do_slideshow(void)
 
 	  update_list = 1;
 	}
-	else if (event.button.x >= 96 + 48 && event.button.x < 96 + 48 + 96 &&
-		 event.button.y >= r_canvas.h - 48 &&
+	else if (event.button.x >= r_canvas.x + button_w && event.button.x < r_canvas.x + button_w + button_w * 2 &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* Speed slider */
@@ -15407,8 +15407,8 @@ static int do_slideshow(void)
 
 	  old_speed = speed;
 
-	  click_x = event.button.x - 96 - 48;
-	  speed = ((10 * click_x) / 96);
+	  click_x = event.button.x - r_canvas.x - button_w;
+	  speed = ((10 * click_x) / (button_w * 2));
 
 	  control_sound = -1;
 
@@ -15424,9 +15424,9 @@ static int do_slideshow(void)
 	    update_list = 1;
 	  }
 	}
-	else if (event.button.x >= (WINDOW_WIDTH - 96 - 48) &&
-		 event.button.x < (WINDOW_WIDTH - 96) &&
-		 event.button.y >= r_canvas.h - 48 &&
+	else if (event.button.x >= (WINDOW_WIDTH - button_w * 3) &&
+		 event.button.x < (WINDOW_WIDTH - button_w * 2) &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* Back */
@@ -15470,7 +15470,7 @@ static int do_slideshow(void)
       {
 	/* Deal with mouse pointer shape! */
 
-	if (event.button.y < 24 &&
+	if (event.button.y < button_h / 2 &&
 	    event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
 	    event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2 && cur > 0)
 	{
@@ -15478,8 +15478,8 @@ static int do_slideshow(void)
 
 	  do_setcursor(cursor_up);
 	}
-	else if (event.button.y >= (r_canvas.h - 48) &&
-		 event.button.y < (r_canvas.h - 24) &&
+	else if (event.button.y >= (r_canvas.h - button_h) &&
+		 event.button.y < (r_canvas.h - button_h / 2) &&
 		 event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
 		 event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2 &&
 		 cur < num_files - 16)
@@ -15488,22 +15488,22 @@ static int do_slideshow(void)
 
 	  do_setcursor(cursor_down);
 	}
-	else if (((event.button.x >= 96 && event.button.x < 96 + 48 + 96) ||
-		  (event.button.x >= (WINDOW_WIDTH - 96 - 48) &&
-		   event.button.x < (WINDOW_WIDTH - 96))) &&
-		 event.button.y >= r_canvas.h - 48 &&
+	else if (((event.button.x >= r_canvas.x && event.button.x < r_canvas.x + button_w + button_w * 2) ||
+		  (event.button.x >= (WINDOW_WIDTH - button_w * 3) &&
+		   event.button.x < (WINDOW_WIDTH - button_w * 2))) &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* One of the command buttons: */
 
 	  do_setcursor(cursor_hand);
 	}
-	else if (event.button.x >= 96 && event.button.x < WINDOW_WIDTH - 96
-		 && event.button.y > 24
-		 && event.button.y < r_canvas.h - 48
+	else if (event.button.x >= r_canvas.x && event.button.x < WINDOW_WIDTH - button_w * 2
+		 && event.button.y > button_h / 2
+		 && event.button.y < r_canvas.h - button_h
 		 &&
-		 ((((event.button.x - 96) / (THUMB_W) +
-		    (((event.button.y - 24) / THUMB_H) * 4)) + cur) <
+		 ((((event.button.x - r_canvas.x) / (THUMB_W) +
+		    (((event.button.y - button_h / 2) / THUMB_H) * 4)) + cur) <
 		  num_files))
 	{
 	  /* One of the thumbnails: */
@@ -15640,21 +15640,21 @@ static void play_slideshow(int * selected, int num_selected, char * dirname,
 
       /* "Back" button: */
 
-      dest.x = screen->w - 48;
-      dest.y = screen->h - 48;
+      dest.x = screen->w - button_w;
+      dest.y = screen->h - button_h;
       SDL_BlitSurface(img_back, NULL, screen, &dest);
 
-      dest.x = screen->w - 48 + (48 - img_openlabels_back->w) / 2;
+      dest.x = screen->w - button_w + (button_w - img_openlabels_back->w) / 2;
       dest.y = screen->h - img_openlabels_back->h;
       SDL_BlitSurface(img_openlabels_back, NULL, screen, &dest);
 
       /* "Next" button: */
 
       dest.x = 0;
-      dest.y = screen->h - 48;
+      dest.y = screen->h - button_h;
       SDL_BlitSurface(img_play, NULL, screen, &dest);
 
-      dest.x = (48 - img_openlabels_next->w) / 2;
+      dest.x = (button_w - img_openlabels_next->w) / 2;
       dest.y = screen->h - img_openlabels_next->h;
       SDL_BlitSurface(img_openlabels_next, NULL, screen, &dest);
 
@@ -15720,8 +15720,8 @@ static void play_slideshow(int * selected, int num_selected, char * dirname,
 	  {
             /* Mouse click! */
 
-	    if (event.button.x >= screen->w - 48 &&
-		event.button.y >= screen->h - 48)
+	    if (event.button.x >= screen->w - button_w &&
+		event.button.y >= screen->h - button_h)
 	    {
 	      /* Back button */
 
@@ -15741,9 +15741,9 @@ static void play_slideshow(int * selected, int num_selected, char * dirname,
           {
 	    /* Deal with mouse pointer shape! */
 
-	    if ((event.button.x >= screen->w - 48 ||
-		event.button.x < 48) &&
-		event.button.y >= screen->h - 48)
+	    if ((event.button.x >= screen->w - button_w ||
+		event.button.x < button_w) &&
+		event.button.y >= screen->h - button_h)
 	    {
 	      /* Back or Next buttons */
 
@@ -18564,7 +18564,7 @@ static int do_new_dialog(void)
         /* Palette colors: */
 
         thumbs[num_files] = SDL_CreateRGBSurface(screen->flags,
-                                                 THUMB_W - 20, THUMB_H - 20,
+                                                 THUMB_W - SCALED(20), THUMB_H - SCALED(20),
                                   screen->format->BitsPerPixel,
                                   screen->format->Rmask,
                                   screen->format->Gmask,
@@ -18596,7 +18596,7 @@ static int do_new_dialog(void)
     {
       /* Color picker: */
 
-      thumbs[num_files] = thumbnail(img_color_picker, THUMB_W - 20, THUMB_H - 20, 0);
+      thumbs[num_files] = thumbnail(img_color_picker, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0);
       added = 1;
     }
 
@@ -18739,10 +18739,10 @@ static int do_new_dialog(void)
             /* if too big, or too small in both dimensions, rescale it
                (for now: using old thumbnail as source for high speed,
                low quality) */
-            if (img1->w > THUMB_W - 20 || img1->h > THUMB_H - 20
-                || (img1->w < THUMB_W - 20 && img1->h < THUMB_H - 20))
+            if (img1->w > THUMB_W - SCALED(20) || img1->h > THUMB_H - SCALED(20)
+                || (img1->w < THUMB_W - SCALED(20) && img1->h < THUMB_H - SCALED(20)))
             {
-              img2 = thumbnail(img1, THUMB_W - 20, THUMB_H - 20, 0);
+              img2 = thumbnail(img1, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0);
               SDL_FreeSurface(img1);
               img1 = img2;
             }
@@ -18840,7 +18840,7 @@ static int do_new_dialog(void)
               /* Turn it into a thumbnail: */
 
               img1 = SDL_DisplayFormatAlpha(img);
-              img2 = thumbnail2(img1, THUMB_W - 20, THUMB_H - 20, 0, 0);
+              img2 = thumbnail2(img1, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0, 0);
               SDL_FreeSurface(img1);
 
               show_progress_bar(screen);
@@ -18947,7 +18947,7 @@ static int do_new_dialog(void)
     {
       /* Erase screen: */
 
-      dest.x = 96;
+      dest.x = r_canvas.x;
       dest.y = 0;
       dest.w = r_canvas.w;
       dest.h = r_canvas.h;
@@ -18962,8 +18962,8 @@ static int do_new_dialog(void)
       {
         /* Draw cursor: */
 
-        dest.x = THUMB_W * ((i - cur) % 4) + 96;
-        dest.y = THUMB_H * ((i - cur) / 4) + 24;
+        dest.x = THUMB_W * ((i - cur) % 4) + r_canvas.x;
+        dest.y = THUMB_H * ((i - cur) / 4) + button_h / 2;
 
         if (d_places[i] == PLACE_SAVED_DIR)
         {
@@ -18988,10 +18988,10 @@ static int do_new_dialog(void)
 
 
 
-        dest.x = THUMB_W * ((i - cur) % 4) + 96 + 10 +
-          (THUMB_W - 20 - thumbs[i]->w) / 2;
-        dest.y = THUMB_H * ((i - cur) / 4) + 24 + 10 +
-          (THUMB_H - 20 - thumbs[i]->h) / 2;
+        dest.x = THUMB_W * ((i - cur) % 4) + r_canvas.x + SCALED(10) +
+          (THUMB_W - SCALED(20) - thumbs[i]->w) / 2;
+        dest.y = THUMB_H * ((i - cur) / 4) + button_h / 2 + SCALED(10) +
+          (THUMB_H - SCALED(20) - thumbs[i]->h) / 2;
 
         if (thumbs[i] != NULL)
           SDL_BlitSurface(thumbs[i], NULL, screen, &dest);
@@ -19009,7 +19009,7 @@ static int do_new_dialog(void)
         SDL_BlitSurface(img_scroll_up_off, NULL, screen, &dest);
 
       dest.x = (WINDOW_WIDTH - img_scroll_up->w) / 2;
-      dest.y = r_canvas.h - 48;
+      dest.y = r_canvas.h - button_h;
 
       if (cur < num_files - 16)
         SDL_BlitSurface(img_scroll_down, NULL, screen, &dest);
@@ -19019,22 +19019,22 @@ static int do_new_dialog(void)
 
       /* "Open" button: */
 
-      dest.x = 96;
-      dest.y = r_canvas.h - 48;
+      dest.x = r_canvas.x;
+      dest.y = r_canvas.h - button_h;
       SDL_BlitSurface(img_open, NULL, screen, &dest);
 
-      dest.x = 96 + (48 - img_openlabels_open->w) / 2;
+      dest.x = r_canvas.x + (button_w - img_openlabels_open->w) / 2;
       dest.y = r_canvas.h - img_openlabels_open->h;
       SDL_BlitSurface(img_openlabels_open, NULL, screen, &dest);
 
 
       /* "Back" button: */
 
-      dest.x = WINDOW_WIDTH - 96 - 48;
-      dest.y = r_canvas.h - 48;
+      dest.x = WINDOW_WIDTH - button_w * 3;
+      dest.y = r_canvas.h - button_h;
       SDL_BlitSurface(img_back, NULL, screen, &dest);
 
-      dest.x = WINDOW_WIDTH - 96 - 48 + (48 - img_openlabels_back->w) / 2;
+      dest.x = WINDOW_WIDTH - button_w * 3 + (button_w - img_openlabels_back->w) / 2;
       dest.y = r_canvas.h - img_openlabels_back->h;
       SDL_BlitSurface(img_openlabels_back, NULL, screen, &dest);
 
@@ -19145,14 +19145,14 @@ static int do_new_dialog(void)
       else if (event.type == SDL_MOUSEBUTTONDOWN &&
 	       valid_click(event.button.button))
       {
-	if (event.button.x >= 96 && event.button.x < WINDOW_WIDTH - 96 &&
-	    event.button.y >= 24 &&
-	    event.button.y < (r_canvas.h - 48))
+	if (event.button.x >= r_canvas.x && event.button.x < WINDOW_WIDTH - button_w * 2 &&
+	    event.button.y >= button_h / 2 &&
+	    event.button.y < (r_canvas.h - button_h))
 	{
 	  /* Picked an icon! */
 
-	  which = ((event.button.x - 96) / (THUMB_W) +
-		   (((event.button.y - 24) / THUMB_H) * 4)) + cur;
+	  which = ((event.button.x - r_canvas.x) / (THUMB_W) +
+		   (((event.button.y - button_h / 2) / THUMB_H) * 4)) + cur;
 
 	  if (which < num_files)
 	  {
@@ -19177,7 +19177,7 @@ static int do_new_dialog(void)
 	else if (event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
 		 event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2)
 	{
-	  if (event.button.y < 24)
+	  if (event.button.y < button_h / 2)
 	  {
 	    /* Up scroll button: */
 
@@ -19195,8 +19195,8 @@ static int do_new_dialog(void)
 	    if (which >= cur + 16)
 	      which = which - 4;
 	  }
-	  else if (event.button.y >= (r_canvas.h - 48) &&
-		   event.button.y < (r_canvas.h - 24))
+	  else if (event.button.y >= (r_canvas.h - button_h) &&
+		   event.button.y < (r_canvas.h - button_h / 2))
 	  {
 	    /* Down scroll button: */
 
@@ -19215,8 +19215,8 @@ static int do_new_dialog(void)
 	      which = which + 4;
 	  }
 	}
-	else if (event.button.x >= 96 && event.button.x < 96 + 48 &&
-		 event.button.y >= r_canvas.h - 48 &&
+	else if (event.button.x >= r_canvas.x && event.button.x < r_canvas.x + button_w &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* Open */
@@ -19224,9 +19224,9 @@ static int do_new_dialog(void)
 	  done = 1;
 	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_LEFT, SNDDIST_NEAR);
 	}
-	else if (event.button.x >= (WINDOW_WIDTH - 96 - 48) &&
-		 event.button.x < (WINDOW_WIDTH - 96) &&
-		 event.button.y >= r_canvas.h - 48 &&
+	else if (event.button.x >= (WINDOW_WIDTH - button_w * 3) &&
+		 event.button.x < (WINDOW_WIDTH - button_w * 2) &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* Back */
@@ -19270,7 +19270,7 @@ static int do_new_dialog(void)
       {
 	/* Deal with mouse pointer shape! */
 
-	if (event.button.y < 24 &&
+	if (event.button.y < button_h / 2 &&
 	    event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
 	    event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2 &&
 	    cur > 0)
@@ -19279,8 +19279,8 @@ static int do_new_dialog(void)
 
 	  do_setcursor(cursor_up);
 	}
-	else if (event.button.y >= (r_canvas.h - 48) &&
-		 event.button.y < (r_canvas.h - 24) &&
+	else if (event.button.y >= (r_canvas.h - button_h) &&
+		 event.button.y < (r_canvas.h - button_h / 2) &&
 		 event.button.x >= (WINDOW_WIDTH - img_scroll_up->w) / 2 &&
 		 event.button.x <= (WINDOW_WIDTH + img_scroll_up->w) / 2 &&
 		 cur < num_files - 16)
@@ -19289,25 +19289,25 @@ static int do_new_dialog(void)
 
 	  do_setcursor(cursor_down);
 	}
-	else if (((event.button.x >= 96 && event.button.x < 96 + 48 + 48) ||
-		  (event.button.x >= (WINDOW_WIDTH - 96 - 48) &&
-		   event.button.x < (WINDOW_WIDTH - 96)) ||
-		  (event.button.x >= (WINDOW_WIDTH - 96 - 48 - 48) &&
-		   event.button.x < (WINDOW_WIDTH - 48 - 96) &&
+	else if (((event.button.x >= r_canvas.x && event.button.x < r_canvas.x + button_w * 2) ||
+		  (event.button.x >= (WINDOW_WIDTH - button_w * 3) &&
+		   event.button.x < (WINDOW_WIDTH - button_w * 2)) ||
+		  (event.button.x >= (WINDOW_WIDTH - button_w * 4) &&
+		   event.button.x < (WINDOW_WIDTH - button_w * 3) &&
 		   d_places[which] != PLACE_STARTERS_DIR &&
 		   d_places[which] != PLACE_PERSONAL_STARTERS_DIR)) &&
-		 event.button.y >= r_canvas.h - 48 &&
+		 event.button.y >= r_canvas.h - button_h &&
 		 event.button.y < r_canvas.h)
 	{
 	  /* One of the command buttons: */
 
 	  do_setcursor(cursor_hand);
 	}
-	else if (event.button.x >= 96 && event.button.x < WINDOW_WIDTH - 96 &&
-		 event.button.y > 24 &&
-		 event.button.y < r_canvas.h - 48 &&
-		 ((((event.button.x - 96) / (THUMB_W) +
-		    (((event.button.y - 24) / THUMB_H) * 4)) +
+	else if (event.button.x >= r_canvas.x && event.button.x < WINDOW_WIDTH - button_w * 2 &&
+		 event.button.y > button_h / 2 &&
+		 event.button.y < r_canvas.h - button_h &&
+		 ((((event.button.x - r_canvas.x) / (THUMB_W) +
+		    (((event.button.y - button_h / 2) / THUMB_H) * 4)) +
 		   cur) < num_files))
 	{
 	  /* One of the thumbnails: */
@@ -19664,17 +19664,17 @@ static int do_color_picker(void)
 
   for (w = 0; w <= 128 + 6 + 4; w = w + 4)
   {
-    oox = ox - w;
-    ooy = oy - w;
+    oox = ox - SCALED(w);
+    ooy = oy - SCALED(w);
 
-    nx = PROMPT_LEFT + 96 - w + PROMPTOFFSETX;
-    ny = 94 + 96 - w + PROMPTOFFSETY;
+    nx = SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX;
+    ny = SCALED(94 + 96 - w) + PROMPTOFFSETY;
 
     dest.x = ((nx * w) + (oox * (128 - w))) / 128;
     dest.y = ((ny * w) + (ooy * (128 - w))) / 128;
 
-    dest.w = (PROMPT_W - 96 * 2) + w * 2;
-    dest.h = w * 2;
+    dest.w = SCALED((PROMPT_W - 96 * 2) + w * 2);
+    dest.h = SCALED(w * 2);
     SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255 - w, 255 - w, 255 - w));
 
     SDL_UpdateRect(screen, dest.x, dest.y, dest.w, dest.h);
@@ -19687,8 +19687,8 @@ static int do_color_picker(void)
 
 #ifndef NO_PROMPT_SHADOWS
   alpha_surf = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
-                                    (PROMPT_W - 96 * 2) + (w - 4) * 2,
-                                    (w - 4) * 2,
+                                    SCALED((PROMPT_W - 96 * 2) + (w - 4) * 2),
+                                    SCALED((w - 4) * 2),
                                     screen->format->BitsPerPixel,
                                     screen->format->Rmask,
                                     screen->format->Gmask,
@@ -19702,10 +19702,10 @@ static int do_color_picker(void)
 
     for (i = 8; i > 0; i = i - 2)
     {
-      dest.x = PROMPT_LEFT + 96 - (w - 4) + i + PROMPTOFFSETX;
-      dest.y = 94 + 96 - (w - 4) + i + PROMPTOFFSETY;
-      dest.w = (PROMPT_W - 96 * 2) + (w - 4) * 2;
-      dest.h = (w - 4) * 2;
+      dest.x = SCALED(PROMPT_LEFT + 96 - (w - 4) + i) + PROMPTOFFSETX;
+      dest.y = SCALED(94 + 96 - (w - 4) + i) + PROMPTOFFSETY;
+      dest.w = SCALED((PROMPT_W - 96 * 2) + (w - 4) * 2);
+      dest.h = SCALED((w - 4) * 2);
 
       SDL_BlitSurface(alpha_surf, NULL, screen, &dest);
     }
@@ -19719,17 +19719,17 @@ static int do_color_picker(void)
 
   w = w - 6;
 
-  dest.x = PROMPT_LEFT + 96 - w + PROMPTOFFSETX;
-  dest.y = 94 + 96 - w + PROMPTOFFSETY;
-  dest.w = (PROMPT_W - 96 * 2) + w * 2;
-  dest.h = w * 2;
+  dest.x = SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX;
+  dest.y = SCALED(94 + 96 - w) + PROMPTOFFSETY;
+  dest.w = SCALED((PROMPT_W - 96 * 2) + w * 2);
+  dest.h = SCALED(w * 2);
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
 
 
   /* Draw color palette: */
 
-  color_picker_left = PROMPT_LEFT + 96 - w + PROMPTOFFSETX + 2;
-  color_picker_top = 94 + 96 - w + PROMPTOFFSETY + 2;
+  color_picker_left = SCALED(PROMPT_LEFT + 96 - w + 2) + PROMPTOFFSETX;
+  color_picker_top = SCALED(94 + 96 - w + 2) + PROMPTOFFSETY;
 
   dest.x = color_picker_left;
   dest.y = color_picker_top;
@@ -19744,58 +19744,58 @@ static int do_color_picker(void)
 
   /* Draw last color position: */
 
-  dest.x = color_picker_x + color_picker_left - 3;
-  dest.y = color_picker_y + color_picker_top - 1;
-  dest.w = 7;
-  dest.h = 3;
+  dest.x = color_picker_x + color_picker_left - SCALED(3);
+  dest.y = color_picker_y + color_picker_top - SCALED(1);
+  dest.w = SCALED(7);
+  dest.h = SCALED(3);
 
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 0, 0, 0));
 
-  dest.x = color_picker_x + color_picker_left - 1;
-  dest.y = color_picker_y + color_picker_top - 3;
-  dest.w = 3;
-  dest.h = 7;
+  dest.x = color_picker_x + color_picker_left - SCALED(1);
+  dest.y = color_picker_y + color_picker_top - SCALED(3);
+  dest.w = SCALED(3);
+  dest.h = SCALED(7);
 
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 0, 0, 0));
 
-  dest.x = color_picker_x + color_picker_left - 2;
+  dest.x = color_picker_x + color_picker_left - SCALED(2);
   dest.y = color_picker_y + color_picker_top;
-  dest.w = 5;
-  dest.h = 1;
+  dest.w = SCALED(5);
+  dest.h = SCALED(1);
 
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
 
   dest.x = color_picker_x + color_picker_left;
-  dest.y = color_picker_y + color_picker_top - 2;
-  dest.w = 1;
-  dest.h = 5;
+  dest.y = color_picker_y + color_picker_top - SCALED(2);
+  dest.w = SCALED(1);
+  dest.h = SCALED(5);
 
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
 
   
   /* Determine spot for example color: */
 
-  color_example_dest.x = color_picker_left + img_color_picker->w + 2;
-  color_example_dest.y = color_picker_top + 2;
-  color_example_dest.w = (PROMPT_W - 96 * 2) + w * 2 - img_color_picker->w - 6;
-  color_example_dest.h = 124;
+  color_example_dest.x = color_picker_left + img_color_picker->w + SCALED(2);
+  color_example_dest.y = color_picker_top + SCALED(2);
+  color_example_dest.w = SCALED((PROMPT_W - 96 * 2) + w * 2) - img_color_picker->w - SCALED(6);
+  color_example_dest.h = SCALED(124);
 
 
   SDL_FillRect(screen, &color_example_dest,
 	       SDL_MapRGB(screen->format, 0, 0, 0));
 
-  color_example_dest.x += 2;
-  color_example_dest.y += 2;
-  color_example_dest.w -= 4;
-  color_example_dest.h -= 4;
+  color_example_dest.x += SCALED(2);
+  color_example_dest.y += SCALED(2);
+  color_example_dest.w -= SCALED(4);
+  color_example_dest.h -= SCALED(4);
 
   SDL_FillRect(screen, &color_example_dest,
 	       SDL_MapRGB(screen->format, 255, 255, 255));
 
-  color_example_dest.x += 2;
-  color_example_dest.y += 2;
-  color_example_dest.w -= 4;
-  color_example_dest.h -= 4;
+  color_example_dest.x += SCALED(2);
+  color_example_dest.y += SCALED(2);
+  color_example_dest.w -= SCALED(4);
+  color_example_dest.h -= SCALED(4);
 
 
   /* Draw current color picker color: */
@@ -19810,8 +19810,8 @@ static int do_color_picker(void)
 
   /* Show "Back" button */
 
-  back_left = (((PROMPT_W - 96 * 2) + w * 2 - img_color_picker->w) - img_back->w) / 2 + color_picker_left + img_color_picker->w;
-  back_top = color_picker_top + img_color_picker->h - img_back->h - 2;
+  back_left = ((SCALED((PROMPT_W - 96 * 2) + w * 2) - img_color_picker->w) - img_back->w) / 2 + color_picker_left + img_color_picker->w;
+  back_top = color_picker_top + img_color_picker->h - img_back->h - SCALED(2);
 
   dest.x = back_left;
   dest.y = back_top;
