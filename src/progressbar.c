@@ -37,32 +37,36 @@ int progress_bar_disabled, prog_bar_ctr;
 void show_progress_bar(SDL_Surface * screen)
 {
   SDL_Rect dest, src;
-  int x;
+  int x, w, h;
   static Uint32 oldtime;
   Uint32 newtime;
 
-  if (progress_bar_disabled)
+  if (progress_bar_disabled || img_progress == NULL)
     return;
+
+  /* The image holds two periods of the pattern (65x24, unless scaled) */
+  w = img_progress->w / 2;
+  h = img_progress->h;
 
   newtime = SDL_GetTicks();
   if (newtime > oldtime + 15)	// trying not to eat some serious CPU time!
   {
-    for (x = 0; x < screen->w; x = x + 65)
+    for (x = 0; x < screen->w; x = x + w)
     {
-      src.x = 65 - (prog_bar_ctr % 65);
+      src.x = w - (prog_bar_ctr % w);
       src.y = 0;
-      src.w = 65;
-      src.h = 24;
+      src.w = w;
+      src.h = h;
 
       dest.x = x;
-      dest.y = screen->h - 24;
+      dest.y = screen->h - h;
 
       SDL_BlitSurface(img_progress, &src, screen, &dest);
     }
 
     prog_bar_ctr++;
 
-    SDL_UpdateRect(screen, 0, screen->h - 24, screen->w, 24);
+    SDL_UpdateRect(screen, 0, screen->h - h, screen->w, h);
   }
   oldtime = newtime;
 

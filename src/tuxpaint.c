@@ -7717,48 +7717,58 @@ static void seticon(void)
 }
 
 
-/* Load a mouse pointer (cursor) shape: */
+/* Load a mouse pointer (cursor) shape, grown by a whole number of pixels
+   to follow the button size: */
 
 static SDL_Cursor *get_cursor(unsigned char *bits, unsigned char *mask_bits,
 			      unsigned int width, unsigned int height,
 			      unsigned int x, unsigned int y)
 {
-  Uint8 b;
-  Uint8 temp_bitmap[128], temp_bitmask[128];
-  unsigned int i;
+  Uint8 *temp_bitmap, *temp_bitmask;
+  unsigned int k, w, h, xx, yy, src, dst;
+  SDL_Cursor *cursor;
 
+  k = (unsigned int) (button_scale + 0.5);
+  if (k < 1)
+    k = 1;
 
-  if (((width + 7) / 8) * height > 128)
+  w = width * k;
+  h = height * k;
+
+  temp_bitmap = calloc(((w + 7) / 8) * h, 1);
+  temp_bitmask = calloc(((w + 7) / 8) * h, 1);
+
+  if (temp_bitmap == NULL || temp_bitmask == NULL)
   {
-    fprintf(stderr, "Error: Cursor is too large!\n");
+    fprintf(stderr, "Error: Can't allocate memory for a cursor!\n");
     cleanup();
     exit(1);
   }
 
-  for (i = 0; i < ((width + 7) / 8) * height; i++)
+  /* XBM bits are least-significant first, SDL wants most-significant first */
+
+  for (yy = 0; yy < h; yy++)
   {
-    b = bits[i];
+    for (xx = 0; xx < w; xx++)
+    {
+      src = (yy / k) * ((width + 7) / 8) + (xx / k) / 8;
+      dst = yy * ((w + 7) / 8) + xx / 8;
 
-    temp_bitmap[i] = (((b & 0x01) << 7) |
-		      ((b & 0x02) << 5) |
-		      ((b & 0x04) << 3) |
-		      ((b & 0x08) << 1) |
-		      ((b & 0x10) >> 1) |
-		      ((b & 0x20) >> 3) |
-		      ((b & 0x40) >> 5) | ((b & 0x80) >> 7));
+      if (bits[src] & (1 << ((xx / k) % 8)))
+	temp_bitmap[dst] |= 0x80 >> (xx % 8);
 
-    b = mask_bits[i];
-
-    temp_bitmask[i] = (((b & 0x01) << 7) |
-		       ((b & 0x02) << 5) |
-		       ((b & 0x04) << 3) |
-		       ((b & 0x08) << 1) |
-		       ((b & 0x10) >> 1) |
-		       ((b & 0x20) >> 3) |
-		       ((b & 0x40) >> 5) | ((b & 0x80) >> 7));
+      if (mask_bits[src] & (1 << ((xx / k) % 8)))
+	temp_bitmask[dst] |= 0x80 >> (xx % 8);
+    }
   }
 
-  return (SDL_CreateCursor(temp_bitmap, temp_bitmask, width, height, x, y));
+  cursor = SDL_CreateCursor(temp_bitmap, temp_bitmask, w, h,
+			    x * k + k / 2, y * k + k / 2);
+
+  free(temp_bitmap);
+  free(temp_bitmask);
+
+  return (cursor);
 }
 
 
@@ -22822,40 +22832,40 @@ static void setup(void)
 
   /* quickly: title image, version, progress bar, and watch cursor */
 
-  img_title = loadimage(DATA_PREFIX "images/title.png");
-  img_title_credits = loadimage(DATA_PREFIX "images/title-credits.png");
-  img_progress = loadimage(DATA_PREFIX "images/ui/progress.png");
+  img_title = loadimagerb(DATA_PREFIX "images/title.png");
+  img_title_credits = loadimagerb(DATA_PREFIX "images/title-credits.png");
+  img_progress = loadimagerb(DATA_PREFIX "images/ui/progress.png");
 
-  if (screen->w - img_title->w >= 410 && screen->h - img_progress->h - img_title_credits->h - 40) /* FIXME: Font */
+  if (screen->w - img_title->w >= SCALED(410) && screen->h - img_progress->h - img_title_credits->h - SCALED(40)) /* FIXME: Font */
     big_title = 1;
   else
     big_title = 0;
 
 
   if (big_title)
-    img_title_tuxpaint = loadimage(DATA_PREFIX "images/title-tuxpaint-2x.png");
+    img_title_tuxpaint = loadimagerb(DATA_PREFIX "images/title-tuxpaint-2x.png");
   else
-    img_title_tuxpaint = loadimage(DATA_PREFIX "images/title-tuxpaint.png");
+    img_title_tuxpaint = loadimagerb(DATA_PREFIX "images/title-tuxpaint.png");
 
   SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
 
   dest.x =
     ((WINDOW_WIDTH - img_title->w - (img_title_tuxpaint->w / 2)) / 2) +
-    (img_title_tuxpaint->w / 2) + 20;
+    (img_title_tuxpaint->w / 2) + SCALED(20);
   dest.y = (WINDOW_HEIGHT - img_title->h);
 
   SDL_BlitSurface(img_title, NULL, screen, &dest);
 
-  dest.x = 10;
+  dest.x = SCALED(10);
   if (big_title)
-    dest.y = WINDOW_HEIGHT - img_title_tuxpaint->h - img_progress->h - 40;
+    dest.y = WINDOW_HEIGHT - img_title_tuxpaint->h - img_progress->h - SCALED(40);
   else
-    dest.y = (WINDOW_HEIGHT - img_title->h) + img_title_tuxpaint->h * 0.8 + 7;
+    dest.y = (WINDOW_HEIGHT - img_title->h) + img_title_tuxpaint->h * 0.8 + SCALED(7);
 
   SDL_BlitSurface(img_title_tuxpaint, NULL, screen, &dest);
 
-  dest.x = 10;
-  dest.y = 5;
+  dest.x = SCALED(10);
+  dest.y = SCALED(5);
 
   SDL_BlitSurface(img_title_credits, NULL, screen, &dest);
 
@@ -22960,7 +22970,7 @@ static void setup(void)
 	   VER_DATE);
 
   tmp_surf = render_text(medium_font, tmp_str, black);
-  dest.x = 10;
+  dest.x = SCALED(10);
   dest.y = WINDOW_HEIGHT - img_progress->h - tmp_surf->h;
   SDL_BlitSurface(tmp_surf, NULL, screen, &dest);
   SDL_FreeSurface(tmp_surf);
@@ -22971,7 +22981,7 @@ static void setup(void)
 
   snprintf(tmp_str, sizeof(tmp_str), "© 2002–2014 Bill Kendrick et al.");
   tmp_surf = render_text(medium_font, tmp_str, black);
-  dest.x = 10;
+  dest.x = SCALED(10);
   dest.y = WINDOW_HEIGHT - img_progress->h - (tmp_surf->h * 2);
   SDL_BlitSurface(tmp_surf, NULL, screen, &dest);
   SDL_FreeSurface(tmp_surf);
@@ -23230,11 +23240,11 @@ static void setup(void)
 
   if (onscreen_keyboard)
   {
-    img_oskdel = loadimage(DATA_PREFIX "images/ui/osk_delete.png");
-    img_osktab = loadimage(DATA_PREFIX "images/ui/osk_tab.png");
-    img_oskenter = loadimage(DATA_PREFIX "images/ui/osk_enter.png");
-    img_oskcapslock = loadimage(DATA_PREFIX "images/ui/osk_capslock.png");
-    img_oskshift = loadimage(DATA_PREFIX "images/ui/osk_shift.png");
+    img_oskdel = loadimagerb(DATA_PREFIX "images/ui/osk_delete.png");
+    img_osktab = loadimagerb(DATA_PREFIX "images/ui/osk_tab.png");
+    img_oskenter = loadimagerb(DATA_PREFIX "images/ui/osk_enter.png");
+    img_oskcapslock = loadimagerb(DATA_PREFIX "images/ui/osk_capslock.png");
+    img_oskshift = loadimagerb(DATA_PREFIX "images/ui/osk_shift.png");
 
   }
   show_progress_bar(screen);

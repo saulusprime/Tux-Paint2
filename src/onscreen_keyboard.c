@@ -990,29 +990,33 @@ static int is_blank_or_comment(char *line)
 static void keybd_prepare(on_screen_keyboard *keyboard)
 {
   char * fontname;
+  int font_size;
+
+  /* 12 points on the original 24x24 keys; grows with the key size */
+  font_size = 12 * keyboard->button_up->h / 24;
 
   fontname = malloc(sizeof(char) * 255);
   if (keyboard->osk_fonty == NULL) {
     if (keyboard->layout->fontpath)
     {
     /* First try if it is an absolute path */
-      keyboard->osk_fonty = TTF_OpenFont( keyboard->layout->fontpath, 12 );
+      keyboard->osk_fonty = TTF_OpenFont( keyboard->layout->fontpath, font_size );
       if (keyboard->osk_fonty == NULL)
       {
         /* Now trying if it is relative to DATA_PREFIX/fonts/ */
         snprintf(fontname, 255, "%s/fonts/%s", DATA_PREFIX, keyboard->layout->fontpath);
 
-        keyboard->osk_fonty = TTF_OpenFont( fontname, 12 );
+        keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
         if (keyboard->osk_fonty == NULL)
         {
 	 /* Perhaps it is relative to DATA_PREFIX only? */
 	 snprintf(fontname, 255, "%s/%s", DATA_PREFIX, keyboard->layout->fontpath);
-	 keyboard->osk_fonty = TTF_OpenFont( fontname, 12 );
+	 keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
 	 if (keyboard->osk_fonty == NULL)
 	 {
 	   /* Or to DATA_PREFIX/fonts/locale/ ? */
 	   snprintf(fontname, 255, "%s/fonts/locale/%s", DATA_PREFIX, keyboard->layout->fontpath);
-	   keyboard->osk_fonty = TTF_OpenFont( fontname, 12 );
+	   keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
 	 }
         }
       }
@@ -1022,7 +1026,7 @@ static void keybd_prepare(on_screen_keyboard *keyboard)
     {
       /* Going with the default */
       sprintf(fontname, "%s/fonts/FreeSansBold.ttf", DATA_PREFIX);
-      keyboard->osk_fonty = TTF_OpenFont( fontname, 12 );
+      keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
     }
 
     if (keyboard->osk_fonty == NULL)
@@ -1309,7 +1313,7 @@ static void label_key(osk_key key, on_screen_keyboard *keyboard)
   {
     messager = TTF_RenderUTF8_Blended(keyboard->osk_fonty, text, keyboard->layout->fgcolor);
 
-    apply_surface( key.x + 5, key.y, messager, keyboard->surface, NULL);
+    apply_surface( key.x + 5 * keyboard->button_up->w / 24, key.y, messager, keyboard->surface, NULL);
     SDL_FreeSurface(messager);
   }
   free(text);
