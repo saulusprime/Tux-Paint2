@@ -87,3 +87,7 @@ struct cfginfo
 #define CFGINFO_MAXOFFSET  (sizeof(struct cfginfo))
 
 extern void parse_one_option(struct cfginfo *restrict tmpcfg, const char *str, const char *opt, const char *restrict src);
+
+/* Defined in tuxpaint.c, called by the parser's immediate options (--version, --help, ...) */
+extern void show_version(int details);
+extern void show_usage(int exitcode);

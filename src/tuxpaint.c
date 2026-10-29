@@ -1744,8 +1744,6 @@ static void blit_brush(int x, int y, int direction);
 static void stamp_draw(int x, int y);
 static void rec_undo_buffer(void);
 
-void show_version(int details);
-void show_usage(int exitcode);
 static char *progname;
 
 static SDL_Cursor *get_cursor(unsigned char *bits, unsigned char *mask_bits,
@@ -1934,14 +1932,14 @@ static char *debug_gettext(const char *str);
 static int charsize(Uint16 c);
 #endif
 
-static SDL_Surface * load_kpx(char * file);
+static SDL_Surface * load_kpx(const char * file);
 #ifndef NOSVG
-static SDL_Surface * load_svg(char * file);
+static SDL_Surface * load_svg(const char * file);
 static float pick_best_scape(unsigned int orig_w, unsigned int orig_h,
                       unsigned int max_w, unsigned int max_h);
-static SDL_Surface * myIMG_Load_RWops(char * file);
+static SDL_Surface * myIMG_Load_RWops(const char * file);
 #endif
-static SDL_Surface * myIMG_Load(char * file);
+static SDL_Surface * myIMG_Load(const char * file);
 static int trash(char * path);
 int file_exists(char * path);
 
@@ -11151,7 +11149,7 @@ static void load_starter_id(char *saved_id, FILE *fil)
 }
 
 
-static SDL_Surface * load_starter_helper(char * path_and_basename, char * extension, SDL_Surface * (*load_func)(char *)) {
+static SDL_Surface * load_starter_helper(char * path_and_basename, const char * extension, SDL_Surface * (*load_func)(const char *)) {
   char * ext;
   char fname[256];
   SDL_Surface * surf;
@@ -17248,7 +17246,7 @@ static int paintsound(int size)
    Based on cairo-demo/sdl/main.c from Cairo (GPL'd, (c) 2004 Eric Windisch):
 */
 
-static SDL_Surface * load_svg(char * file)
+static SDL_Surface * load_svg(const char * file)
 {
   svg_cairo_t * scr;
   int bpp, btpp, stride;
@@ -17408,7 +17406,7 @@ static SDL_Surface * load_svg(char * file)
 #else
 
 /* New libcairo2, rsvg and rsvg-cairo based code */
-static SDL_Surface * load_svg(char * file)
+static SDL_Surface * load_svg(const char * file)
 {
   cairo_surface_t * cairo_surf;
   cairo_t * cr;
@@ -17668,7 +17666,7 @@ static float pick_best_scape(unsigned int orig_w, unsigned int orig_h,
 
 /* FIXME: we can remove this after SDL folks fix their bug at http://bugzilla.libsdl.org/show_bug.cgi?id=1485 */
 /* Try to load an image with IMG_Load(), if it fails, then try with RWops() */
-static SDL_Surface * myIMG_Load_RWops(char * file)
+static SDL_Surface * myIMG_Load_RWops(const char * file)
 {
   SDL_Surface * surf;
   FILE * fi;
@@ -17699,7 +17697,7 @@ static SDL_Surface * myIMG_Load_RWops(char * file)
    if we notice it's an SVG file (if available!);
    call load_kpx() if we notice it's a KPX file (JPEG with wrapper);
    otherwise call SDL_Image lib's IMG_Load() (for PNGs, JPEGs, BMPs, etc.) */
-static SDL_Surface * myIMG_Load(char * file)
+static SDL_Surface * myIMG_Load(const char * file)
 {
   if (strlen(file) > 4 && strcasecmp(file + strlen(file) - 4, ".kpx") == 0) {
     return(load_kpx(file));
@@ -17712,7 +17710,7 @@ static SDL_Surface * myIMG_Load(char * file)
 }
 }
 
-static SDL_Surface * load_kpx(char * file)
+static SDL_Surface * load_kpx(const char * file)
 {
   SDL_RWops * data;
   FILE * fi;

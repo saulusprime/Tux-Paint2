@@ -1,0 +1,13 @@
+# Build artifacts (removed by "make clean")
+/tuxpaint
+/dummy.o
+/obj/*.o
+/obj/.build-prefix
+/obj/parse.c
+/obj/parse_step1.c
+/magic/*.so
+/trans/
+/src/tp_magic_api.h
+/tp-magic-config
+/starters/.thumbs/
+/templates/.thumbs/
