@@ -1,6 +1,7 @@
 """Run on the host: drive Tux Paint and capture screenshots.
 
-usage: flatpak-spawn --host [--env=TP_BIN=path] python3 - WINDOWSIZE ACTION... < tp_session.py > shots.tar
+usage: flatpak-spawn --host [--env=TP_BIN=path] [--env=TP_BUTTON=px] [--env=TP_ARGS="opts"] [--env=TP_SCALE=n] \
+         python3 - WINDOWSIZE ACTION... < tp_session.py > shots.tar
 
 ACTION is one of:
   click:X,Y   left click at window coordinates (X,Y)
@@ -16,6 +17,8 @@ size, actions = sys.argv[1], sys.argv[2:]
 binary = os.environ.get("TP_BIN", os.path.expanduser("~/.local/bin/tuxpaint"))
 button = int(os.environ.get("TP_BUTTON", "48"))
 title_h = int(40 * button / 48 + 0.5)
+extra_args = os.environ.get("TP_ARGS", "").split()
+scale = float(os.environ.get("TP_SCALE", "1"))  # multiplies click/drag coordinates
 
 x11 = ctypes.CDLL("libX11.so.6")
 xtst = ctypes.CDLL("libXtst.so.6")
@@ -24,7 +27,7 @@ dpy = ctypes.c_void_p(x11.XOpenDisplay(None))
 
 proc = subprocess.Popen(
     [binary, "--nolockfile", "--nosound",
-     "--windowed", "--windowsize=" + size],
+     "--windowed", "--windowsize=" + size] + extra_args,
     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
@@ -61,7 +64,7 @@ try:
                 n = int(arg)
                 x, y = (n % 2) * button + button // 2, title_h + (n // 2) * button + button // 2
             else:
-                x, y = (int(v) for v in arg.split(","))
+                x, y = (int(int(v) * scale) for v in arg.split(","))
             xtst.XTestFakeMotionEvent(dpy, -1, wx + x, wy + y, 0)
             x11.XFlush(dpy)
             time.sleep(0.2)
@@ -72,7 +75,7 @@ try:
             x11.XFlush(dpy)
             time.sleep(0.8)
         elif kind == "drag":
-            x1, y1, x2, y2 = (int(v) for v in arg.split(","))
+            x1, y1, x2, y2 = (int(int(v) * scale) for v in arg.split(","))
             xtst.XTestFakeMotionEvent(dpy, -1, wx + x1, wy + y1, 0)
             x11.XFlush(dpy)
             time.sleep(0.2)
