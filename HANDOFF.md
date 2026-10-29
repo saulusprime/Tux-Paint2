@@ -30,7 +30,7 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   - `build/host-debian13`, creato da `master`: correzioni di build,
     `dev.sh`, file di progetto;
   - `feature/ui-scaling`, creato da `build/host-debian13`: UI scalabile con
-    la finestra (fase 1 fatta, §5bis). **È il branch attivo.**
+    la finestra (fasi 1 e 2 fatte, §5bis). **È il branch attivo.**
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
 - **Compilazione**: **riuscita sull'host** (2026-10-29): build da zero in
@@ -48,11 +48,12 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   - `Makefile`: `-lm` aggiunto a `linux_ARCH_LINKS`.
   - `.gitignore` nuovo, per gli artefatti di build.
   - `dev.sh` nuovo: build, installazione e avvio per lo sviluppo (§4).
-  - Su `feature/ui-scaling` (`d346e60`, `22ba70e`): interfaccia della
-    schermata principale scalata con la finestra (§5bis) e strumenti di test
-    in `devtools/ui-test/`.
-- **Installato in `~/.local`**: la build di `feature/ui-scaling`, in cui i
-  dialoghi a scala > 1 non sono ancora adattati.
+  - Su `feature/ui-scaling` (`d346e60`, `321db8b`, più gli strumenti di
+    test in `devtools/ui-test/`): schermata principale e finestre di dialogo
+    scalate con la finestra (§5bis).
+- **Installato in `~/.local`**: la build di `feature/ui-scaling`. Restano
+  non scalati la tastiera a schermo, i cursori del mouse e la schermata
+  iniziale (fase 3).
 - **Decisioni prese** (2026-10-29):
   - **Strategia**: si resta sulla **0.9.22 con SDL 1.2** e la si corregge.
     Niente riallineamento all'upstream né porting a SDL2, per ora.
@@ -269,6 +270,20 @@ all'avvio.
 `HEIGHTOFFSET` e `TOOLOFFSET` ora derivano da `buttons_tall`, il numero di
 righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
 
+**Finestre di dialogo** (fase 2):
+
+- Le richieste sì/no e il selettore colore sono disegnati in un'area di
+  design di 640×480 centrata. `PROMPTOFFSETX = (WINDOW_WIDTH - SCALED(640)) / 2`;
+  `PROMPTOFFSETY = HEIGHTOFFSET / 2` resta invariato.
+- La geometria del riquadro resta in unità di design: la variabile `w`
+  dell'animazione conta pixel di design. Si scala solo il risultato, per
+  esempio `SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX`.
+  `PROMPT_LEFT` (96) e `PROMPT_W` (440) restano valori di design.
+- Apri, Nuovo e presentazione hanno la griglia di miniature da
+  `r_canvas.x`, le frecce alte `button_h / 2` e la riga di pulsanti in
+  basso a `r_canvas.h - button_h`.
+  `THUMB_H = (r_canvas.h - button_h / 2 - button_h) / 4`.
+
 **Non scalati di proposito**:
 
 - i pennelli nel selettore, che mostrano la dimensione reale della punta;
@@ -281,8 +296,16 @@ righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
 pixel. Gli strumenti sono in `devtools/ui-test/`:
 
 - `regress.sh OUT BIN 800x600 48` cattura una schermata per strumento;
+- `dialogs.sh OUT BIN [SCALA]` attraversa tutti i dialoghi: uscita, Apri,
+  presentazione con riproduzione, Nuovo, selettore colore. La finestra è
+  800×600 per SCALA, con SCALA intera, e i clic vengono moltiplicati di
+  conseguenza. Usa come `--savedir` una copia di
+  `~/.cache/tuxpaint-test-canon`, che contiene due disegni salvati, così
+  i dati in `~/.tuxpaint` non vengono toccati;
 - `compare.py` confronta due serie di catture;
-- `tp_session.py` è il motore: clic, trascinamenti e catture.
+- `tp_session.py` è il motore: clic, trascinamenti e catture. Si
+  configura con le variabili `TP_BIN`, `TP_BUTTON`, `TP_ARGS` e
+  `TP_SCALE`.
 
 Il binario di riferimento, cioè il codice prima della feature, è in un
 worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
@@ -306,16 +329,20 @@ rimuove con `git worktree remove ~/.cache/tuxpaint-baseline`.
   non esiste sull'host.
 - Se la finestra è più grande dello schermo, il gestore delle finestre la
   accorcia: per esempio 2400×1500 diventa 2400×1462.
+- Non automatizzare il pulsante "Cancella" di Apri: un clic sul "Sì"
+  sposterebbe un file nel Cestino dell'utente.
 
 ## 6. Prossimi passi consigliati
 
-1. UI scalabile, **fase 2: finestre di dialogo** (`TODO.md`, P1). Oggi a
-   scala > 1 sono sballate.
-2. Indagare il bug di Testo ed Etichetta che non si attivano (`TODO.md`,
-   sezione Bug).
-3. Decidere se unire `build/host-debian13` (e poi `feature/ui-scaling`) in
+1. Indagare il bug di Testo ed Etichetta che non si attivano (`TODO.md`,
+   sezione Bug, P1).
+2. Provare a mano Tux Paint a finestra grande (`./dev.sh run
+   --windowsize=1600x1000`), compresi la richiesta "Cancella" e i pulsanti
+   audio dei timbri.
+3. UI scalabile, fase 3: tastiera a schermo, cursori, schermata iniziale.
+4. Decidere se unire `build/host-debian13` e `feature/ui-scaling` in
    `master`.
-4. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+5. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
 
 ---
@@ -569,3 +596,39 @@ Aperto:
 - Fase 2 (finestre di dialogo, oggi sballate a scala > 1) e fase 3 (tastiera
   a schermo, cursori, schermata iniziale).
 - Pulsanti audio dei timbri da verificare con l'audio attivo.
+
+### 2026-10-29 — UI scalabile con la finestra: fase 2 (finestre di dialogo)
+
+Fatto (branch `feature/ui-scaling`, commit `321db8b` e `a92db23`):
+- Prima di toccare il codice, catture di riferimento di tutti i dialoghi
+  col binario originale:
+  - uscita, Apri (con selezione), presentazione (selezione multipla e
+    riproduzione), Nuovo, selettore colore;
+  - creata la cartella di prova `~/.cache/tuxpaint-test-canon` con due
+    disegni salvati; si usa con `--savedir`, per non toccare
+    `~/.tuxpaint`.
+- Convertite circa 450 righe di dialoghi, con script a coppie esatte:
+  - Apri, Nuovo e presentazione condividono le stesse regole;
+  - nelle richieste e nel selettore colore si scalano con `SCALED()` le
+    espressioni di design (regole in §5bis).
+- Lo script trovava inizialmente il prototipo di `play_slideshow`, che è su
+  più righe, invece della definizione. Nessun danno: lo script si ferma
+  prima di scrivere se una regola non trova corrispondenza.
+
+Verifiche:
+- Build: 0 errori, 52 warning in `tuxpaint.c` come prima.
+- **800×600**: nove schermate dei dialoghi e otto della schermata
+  principale identiche al pixel al binario originale.
+- **1600×1200** (scala 2): tutti i dialoghi proporzionati e funzionanti.
+  Anche i clic con coordinate raddoppiate funzionano: "No" nella richiesta,
+  selezione delle miniature, Diapositive, Indietro, Mostra.
+- **1600×1000** (scala 1,67, proporzioni diverse): richiesta d'uscita
+  centrata. Il clic su "No", calcolato dal codice in (476,503), funziona e
+  il selettore colore si apre correttamente.
+- Selettore colore a scala 2: il colore scelto finisce nel pulsante del
+  colore personalizzato e nel disegno.
+
+Aperto:
+- Fase 3: tastiera a schermo, cursori del mouse, schermata iniziale.
+- Da provare a mano: la richiesta "Cancella" e i pulsanti audio dei timbri.
+- Passo del mouse da tastiera non scalato (TODO, P3).

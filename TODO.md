@@ -20,17 +20,10 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 ## UI scalabile con la finestra (feature in corso)
 
 Decisa il 2026-10-29: scala nativa dell'interfaccia, a fasi, sul branch
-`feature/ui-scaling` (parte da `build/host-debian13`). La fase 1 (schermata
-principale) è fatta, vedi [ASIS.md](ASIS.md). Dettagli tecnici in
-`HANDOFF.md` §5bis.
+`feature/ui-scaling` (parte da `build/host-debian13`). Le fasi 1 (schermata
+principale) e 2 (finestre di dialogo) sono fatte, vedi [ASIS.md](ASIS.md).
+Dettagli tecnici in `HANDOFF.md` §5bis.
 
-- [ ] [P1] **Fase 2 — finestre di dialogo**: richieste sì/no
-  (`do_prompt_image_flash_snd`), Apri (`do_open`), Nuovo (`do_new_dialog`),
-  presentazione (`do_slideshow`, `play_slideshow`), selettore colore
-  (`do_color_picker`). Circa 230 costanti fisse (`48`, `96`, `PROMPT_W` 440,
-  `PROMPTOFFSETX/Y`, `THUMB_W/H`, `- 48` dal fondo della tela).
-  **Oggi, con finestre più grandi di 800×600, i dialoghi sono sballati**:
-  immagini e font sono già scalati, le geometrie no.
 - [ ] [P2] **Fase 3 — resto dell'interfaccia**: tastiera a schermo
   (`src/onscreen_keyboard.c` e icone `img_osk*`, oggi non scalate di
   proposito), cursori del mouse (bitmap a dimensione fissa, minuscoli su
@@ -44,6 +37,14 @@ principale) è fatta, vedi [ASIS.md](ASIS.md). Dettagli tecnici in
   valutare una dimensione iniziale ricavata dallo schermo.
 - [ ] [P3] Icone più nitide a scala > 1: oggi sono bitmap da 48 px
   ingrandite (bilineare); servirebbero originali più grandi o SVG.
+- [ ] [P3] Mouse da tastiera e joystick (`handle_keymouse(..., 24, ...)`):
+  il passo è fisso in pixel, quindi a scala > 1 il puntatore si muove più
+  lentamente rispetto all'interfaccia. Valutare `SCALED(24)`.
+- [ ] [P3] Richiesta "Cancella" in Apri non provata automaticamente (un clic
+  sbagliato sposterebbe un file nel Cestino): è la stessa funzione delle
+  altre richieste, ma va provata a mano a scala > 1.
+- [ ] [P2] Unire `feature/ui-scaling` in `master` quando la fase 3 è
+  fatta, o anche prima, visto che a scala 1 non cambia nulla.
 
 ## Bug
 

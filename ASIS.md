@@ -75,6 +75,15 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
 - [x] 2026-10-29 — Strumenti di test dell'interfaccia (`22ba70e`) —
   `devtools/ui-test/`: clic simulati via XTest, catture `xwd` e confronto
   pixel per pixel.
+- [x] 2026-10-29 — UI scalabile, fase 2: finestre di dialogo (`321db8b`):
+  - adattati richieste sì/no, Apri, Nuovo, presentazione (selezione,
+    cursore della velocità, riproduzione) e selettore colore;
+  - a 800×600 le nove schermate dei dialoghi sono identiche al pixel al
+    binario originale;
+  - corrette anche a 1600×1200 (scala 2) e a 1600×1000 (scala 1,67, con
+    la richiesta centrata);
+  - la scelta di un colore dal selettore funziona anche a scala 2;
+  - script `devtools/ui-test/dialogs.sh` (`a92db23`).
 - [x] 2026-10-29 — Bug: il ricolore del pulsante del colore personalizzato
   (`search_label_list`) scriveva oltre il bordo dell'immagine (ciclo fisso
   48×48) — corretto in `d346e60`.
