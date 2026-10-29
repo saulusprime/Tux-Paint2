@@ -1,12 +1,15 @@
 """Run on the host: drive Tux Paint and capture screenshots.
 
 usage: flatpak-spawn --host [--env=TP_BIN=path] [--env=TP_BUTTON=px] [--env=TP_ARGS="opts"] [--env=TP_SCALE=n] \
+         [--env=TP_START_WAIT=sec] [--env=TP_LOG=host-file-for-tuxpaint-output] [--env=TP_WRAP=cmd] \
          python3 - WINDOWSIZE ACTION... < tp_session.py > shots.tar
 
 ACTION is one of:
   click:X,Y   left click at window coordinates (X,Y)
   tool:N      left click on tool button N (button size from TP_BUTTON, default 48)
   drag:X1,Y1,X2,Y2  press at (X1,Y1), move to (X2,Y2), release
+  move:X,Y    move the pointer without clicking
+  cursor:NAME save the current mouse cursor (via XFixes) to NAME.png
   wait:SEC    sleep
   shot:NAME   capture the window to NAME.png
 Writes a tar archive of the PNGs to stdout.
@@ -17,18 +20,34 @@ size, actions = sys.argv[1], sys.argv[2:]
 binary = os.environ.get("TP_BIN", os.path.expanduser("~/.local/bin/tuxpaint"))
 button = int(os.environ.get("TP_BUTTON", "48"))
 title_h = int(40 * button / 48 + 0.5)
+start_wait = float(os.environ.get("TP_START_WAIT", "5"))
 extra_args = os.environ.get("TP_ARGS", "").split()
 scale = float(os.environ.get("TP_SCALE", "1"))  # multiplies click/drag coordinates
 
 x11 = ctypes.CDLL("libX11.so.6")
 xtst = ctypes.CDLL("libXtst.so.6")
+xfixes = ctypes.CDLL("libXfixes.so.3")
 x11.XOpenDisplay.restype = ctypes.c_void_p
+
+
+class XFixesCursorImage(ctypes.Structure):
+    _fields_ = [("x", ctypes.c_short), ("y", ctypes.c_short),
+                ("width", ctypes.c_ushort), ("height", ctypes.c_ushort),
+                ("xhot", ctypes.c_ushort), ("yhot", ctypes.c_ushort),
+                ("cursor_serial", ctypes.c_ulong),
+                ("pixels", ctypes.POINTER(ctypes.c_ulong)),
+                ("atom", ctypes.c_ulong), ("name", ctypes.c_char_p)]
+
+
+xfixes.XFixesGetCursorImage.restype = ctypes.POINTER(XFixesCursorImage)
 dpy = ctypes.c_void_p(x11.XOpenDisplay(None))
 
+log = open(os.environ["TP_LOG"], "w") if "TP_LOG" in os.environ else subprocess.DEVNULL
+wrapper = os.environ.get("TP_WRAP", "").split()  # e.g. "stdbuf -oL -eL"
 proc = subprocess.Popen(
-    [binary, "--nolockfile", "--nosound",
+    wrapper + [binary, "--nolockfile", "--nosound",
      "--windowed", "--windowsize=" + size] + extra_args,
-    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    stdout=log, stderr=subprocess.STDOUT)
 
 
 def window():
@@ -50,7 +69,7 @@ def window():
 
 out = tarfile.open(fileobj=sys.stdout.buffer, mode="w|")
 try:
-    time.sleep(5)
+    time.sleep(start_wait)
     win = window()
     if win is None:
         sys.exit("window not found")
@@ -89,6 +108,22 @@ try:
             xtst.XTestFakeButtonEvent(dpy, 1, 0, 0)
             x11.XFlush(dpy)
             time.sleep(0.8)
+        elif kind == "move":
+            x, y = (int(int(v) * scale) for v in arg.split(","))
+            xtst.XTestFakeMotionEvent(dpy, -1, wx + x, wy + y, 0)
+            x11.XFlush(dpy)
+            time.sleep(0.5)
+        elif kind == "cursor":
+            from PIL import Image
+            ci = xfixes.XFixesGetCursorImage(dpy).contents
+            argb = [ci.pixels[i] & 0xffffffff for i in range(ci.width * ci.height)]
+            rgba = bytes(b for p in argb for b in ((p >> 16) & 255, (p >> 8) & 255, p & 255, p >> 24))
+            buf = io.BytesIO()
+            Image.frombytes("RGBA", (ci.width, ci.height), rgba).save(buf, "PNG")
+            sys.stderr.write("%s: cursor %dx%d, hotspot %d,%d\n" % (arg, ci.width, ci.height, ci.xhot, ci.yhot))
+            ti = tarfile.TarInfo(arg + ".png")
+            ti.size = len(buf.getvalue())
+            out.addfile(ti, io.BytesIO(buf.getvalue()))
         elif kind == "shot":
             xwd = subprocess.run(["xwd", "-silent", "-id", wid], capture_output=True).stdout
             png = subprocess.run(["ffmpeg", "-loglevel", "error", "-f", "xwd_pipe", "-i", "-",
