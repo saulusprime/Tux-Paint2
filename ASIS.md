@@ -61,3 +61,20 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
 - [x] 2026-10-29 — Commit delle correzioni di build, di `dev.sh` e dei file
   di progetto — sul branch `build/host-debian13` (`b92a7d1`, `93fc7df` e il
   commit dei file di progetto); identità git configurata solo nel repo.
+- [x] 2026-10-29 — Decisione: UI scalabile con la finestra — scala nativa
+  dell'interfaccia (non ingrandimento globale con sdl12-compat), a fasi, sul
+  branch `feature/ui-scaling`.
+- [x] 2026-10-29 — UI scalabile, fase 1: schermata principale (`d346e60`):
+  - pulsanti proporzionali alla finestra rispetto a 800×600, mai sotto i
+    48 px: 1600×1000 → 80 px, 2400×1500 → 120 px;
+  - scalati barra strumenti, selettori, palette, titoli, area di Tux,
+    etichette, font, icone delle magie e miniature dei timbri;
+  - tela e clic allineati;
+  - a 800×600 le otto schermate di prova sono identiche al pixel al
+    binario originale.
+- [x] 2026-10-29 — Strumenti di test dell'interfaccia (`22ba70e`) —
+  `devtools/ui-test/`: clic simulati via XTest, catture `xwd` e confronto
+  pixel per pixel.
+- [x] 2026-10-29 — Bug: il ricolore del pulsante del colore personalizzato
+  (`search_label_list`) scriveva oltre il bordo dell'immagine (ciclo fisso
+  48×48) — corretto in `d346e60`.

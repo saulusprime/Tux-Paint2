@@ -17,6 +17,44 @@ si resta sulla **0.9.22 con SDL 1.2** e la si corregge. Target: solo Linux.
 Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 `HANDOFF.md` §1.
 
+## UI scalabile con la finestra (feature in corso)
+
+Decisa il 2026-10-29: scala nativa dell'interfaccia, a fasi, sul branch
+`feature/ui-scaling` (parte da `build/host-debian13`). La fase 1 (schermata
+principale) è fatta, vedi [ASIS.md](ASIS.md). Dettagli tecnici in
+`HANDOFF.md` §5bis.
+
+- [ ] [P1] **Fase 2 — finestre di dialogo**: richieste sì/no
+  (`do_prompt_image_flash_snd`), Apri (`do_open`), Nuovo (`do_new_dialog`),
+  presentazione (`do_slideshow`, `play_slideshow`), selettore colore
+  (`do_color_picker`). Circa 230 costanti fisse (`48`, `96`, `PROMPT_W` 440,
+  `PROMPTOFFSETX/Y`, `THUMB_W/H`, `- 48` dal fondo della tela).
+  **Oggi, con finestre più grandi di 800×600, i dialoghi sono sballati**:
+  immagini e font sono già scalati, le geometrie no.
+- [ ] [P2] **Fase 3 — resto dell'interfaccia**: tastiera a schermo
+  (`src/onscreen_keyboard.c` e icone `img_osk*`, oggi non scalate di
+  proposito), cursori del mouse (bitmap a dimensione fissa, minuscoli su
+  HiDPI), schermata iniziale.
+- [ ] [P2] Pulsanti audio dei timbri (`r_sfx`) a scala > 1: da verificare
+  con l'audio attivo (i test girano con `--nosound`).
+- [ ] [P3] Opzione `buttonsize=auto|N` (come l'upstream, dalla 0.9.27) per
+  forzare la dimensione dei pulsanti: `src/parse.gperf`, `tuxpaint.conf`,
+  `docs/OPTIONS.txt`, completamento bash.
+- [ ] [P3] Finestra di default 800×600 minuscola sugli schermi HiDPI:
+  valutare una dimensione iniziale ricavata dallo schermo.
+- [ ] [P3] Icone più nitide a scala > 1: oggi sono bitmap da 48 px
+  ingrandite (bilineare); servirebbero originali più grandi o SVG.
+
+## Bug
+
+- [ ] [P1] **Strumenti Testo ed Etichetta non si attivano** sull'host:
+  dopo il clic resta il messaggio del Testo ma lo strumento non si
+  seleziona e il pannello dei font resta vuoto, anche dopo 40 s e un
+  secondo clic. Succede anche col binario originale, quindi è un problema
+  preesistente. Ipotesi: caricamento dei font (461 sull'host, scanner in
+  un processo separato, `FORKED_FONTS`) che non termina. Da verificare a
+  mano, fuori dai test automatici.
+
 ## Build e ambiente
 
 - [ ] [P2] Unire il branch `build/host-debian13` in `master`.

@@ -26,8 +26,11 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   `https://github.com/lliurex/tuxpaint.git`. Un solo commit
   (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16): import del
   sorgente 0.9.22 così come pacchettizzato in Ubuntu.
-- **Branch**: lavoro su `build/host-debian13`, creato da `master` il
-  2026-10-29; non ancora unito a `master` né pubblicato su `origin`.
+- **Branch** (nessuno unito a `master` né pubblicato su `origin`):
+  - `build/host-debian13`, creato da `master`: correzioni di build,
+    `dev.sh`, file di progetto;
+  - `feature/ui-scaling`, creato da `build/host-debian13`: UI scalabile con
+    la finestra (fase 1 fatta, §5bis). **È il branch attivo.**
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
 - **Compilazione**: **riuscita sull'host** (2026-10-29): build da zero in
@@ -45,6 +48,11 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   - `Makefile`: `-lm` aggiunto a `linux_ARCH_LINKS`.
   - `.gitignore` nuovo, per gli artefatti di build.
   - `dev.sh` nuovo: build, installazione e avvio per lo sviluppo (§4).
+  - Su `feature/ui-scaling` (`d346e60`, `22ba70e`): interfaccia della
+    schermata principale scalata con la finestra (§5bis) e strumenti di test
+    in `devtools/ui-test/`.
+- **Installato in `~/.local`**: la build di `feature/ui-scaling`, in cui i
+  dialoghi a scala > 1 non sono ancora adattati.
 - **Decisioni prese** (2026-10-29):
   - **Strategia**: si resta sulla **0.9.22 con SDL 1.2** e la si corregge.
     Niente riallineamento all'upstream né porting a SDL2, per ora.
@@ -224,11 +232,90 @@ in `TODO.md`, sezione "Qualità del codice".
    Impostata solo nella config del repository; `~/.gitconfig` non esiste,
    quindi negli altri repository va configurata a parte.
 
+## 5bis. UI scalabile con la finestra: note tecniche
+
+Feature richiesta il 2026-10-29: su schermi ad alta risoluzione pulsanti e
+icone restavano a 48 px, minuscoli. Si è scelta la scala nativa
+dell'interfaccia, a fasi, sul branch `feature/ui-scaling`. L'alternativa
+scartata era l'ingrandimento globale con `SDL12COMPAT_WINDOW_SCALING`, che
+riduce la risoluzione della tela.
+
+**Modello** (`setup_normal_screen_layout()` in `src/tuxpaint.c`):
+
+- `scala = max(1, min(max(L,A) / 800, min(L,A) / 600))`;
+- `button_w = button_h = floor(48 × scala)`;
+- `button_scale = button_w / 48`.
+
+Fino a 800×600 non cambia nulla. Esempi: 1600×1000 → 80 px,
+2400×1500 → 120 px, 2560×1600 a schermo intero → 128 px. La finestra è
+fissa per tutta la sessione, quindi la scala si calcola una volta sola,
+all'avvio.
+
+**Convenzioni per convertire il codice** (da seguire anche nella fase 2):
+
+| Prima (design 48×48) | Dopo |
+|----------------------|------|
+| `48` (pulsante) | `button_w` / `button_h` |
+| `96` (due colonne) | `button_w * 2` |
+| `40` (altezza titolo) | `r_ttools.h` / `r_ttoolopt.h` |
+| `24` (mezzo pulsante, frecce di scorrimento) | `button_h / 2` |
+| margini e misure interne (`2`, `4`, `40`, `44`…) | `SCALED(n)` |
+| `+ 96` / `- 96` (scostamento della tela) | `r_canvas.x` |
+| `WINDOW_WIDTH - 96 - 96`, `48 * 7 + 40 + HEIGHTOFFSET` | `r_canvas.w`, `r_canvas.h` |
+| `loadimage()` di immagini dell'interfaccia | `loadimagerb()` |
+| superfici già caricate (es. icone dei plugin) | `scale_ui_image()` |
+| dimensioni dei font dell'interfaccia | `SCALED(punti)` |
+
+`HEIGHTOFFSET` e `TOOLOFFSET` ora derivano da `buttons_tall`, il numero di
+righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
+
+**Non scalati di proposito**:
+
+- i pennelli nel selettore, che mostrano la dimensione reale della punta;
+- timbri, testo e disegni sulla tela, che sono contenuto e non interfaccia;
+- la schermata iniziale;
+- le icone della tastiera a schermo, perché la tastiera stessa non è
+  ancora scalata (fase 3).
+
+**Invariante e test**: a scala 1 l'interfaccia deve restare identica al
+pixel. Gli strumenti sono in `devtools/ui-test/`:
+
+- `regress.sh OUT BIN 800x600 48` cattura una schermata per strumento;
+- `compare.py` confronta due serie di catture;
+- `tp_session.py` è il motore: clic, trascinamenti e catture.
+
+Il binario di riferimento, cioè il codice prima della feature, è in un
+worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
+`build/host-debian13`. Si ricompila con `./dev.sh build` lì dentro e si
+rimuove con `git worktree remove ~/.cache/tuxpaint-baseline`.
+
+**Insidie dei test automatici**:
+
+- Il primo clic su una finestra non attiva serve solo a darle il focus:
+  `regress.sh` fa un clic iniziale sul titolo "Strumenti".
+- I **trascinamenti simulati non sono affidabili**: il puntatore reale
+  dell'utente interferisce e produce linee "a ventaglio". Per verificare
+  la tela usare clic singoli.
+- **Tux Paint non si chiude con SIGTERM**: SDL lo trasforma in una
+  richiesta di uscita e il programma chiede conferma. Negli script usare
+  SIGKILL (`timeout -s KILL`, `kill -9`).
+- `pkill -f` con il testo della riga di comando colpisce anche le shell che
+  lo contengono: usare `pgrep -x tuxpaint`.
+- L'host non vede la `/tmp` del sandbox: i dati passano su stdout (tar).
+  Con `flatpak-spawn` passare `--directory=$HOME` se la cartella corrente
+  non esiste sull'host.
+- Se la finestra è più grande dello schermo, il gestore delle finestre la
+  accorcia: per esempio 2400×1500 diventa 2400×1462.
+
 ## 6. Prossimi passi consigliati
 
-1. Decidere se unire `build/host-debian13` in `master`.
-2. Provare Tux Paint a mano (`./dev.sh run`) e annotare eventuali problemi.
-3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+1. UI scalabile, **fase 2: finestre di dialogo** (`TODO.md`, P1). Oggi a
+   scala > 1 sono sballate.
+2. Indagare il bug di Testo ed Etichetta che non si attivano (`TODO.md`,
+   sezione Bug).
+3. Decidere se unire `build/host-debian13` (e poi `feature/ui-scaling`) in
+   `master`.
+4. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
 
 ---
@@ -426,3 +513,59 @@ Aperto:
 - Unire il branch in `master` (decisione dell'utente).
 - Nessun push su `origin` (`github.com/lliurex/tuxpaint`, repository di
   LliureX).
+
+### 2026-10-29 — UI scalabile con la finestra: fase 1 (schermata principale)
+
+Richiesta dell'utente: le icone funzionali devono ingrandirsi in proporzione
+alla finestra, perché su schermi ad alta risoluzione restano minuscole.
+
+Analisi:
+- Lo schermo dell'utente è 2560×1600 (circa 224 dpi), GNOME al 200%, con
+  `xwayland-native-scaling`. Tux Paint gira via XWayland a pixel fisici,
+  quindi una finestra 800×600 appare grande come una 400×300 e i pulsanti
+  da 48 px sono larghi circa 5 mm.
+- La finestra ha una dimensione fissa per la sessione (`windowsize`, oppure
+  schermo intero nativo). "Proporzionale alla finestra" vuol dire quindi
+  calcolare la scala all'avvio.
+- Nel codice ci sono centinaia di costanti di design. Circa 200 riguardano
+  la schermata principale e circa 230 le finestre di dialogo.
+- Si poteva ingrandire tutta la finestra con `SDL12COMPAT_WINDOW_SCALING`
+  di sdl12-compat: verificato che funziona (800×600 diventa 1600×1200), ma
+  la tela perderebbe risoluzione.
+- **Decisione dell'utente**: scala nativa dell'interfaccia, a fasi.
+
+Fatto (branch `feature/ui-scaling`, commit `d346e60`):
+- Modello e convenzioni descritti in §5bis.
+- Sostituzioni nelle funzioni di disegno fatte con script a coppie esatte
+  (con controllo del numero di occorrenze), poi riviste nel diff.
+- Correzioni emerse durante il lavoro:
+  - l'icona di "Colori XOR" (PNG a palette) diventava bianca una volta
+    scalata, perché `thumbnail2()` non copia la palette: ora viene prima
+    convertita in RGBA;
+  - il ciclo fisso 48×48 in `search_label_list` scriveva oltre il bordo
+    del pulsante del colore personalizzato.
+- Creati gli strumenti di test in `devtools/ui-test/` (commit `22ba70e`) e
+  un binario di riferimento in `~/.cache/tuxpaint-baseline`.
+
+Verifiche:
+- Build: 0 errori, 52 warning in `tuxpaint.c` come prima.
+- **800×600**: le otto schermate (pennello, timbri, linee, forme, testo,
+  etichetta, magie, gomma) sono identiche al pixel al binario originale.
+- **1600×1000** (pulsanti da 80 px) e **2400×1500** (120 px): schermata
+  principale proporzionata; etichette, titoli, palette, area di Tux e
+  icone sono a posto.
+- Tela: clic con un pennello grande in (800,400), (300,200), (1400,700) e
+  (170,10); i punti cadono esattamente lì e un timbro risulta centrato in
+  (600,550).
+
+Scoperte:
+- **Testo ed Etichetta non si attivano**, anche col binario originale:
+  problema preesistente, registrato nel TODO (sezione Bug).
+- Tux Paint ignora SIGTERM (chiede conferma per uscire): è la causa del
+  blocco di 60 s notato nella prova di avvio precedente.
+- Altre insidie dei test automatici in §5bis.
+
+Aperto:
+- Fase 2 (finestre di dialogo, oggi sballate a scala > 1) e fase 3 (tastiera
+  a schermo, cursori, schermata iniziale).
+- Pulsanti audio dei timbri da verificare con l'audio attivo.
