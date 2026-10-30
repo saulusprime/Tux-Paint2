@@ -26,10 +26,14 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   `https://github.com/lliurex/tuxpaint.git`. Un solo commit
   (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16): import del
   sorgente 0.9.22 così come pacchettizzato in Ubuntu.
-- **Branch**: dal 2026-10-30 `master` contiene tutto il lavoro, unito per
-  avanzamento rapido da `build/host-debian13` e `feature/ui-scaling`. I due
-  branch restano, fermi allo stesso commit o prima. **È il branch attivo.**
-  Niente è pubblicato su `origin`.
+- **Branch**: dal 2026-10-30 `master` contiene tutto il lavoro fino a
+  `f0f9036`, unito per avanzamento rapido da `build/host-debian13` e
+  `feature/ui-scaling`. Niente è pubblicato su `origin`.
+  - `feature/sharper-icons`, da `master`: ingrandimento Lanczos delle
+    icone (`7cb40aa`) e file di progetto. **È il branch attivo**, da unire
+    in `master`.
+  - Regola: il lavoro nuovo si fa su un branch, non direttamente su
+    `master`.
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
 - **Compilazione**: **riuscita sull'host** (2026-10-29): build da zero in
@@ -309,6 +313,12 @@ righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
   dimensione indicata.
 - **Mouse da tastiera**: i passi di `handle_keymouse()` sono
   `SCALED(16)` / `SCALED(24)`.
+- **Icone ingrandite con Lanczos** (`enlarge_lanczos()`, prima di
+  `scale_ui_image()`): filtro separabile Lanczos-3 su alfa premoltiplicato
+  (RGB × alfa, poi diviso di nuovo). Si usa solo se entrambe le dimensioni
+  crescono; altrimenti, o in caso di errore di memoria, `thumbnail2()`.
+  `zoom()` (bilineare) resta per gli altri usi: miniature, timbri,
+  Starter.
 
 **Resto dell'interfaccia** (fase 3):
 
@@ -409,13 +419,13 @@ ricompila con `./dev.sh build` lì dentro e si rimuove con
 
 ## 6. Prossimi passi consigliati
 
-1. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
+1. Unire `feature/sharper-icons` in `master` (icone più nitide).
+2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
-2. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
-3. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
+4. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
    codice").
-4. Se interessa: icone più nitide, che richiedono nuove immagini.
 
 ---
 
@@ -882,3 +892,37 @@ Scoperte:
 
 Aperto:
 - Icone più nitide: servono nuove immagini (TODO, P3).
+
+### 2026-10-30 — Icone più nitide: ingrandimento Lanczos
+
+Fatto:
+- **Ricerca di immagini ad alta risoluzione nell'upstream**: non ce ne
+  sono. Il repository git ha in `data/images/tools/` solo PNG, e
+  `brush.png` è ancora 40×30, come qui. L'upstream ha introdotto
+  `buttonsize` e `auto` con la stessa formula su 800×600, ma ingrandisce le
+  stesse bitmap.
+- **Confronto degli algoritmi** con PIL sull'host, su icone reali a scala
+  2 e 2,67: bilineare (l'attuale `zoom()`), bicubico, Lanczos, Lanczos con
+  maschera di contrasto. Scelto Lanczos: bordi netti senza aloni; la
+  nitidezza aggiuntiva è più una questione di gusto.
+- `enlarge_lanczos()` in `src/tuxpaint.c`, usato da `scale_ui_image()`
+  (commit `7cb40aa`).
+- Il commit era finito per errore su `master`. Spostato sul branch nuovo
+  `feature/sharper-icons` e riportato `master` a `f0f9036`
+  (`git branch -f`, senza toccare i file).
+
+Verifiche (desktop fermo, su richiesta all'utente):
+- Build: 0 errori, warning invariati (52 in `tuxpaint.c`).
+- **800×600**: le otto schermate principali sono identiche al riferimento;
+  a scala 1 il codice nuovo non viene eseguito.
+- **Prima e dopo a scala 2 (1600×1200) e 2,5 (2000×1500)**, schermata
+  delle magie: icone e scritte nettamente più definite (Linee, Forme,
+  Blocchi, Bordi di fili), senza aloni e con le sfumature dei pulsanti
+  pulite.
+- Una cattura a 2,5 si è fermata da sola con "STOP": sotto il puntatore
+  non c'era nessuna finestra, perché la finestra era troppo alta per lo
+  schermo. Ripetuta, è andata a buon fine.
+
+Aperto:
+- Unire `feature/sharper-icons` in `master`.
+- Icone davvero nitide solo con nuove immagini (lavoro grafico, P3).

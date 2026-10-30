@@ -19,14 +19,15 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 
 ## UI scalabile con la finestra
 
-La scala nativa dell'interfaccia è completa, con le rifiniture, e unita in
-`master`: vedi [ASIS.md](ASIS.md) e `HANDOFF.md` §5bis. Resta:
+Completa: scala nativa, rifiniture e icone ingrandite con Lanczos. Vedi
+[ASIS.md](ASIS.md) e `HANDOFF.md` §5bis.
 
-- [ ] [P3] Icone più nitide a scala > 1: oggi sono bitmap da 48 px
-  ingrandite (bilineare), un po' morbide. Il codice non può farci molto:
-  servono immagini nuove (PNG più grandi o SVG) per pulsanti, strumenti,
-  forme e magie, cioè un lavoro grafico. La finestra iniziale a multipli
-  interi di 800×600 limita già la sfocatura.
+- [ ] [P2] Unire `feature/sharper-icons` (ingrandimento Lanczos, commit
+  `7cb40aa`) in `master`.
+- [ ] [P3] Icone davvero nitide a scala > 1: servirebbero immagini nuove
+  (PNG grandi o SVG) per pulsanti, strumenti, forme e magie, cioè un lavoro
+  grafico. Nemmeno l'upstream le ha: nella versione attuale le icone degli
+  strumenti sono ancora PNG da 40×30.
 
 ## Bug
 

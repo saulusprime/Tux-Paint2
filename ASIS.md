@@ -137,3 +137,16 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     al riferimento.
 - [x] 2026-10-30 — Uniti `build/host-debian13` e `feature/ui-scaling` in
   `master` (avanzamento rapido, nessun push).
+- [x] 2026-10-30 — Icone più nitide a scala > 1 (`7cb40aa`, branch
+  `feature/sharper-icons`):
+  - verificato che neanche l'upstream ha immagini ad alta risoluzione:
+    icone degli strumenti PNG 40×30, nessun SVG;
+  - confronto di bilineare, bicubico, Lanczos e Lanczos con nitidezza
+    sulle icone reali: scelto Lanczos, senza nitidezza aggiuntiva per
+    evitare aloni;
+  - `enlarge_lanczos()`: filtro separabile Lanczos-3 su alfa
+    premoltiplicato, usato da `scale_ui_image()` solo quando
+    l'immagine si ingrandisce;
+  - prima e dopo a scala 2 e 2,5: bordi netti, senza aloni; a 800×600
+    identico al riferimento.
+
