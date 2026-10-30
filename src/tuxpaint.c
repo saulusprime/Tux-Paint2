@@ -7806,12 +7806,151 @@ static SDL_Surface *loadimagerb(const char *const fname)
 }
 
 
+/* Lanczos (a = 3) kernel: */
+
+static float lanczos3(float x)
+{
+  if (x == 0)
+    return (1);
+  if (x <= -3 || x >= 3)
+    return (0);
+
+  x = x * M_PI;
+  return (3 * sin(x) * sin(x / 3) / (x * x));
+}
+
+
+/* Enlarge n_lines lines of pixels (4 floats each) from len_in to len_out
+   pixels. Pixels of a line are 'step' pixels apart, lines are 'line' pixels
+   apart, in both buffers: */
+
+static void lanczos_1d(const float *in, float *out, int len_in, int len_out,
+		       int n_lines, int in_step, int in_line,
+		       int out_step, int out_line)
+{
+  float scale = (float) len_in / len_out;
+  float weight[6], sum, center, acc[4];
+  const float *p;
+  float *q;
+  int o, i, first, line, c, ii;
+
+  for (o = 0; o < len_out; o++)
+  {
+    center = (o + 0.5) * scale - 0.5;
+    first = floor(center) - 2;
+
+    sum = 0;
+    for (i = 0; i < 6; i++)
+    {
+      weight[i] = lanczos3(center - (first + i));
+      sum += weight[i];
+    }
+
+    for (line = 0; line < n_lines; line++)
+    {
+      acc[0] = acc[1] = acc[2] = acc[3] = 0;
+
+      for (i = 0; i < 6; i++)
+      {
+	ii = min(max(first + i, 0), len_in - 1);
+	p = in + (line * in_line + ii * in_step) * 4;
+	for (c = 0; c < 4; c++)
+	  acc[c] += p[c] * weight[i];
+      }
+
+      q = out + (line * out_line + o * out_step) * 4;
+      for (c = 0; c < 4; c++)
+	q[c] = acc[c] / sum;
+    }
+  }
+}
+
+
+/* Enlarge an image with Lanczos resampling, sharper than zoom()'s bilinear
+   interpolation. Works on premultiplied alpha, so the color of transparent
+   pixels doesn't bleed into the edges. Returns NULL on failure. */
+
+static SDL_Surface *enlarge_lanczos(SDL_Surface * src, int new_w, int new_h)
+{
+  Uint32(*getpixel) (SDL_Surface *, int, int) = getpixels[src->format->BytesPerPixel];
+  void (*putpixel) (SDL_Surface *, int, int, Uint32);
+  SDL_Surface *dst;
+  float *in, *tmp, *out, *p;
+  Uint8 r, g, b, a;
+  int x, y;
+
+  dst = SDL_CreateRGBSurface(src->flags, new_w, new_h,
+			     src->format->BitsPerPixel,
+			     src->format->Rmask, src->format->Gmask,
+			     src->format->Bmask, src->format->Amask);
+  in = malloc(sizeof(float) * 4 * src->w * src->h);
+  tmp = malloc(sizeof(float) * 4 * new_w * src->h);
+  out = malloc(sizeof(float) * 4 * new_w * new_h);
+
+  if (dst == NULL || in == NULL || tmp == NULL || out == NULL)
+  {
+    if (dst != NULL)
+      SDL_FreeSurface(dst);
+    free(in);
+    free(tmp);
+    free(out);
+    return (NULL);
+  }
+
+  SDL_LockSurface(src);
+  for (y = 0; y < src->h; y++)
+  {
+    for (x = 0; x < src->w; x++)
+    {
+      SDL_GetRGBA(getpixel(src, x, y), src->format, &r, &g, &b, &a);
+      p = in + (y * src->w + x) * 4;
+      p[0] = r * a / 255.0;
+      p[1] = g * a / 255.0;
+      p[2] = b * a / 255.0;
+      p[3] = a;
+    }
+  }
+  SDL_UnlockSurface(src);
+
+  lanczos_1d(in, tmp, src->w, new_w, src->h, 1, src->w, 1, new_w);
+  lanczos_1d(tmp, out, src->h, new_h, new_w, new_w, 1, new_w, 1);
+
+  putpixel = putpixels[dst->format->BytesPerPixel];
+  SDL_LockSurface(dst);
+  for (y = 0; y < new_h; y++)
+  {
+    for (x = 0; x < new_w; x++)
+    {
+      p = out + (y * new_w + x) * 4;
+      a = min(max(p[3] + 0.5, 0.0), 255.0);
+      if (a == 0)
+	r = g = b = 0;
+      else
+      {
+	r = min(max(p[0] * 255 / a + 0.5, 0.0), 255.0);
+	g = min(max(p[1] * 255 / a + 0.5, 0.0), 255.0);
+	b = min(max(p[2] * 255 / a + 0.5, 0.0), 255.0);
+      }
+      putpixel(dst, x, y, SDL_MapRGBA(dst->format, r, g, b, a));
+    }
+  }
+  SDL_UnlockSurface(dst);
+
+  free(in);
+  free(tmp);
+  free(out);
+
+  return (dst);
+}
+
+
 /* Resize a UI image, drawn for 48x48 buttons, to the current button size
    (frees the original): */
 
 static SDL_Surface *scale_ui_image(SDL_Surface * s)
 {
   SDL_Surface *scaled;
+  int w, h;
 
   if (s == NULL || button_scale == 1)
     return (s);
@@ -7826,7 +7965,14 @@ static SDL_Surface *scale_ui_image(SDL_Surface * s)
     s = scaled;
   }
 
-  scaled = thumbnail2(s, SCALED(s->w), SCALED(s->h), 0, 1);
+  w = SCALED(s->w);
+  h = SCALED(s->h);
+
+  scaled = NULL;
+  if (w > s->w && h > s->h)
+    scaled = enlarge_lanczos(s, w, h);
+  if (scaled == NULL)
+    scaled = thumbnail2(s, w, h, 0, 1);
   SDL_FreeSurface(s);
 
   return (scaled);
