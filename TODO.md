@@ -43,6 +43,9 @@ La scala nativa dell'interfaccia è completa (fasi 1-3, branch
 
 ## Bug
 
+Nessuno aperto. I difetti trovati nei warning sono nella sezione
+"Qualità del codice".
+
 ## Build e ambiente
 
 - [ ] [P2] Unire il branch `build/host-debian13` in `master`.
