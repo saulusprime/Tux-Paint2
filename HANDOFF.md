@@ -26,12 +26,10 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
   `https://github.com/lliurex/tuxpaint.git`. Un solo commit
   (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16): import del
   sorgente 0.9.22 così come pacchettizzato in Ubuntu.
-- **Branch** (nessuno unito a `master` né pubblicato su `origin`):
-  - `build/host-debian13`, creato da `master`: correzioni di build,
-    `dev.sh`, file di progetto;
-  - `feature/ui-scaling`, creato da `build/host-debian13`: UI scalabile con
-    la finestra (completa, §5bis) e correzione del caricamento dei font.
-    **È il branch attivo.**
+- **Branch**: dal 2026-10-30 `master` contiene tutto il lavoro, unito per
+  avanzamento rapido da `build/host-debian13` e `feature/ui-scaling`. I due
+  branch restano, fermi allo stesso commit o prima. **È il branch attivo.**
+  Niente è pubblicato su `origin`.
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
 - **Compilazione**: **riuscita sull'host** (2026-10-29): build da zero in
@@ -294,7 +292,23 @@ righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
 
 - i pennelli nel selettore, che mostrano la dimensione reale della punta;
 - timbri, testo e disegni sulla tela, che sono contenuto e non interfaccia;
-- il passo del mouse da tastiera e joystick (`handle_keymouse(..., 24)`).
+- il joystick (passi configurabili con le sue opzioni).
+
+**Rifiniture** (2026-10-30):
+
+- **`buttonsize=auto|24-192`** (`button_size_wanted`): in
+  `setup_normal_screen_layout()` sostituisce la dimensione automatica solo
+  se è più piccola. Più grande non ci starebbe, perché il layout ha
+  bisogno di almeno 7 righe di pulsanti; in quel caso c'è un avviso su
+  stderr.
+- **Finestra iniziale su schermi grandi**: se `windowsize` non è
+  indicato (`window_size_given`) e la finestra non è a schermo intero,
+  prima di aprirla Tux Paint legge la risoluzione con `SDL_GetVideoInfo()`.
+  Poi moltiplica 800×600 per `k = min(90% larghezza / 800,
+  85% altezza / 600)`, con k intero ≥ 2. Anche `--1024x768` conta come
+  dimensione indicata.
+- **Mouse da tastiera**: i passi di `handle_keymouse()` sono
+  `SCALED(16)` / `SCALED(24)`.
 
 **Resto dell'interfaccia** (fase 3):
 
@@ -378,6 +392,15 @@ ricompila con `./dev.sh build` lì dentro e si rimuove con
   cliccare. Se invece l'utente sta usando il mouse, i clic simulati
   vengono ignorati o mescolati ai suoi: prima di una prova chiedere di
   non toccare il mouse.
+- **Audio nei test**: con `TP_SOUND=1` Tux Paint gira con l'audio attivo
+  ma col driver SDL `dummy`, quindi senza suoni reali.
+- **Cestino nei test**: Tux Paint mette i file cancellati in
+  `$XDG_DATA_HOME/Trash`. Con
+  `TP_WRAP="env XDG_DATA_HOME=$HOME/.cache/tuxpaint-test-xdg"` la
+  richiesta "Cancella" si può provare senza toccare il Cestino vero.
+- **Effetto del primo clic**: il clic di messa a fuoco a volte lasciava un
+  punto sulla tela. `regress.sh` e `dialogs.sh` ora portano prima il
+  puntatore sul titolo e aspettano un secondo.
 - Crash senza `gdb`: `devtools/ui-test/segv_backtrace.c`, caricato con
   `LD_PRELOAD` tramite `TP_WRAP`, stampa la pila delle chiamate al
   segmentation fault, anche nei processi figli. Gli indirizzi si
@@ -386,15 +409,13 @@ ricompila con `./dev.sh build` lì dentro e si rimuove con
 
 ## 6. Prossimi passi consigliati
 
-1. Provare a mano Tux Paint a finestra grande (`./dev.sh run
-   --windowsize=1600x1000`, oppure a schermo intero), compresi la
-   richiesta "Cancella" e i pulsanti audio dei timbri.
-2. Decidere se unire `build/host-debian13` e `feature/ui-scaling` in
-   `master`.
-3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+1. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
+   apre da solo una finestra 1600×1200 sul tuo schermo.
+2. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
-4. Rifiniture della UI scalabile (`TODO.md`): opzione `buttonsize`,
-   dimensione iniziale della finestra su HiDPI.
+3. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
+   codice").
+4. Se interessa: icone più nitide, che richiedono nuove immagini.
 
 ---
 
@@ -818,3 +839,46 @@ Aperto:
 - Effetto del primo clic negli script: a volte il clic di messa a fuoco
   lascia un punto sulla tela. Si potrebbe eliminare con uno spostamento
   del puntatore prima del clic.
+
+### 2026-10-30 — UI scalabile: rifiniture e unione in master
+
+Fatto:
+- **Mouse da tastiera**: passi proporzionali alla scala.
+- **Opzione `buttonsize`**: parser, interpretazione, layout e
+  documentazione (OPTIONS txt/html, man, `tuxpaint.conf`, `--usage`,
+  completamento bash). Regole in §5bis.
+- **Finestra iniziale su schermi grandi**: multiplo intero di 800×600
+  (§5bis).
+- Commit `c06ba8f` (codice e documentazione) e `ed4a2f8` (script di
+  prova).
+- Unione in `master` per avanzamento rapido (vedi §1).
+
+Verifiche (desktop fermo, su richiesta all'utente):
+- **800×600**: le otto schermate principali, i nove dialoghi e Timbro con
+  l'audio attivo sono identici al riferimento.
+- **`--buttonsize=48` a 1600×1000**: identico al pixel al programma
+  originale alla stessa dimensione. `--buttonsize=64` a 1600×1000: layout
+  regolare, con più righe.
+- Valori non validi (`300`, `abc`): rifiutati con messaggio e codice
+  d'uscita 91.
+- **Finestra iniziale**: senza `windowsize` il programma originale apre
+  800×600, il nuovo 1600×1200.
+- **Pulsanti audio dei timbri a scala 2** (driver `dummy`): scalati, con
+  Tux sotto di loro.
+- **Richiesta "Cancella" a scala 2**, con un Cestino di prova: corretta.
+  Dopo "No" i file restano e il Cestino di prova è vuoto.
+
+Scoperte:
+- **Barra nera sopra la miniatura nella richiesta "Cancella"**: c'è anche
+  nel programma originale, quindi è un difetto preesistente. Registrato
+  nel TODO (Bug, P3).
+- Prove disturbate ancora una volta (rotella del mouse sopra la finestra
+  di prova). Le prove definitive sono state fatte dopo aver chiesto
+  all'utente di non usare il computer.
+- Un comando con `cd ... && rm -rf *` è stato bloccato dal controllo di
+  sicurezza prima di partire: se il `cd` fosse fallito, avrebbe cancellato
+  la cartella corrente. Da ora nessuna pulizia con glob relativi: si usano
+  solo cartelle di output nuove.
+
+Aperto:
+- Icone più nitide: servono nuove immagini (TODO, P3).

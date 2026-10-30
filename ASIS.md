@@ -118,3 +118,22 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
 - [x] 2026-10-29 — Bug: il ricolore del pulsante del colore personalizzato
   (`search_label_list`) scriveva oltre il bordo dell'immagine (ciclo fisso
   48×48) — corretto in `d346e60`.
+- [x] 2026-10-30 — UI scalabile, rifiniture (`c06ba8f`, `ed4a2f8`):
+  - opzione `buttonsize=auto|24-192` (OPTIONS, man, `tuxpaint.conf`,
+    `--usage`, completamento bash); può solo rimpicciolire rispetto ad
+    `auto`. Con `--buttonsize=48` a 1600×1000 l'interfaccia è identica al
+    pixel al programma originale; valori non validi rifiutati (codice
+    d'uscita 91);
+  - finestra iniziale su schermi grandi: senza `windowsize`, il più grande
+    multiplo intero di 800×600 che sta comodamente nello schermo
+    (1600×1200 sul 2560×1600 dell'utente; il programma originale apriva
+    800×600);
+  - passo del mouse da tastiera proporzionale (`SCALED(16)`, `SCALED(24)`);
+  - verificati a scala 2 i pulsanti audio dei timbri (audio attivo col
+    driver SDL "dummy", senza suoni reali) e la richiesta "Cancella" (con
+    un Cestino di prova, `XDG_DATA_HOME` dedicato: rispondendo "No" i file
+    restano);
+  - a 800×600 schermata principale, dialoghi e Timbro con audio identici
+    al riferimento.
+- [x] 2026-10-30 — Uniti `build/host-debian13` e `feature/ui-scaling` in
+  `master` (avanzamento rapido, nessun push).

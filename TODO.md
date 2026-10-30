@@ -17,38 +17,29 @@ si resta sulla **0.9.22 con SDL 1.2** e la si corregge. Target: solo Linux.
 Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 `HANDOFF.md` §1.
 
-## UI scalabile con la finestra (rifiniture)
+## UI scalabile con la finestra
 
-La scala nativa dell'interfaccia è completa (fasi 1-3, branch
-`feature/ui-scaling`), vedi [ASIS.md](ASIS.md). Dettagli tecnici in
-`HANDOFF.md` §5bis. Restano rifiniture e verifiche:
+La scala nativa dell'interfaccia è completa, con le rifiniture, e unita in
+`master`: vedi [ASIS.md](ASIS.md) e `HANDOFF.md` §5bis. Resta:
 
-- [ ] [P2] Pulsanti audio dei timbri (`r_sfx`) a scala > 1: da verificare
-  con l'audio attivo (i test girano con `--nosound`).
-- [ ] [P3] Opzione `buttonsize=auto|N` (come l'upstream, dalla 0.9.27) per
-  forzare la dimensione dei pulsanti: `src/parse.gperf`, `tuxpaint.conf`,
-  `docs/OPTIONS.txt`, completamento bash.
-- [ ] [P3] Finestra di default 800×600 minuscola sugli schermi HiDPI:
-  valutare una dimensione iniziale ricavata dallo schermo.
 - [ ] [P3] Icone più nitide a scala > 1: oggi sono bitmap da 48 px
-  ingrandite (bilineare); servirebbero originali più grandi o SVG.
-- [ ] [P3] Mouse da tastiera e joystick (`handle_keymouse(..., 24, ...)`):
-  il passo è fisso in pixel, quindi a scala > 1 il puntatore si muove più
-  lentamente rispetto all'interfaccia. Valutare `SCALED(24)`.
-- [ ] [P3] Richiesta "Cancella" in Apri non provata automaticamente (un clic
-  sbagliato sposterebbe un file nel Cestino): è la stessa funzione delle
-  altre richieste, ma va provata a mano a scala > 1.
-- [ ] [P2] Unire `feature/ui-scaling` in `master`: la feature è completa
-  e a scala 1 non cambia nulla.
+  ingrandite (bilineare), un po' morbide. Il codice non può farci molto:
+  servono immagini nuove (PNG più grandi o SVG) per pulsanti, strumenti,
+  forme e magie, cioè un lavoro grafico. La finestra iniziale a multipli
+  interi di 800×600 limita già la sfocatura.
 
 ## Bug
 
-Nessuno aperto. I difetti trovati nei warning sono nella sezione
-"Qualità del codice".
+- [ ] [P3] Richiesta "Cancella" di Apri: sopra la miniatura del disegno c'è
+  una barra nera. È un difetto preesistente, presente anche nel programma
+  originale a 800×600. Probabile causa: la miniatura è adattata mantenendo
+  le proporzioni (`thumbnail(img1, SCALED(80), SCALED(64), 1)` in
+  `do_prompt_image_flash_snd`) e lo spazio rimasto resta nero.
+
+I difetti trovati nei warning sono nella sezione "Qualità del codice".
 
 ## Build e ambiente
 
-- [ ] [P2] Unire il branch `build/host-debian13` in `master`.
 - [ ] [P2] Prova manuale di tutti gli strumenti (`./dev.sh run`): disegno,
   timbri, Magic, testo/etichette, salvataggio/apertura, stampa, audio.
 - [ ] [P3] Completamento bash non caricato automaticamente: installarlo come
