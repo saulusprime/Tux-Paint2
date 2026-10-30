@@ -27,11 +27,7 @@
 
 // plan to rip this out as soon as it is considered stable
 //#define THREADED_FONTS
-
-/* The forked font scanner is disabled: with SDL 1.2 running on top of SDL2
-   (sdl12-compat), the child process crashes (SIGSEGV) after fork(), and the
-   Text and Label tools end up with no fonts. Fonts load in a thread instead. */
-//#define FORKED_FONTS
+#define FORKED_FONTS
 #if defined(WIN32) || defined(__BEOS__)
 #undef FORKED_FONTS
 #endif

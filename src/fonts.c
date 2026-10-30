@@ -1140,7 +1140,12 @@ void run_font_scanner(SDL_Surface * screen, const char *restrict const locale)
     *walk++ = '\0';
   }
   reliable_write(font_socket_fd, buf, size);
-  exit(0);
+
+  /* Not exit(): that would run the atexit handlers inherited from the
+     parent, and some (e.g. Mesa's, loaded by SDL2 under sdl12-compat) join
+     threads that don't exist in this forked child, crashing it, and then
+     the parent throws away the fonts we just sent. */
+  _exit(0);
 }
 
 
