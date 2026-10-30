@@ -95,6 +95,10 @@ Windows Users
                different screen resolution (in fullscreen mode), rather than
                the default (usually 800x600).
 
+               If no size is given, on big (e.g. high resolution) screens the
+               window is a whole multiple of the default size that fits the
+               screen comfortably (e.g. 1600x1200 on a 2560x1600 screen).
+
                The SIZE value should be presented in pixels, in
                'width-by-height' format, with an "x" (lowercase X) between
                the values. The size can be anything that's at least 640 wide,
@@ -105,6 +109,18 @@ Windows Users
                   * 1024x768
                   * 768x1024
                   * 1600x1200
+
+       buttonsize=SIZE
+       buttonsize=auto
+
+               Buttons, icons and text of the interface grow with the window:
+               they are 48x48 pixels up to an 800x600 window (600x800 in
+               portrait), and proportionally bigger in bigger windows
+               ("auto", the default).
+
+               A SIZE in pixels, from 24 to 192, sets the size of the buttons.
+               It can make them smaller than "auto", but not bigger: the
+               window must have room for the tool buttons.
 
        orient=portrait
 
@@ -941,6 +957,7 @@ Windows Users
          --WIDTHxHEIGHT
          --orient=portrait
          --native
+         --buttonsize=SIZE
          --allowscreensaver
          --startblank
          --nosound
@@ -1012,6 +1029,7 @@ Windows Users
 
          --windowed
          --800x600
+         --buttonsize=auto
          --orient=landscape
          --disablescreensaver
          --startlast

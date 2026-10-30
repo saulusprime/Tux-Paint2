@@ -11,6 +11,7 @@ struct cfginfo
   const char *alt_print_command_default;
   const char *altprintcommand;
   const char *autosave_on_quit;
+  const char *button_size;
   const char *colorfile;
   const char *datadir;
   const char *disable_label;

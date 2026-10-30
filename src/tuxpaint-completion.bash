@@ -24,6 +24,7 @@ _tuxpaint()
 			-u --usage \
 			-w --windowed -f --fullscreen \
 			--native \
+			--buttonsize=auto --buttonsize= \
 			--disablescreensaver --allowscreensaver \
 			--orient=landscape --orient=portrait \
 			-b --startblank --startlast \

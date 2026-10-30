@@ -692,6 +692,13 @@ static int button_h;		/* was 48 */
 /* The UI was designed for 48x48 buttons; button_w / 48 */
 static float button_scale = 1;
 
+/* "buttonsize" option: button size in pixels, or 0 for "auto" */
+static int button_size_wanted = 0;
+
+/* Whether the window size was set ("windowsize" option); if not, big screens
+   get a bigger window */
+static int window_size_given = 0;
+
 /* Scale a size or position from the 48x48-button design to the current size */
 #define SCALED(x) ((int) ((x) * button_scale + 0.5))
 
@@ -744,6 +751,15 @@ static void setup_normal_screen_layout(void)
     button_scale = 1;
 
   button_w = 48 * button_scale;
+
+  /* The window needs room for 7 rows of buttons, so the "buttonsize"
+     option can make them smaller than that, but not bigger */
+  if (button_size_wanted > button_w)
+    fprintf(stderr, "Warning: Buttons of %d pixels don't fit in a %dx%d window; using %d.\n",
+            button_size_wanted, WINDOW_WIDTH, WINDOW_HEIGHT, button_w);
+  else if (button_size_wanted > 0)
+    button_w = button_size_wanted;
+
   button_h = button_w;
   button_scale = button_w / 48.0;
 
@@ -2258,7 +2274,7 @@ static void mainloop(void)
       {
 	key = event.key.keysym.sym;
 
-	handle_keymouse(key, SDL_KEYUP, 16, NULL, NULL);
+	handle_keymouse(key, SDL_KEYUP, SCALED(16), NULL, NULL);
       }
       
       else if (event.type == SDL_KEYDOWN)
@@ -2286,10 +2302,10 @@ static void mainloop(void)
 	  r_stamps_sizesel.y = r_canvas.h - img_btn_up->h;
 	  r_stamps_sizesel.w = img_btn_up->w * 2;
 	  r_stamps_sizesel.h = img_btn_up->h;
-	  handle_keymouse(key, SDL_KEYDOWN, 16, &r_canvas, &r_stamps_sizesel);
+	  handle_keymouse(key, SDL_KEYDOWN, SCALED(16), &r_canvas, &r_stamps_sizesel);
 	}
 	else
-	  handle_keymouse(key, SDL_KEYDOWN, 16, &r_canvas, NULL);
+	  handle_keymouse(key, SDL_KEYDOWN, SCALED(16), &r_canvas, NULL);
 
 	/* handle_keymouse_buttons will move one button at a time */
 	handle_keymouse_buttons(key, &whicht, &whichc, real_r_tools);
@@ -6359,6 +6375,7 @@ void show_usage(int exitcode)
 	  "\n"
 	  "  %s [--windowed | --fullscreen]\n"
 	  "  %s [--WIDTHxHEIGHT | --native]\n"
+	  "  %s [--buttonsize=auto | --buttonsize=SIZE] (24-192)\n"
           "  %s [--disablescreensaver | --allowscreensaver ]\n"
           "  %s [--orient=landscape | --orient=portrait]\n"
 	  "  %s [--startblank | --startlast]\n"
@@ -6420,7 +6437,8 @@ void show_usage(int exitcode)
 #if !defined(WIN32) && !defined(__APPLE__) && !defined(__BEOS__) && !defined(__HAIKU__)
 	  blank,
 #endif
-	  blank, blank, blank, blank, blank, blank, blank, blank, blank, blank);
+	  blank, blank, blank, blank, blank, blank, blank, blank, blank, blank,
+	  blank);
 
   free(blank);
 }
@@ -11989,13 +12007,13 @@ static int do_prompt_image_flash_snd(const char *const text,
       {
 	key = event.key.keysym.sym;
 
-	handle_keymouse(key, SDL_KEYUP, 24, NULL, NULL);
+	handle_keymouse(key, SDL_KEYUP, SCALED(24), NULL, NULL);
       }
       else if (event.type == SDL_KEYDOWN)
       {
 	key = event.key.keysym.sym;
 
-	handle_keymouse(key, SDL_KEYDOWN, 24, NULL, NULL);
+	handle_keymouse(key, SDL_KEYDOWN, SCALED(24), NULL, NULL);
 
 
 	/* FIXME: Should use SDLK_{c} instead of '{c}'?  How? */
@@ -14205,13 +14223,13 @@ static int do_open(void)
         {
           key = event.key.keysym.sym;
 
-          handle_keymouse(key, SDL_KEYUP, 24, NULL, NULL);
+          handle_keymouse(key, SDL_KEYUP, SCALED(24), NULL, NULL);
         }
         else if (event.type == SDL_KEYDOWN)
         {
           key = event.key.keysym.sym;
 
-          handle_keymouse(key, SDL_KEYDOWN, 24, NULL, NULL);
+          handle_keymouse(key, SDL_KEYDOWN, SCALED(24), NULL, NULL);
 
 	  /* This was interfering with handle_keymouse above,
 	     remapping from LEFT RIGHT UP DOWN to F11 F12 F8 F7 */
@@ -15250,7 +15268,7 @@ static int do_slideshow(void)
       {
 	key = event.key.keysym.sym;
 
-	handle_keymouse(key, SDL_KEYUP, 24, NULL, NULL);
+	handle_keymouse(key, SDL_KEYUP, SCALED(24), NULL, NULL);
       }
       else if (event.type == SDL_KEYDOWN)
       {
@@ -15262,7 +15280,7 @@ static int do_slideshow(void)
 	dest.w = button_w * 2;
 	dest.h = button_h;
 	 
-	handle_keymouse(key, SDL_KEYDOWN, 24, &dest, NULL);
+	handle_keymouse(key, SDL_KEYDOWN, SCALED(24), &dest, NULL);
 
 	if (key == SDLK_RETURN)
 	{
@@ -15696,7 +15714,7 @@ static void play_slideshow(int * selected, int num_selected, char * dirname,
 	  {
 	    key = event.key.keysym.sym;
 
-            handle_keymouse(key, SDL_KEYDOWN, 24, NULL, NULL);
+            handle_keymouse(key, SDL_KEYDOWN, SCALED(24), NULL, NULL);
 
             if (key == SDLK_RETURN || key == SDLK_SPACE || key == SDLK_PAGEDOWN)
 	    {
@@ -19072,13 +19090,13 @@ static int do_new_dialog(void)
       {
 	key = event.key.keysym.sym;
 
-	handle_keymouse(key, SDL_KEYUP, 24, NULL, NULL);
+	handle_keymouse(key, SDL_KEYUP, SCALED(24), NULL, NULL);
       }
       else if (event.type == SDL_KEYDOWN)
       {
 	key = event.key.keysym.sym;
 
-	handle_keymouse(key, SDL_KEYDOWN, 24, NULL, NULL);
+	handle_keymouse(key, SDL_KEYDOWN, SCALED(24), NULL, NULL);
 
 	/* Moved from LEFT RIGHT UP DOWN to F11 F12 F8 F7 */
 
@@ -19860,13 +19878,13 @@ static int do_color_picker(void)
       {
         key = event.key.keysym.sym;
 
-        handle_keymouse(key, SDL_KEYUP, 24, NULL, NULL);
+        handle_keymouse(key, SDL_KEYUP, SCALED(24), NULL, NULL);
       }
       else if (event.type == SDL_KEYDOWN)
       {
         key = event.key.keysym.sym;
 
-        handle_keymouse(key, SDL_KEYDOWN, 24, &r_color_picker, NULL);
+        handle_keymouse(key, SDL_KEYDOWN, SCALED(24), &r_color_picker, NULL);
 
         if (key == SDLK_ESCAPE)
         {
@@ -21909,6 +21927,22 @@ static void setup_config(char *argv[])
     }
     WINDOW_WIDTH = w;
     WINDOW_HEIGHT = h;
+    window_size_given = 1;
+  }
+  if(tmpcfg.button_size)
+  {
+    if (!strcmp(tmpcfg.button_size, "auto"))
+      button_size_wanted = 0;
+    else
+    {
+      char *endp;
+      button_size_wanted = strtol(tmpcfg.button_size, &endp, 10);
+      if (endp == tmpcfg.button_size || *endp || button_size_wanted < 24 || button_size_wanted > 192)
+      {
+        fprintf(stderr, "Button size '%s' is not understood (use 'auto' or 24 to 192).\n", tmpcfg.button_size);
+        exit(91);
+      }
+    }
   }
   if(tmpcfg.parsertmp_fullscreen_native)
   {
@@ -22754,6 +22788,28 @@ static void setup(void)
     {
       WINDOW_WIDTH = 0;
       WINDOW_HEIGHT = 0;
+    }
+  }
+
+
+  /* No window size asked for: on big (e.g. high resolution) screens, use a
+     whole multiple of the default size that fits comfortably, so the buttons
+     don't end up tiny */
+
+  if (!fullscreen && !window_size_given)
+  {
+    const SDL_VideoInfo *info = SDL_GetVideoInfo();
+
+    if (info != NULL && info->current_w > 0 && info->current_h > 0)
+    {
+      int k = min((info->current_w * 9 / 10) / WINDOW_WIDTH,
+                  (info->current_h * 85 / 100) / WINDOW_HEIGHT);
+
+      if (k > 1)
+      {
+        WINDOW_WIDTH *= k;
+        WINDOW_HEIGHT *= k;
+      }
     }
   }
 

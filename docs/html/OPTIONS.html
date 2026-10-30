@@ -135,6 +135,10 @@ New Breed Software</p>
     at a different screen resolution (in fullscreen mode), rather than the
     default (usually 800x600).</p>
 
+    <p>If no size is given, on big (e.g. high resolution) screens the window
+    is a whole multiple of the default size that fits the screen comfortably
+    (e.g. 1600x1200 on a 2560x1600 screen).</p>
+
     <p>The <i>SIZE</i> value should be presented in pixels, in 'width-by-height'
     format, with an "x" (lowercase&nbsp;X) between the values. The size can
     be anything that's at least 640 wide, and at least 480 tall.</p>
@@ -147,6 +151,18 @@ New Breed Software</p>
     <li>1600x1200
     </ul>
     </p>
+  </dd>
+
+  <dt><code><b>buttonsize=<i>SIZE</i></b></code><br>
+      <code><b>buttonsize=auto</b></code></dt>
+  <dd>
+    <p>Buttons, icons and text of the interface grow with the window: they
+    are 48x48 pixels up to an 800x600 window (600x800 in portrait), and
+    proportionally bigger in bigger windows ("auto", the default).</p>
+
+    <p>A <i>SIZE</i> in pixels, from 24 to 192, sets the size of the buttons.
+    It can make them smaller than "auto", but not bigger: the window must have
+    room for the tool buttons.</p>
   </dd>
 
   <dt><code><b>orient=portrait</b></code></dt>
@@ -1462,6 +1478,7 @@ New Breed Software</p>
     --<i>WIDTH</i>x<i>HEIGHT</i><br>
     --orient=portrait<br>
     --native<br>
+    --buttonsize=<i>SIZE</i><br>
     --allowscreensaver<br>
     --startblank<br>
     --nosound<br>
@@ -1536,6 +1553,7 @@ New Breed Software</p>
     <dt><code><b>
     --windowed<br>
     --800x600<br>
+    --buttonsize=auto<br>
     --orient=landscape<br>
     --disablescreensaver<br>
     --startlast<br>

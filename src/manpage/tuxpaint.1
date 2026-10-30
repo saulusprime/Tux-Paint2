@@ -17,6 +17,8 @@ tuxpaint -- "Tux Paint", a drawing program for young children.
 .br
 [\-\-native]
 .br
+[\-\-buttonsize=SIZE]
+.br
 [\-\-orient=portrait]
 .br
 [\-\-startblank]
@@ -270,6 +272,14 @@ Run \fITux Paint\fP in a particularly-sized window, or at a particular
 fullscreen resolution (if \-\-native is not used).  Default is 800x600.
 Minimum width is 640.  Minimum height is 480.  Portrait and landscape
 orientations are both supported.  (Also see \-\-orient, below.)
+If no size is given, on big (e.g. high resolution) screens the window is a
+whole multiple of the default size that fits the screen (e.g. 1600x1200).
+
+.TP 8
+.B \-\-buttonsize=SIZE \-\-buttonsize=auto
+Size of the buttons, in pixels (24 to 192).  By default ("auto") buttons,
+icons and text are 48x48 up to an 800x600 window, and grow proportionally
+in bigger windows.  SIZE can make them smaller than that, but not bigger.
 
 .TP 8
 .B \-\-orient=landscape \-\-orient=portrait
