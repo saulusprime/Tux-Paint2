@@ -11,7 +11,7 @@ mkdir -p "$out" && rm -f "$out"/*.png
 cd "$HOME" && flatpak-spawn --host bash -c 'rm -rf ~/.cache/tuxpaint-test && cp -a ~/.cache/tuxpaint-test-canon ~/.cache/tuxpaint-test'
 flatpak-spawn --host --directory="$HOME" --env=TP_BIN="$bin" --env=TP_ARGS="--savedir=$HOME/.cache/tuxpaint-test" \
   --env=TP_SCALE="$scale" --env=TP_BUTTON=$((48 * scale)) \
-  python3 - $((800 * scale))x$((600 * scale)) click:48,16 wait:1 \
+  python3 - $((800 * scale))x$((600 * scale)) move:48,16 wait:1 click:48,16 wait:1 \
   tool:15 wait:1 shot:q1-quit click:205,302 wait:1 \
   tool:12 wait:1 shot:o1-open click:170,75 shot:o2-selected \
   click:168,448 wait:1 shot:s1-slides click:680,448 wait:1 shot:s2-back click:680,448 wait:1 \

@@ -2,6 +2,7 @@
 
 usage: flatpak-spawn --host [--env=TP_BIN=path] [--env=TP_BUTTON=px] [--env=TP_ARGS="opts"] [--env=TP_SCALE=n] \
          [--env=TP_START_WAIT=sec] [--env=TP_LOG=host-file-for-tuxpaint-output] [--env=TP_WRAP=cmd] \
+         [--env=TP_SOUND=1 (sound on, through SDL's silent "dummy" audio driver)] \
          python3 - WINDOWSIZE ACTION... < tp_session.py > shots.tar
 
 ACTION is one of:
@@ -113,10 +114,12 @@ def window_pid(wid):
 windows_before = set(tuxpaint_windows())
 log = open(os.environ["TP_LOG"], "w") if "TP_LOG" in os.environ else subprocess.DEVNULL
 wrapper = os.environ.get("TP_WRAP", "").split()  # e.g. "stdbuf -oL -eL"
+sound = bool(os.environ.get("TP_SOUND"))
+child_env = dict(os.environ, SDL_AUDIODRIVER="dummy") if sound else None
 proc = subprocess.Popen(
-    wrapper + [binary, "--nolockfile", "--nosound",
-     "--windowed", "--windowsize=" + size] + extra_args,
-    stdout=log, stderr=subprocess.STDOUT)
+    wrapper + [binary, "--nolockfile"] + ([] if sound else ["--nosound"]) +
+    ["--windowed", "--windowsize=" + size] + extra_args,
+    stdout=log, stderr=subprocess.STDOUT, env=child_env)
 
 
 def window():
