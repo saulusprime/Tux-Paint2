@@ -53,10 +53,11 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
     - `d346e60`, `321db8b`, `0c7bcf9`: tutta l'interfaccia scalata con la
       finestra (§5bis);
     - strumenti di test in `devtools/ui-test/`;
-    - `6d3f130`: `FORKED_FONTS` disattivato in `src/fonts.h`, perché il
-      processo figlio dei font andava in crash con sdl12-compat e Testo ed
-      Etichetta non si attivavano. È indipendente dalla scala, quindi si
-      può riportare da solo con `cherry-pick`.
+    - `b7021ac`: correzione del crash del processo figlio dei font. Il
+      figlio esce con `_exit(0)` invece di `exit(0)`, e `FORKED_FONTS`
+      è di nuovo attivo. Sostituisce `6d3f130`, che caricava i font in un
+      thread. È indipendente dalla scala: per riportarla altrove basta la
+      modifica a `src/fonts.c`.
 - **Installato in `~/.local`**: la build di `feature/ui-scaling` (tutto
   funzionante, compresi Testo ed Etichetta).
 - **Decisioni prese** (2026-10-29):
@@ -331,10 +332,10 @@ pixel. Gli strumenti sono in `devtools/ui-test/`:
 
 Il binario di riferimento, cioè il codice prima della feature, è in un
 worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
-`build/host-debian13` (`ec9ebe3`) più la correzione dei font
-(`cherry-pick`, commit `584ca70` senza branch). Si ricompila con
-`./dev.sh build` lì dentro e si rimuove con
-`git worktree remove ~/.cache/tuxpaint-baseline`.
+`build/host-debian13` (`ec9ebe3`), con in più la sola correzione dei font
+(`_exit(0)` in `src/fonts.c`, modifica non committata nel worktree). Si
+ricompila con `./dev.sh build` lì dentro e si rimuove con
+`git worktree remove --force ~/.cache/tuxpaint-baseline`.
 
 **Insidie dei test automatici**:
 
@@ -362,6 +363,13 @@ worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
   immagini e ripetere la prova.
 - Messaggi di Tux Paint persi: stdout è bufferizzato e il processo viene
   chiuso con SIGKILL. Usare `TP_WRAP="stdbuf -oL -eL"` e `TP_LOG`.
+- **Finestre Tux Paint dell'utente**: prima lo script prendeva la prima
+  finestra Tux Paint sullo schermo, e se l'utente ne aveva una aperta
+  poteva catturarla e cliccarla. Ora usa solo quella del processo che ha
+  avviato (`_NET_WM_PID`).
+- **"mutter guard window"**: quando in primo piano c'è una finestra
+  Wayland, GNOME copre le finestre X con una finestra invisibile e i clic
+  simulati finiscono lì. Lo script la rileva e si ferma ("STOP").
 - **Finestra di prova dietro altre finestre o mouse dell'utente in uso**:
   i clic simulati possono finire altrove o perdersi. `tp_session.py` ora
   porta in primo piano la finestra (`_NET_ACTIVE_WINDOW`) e, prima di
@@ -770,3 +778,43 @@ Aperto (decisione dell'utente):
 - Sostituire la correzione attuale `6d3f130` (thread) con `_exit(0)` e
   `FORKED_FONTS` attivo. Prima va verificata a mano:
   `~/.cache/tuxpaint-debug/tuxpaint --windowed`, poi clic su Testo.
+
+### 2026-10-30 — Correzione definitiva del crash dei font
+
+Fatto:
+- L'utente ha provato a mano il binario di debug con `FORKED_FONTS` e
+  `_exit(0)`: il pannello di Testo compare, si scrive e si cambia font.
+- Commit `b7021ac` su `feature/ui-scaling`: `_exit(0)` nel figlio
+  (`src/fonts.c`, con commento sul perché) e `FORKED_FONTS` di nuovo
+  attivo in `src/fonts.h`. Così si ritira il ripiego col thread
+  (`6d3f130`).
+- Binario di riferimento allineato: riportato a `ec9ebe3` con la sola
+  modifica `_exit(0)`, così l'ordine dei font è uguale a quello della
+  build nuova.
+- Rimossi il worktree di debug e i file temporanei in `~/.cache`.
+
+Problemi negli strumenti di test, scoperti e corretti:
+- **Lo script poteva usare la finestra Tux Paint dell'utente**: prendeva
+  la prima trovata. Probabilmente è la causa dei tratti a mano visti
+  nelle catture del 2026-10-29: l'utente stava provando un suo Tux Paint.
+  Ora usa solo quella con `_NET_WM_PID` uguale al processo avviato.
+- **"mutter guard window"**: una volta il punto da cliccare era coperto
+  da questa finestra (GNOME la mette sopra le finestre X quando in primo
+  piano c'è una finestra Wayland). Il controllo aggiunto ieri ha fermato
+  lo script senza cliccare.
+- Verifiche rifatte col desktop fermo, su richiesta all'utente.
+
+Verifiche:
+- **800×600**: le otto schermate della schermata principale, compresi
+  Testo ed Etichetta, sono identiche al riferimento. Dei nove dialoghi,
+  otto sono identici. La richiesta d'uscita differisce solo per il tasto
+  Annulla attivo: è l'effetto noto del primo clic, che a volte lascia un
+  segno sulla tela, e non dipende dal codice.
+- **Scala 2**: Testo con l'elenco dei font, scorrimento e controlli
+  corretti.
+- Build: 0 errori; warning come in origine (`fonts.c` 2, `tuxpaint.c` 52).
+
+Aperto:
+- Effetto del primo clic negli script: a volte il clic di messa a fuoco
+  lascia un punto sulla tela. Si potrebbe eliminare con uno spostamento
+  del puntatore prima del clic.

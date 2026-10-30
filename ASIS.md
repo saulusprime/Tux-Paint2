@@ -99,6 +99,22 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   - correzione: caricamento dei font in un thread;
   - verificati Testo ed Etichetta a 800×600 (identici al riferimento
     corretto) e a scala 2.
+- [x] 2026-10-30 — Crash del processo figlio dei font: analisi e correzione
+  definitiva (`1431866`, `b7021ac`):
+  - pila del crash ottenuta senza `gdb` (libreria `LD_PRELOAD` più
+    `addr2line`): il figlio finisce la scansione, poi `exit(0)` esegue il
+    gestore di chiusura di Mesa ereditato dal genitore, che va in crash
+    su `pthread_join`;
+  - correzione: `_exit(0)` nel figlio e `FORKED_FONTS` di nuovo attivo; la
+    soluzione col thread (`6d3f130`) è stata ritirata;
+  - verifiche: prova manuale dell'utente (Testo: pannello, scrittura,
+    cambio di font); a 800×600 schermata principale e dialoghi identici al
+    riferimento; Testo a scala 2 corretto.
+- [x] 2026-10-30 — Strumenti di test più sicuri:
+  - `tp_session.py` usa solo la finestra del Tux Paint che ha avviato lui
+    (`_NET_WM_PID`) e la porta in primo piano;
+  - non clicca se in cima c'è un'altra finestra, per esempio la "mutter
+    guard window".
 - [x] 2026-10-29 — Bug: il ricolore del pulsante del colore personalizzato
   (`search_label_list`) scriveva oltre il bordo dell'immagine (ciclo fisso
   48×48) — corretto in `d346e60`.

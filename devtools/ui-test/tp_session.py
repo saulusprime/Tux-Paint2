@@ -14,9 +14,11 @@ ACTION is one of:
   shot:NAME   capture the window to NAME.png
 Writes a tar archive of the PNGs to stdout.
 
-Safety: the window is activated first, and before every pointer action the
-script checks that Tux Paint is the topmost window under the pointer; if
-not (e.g. it opened behind another window), it stops without clicking.
+Safety: only the window of the Tux Paint process started here is used (by
+_NET_WM_PID; other Tux Paint windows, e.g. the user's, are ignored). It is
+activated first, and before every pointer action the script checks that it
+is the topmost window under the pointer; if not (e.g. it opened behind
+another window), it stops without clicking.
 """
 import ctypes, io, os, subprocess, sys, tarfile, tempfile, time
 
@@ -95,6 +97,20 @@ def activate(w):
     x11.XFlush(dpy)
     time.sleep(0.5)
 
+def tuxpaint_windows():
+    tree = subprocess.run(["xwininfo", "-root", "-tree"], capture_output=True, text=True).stdout
+    return [l.split()[0] for l in tree.splitlines() if '"TuxPaint.TuxPaint"' in l]
+
+
+def window_pid(wid):
+    prop = subprocess.run(["xprop", "-id", wid, "_NET_WM_PID"], capture_output=True, text=True).stdout
+    try:
+        return int(prop.split("=")[1])
+    except (IndexError, ValueError):
+        return None
+
+
+windows_before = set(tuxpaint_windows())
 log = open(os.environ["TP_LOG"], "w") if "TP_LOG" in os.environ else subprocess.DEVNULL
 wrapper = os.environ.get("TP_WRAP", "").split()  # e.g. "stdbuf -oL -eL"
 proc = subprocess.Popen(
@@ -104,19 +120,19 @@ proc = subprocess.Popen(
 
 
 def window():
-    tree = subprocess.run(["xwininfo", "-root", "-tree"], capture_output=True, text=True).stdout
-    for line in tree.splitlines():
-        if '"TuxPaint.TuxPaint"' in line:
-            wid = line.split()[0]
-            info = subprocess.run(["xwininfo", "-id", wid], capture_output=True, text=True).stdout
-            pos = {}
-            for l in info.splitlines():
-                l = l.strip()
-                if l.startswith("Absolute upper-left X:"):
-                    pos["x"] = int(l.split(":")[1])
-                if l.startswith("Absolute upper-left Y:"):
-                    pos["y"] = int(l.split(":")[1])
-            return wid, pos["x"], pos["y"]
+    """Our Tux Paint window: new since launch, and owned by our process."""
+    for wid in tuxpaint_windows():
+        if wid in windows_before or window_pid(wid) != proc.pid:
+            continue
+        info = subprocess.run(["xwininfo", "-id", wid], capture_output=True, text=True).stdout
+        pos = {}
+        for l in info.splitlines():
+            l = l.strip()
+            if l.startswith("Absolute upper-left X:"):
+                pos["x"] = int(l.split(":")[1])
+            if l.startswith("Absolute upper-left Y:"):
+                pos["y"] = int(l.split(":")[1])
+        return wid, pos["x"], pos["y"]
     return None
 
 
@@ -125,7 +141,7 @@ try:
     time.sleep(start_wait)
     win = window()
     if win is None:
-        sys.exit("window not found")
+        sys.exit("window of our Tux Paint (pid %d) not found" % proc.pid)
     wid, wx, wy = win
     frame = toplevel(int(wid, 16))
     activate(int(wid, 16))
