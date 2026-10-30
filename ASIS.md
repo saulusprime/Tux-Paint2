@@ -149,4 +149,12 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     l'immagine si ingrandisce;
   - prima e dopo a scala 2 e 2,5: bordi netti, senza aloni; a 800×600
     identico al riferimento.
+- [x] 2026-10-30 — Documentazione di progetto aggiornata per la ripresa:
+  - `HANDOFF.md`: nuova §0 "Come riprendere"; §1 riscritta, con stato al
+    30, tabelle di branch e modifiche, cartelle di supporto; §5bis
+    riordinata (modello, convenzioni, parti dell'interfaccia, prove,
+    insidie), senza istruzioni superate;
+  - `TODO.md`: numeri di riga della sezione "Qualità del codice"
+    aggiornati;
+  - nuovo `devtools/ui-test/README.md` con esempi d'uso.
 

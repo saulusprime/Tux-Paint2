@@ -17,56 +17,82 @@ in `ASIS.md` con data ed esito, e si aggiunge una voce al diario qui sotto.
 
 ---
 
-## 1. Stato attuale (al 2026-10-29)
+## 0. Come riprendere
+
+Per chi riparte, anche dopo una pausa o una compressione del contesto:
+
+1. Leggere questo file fino alla §6. Il diario (§7) serve solo per i
+   dettagli. Poi [TODO.md](TODO.md): l'utente di solito indica una sezione
+   o una voce da fare.
+2. Controllare il branch: `git branch -v`. Il lavoro nuovo si fa su un
+   branch dedicato, **mai direttamente su `master`**. Si committa solo su
+   richiesta, si fa push solo su richiesta (finora mai).
+3. La shell di VS Code è un sandbox Flatpak: compilazione ed esecuzione
+   avvengono **sull'host**. `./dev.sh build|install|run` passa da solo
+   all'host (§4); per altri comandi usare
+   `flatpak-spawn --host --directory=$HOME bash -c '…'`.
+4. Prove dell'interfaccia: script in `devtools/ui-test/` (§5bis).
+   **Prima di ogni prova automatica chiedere all'utente di non usare
+   mouse, rotella e tastiera per qualche minuto**: le finestre di prova
+   compaiono sul suo schermo e ogni interferenza sporca le catture. A
+   800×600 tutto deve restare identico al pixel al binario di
+   riferimento.
+5. A fine attività: spostare la voce da TODO ad ASIS con data ed esito,
+   aggiungere una voce di diario qui (§7) e aggiornare §1 e §6 se
+   cambiano.
+6. Lingua: l'utente scrive in italiano; i file di progetto sono in
+   italiano. Codice, commenti e messaggi di commit sono in inglese, come il
+   resto del sorgente.
+
+## 1. Stato attuale (al 2026-10-30)
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
   `MAGIC_API_VERSION 0x00000003` (vedi [Makefile](Makefile) riga 12-14).
 - **Origine del repository**: fork di LliureX, `origin` =
-  `https://github.com/lliurex/tuxpaint.git`. Un solo commit
-  (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16): import del
+  `https://github.com/lliurex/tuxpaint.git`. Il commit iniziale
+  (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16) importa il
   sorgente 0.9.22 così come pacchettizzato in Ubuntu.
-- **Branch**: dal 2026-10-30 `master` contiene tutto il lavoro fino a
-  `f0f9036`, unito per avanzamento rapido da `build/host-debian13` e
-  `feature/ui-scaling`. Niente è pubblicato su `origin`.
-  - `feature/sharper-icons`, da `master`: ingrandimento Lanczos delle
-    icone (`7cb40aa`) e file di progetto. **È il branch attivo**, da unire
-    in `master`.
-  - Regola: il lavoro nuovo si fa su un branch, non direttamente su
-    `master`.
-- **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
-  repository (`.git/config`).
-- **Compilazione**: **riuscita sull'host** (2026-10-29): build da zero in
-  ~12 s, 0 errori, 96 warning (vedi §4).
-- **Installazione**: in `~/.local` sull'host, tramite `./dev.sh install`.
-  Primo avvio riuscito, con lanciatore nel menu. Dati utente in
-  `~/.tuxpaint/`.
-- **Modifiche locali rispetto a 0.9.22** (commit `b92a7d1` e `93fc7df`):
-  - `src/tuxpaint.c`: `load_kpx`, `load_svg`, `myIMG_Load`,
-    `myIMG_Load_RWops` accettano `const char *`. `load_starter_helper` vuole
-    un loader `(const char *)`, compatibile con `IMG_Load`. Tolte le
-    dichiarazioni di `show_version` e `show_usage`, spostate in `parse.h`.
-  - `src/parse.h`: dichiarazioni di `show_version()` e `show_usage()`,
-    usate dal parser generato da `src/parse.gperf`.
-  - `Makefile`: `-lm` aggiunto a `linux_ARCH_LINKS`.
-  - `.gitignore` nuovo, per gli artefatti di build.
-  - `dev.sh` nuovo: build, installazione e avvio per lo sviluppo (§4).
-  - Su `feature/ui-scaling`:
-    - `d346e60`, `321db8b`, `0c7bcf9`: tutta l'interfaccia scalata con la
-      finestra (§5bis);
-    - strumenti di test in `devtools/ui-test/`;
-    - `b7021ac`: correzione del crash del processo figlio dei font. Il
-      figlio esce con `_exit(0)` invece di `exit(0)`, e `FORKED_FONTS`
-      è di nuovo attivo. Sostituisce `6d3f130`, che caricava i font in un
-      thread. È indipendente dalla scala: per riportarla altrove basta la
-      modifica a `src/fonts.c`.
-- **Installato in `~/.local`**: la build di `feature/ui-scaling` (tutto
-  funzionante, compresi Testo ed Etichetta).
 - **Decisioni prese** (2026-10-29):
-  - **Strategia**: si resta sulla **0.9.22 con SDL 1.2** e la si corregge.
-    Niente riallineamento all'upstream né porting a SDL2, per ora.
+  - **Strategia**: si resta sulla **0.9.22 con SDL 1.2** (tramite
+    sdl12-compat) e la si corregge. Niente riallineamento all'upstream né
+    porting a SDL2, per ora.
   - **Obiettivo**: **sperimentazione personale**. Target solo Linux;
     packaging, distribuzione e altre piattaforme non sono priorità.
+- **Branch** (niente è pubblicato su `origin`):
+
+| Branch | Commit | Contenuto |
+|--------|--------|-----------|
+| `master` | `f0f9036` | tutto il lavoro fino alle rifiniture della UI scalabile (unione per avanzamento rapido del 2026-10-30) |
+| `feature/sharper-icons` | ultimo commit | **branch attivo**: icone ingrandite con Lanczos (`7cb40aa`) e file di progetto; **da unire in `master`** |
+| `feature/ui-scaling` | `f0f9036` | già unito in `master` |
+| `build/host-debian13` | `ec9ebe3` | già unito in `master` |
+
+- **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
+  repository (`.git/config`).
+- **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori. Warning: 52 in
+  `src/tuxpaint.c`, invariati rispetto alla prima build; quelli che
+  indicano bug possibili sono nel TODO.
+- **Installato in `~/.local`**: la build di `feature/sharper-icons`,
+  tutto funzionante, compresi Testo ed Etichetta. Lanciatore nel menu;
+  dati utente in `~/.tuxpaint/`.
+- **Modifiche rispetto a 0.9.22**:
+
+| Area | Commit | Cosa |
+|------|--------|------|
+| Build con GCC 14 | `b92a7d1` | loader con `const char *` (`load_kpx`, `load_svg`, `myIMG_Load*`); prototipi di `show_version`/`show_usage` in `src/parse.h`; `-lm` nel Makefile; `.gitignore` |
+| Strumenti di sviluppo | `93fc7df`, poi altri | `dev.sh` (§4); `devtools/ui-test/` (§5bis) |
+| UI scalabile | `d346e60`, `321db8b`, `0c7bcf9` | schermata principale, dialoghi, cursori, schermata iniziale, tastiera a schermo (§5bis) |
+| Font di Testo/Etichetta | `b7021ac` | il processo figlio dei font esce con `_exit(0)`: prima andava in crash in `exit()`, nel gestore di Mesa ereditato, e il genitore scartava i font. Sostituisce il ripiego col thread `6d3f130` |
+| Rifiniture UI | `c06ba8f` | opzione `buttonsize`; finestra iniziale più grande sugli schermi grandi; passo del mouse da tastiera proporzionale |
+| Icone più nitide | `7cb40aa` (su `feature/sharper-icons`) | ingrandimento Lanczos-3 delle immagini dell'interfaccia |
+
+- **Cartelle di supporto in `~/.cache`** (sull'host):
+  - `tuxpaint-baseline/`: worktree git con il binario di riferimento
+    (§5bis);
+  - `tuxpaint-test-canon/`: cartella di salvataggio con due disegni, da
+    copiare in `tuxpaint-test/` prima delle prove dei dialoghi;
+  - `tuxpaint-test-xdg/`: Cestino di prova.
 
 ## 2. Mappa del repository
 
@@ -115,7 +141,8 @@ libpng, librsvg2 + cairo (SVG), fribidi, libpaper, gettext, gperf.
 Comando di build standard: `make` → `make install` (variabili `PREFIX`, `DESTDIR`,
 `SVG_LIB:=` per disattivare SVG).
 
-Verifica eseguita il 2026-10-29 nella shell di VS Code:
+Verifica eseguita il 2026-10-29 nella shell di VS Code (storica: il problema
+è risolto compilando sull'host):
 
 | Componente | Stato |
 |------------|-------|
@@ -245,22 +272,29 @@ in `TODO.md`, sezione "Qualità del codice".
 
 Feature richiesta il 2026-10-29: su schermi ad alta risoluzione pulsanti e
 icone restavano a 48 px, minuscoli. Si è scelta la scala nativa
-dell'interfaccia, a fasi, sul branch `feature/ui-scaling`. L'alternativa
-scartata era l'ingrandimento globale con `SDL12COMPAT_WINDOW_SCALING`, che
-riduce la risoluzione della tela.
+dell'interfaccia, a fasi. L'alternativa scartata era l'ingrandimento globale
+con `SDL12COMPAT_WINDOW_SCALING`, che riduce la risoluzione della tela.
+L'upstream ha introdotto una soluzione simile (`buttonsize`, `auto`) dalla
+0.9.27.
 
-**Modello** (`setup_normal_screen_layout()` in `src/tuxpaint.c`):
+### Modello
+
+In `setup_normal_screen_layout()` (`src/tuxpaint.c`):
 
 - `scala = max(1, min(max(L,A) / 800, min(L,A) / 600))`;
-- `button_w = button_h = floor(48 × scala)`;
-- `button_scale = button_w / 48`.
+- `button_w = button_h = floor(48 × scala)`, ridotta da `buttonsize` se
+  questo è più piccolo;
+- `button_scale = button_w / 48`; `SCALED(x)` converte le misure del
+  design 48×48.
 
-Fino a 800×600 non cambia nulla. Esempi: 1600×1000 → 80 px,
-2400×1500 → 120 px, 2560×1600 a schermo intero → 128 px. La finestra è
-fissa per tutta la sessione, quindi la scala si calcola una volta sola,
-all'avvio.
+Fino a 800×600 non cambia nulla. Esempi: 1600×1000 → 80 px, 1600×1200 →
+96 px, 2400×1500 → 120 px, 2560×1600 a schermo intero → 128 px. La
+finestra è fissa per tutta la sessione, quindi la scala si calcola una volta
+sola, all'avvio. `HEIGHTOFFSET` e `TOOLOFFSET` derivano da `buttons_tall`,
+le righe di pulsanti del layout: `HEIGHTOFFSET = (buttons_tall - 7) *
+button_h`.
 
-**Convenzioni per convertire il codice** (da seguire anche nella fase 2):
+### Convenzioni per il codice
 
 | Prima (design 48×48) | Dopo |
 |----------------------|------|
@@ -275,147 +309,124 @@ all'avvio.
 | superfici già caricate (es. icone dei plugin) | `scale_ui_image()` |
 | dimensioni dei font dell'interfaccia | `SCALED(punti)` |
 
-`HEIGHTOFFSET` e `TOOLOFFSET` ora derivano da `buttons_tall`, il numero di
-righe del layout, con `HEIGHTOFFSET = (buttons_tall - 7) * button_h`.
+### Parti dell'interfaccia
 
-**Finestre di dialogo** (fase 2):
+- **Schermata principale** (fase 1): barre, selettori, palette, titoli,
+  area di Tux, etichette, font, icone delle magie, miniature dei timbri,
+  pulsanti audio dei timbri.
+- **Finestre di dialogo** (fase 2):
+  - Le richieste sì/no e il selettore colore sono disegnati in un'area di
+    design di 640×480 centrata.
+    `PROMPTOFFSETX = (WINDOW_WIDTH - SCALED(640)) / 2`;
+    `PROMPTOFFSETY = HEIGHTOFFSET / 2`.
+  - La geometria del riquadro resta in unità di design: la variabile `w`
+    dell'animazione conta pixel di design. Si scala solo il risultato, per
+    esempio `SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX`.
+  - Apri, Nuovo e presentazione hanno la griglia di miniature da
+    `r_canvas.x`, le frecce alte `button_h / 2` e la riga di pulsanti a
+    `r_canvas.h - button_h`.
+    `THUMB_H = (r_canvas.h - button_h / 2 - button_h) / 4`.
+- **Resto dell'interfaccia** (fase 3):
+  - **Cursori**: `get_cursor()` ingrandisce le bitmap XBM di un fattore
+    intero `k = round(button_scale)`, con punto attivo `x·k + k/2`; il
+    buffer è dinamico.
+  - **Schermata iniziale**: immagini con `loadimagerb()`, margini con
+    `SCALED()`. La barra di avanzamento (`src/progressbar.c`) ricava il
+    modulo dall'immagine (`img_progress->w / 2` × `img_progress->h`).
+  - **Tastiera a schermo**: i tasti sono i pulsanti piccoli già scalati
+    (`img_btnsm_*`). Il font (`12 · altezza tasto / 24`) e il margine
+    della scritta seguono il tasto (`src/onscreen_keyboard.c`).
+- **Rifiniture** (2026-10-30):
+  - **`buttonsize=auto|24-192`** (`button_size_wanted`): può solo
+    rimpicciolire rispetto ad `auto`. Il layout ha bisogno di almeno 7
+    righe di pulsanti; se il valore è troppo grande c'è un avviso su
+    stderr. Un valore non valido fa uscire con codice 91.
+  - **Finestra iniziale**: se `windowsize` non è indicato
+    (`window_size_given`, impostato anche da `--1024x768`) e non si è a
+    schermo intero, 800×600 viene moltiplicato per
+    `k = min(90% larghezza schermo / 800, 85% altezza / 600)`, con k
+    intero ≥ 2 e schermo letto da `SDL_GetVideoInfo()`. Sullo schermo
+    dell'utente (2560×1600) dà 1600×1200.
+  - **Mouse da tastiera**: passi `SCALED(16)` / `SCALED(24)` in
+    `handle_keymouse()`.
+  - **Icone più nitide**: `enlarge_lanczos()` (filtro separabile Lanczos-3
+    su alfa premoltiplicato), usato da `scale_ui_image()` solo se entrambe
+    le dimensioni crescono. Altrimenti, o se manca memoria, si usa
+    `thumbnail2()`. `zoom()` (bilineare) resta per miniature, timbri e
+    Starter. Immagini ad alta risoluzione non esistono, nemmeno
+    nell'upstream.
+- **Non scalati di proposito**: i pennelli nel selettore (mostrano la
+  dimensione reale della punta); timbri, testo e disegni sulla tela, che
+  sono contenuto; i passi del joystick, configurabili con le sue opzioni.
 
-- Le richieste sì/no e il selettore colore sono disegnati in un'area di
-  design di 640×480 centrata. `PROMPTOFFSETX = (WINDOW_WIDTH - SCALED(640)) / 2`;
-  `PROMPTOFFSETY = HEIGHTOFFSET / 2` resta invariato.
-- La geometria del riquadro resta in unità di design: la variabile `w`
-  dell'animazione conta pixel di design. Si scala solo il risultato, per
-  esempio `SCALED(PROMPT_LEFT + 96 - w) + PROMPTOFFSETX`.
-  `PROMPT_LEFT` (96) e `PROMPT_W` (440) restano valori di design.
-- Apri, Nuovo e presentazione hanno la griglia di miniature da
-  `r_canvas.x`, le frecce alte `button_h / 2` e la riga di pulsanti in
-  basso a `r_canvas.h - button_h`.
-  `THUMB_H = (r_canvas.h - button_h / 2 - button_h) / 4`.
+### Prove automatiche (`devtools/ui-test/`)
 
-**Non scalati di proposito**:
+Si lanciano dalla shell di VS Code e pilotano Tux Paint sull'host
+(XWayland). Sull'host servono `xwininfo`, `xprop`, `xwd`, `ffmpeg`,
+`python3` con PIL, `libXtst` e `libXfixes`. Dettagli d'uso in
+[devtools/ui-test/README.md](devtools/ui-test/README.md).
 
-- i pennelli nel selettore, che mostrano la dimensione reale della punta;
-- timbri, testo e disegni sulla tela, che sono contenuto e non interfaccia;
-- il joystick (passi configurabili con le sue opzioni).
+- `regress.sh OUT BIN DIMENSIONE PULSANTE` cattura una schermata per
+  strumento: pennello, timbro, linee, forme, testo, etichetta, magie,
+  gomma. Inoltra `TP_ARGS` e `TP_SOUND`.
+- `dialogs.sh OUT BIN [SCALA]` attraversa tutti i dialoghi a 800×600 per
+  SCALA (intera), con `--savedir` su una copia di
+  `~/.cache/tuxpaint-test-canon`: uscita, Apri con selezione,
+  presentazione e riproduzione, Nuovo, selettore colore.
+- `compare.py` confronta due serie di catture pixel per pixel.
+- `tp_session.py` è il motore.
+  - Azioni: `click`, `tool`, `move`, `drag`, `wait`, `shot` (finestra),
+    `cursor` (cursore via XFixes).
+  - Variabili: `TP_BIN`, `TP_BUTTON`, `TP_ARGS`, `TP_SCALE`,
+    `TP_START_WAIT`, `TP_LOG`, `TP_WRAP`, `TP_SOUND` (audio col driver
+    SDL `dummy`).
+  - Usa solo la finestra del processo che ha avviato (`_NET_WM_PID`), la
+    porta in primo piano e non clicca mai se sotto il puntatore c'è
+    un'altra finestra: in quel caso scrive "STOP".
+- `segv_backtrace.c`: libreria per `LD_PRELOAD` che stampa la pila delle
+  chiamate ai crash, anche nei processi figli. Indirizzi da tradurre con
+  `addr2line -f -e BINARIO 0xOFFSET` su un binario compilato con `-g`.
 
-**Rifiniture** (2026-10-30):
+**Binario di riferimento**: worktree git in `~/.cache/tuxpaint-baseline`,
+a `ec9ebe3` (prima della UI scalabile) più la sola correzione `_exit(0)` in
+`src/fonts.c`, non committata nel worktree, così l'ordine dei font coincide.
+Si ricompila con `./dev.sh build` lì dentro e si rimuove con
+`git worktree remove --force ~/.cache/tuxpaint-baseline`. Le serie di
+riferimento vanno rigenerate a ogni sessione: le catture stanno in una
+cartella temporanea.
 
-- **`buttonsize=auto|24-192`** (`button_size_wanted`): in
-  `setup_normal_screen_layout()` sostituisce la dimensione automatica solo
-  se è più piccola. Più grande non ci starebbe, perché il layout ha
-  bisogno di almeno 7 righe di pulsanti; in quel caso c'è un avviso su
-  stderr.
-- **Finestra iniziale su schermi grandi**: se `windowsize` non è
-  indicato (`window_size_given`) e la finestra non è a schermo intero,
-  prima di aprirla Tux Paint legge la risoluzione con `SDL_GetVideoInfo()`.
-  Poi moltiplica 800×600 per `k = min(90% larghezza / 800,
-  85% altezza / 600)`, con k intero ≥ 2. Anche `--1024x768` conta come
-  dimensione indicata.
-- **Mouse da tastiera**: i passi di `handle_keymouse()` sono
-  `SCALED(16)` / `SCALED(24)`.
-- **Icone ingrandite con Lanczos** (`enlarge_lanczos()`, prima di
-  `scale_ui_image()`): filtro separabile Lanczos-3 su alfa premoltiplicato
-  (RGB × alfa, poi diviso di nuovo). Si usa solo se entrambe le dimensioni
-  crescono; altrimenti, o in caso di errore di memoria, `thumbnail2()`.
-  `zoom()` (bilineare) resta per gli altri usi: miniature, timbri,
-  Starter.
+### Insidie delle prove automatiche
 
-**Resto dell'interfaccia** (fase 3):
-
-- **Cursori**: `get_cursor()` ingrandisce le bitmap XBM di un fattore intero
-  `k = round(button_scale)`, con punto attivo `x·k + k/2`. Il buffer ora è
-  dinamico; prima era fisso a 128 byte, cioè al massimo 32×32.
-- **Schermata iniziale**: immagini con `loadimagerb()` e margini con
-  `SCALED()`. La barra di avanzamento (`src/progressbar.c`) ricava il
-  modulo dall'immagine: larghezza `img_progress->w / 2`, altezza
-  `img_progress->h`.
-- **Tastiera a schermo**: i tasti sono già i pulsanti piccoli scalati
-  (`img_btnsm_*`). In `src/onscreen_keyboard.c` il font
-  (`12 · altezza tasto / 24`) e il margine della scritta seguono la
-  dimensione del tasto; le icone `img_osk*` si caricano con `loadimagerb()`.
-
-**Invariante e test**: a scala 1 l'interfaccia deve restare identica al
-pixel. Gli strumenti sono in `devtools/ui-test/`:
-
-- `regress.sh OUT BIN 800x600 48` cattura una schermata per strumento;
-- `dialogs.sh OUT BIN [SCALA]` attraversa tutti i dialoghi: uscita, Apri,
-  presentazione con riproduzione, Nuovo, selettore colore. La finestra è
-  800×600 per SCALA, con SCALA intera, e i clic vengono moltiplicati di
-  conseguenza. Usa come `--savedir` una copia di
-  `~/.cache/tuxpaint-test-canon`, che contiene due disegni salvati, così
-  i dati in `~/.tuxpaint` non vengono toccati;
-- `compare.py` confronta due serie di catture;
-- `tp_session.py` è il motore. Azioni: `click`, `tool`, `drag`, `move`,
-  `wait`, `shot` (cattura della finestra) e `cursor` (salva il cursore
-  attuale via XFixes). Variabili:
-  - `TP_BIN`, `TP_BUTTON`, `TP_ARGS`, `TP_SCALE`;
-  - `TP_START_WAIT`: attesa iniziale, utile per la schermata d'avvio;
-  - `TP_LOG`: file sull'host dove scrivere l'output di Tux Paint;
-  - `TP_WRAP`: comando con cui avviarlo, es. `stdbuf -oL -eL` per avere
-    l'output non bufferizzato.
-
-Il binario di riferimento, cioè il codice prima della feature, è in un
-worktree git: `~/.cache/tuxpaint-baseline/tuxpaint`, ricavato da
-`build/host-debian13` (`ec9ebe3`), con in più la sola correzione dei font
-(`_exit(0)` in `src/fonts.c`, modifica non committata nel worktree). Si
-ricompila con `./dev.sh build` lì dentro e si rimuove con
-`git worktree remove --force ~/.cache/tuxpaint-baseline`.
-
-**Insidie dei test automatici**:
-
-- Il primo clic su una finestra non attiva serve solo a darle il focus:
-  `regress.sh` fa un clic iniziale sul titolo "Strumenti".
-- I **trascinamenti simulati non sono affidabili**: il puntatore reale
-  dell'utente interferisce e produce linee "a ventaglio". Per verificare
-  la tela usare clic singoli.
-- **Tux Paint non si chiude con SIGTERM**: SDL lo trasforma in una
-  richiesta di uscita e il programma chiede conferma. Negli script usare
-  SIGKILL (`timeout -s KILL`, `kill -9`).
-- `pkill -f` con il testo della riga di comando colpisce anche le shell che
-  lo contengono: usare `pgrep -x tuxpaint`.
-- L'host non vede la `/tmp` del sandbox: i dati passano su stdout (tar).
-  Con `flatpak-spawn` passare `--directory=$HOME` se la cartella corrente
-  non esiste sull'host.
-- Se la finestra è più grande dello schermo, il gestore delle finestre la
-  accorcia: per esempio 2400×1500 diventa 2400×1462.
-- Non automatizzare il pulsante "Cancella" di Apri: un clic sul "Sì"
-  sposterebbe un file nel Cestino dell'utente.
-- La finestra di prova compare sullo schermo dell'utente. **Se l'utente usa
-  il mouse dentro la finestra durante una prova, la cattura si sporca**:
-  è successo una volta, con lo strumento Linee selezionato e linee
-  disegnate. Se un confronto fallisce, prima di cercare un bug guardare le
-  immagini e ripetere la prova.
-- Messaggi di Tux Paint persi: stdout è bufferizzato e il processo viene
-  chiuso con SIGKILL. Usare `TP_WRAP="stdbuf -oL -eL"` e `TP_LOG`.
-- **Finestre Tux Paint dell'utente**: prima lo script prendeva la prima
-  finestra Tux Paint sullo schermo, e se l'utente ne aveva una aperta
-  poteva catturarla e cliccarla. Ora usa solo quella del processo che ha
-  avviato (`_NET_WM_PID`).
+- **Mouse dell'utente**: se l'utente usa mouse o rotella sopra la finestra
+  di prova, la cattura si sporca (linee disegnate, elenchi scorsi). Prima
+  di una prova chiedere di non toccare nulla. Se un confronto fallisce,
+  guardare le immagini prima di cercare un bug.
 - **"mutter guard window"**: quando in primo piano c'è una finestra
   Wayland, GNOME copre le finestre X con una finestra invisibile e i clic
-  simulati finiscono lì. Lo script la rileva e si ferma ("STOP").
-- **Finestra di prova dietro altre finestre o mouse dell'utente in uso**:
-  i clic simulati possono finire altrove o perdersi. `tp_session.py` ora
-  porta in primo piano la finestra (`_NET_ACTIVE_WINDOW`) e, prima di
-  ogni azione del puntatore, verifica con `XQueryPointer` che Tux Paint
-  sia la finestra in cima. Se non lo è si ferma con "STOP", senza
-  cliccare. Se invece l'utente sta usando il mouse, i clic simulati
-  vengono ignorati o mescolati ai suoi: prima di una prova chiedere di
-  non toccare il mouse.
-- **Audio nei test**: con `TP_SOUND=1` Tux Paint gira con l'audio attivo
-  ma col driver SDL `dummy`, quindi senza suoni reali.
-- **Cestino nei test**: Tux Paint mette i file cancellati in
-  `$XDG_DATA_HOME/Trash`. Con
-  `TP_WRAP="env XDG_DATA_HOME=$HOME/.cache/tuxpaint-test-xdg"` la
-  richiesta "Cancella" si può provare senza toccare il Cestino vero.
-- **Effetto del primo clic**: il clic di messa a fuoco a volte lasciava un
-  punto sulla tela. `regress.sh` e `dialogs.sh` ora portano prima il
-  puntatore sul titolo e aspettano un secondo.
-- Crash senza `gdb`: `devtools/ui-test/segv_backtrace.c`, caricato con
-  `LD_PRELOAD` tramite `TP_WRAP`, stampa la pila delle chiamate al
-  segmentation fault, anche nei processi figli. Gli indirizzi si
-  traducono con `addr2line -f -e BINARIO 0xOFFSET` su un binario
-  compilato con `-g`.
+  finirebbero lì. Lo script la rileva e si ferma ("STOP"). Si ripete la
+  prova.
+- **Primo clic**: serve a dare il focus e a volte lasciava un punto sulla
+  tela. Gli script portano prima il puntatore sul titolo e aspettano.
+- **Trascinamenti simulati**: poco affidabili, il puntatore reale
+  interferisce. Per verificare la tela usare clic singoli.
+- **Chiusura**: Tux Paint ignora SIGTERM (SDL lo trasforma in una
+  richiesta di uscita, con conferma). Usare SIGKILL. Per cercare processi
+  usare `pgrep -x tuxpaint`, non `pkill -f`, che colpisce anche le shell.
+- **Sandbox e host**: l'host non vede la `/tmp` del sandbox, quindi i dati
+  passano su stdout (tar). Con `flatpak-spawn` passare `--directory=$HOME`
+  se la cartella corrente non esiste sull'host.
+- **Finestre troppo grandi**: il gestore delle finestre le accorcia (per
+  esempio 2400×1500 diventa 2400×1462) e possono finire senza nessuna
+  finestra sotto il puntatore: STOP, si ripete.
+- **"Cancella" in Apri**: provarla solo con
+  `TP_WRAP="env XDG_DATA_HOME=$HOME/.cache/tuxpaint-test-xdg"` e
+  `--savedir` di prova. Altrimenti un "Sì" sposta file veri nel Cestino
+  dell'utente.
+- **Output perso**: stdout è bufferizzato e il processo muore con
+  SIGKILL. Usare `TP_WRAP="stdbuf -oL -eL"` e `TP_LOG`.
+- **Pulizie**: mai `cd DIR && rm -rf *`, perché se il `cd` fallisce cancella
+  la cartella corrente; il controllo di sicurezza l'ha già bloccato una
+  volta. Usare cartelle di output nuove o percorsi espliciti.
 
 ## 6. Prossimi passi consigliati
 
@@ -926,3 +937,26 @@ Verifiche (desktop fermo, su richiesta all'utente):
 Aperto:
 - Unire `feature/sharper-icons` in `master`.
 - Icone davvero nitide solo con nuove immagini (lavoro grafico, P3).
+
+### 2026-10-30 — Documentazione di progetto aggiornata
+
+Richiesta dell'utente: aggiornare tutta la documentazione di progetto e
+prepararsi alla compressione del contesto.
+
+Fatto:
+- `HANDOFF.md`:
+  - nuova §0 "Come riprendere": lettura, branch, sandbox/host, prove
+    con desktop fermo, chiusura delle attività, lingue;
+  - §1 riscritta: stato al 2026-10-30, tabella dei branch, tabella delle
+    modifiche rispetto a 0.9.22 con i commit, cartelle di supporto in
+    `~/.cache`;
+  - §5bis riordinata. Tolte le istruzioni superate, per esempio "non
+    automatizzare Cancella", che ora si prova col Cestino di prova.
+- `TODO.md`: numeri di riga aggiornati nella sezione "Qualità del codice".
+- `devtools/ui-test/README.md`: uso degli script, azioni e variabili.
+
+Stato alla chiusura della sessione:
+- Branch attivo `feature/sharper-icons` (icone Lanczos), da unire in
+  `master`.
+- Nessuna modifica in sospeso nel repository, a parte `.vscode/` di
+  VS Code, che non va committata.

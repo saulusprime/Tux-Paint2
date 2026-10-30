@@ -60,41 +60,44 @@ I difetti trovati nei warning sono nella sezione "Qualità del codice".
 
 ## Qualità del codice (dai warning della build del 2026-10-29)
 
+Numeri di riga aggiornati al 2026-10-30 (branch `feature/sharper-icons`);
+se si spostano, cercare il testo o la funzione indicati.
+
 - [ ] [P2] **Doppio `free(unc_buff)`** nei percorsi di errore del
   caricamento di sfondo/primo piano incorporati nel PNG
-  (`src/tuxpaint.c:21399/21403` e `:21456/21460`) — crash possibile
+  (`src/tuxpaint.c:21626/21630` e `:21683/21687`, funzione `load_embedded_data`) — crash possibile
   aprendo un disegno salvato danneggiato.
 - [ ] [P2] Operazioni su `cm.section` con comportamento indefinito
   (`-Wsequence-point`) in `src/im.c:899`, `:1085`, `:1271`, `:1481` —
   metodi di input giapponese/coreano/cinese.
 - [ ] [P2] `strtok` su stringa `const` e argomenti in più per `printf`
-  (`src/tuxpaint.c:22124`, `:22128`).
+  (`src/tuxpaint.c:22367`, `:22371`).
 - [ ] [P3] Variabili forse non inizializzate `left_y`, `right_x` nel
   plugin Fold (`magic/src/fold.c:172`, `:178`).
 - [ ] [P3] `abs()` intera usata su un `float` nel plugin Flower
   (`magic/src/flower.c:398`), si perde la parte decimale.
 - [ ] [P3] Confronto sempre vero sull'indirizzo di `filename`
-  (`src/fonts.c:1285`).
-- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:16728`) e parentesi
-  mancanti in un `|` (`:16958`) — verificare che il comportamento sia
+  (`src/fonts.c:1290`).
+- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:16955`) e parentesi
+  mancanti in un `|` (`:17185`) — verificare che il comportamento sia
   quello voluto.
 - [ ] [P3] API librsvg deprecate: `rsvg_handle_get_dimensions` e
-  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17441`, `:17518`).
+  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17668`, `:17745`).
 - [ ] [P3] Ripulire i restanti ~80 warning innocui (variabili e funzioni
   inutilizzate, confronti con e senza segno).
 
 ## Qualità del codice (dai FIXME nel sorgente)
 
 - [ ] [P2] Scaricare i plugin Magic all'uscita e togliere il limite fisso di
-  512 handle (`src/tuxpaint.c:1268-1271`).
-- [ ] [P2] Memory leak segnalati da Valgrind in `src/fonts.c:1166` e `:1218`.
+  512 handle (`src/tuxpaint.c:1300-1303`, `magic_handle`).
+- [ ] [P2] Memory leak segnalati da Valgrind in `src/fonts.c:1171` e `:1223`.
 - [ ] [P3] Barriera di memoria mancante nel thread di caricamento font
   (`src/fonts.c:1010`).
 - [ ] [P3] Centratura della stampa PostScript (`src/postscript_print.c:198`)
   e inizializzazione di libpaper all'avvio/chiusura (`:107`, `:158`).
 - [ ] [P3] Allocazioni ripetute in `src/get_fname.c:54`.
 - [ ] [P3] Rendere array-based la gestione dei locale (`src/i18n.c:403`).
-- [ ] [P3] Barra di avanzamento da riattivare (`src/progressbar.c:70`).
+- [ ] [P3] Barra di avanzamento da riattivare (`src/progressbar.c:74`).
 - [ ] [P3] Ordinamento case-insensitive di Starter/file
   (`src/dirwalk.c:261`, es. `Jigsaw*` vs `jigsaw*`).
 - [ ] [P3] Suddividere `src/tuxpaint.c` (~24.100 righe) in moduli.
@@ -113,7 +116,7 @@ I difetti trovati nei warning sono nella sezione "Qualità del codice".
   Halftone, Mosaic, Tint (`fade_darken.c:240`, `glasstile.c:282`,
   `halftone.c:92`, `mosaic.c:94`, `tint.c:64`).
 - [ ] [P3] Tastiera a schermo: etichette AltGr e caratteri non-BMP
-  (`src/onscreen_keyboard.c:1215`, `:1070`).
+  (`src/onscreen_keyboard.c:1219`, `:1074`).
 - [ ] [P3] Halftone: angolo per canale colore (`magic/src/halftone.c:277`).
 
 ## Contenuti e localizzazione
