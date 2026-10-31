@@ -1,1 +1,2 @@
-Veda prego "docs/FAQ.txt"
+Le domande frequenti (FAQ) sono in inglese, in docs/FAQ.txt o
+docs/html/FAQ.html.

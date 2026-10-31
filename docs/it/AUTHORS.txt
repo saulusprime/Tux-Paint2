@@ -1,3 +1,7 @@
+NOTA (2026): questo elenco è di una versione precedente di Tux Paint.
+Quello aggiornato, in inglese, è in docs/AUTHORS.txt.
+-----------------------------------------------------------------------------
+
 AUTHORS.it.txt di Tux Paint
 
 Tux Paint - Un semplice programma di disegno per bambini.

@@ -1,3 +1,9 @@
+NOTA (2026): questo file è la documentazione delle opzioni di Tux Paint
+0.9.14, mai tradotta in italiano e ormai superata. Quella aggiornata (0.9.22,
+con le opzioni aggiunte in questo fork, come "buttonsize" e "fullscreen" senza
+dimensione) è in inglese: docs/OPTIONS.txt o docs/html/OPTIONS.html.
+-----------------------------------------------------------------------------
+
                                    Tux Paint
                                  version 0.9.14
 

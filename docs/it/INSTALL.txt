@@ -1,3 +1,10 @@
+NOTA (2026): questa traduzione è della versione 0.9.15 (2005) ed è
+superata. Le istruzioni aggiornate sono in inglese, in docs/INSTALL.txt. In
+questo fork la compilazione e l'installazione su Linux si fanno con lo script
+dev.sh nella cartella del sorgente (per esempio "./dev.sh install"); le
+istruzioni sono in testa allo script.
+-----------------------------------------------------------------------------
+
 INSTALL.it.txt di Tux Paint
 
 Tux Paint - Un semplice programma di disegno per bambini.

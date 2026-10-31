@@ -1,0 +1,984 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="it"><head><title>Espandere Tux Paint</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#FF0000"
+alink="#FF00FF">
+
+<center>
+<h1><img src="../../html/images/tuxpaint-title.png" width=220 height=219
+alt="Tux&nbsp;Paint"><br>
+
+versione
+
+0.9.22
+
+<br>
+Espandere Tux Paint</h1>
+
+<p>Copyright 2002-2009 Bill Kendrick e altri<br>
+New Breed Software</p>
+
+<p><a href="mailto:bill@newbreedsoftware.com">bill@newbreedsoftware.com</a><br>
+<a href="http://www.tuxpaint.org/">http://www.tuxpaint.org/</a></p>
+
+<p>14 giugno 2002 - 1 luglio 2009</p>
+
+<p><small>Traduzione italiana, 2026, con le note su questo fork di
+Tux&nbsp;Paint.</small></p>
+</center>
+
+<hr size=2 noshade>
+
+<p>Per aggiungere o cambiare cose come i pennelli e i timbri di
+Tux&nbsp;Paint, basta mettere o togliere file sul disco.</p>
+
+<p>Nota: perché le modifiche abbiano effetto bisogna riavviare
+Tux&nbsp;Paint.</p>
+
+<h2>Dove vanno i file</h2>
+<blockquote>
+  <h3>File comuni</h3>
+  <blockquote>
+    <p>Tux&nbsp;Paint cerca i suoi file di dati nella sua cartella
+    'data'.</p>
+
+    <h4>Linux e Unix</h4>
+    <blockquote>
+      <p>La posizione di questa cartella dipende dal valore di
+      "<code>DATA_PREFIX</code>" usato quando Tux&nbsp;Paint è stato
+      compilato. Vedi INSTALL.txt per i dettagli.</p>
+
+      <p>Normalmente la cartella è:</p>
+
+      <blockquote><code>
+        /usr/local/share/tuxpaint/
+      </code></blockquote>
+
+      <p>Se Tux&nbsp;Paint è stato installato da un pacchetto, è più
+      probabile che sia:</p>
+
+      <blockquote><code>
+        /usr/share/tuxpaint/
+      </code></blockquote>
+
+      <p>In questa versione, se è stato installato con
+      <code>./dev.sh install</code> dalla cartella del sorgente, è:</p>
+
+      <blockquote><code>
+        ~/.local/share/tuxpaint/
+      </code></blockquote>
+    </blockquote>
+
+
+    <h4>Windows</h4>
+    <blockquote>
+      <p>Tux&nbsp;Paint cerca una cartella chiamata 'data' nella stessa
+      cartella del programma. È la cartella scelta dal programma di
+      installazione quando ha installato Tux&nbsp;Paint, per esempio:</p>
+
+      <blockquote><code>
+        C:\Program&nbsp;Files\TuxPaint\data
+      </code></blockquote>
+
+    </blockquote>
+
+
+    <h4>Mac OS X</h4>
+    <blockquote>
+      <p>Tux&nbsp;Paint tiene i suoi file di dati dentro l'applicazione
+      "Tux&nbsp;Paint" (che su Mac&nbsp;OS&nbsp;X è in realtà una cartella
+      speciale). Ecco come arrivare alle cartelle che contiene:</p>
+
+      <ol>
+      <li>Apri il menu contestuale tenendo premuto il tasto [Ctrl] e facendo
+        clic sull'icona di Tux&nbsp;Paint nel Finder. (Se il mouse ha più di
+        un pulsante, basta fare clic destro sull'icona.)</li>
+      <li>Scegli "Mostra&nbsp;contenuto pacchetto" dal menu che compare. Si
+        apre una nuova finestra del Finder con dentro una cartella
+        "Contents".</li>
+      <li>Apri la cartella "Contents" e poi la cartella "Resources" che
+        contiene.</li>
+      <li>Lì trovi le cartelle "starters", "stamps" e "brushes". I contenuti
+        nuovi messi in queste cartelle saranno disponibili per tutti gli
+        utenti che avviano questa copia (icona) di Tux&nbsp;Paint.</li>
+      </ol>
+
+      <p><em>Nota:</em> se installi una versione più recente di
+      Tux&nbsp;Paint e sostituisci o elimini quella vecchia, le modifiche
+      fatte seguendo queste istruzioni vanno perse: tieni una copia dei tuoi
+      contenuti nuovi (timbri, pennelli, ecc.).</p>
+
+      <p>Tux&nbsp;Paint cerca i file anche in una cartella "TuxPaint" che
+      puoi mettere nella cartella "Application&nbsp;Support" del sistema
+      (in "Libreria", nella radice del disco):</p>
+
+      <blockquote><code>
+        /Library/Application&nbsp;Support/TuxPaint/
+      </code></blockquote>
+
+      <p>E anche nella cartella "Application Support" dell'utente:</p>
+
+      <blockquote><code>
+        /Users/<i>(nome&nbsp;utente)</i>/Library/Application Support/TuxPaint/
+      </code></blockquote>
+
+      <p>Quando passi a una versione più recente di Tux&nbsp;Paint, il
+      contenuto di questa cartella TuxPaint resta com'è e continua a essere
+      disponibile per tutti gli utenti.</p>
+
+    </blockquote>
+
+  </blockquote>
+
+  <hr size=1 noshade>
+
+
+  <h3>File personali</h3>
+  <blockquote>
+    <p>Pennelli, timbri, tipi di carattere, Starter e modelli possono anche
+    stare in una tua cartella personale, dove Tux&nbsp;Paint li trova.</p>
+
+
+    <h4>Windows</h4>
+    <blockquote>
+      <p>La cartella personale di Tux&nbsp;Paint è dentro "Dati
+      applicazioni". Per esempio, sulle versioni più recenti di Windows:</p>
+
+      <blockquote><code>
+        C:\Documents and Settings\<i>(nome&nbsp;utente)</i>\Dati
+        applicazioni\TuxPaint\
+      </code></blockquote>
+
+    </blockquote>
+
+    <h4>Mac OS X</h4>
+    <blockquote>
+      <p>La cartella personale di Tux&nbsp;Paint è dentro la cartella
+      "Application Support":</p>
+
+      <blockquote><code>
+        /Users/<i>(nome&nbsp;utente)</i>/Library/Application Support/TuxPaint/
+      </code></blockquote>
+    </blockquote>
+
+    <h4>Linux e Unix</h4>
+    <blockquote>
+      <p>La cartella personale di Tux&nbsp;Paint è
+      "<code>$(HOME)/.tuxpaint/</code>" (o anche "<code>~/.tuxpaint/</code>").</p>
+
+      <p>Cioè, se la tua cartella home è "<code>/home/carla</code>", la
+      cartella di Tux&nbsp;Paint è "<code>/home/carla/.tuxpaint/</code>".</p>
+
+      <p>Non dimenticare il punto ("<code>.</code>") prima di
+      '<code>tuxpaint</code>'!</p>
+
+      <p>(L'opzione <code>--datadir</code> permette di usare un'altra
+      cartella al posto di questa.)</p>
+    </blockquote>
+
+    <p>Per aggiungere pennelli, timbri, tipi di carattere, Starter e
+    modelli, crea nella cartella personale di Tux&nbsp;Paint le
+    sottocartelle "<code><b>brushes</b></code>",
+    "<code><b>stamps</b></code>", "<code><b>fonts</b></code>",
+    "<code><b>starters</b></code>" e "<code><b>templates</b></code>".</p>
+
+    <p>(Per esempio, un pennello chiamato "<code>fiore.png</code>" va in
+    "<code>~/.tuxpaint/brushes/</code>" su Linux o Unix.)</p>
+  </blockquote>
+</blockquote>
+
+<hr size=1 noshade>
+
+
+<h2>Pennelli</h2>
+<blockquote>
+  <p>I pennelli usati dagli strumenti 'Pittura' e 'Linee' di Tux&nbsp;Paint
+  sono semplici immagini PNG.</p>
+
+  <img src="../../html/images/brush_edit.png" width=123 height=147 alt="" align=right>
+
+  <p>Il canale alfa (la trasparenza) dell'immagine PNG determina la forma
+  del pennello: i bordi della forma possono quindi essere sfumati
+  (&laquo;anti-aliasing&raquo;) e la forma può essere anche in parte
+  trasparente!</p>
+
+  <p>I pixel in scala di grigi del pennello vengono disegnati con il colore
+  scelto in Tux&nbsp;Paint. I pixel colorati vengono tinti.</p>
+
+  <p>Le immagini dei pennelli non devono superare i 40&nbsp;pixel di
+  larghezza e i 40&nbsp;pixel di altezza (cioè la dimensione massima è
+  40&nbsp;x&nbsp;40).</p>
+
+
+  <h3>Opzioni dei pennelli</h3>
+  <blockquote>
+    <p>Oltre alla forma, un pennello può avere altre caratteristiche. Per
+    dargliele serve un 'file di dati' del pennello.</p>
+
+    <p>Il file di dati di un pennello è un semplice file di testo che
+    contiene le opzioni.</p>
+
+    <p>Il file ha lo stesso nome dell'immagine PNG, ma l'estensione
+    "<code>.dat</code>". (Per esempio, il file di dati di
+    "<code>pennello.png</code>" è il file di testo "<code>pennello.dat</code>",
+    nella stessa cartella.)</p>
+
+    <h4>Spaziatura del pennello</h4>
+    <blockquote>
+      <p>Dalla versione 0.9.16 di Tux&nbsp;Paint si può indicare la
+      spaziatura dei pennelli (cioè ogni quanto vengono disegnati).
+      Normalmente la spaziatura è l'altezza del pennello divisa per 4.</p>
+
+      <p>Aggiungi al file di dati del pennello una riga
+      "<code><b>spacing=<i>N</i></b></code>", dove <i>N</i> è la spaziatura
+      che vuoi. (Più il numero è basso, più spesso il pennello viene
+      disegnato.)</p>
+    </blockquote>
+
+    <h4>Pennelli animati</h4>
+    <blockquote>
+      <p>Dalla versione 0.9.16 di Tux&nbsp;Paint si possono creare pennelli
+      animati. Mentre si usa il pennello, viene disegnato un fotogramma
+      dell'animazione dopo l'altro.</p>
+
+      <p>Disponi i fotogrammi uno accanto all'altro in un'immagine PNG
+      larga. Per esempio, se il pennello è 30x30 e ha 5 fotogrammi,
+      l'immagine deve essere 150x30.</p>
+
+      <p>Aggiungi al file di dati del pennello una riga
+      "<code><b>frames=<i>N</i></b></code>", dove <i>N</i> è il numero di
+      fotogrammi del pennello.</p>
+
+      <p><b>Nota:</b> se preferisci che i fotogrammi vengano scelti a caso
+      invece che in ordine, aggiungi al file di dati anche una riga
+      "<code><b>random</b></code>".</p>
+    </blockquote>
+
+    <h4>Pennelli direzionali</h4>
+    <blockquote>
+      <p>Dalla versione 0.9.16 di Tux&nbsp;Paint si possono creare pennelli
+      direzionali: mentre si usa il pennello, vengono disegnate forme
+      diverse a seconda della direzione in cui si muove.</p>
+
+      <p>Le forme per le varie direzioni sono disposte in una griglia 3x3
+      in un'immagine PNG. Per esempio, se il pennello è 30x30, l'immagine
+      deve essere 90x90, con le forme di ogni direzione in una griglia
+      3x3. La casella centrale si usa quando non c'è movimento; quella in
+      alto a destra per il movimento verso l'alto e verso destra insieme; e
+      così via.</p>
+
+      <p>Aggiungi al file di dati del pennello una riga
+      "<code><b>directional</b></code>".</p>
+    </blockquote>
+
+    <h4>Pennelli animati e direzionali</h4>
+    <blockquote>
+      <p>Si possono combinare in un pennello sia l'animazione sia la
+      direzione. Usa entrambe le opzioni ("<code><b>frames=<i>N</i></b></code>"
+      e "<code><b>directional</b></code>"), su righe separate del file
+      "<code>.dat</code>" del pennello.</p>
+
+      <p>Disponi il pennello in modo che le griglie 3x3 delle forme
+      direzionali siano una accanto all'altra in un'immagine PNG larga. Per
+      esempio, se il pennello è 30x30 e ci sono 5 fotogrammi, l'immagine è
+      450x90. (I 150x90 pixel più a sinistra contengono le 9 forme
+      direzionali del primo fotogramma, e così via.)</p>
+    </blockquote>
+  </blockquote>
+
+  <p>Metti le immagini PNG dei pennelli (ed eventuali file di dati) nella
+  cartella "<code><b>brushes</b></code>".</p>
+
+  <p>Nota: se i tuoi nuovi pennelli disegnano tutti quadrati o rettangoli
+  pieni, è perché hai dimenticato di usare la trasparenza alfa! Vedi il
+  documento "<a href="../PNG.txt">PNG.txt</a>" per altre informazioni e
+  consigli.</p>
+
+  <br clear=all>
+</blockquote>
+
+<hr size=1 noshade>
+
+
+<h2><a name="stamps">Timbri</a></h2>
+<blockquote>
+  <p>Tutti i file dei timbri vanno nella cartella "<code><b>stamps</b></code>".
+  Conviene creare lì dentro sottocartelle, anche a più livelli, per
+  organizzare i timbri. (Per esempio, una cartella "<code>feste</code>"
+  con le sottocartelle "<code>halloween</code>" e "<code>natale</code>".)</p>
+
+  <h3>La raccolta completa dei timbri</h3>
+  <blockquote>
+    <p><i>(Solo in questa versione)</i></p>
+
+    <p>Tux&nbsp;Paint comprende solo pochi timbri di esempio (nella
+    cartella <code>cartoon</code>). La raccolta completa è distribuita a
+    parte, nel pacchetto <code>tuxpaint-stamps</code>: quasi mille timbri
+    di animali, piante, cibi, veicoli, persone, simboli e altro, divisi in
+    categorie, quasi tutti con la descrizione in italiano. La versione del
+    2025 funziona anche con la 0.9.22.</p>
+
+    <p>Dalla cartella del sorgente, questo comando la aggiunge ai timbri di
+    Tux&nbsp;Paint (in <code>~/.local/share/tuxpaint/stamps/</code>):</p>
+
+    <blockquote><code>
+      ./dev.sh stamps
+    </code></blockquote>
+
+    <p>Il comando scarica il pacchetto Debian
+    <code>tuxpaint-stamps-default</code>, senza installarlo e senza
+    bisogno dei permessi di amministratore, e ne copia solo i timbri.
+    Si può anche indicare un pacchetto <code>.deb</code> già scaricato,
+    oppure una cartella "<code>stamps</code>" (o una cartella che ne
+    contiene una, come l'archivio sorgente di <code>tuxpaint-stamps</code>
+    estratto):</p>
+
+    <blockquote><code>
+      ./dev.sh stamps tuxpaint-stamps-default_2025.03.31-1_all.deb<br>
+      ./dev.sh stamps ~/Scaricati/tuxpaint-stamps-2025.03.31
+    </code></blockquote>
+
+    <p>All'avvio Tux&nbsp;Paint legge solo l'elenco dei timbri: le
+    immagini e le descrizioni vengono caricate quando servono, quindi la
+    raccolta completa non rallenta l'avvio. Per toglierla basta cancellare
+    le cartelle delle categorie in
+    <code>~/.local/share/tuxpaint/stamps/</code> (lasciando
+    <code>cartoon</code>); <code>./dev.sh uninstall</code> toglie tutto
+    Tux&nbsp;Paint, timbri compresi.</p>
+  </blockquote>
+
+  <h3>Immagini</h3>
+  <blockquote>
+    <p>Un timbro di Tux&nbsp;Paint può essere fatto di diversi file.
+    L'unico obbligatorio è, ovviamente, l'immagine stessa.</p>
+
+    <img src="../../html/images/stamp_edit.png" width=128 height=147 alt="" align=right>
+
+    <p>Dalla versione 0.9.17 di Tux&nbsp;Paint i timbri possono essere
+    immagini bitmap PNG o immagini vettoriali SVG, a colori o in scala di
+    grigi. Il canale alfa (la trasparenza) delle immagini PNG determina la
+    forma vera e propria del timbro (altrimenti sul disegno verrebbe
+    timbrato un grosso rettangolo).</p>
+
+    <p>Le immagini PNG possono essere di qualsiasi dimensione, e
+    Tux&nbsp;Paint (normalmente) mostra dei pulsanti per ingrandire e
+    rimpicciolire il timbro.</p>
+
+    <p>Le immagini SVG sono vettoriali, e vengono ridimensionate in modo
+    adatto alla tela usata da Tux&nbsp;Paint.</p>
+
+    <p>Nota: se i tuoi nuovi timbri PNG hanno tutti un contorno rettangolare
+    di un solo colore (per esempio bianco o nero), è perché hai dimenticato
+    di usare la trasparenza alfa! Vedi il documento
+    "<a href="../PNG.txt">PNG.txt</a>" per altre informazioni e
+    consigli.</p>
+
+    <p>Nota: se i tuoi nuovi timbri SVG sembrano avere molto spazio vuoto
+    intorno, controlla che il 'documento' SVG non sia più grande delle
+    forme che contiene. Se invece vengono tagliati, controlla che il
+    'documento' sia abbastanza grande da contenerle. Vedi il documento
+    "<a href="../../SVG.txt">SVG.txt</a>" (in inglese) per altre
+    informazioni e consigli.</p>
+
+    <p><b>Utenti esperti:</b> la guida
+    <a href="../../html/ADVANCED-STAMPS-HOWTO.html">Advanced Stamps HOWTO</a>
+    (in inglese) spiega in dettaglio come preparare immagini PNG che
+    vengano ridimensionate perfettamente quando si usano come timbri in
+    Tux&nbsp;Paint.</p>
+
+    <br clear=all>
+  </blockquote>
+
+  <hr size=1 noshade>
+
+  <h3>Descrizione</h3>
+  <blockquote>
+    <p>La descrizione è un file di testo (".TXT") con lo stesso nome
+    dell'immagine PNG o SVG. (Per esempio, la descrizione di
+    "<code>immagine.png</code>" è nel file "<code>immagine.txt</code>",
+    nella stessa cartella.)</p>
+
+    <p>La prima riga del file di testo è la descrizione del timbro in
+    inglese (americano). Il file deve essere codificato in UTF-8.</p>
+
+    <h4>Altre lingue</h4>
+    <blockquote>
+      <p>Si possono aggiungere al file altre righe con la traduzione della
+      descrizione, da mostrare quando Tux&nbsp;Paint usa un'altra lingua
+      (come l'italiano o il francese).</p>
+
+      <p>La riga deve iniziare con il codice della lingua (per esempio
+      "<code>it</code>" per l'italiano e "<code>zh_TW</code>" per il cinese
+      tradizionale), seguito da "<code>.utf8=</code>" e dalla descrizione
+      tradotta (codificata in UTF-8). Per esempio:</p>
+
+      <blockquote><code>
+        An eggplant with fruit.<br>
+        it.utf8=Una pianta di melanzane con un frutto.
+      </code></blockquote>
+
+      <p>Nel pacchetto sorgente dei timbri (<code>tuxpaint-stamps</code>), la
+      cartella "<code>po</code>" contiene degli script che convertono i file
+      di testo nel formato PO (e viceversa), per tradurli più facilmente in
+      altre lingue. Per i timbri di quella raccolta, quindi, le traduzioni
+      non andrebbero mai aggiunte o cambiate direttamente nei file .txt.</p>
+
+      <p>Se manca la traduzione nella lingua in cui sta funzionando
+      Tux&nbsp;Paint, viene usato il testo inglese.</p>
+   </blockquote>
+
+    <h4>Windows</h4>
+    <blockquote>
+      <p>Per creare o modificare questi file usa Blocco note o WordPad.
+      Salvali come testo semplice, e controlla che il nome del file finisca
+      con "<code>.txt</code>"...</p>
+    </blockquote>
+  </blockquote>
+
+  <hr size=1 noshade>
+
+  <h3>Effetti sonori</h3>
+  <blockquote>
+    <p>File WAVE (".wav") o OGG Vorbis (".ogg") con lo stesso nome
+    dell'immagine PNG o SVG. (Per esempio, l'effetto sonoro di
+    "<code>immagine.svg</code>" è il file "<code>immagine.wav</code>",
+    nella stessa cartella.)</p>
+
+    <h4>Altre lingue</h4>
+    <blockquote>
+      <p>Per avere suoni diversi per ogni lingua (per esempio, se il suono è
+      una persona che pronuncia una parola e vuoi la parola tradotta), crea
+      anche dei file WAV o OGG con il codice della lingua nel nome, nella
+      forma "<code><b>TIMBRO_LINGUA.EST</b></code>".</p>
+
+      <p>L'effetto sonoro di "<code>immagine.png</code>", quando
+      Tux&nbsp;Paint funziona in italiano, sarà "<code>immagine_it.wav</code>";
+      in spagnolo "<code>immagine_es.wav</code>"; in portoghese brasiliano
+      "<code>immagine_pt_BR.wav</code>"; e così via...</p>
+
+      <p>Se non c'è un effetto sonoro per la lingua in uso, Tux&nbsp;Paint
+      prova a caricare il file sonoro 'predefinito' (per esempio
+      "<code>immagine.wav</code>").</p>
+    </blockquote>
+
+    <p>Nota: per i suoni descrittivi (non gli effetti sonori, come uno
+    scoppio o il cinguettio di un uccello), conviene usare la descrizione
+    parlata, spiegata qui sotto.</p>
+  </blockquote>
+
+  <hr size=1 noshade>
+
+  <h3>Descrizione parlata</h3>
+  <blockquote>
+    <p>File WAVE (".wav") o OGG Vorbis (".ogg") con lo stesso nome
+    dell'immagine PNG o SVG, seguito da "<code>_desc</code>". (Per esempio,
+    la descrizione parlata di "<code>immagine.svg</code>" è il file
+    "<code>immagine_desc.ogg</code>", nella stessa cartella.)</p>
+
+    <h4>Altre lingue</h4>
+    <blockquote>
+      <p>Per le descrizioni in altre lingue, crea anche dei file WAV o OGG
+      con nel nome sia "<code>_desc</code>" sia il codice della lingua,
+      nella forma "<code><b>TIMBRO_desc_LINGUA.EST</b></code>".</p>
+
+      <p>La descrizione parlata di "<code>immagine.png</code>", quando
+      Tux&nbsp;Paint funziona in italiano, sarà
+      "<code>immagine_desc_it.wav</code>"; in spagnolo
+      "<code>immagine_desc_es.wav</code>"; in portoghese brasiliano
+      "<code>immagine_desc_pt_BR.wav</code>"; e così via...</p>
+
+      <p>Se non c'è una descrizione parlata per la lingua in uso,
+      Tux&nbsp;Paint prova a caricare quella 'predefinita' (per esempio
+      "<code>immagine_desc.wav</code>").</p>
+
+      <p>(Nella raccolta completa ci sono descrizioni parlate in alcune
+      lingue, ma non in italiano.)</p>
+    </blockquote>
+  </blockquote>
+
+  <hr size=1 noshade>
+
+  <h3>Opzioni dei timbri</h3>
+  <blockquote>
+    <p>Oltre all'immagine, alla descrizione e all'effetto sonoro, un timbro
+    può avere altre caratteristiche. Per dargliele serve un 'file di dati'
+    del timbro.</p>
+
+    <p>Il file di dati di un timbro è un semplice file di testo che contiene
+    le opzioni, una per riga.</p>
+
+    <p>Il file ha lo stesso nome dell'immagine PNG o SVG, ma l'estensione
+    "<code>.dat</code>". (Per esempio, il file di dati di
+    "<code>immagine.png</code>" è il file di testo
+    "<code>immagine.dat</code>", nella stessa cartella.)</p>
+
+    <h4>Timbri colorati</h4>
+    <blockquote>
+      <p>I timbri possono essere "colorabili" o "tingibili".</p>
+
+      <h5>Colorabili</h5>
+      <blockquote>
+        <p>I timbri "colorabili" funzionano come i pennelli: si sceglie il
+        timbro per avere la forma, e poi il colore che deve avere. (Un
+        esempio sono i timbri dei simboli, come quelli matematici e
+        musicali.)</p>
+
+        <p>Dell'immagine originale si usa solo la trasparenza (il canale
+        "alfa"). Il timbro viene di un colore uniforme.</p>
+
+        <center><img src="../../html/images/ex_colorable.png" width=74 height=92
+        alt=""></center>
+
+        <p>Aggiungi al file di dati del timbro una riga con la parola
+	"<code><b>colorable</b></code>".</p>
+      </blockquote>
+
+      <h5>Tingibili</h5>
+      <blockquote>
+        <p>I timbri "tingibili" sono simili a quelli "colorabili", ma i
+        dettagli dell'immagine originale restano. (In termini tecnici: si
+        usa l'immagine originale, ma la sua tonalità cambia secondo il colore
+        scelto.)</p>
+
+        <center><img src="../../html/images/ex_tintable.png" width=151 height=78
+        alt=""></center>
+
+        <p>Aggiungi al file di dati del timbro una riga con la parola
+	"<code><b>tintable</b></code>".</p>
+
+        <h6>Opzioni di tinta:</h6>
+	<blockquote>
+	  <p>A seconda del contenuto del timbro, puoi far usare a
+	  Tux&nbsp;Paint uno di diversi metodi per tingerlo. Aggiungi al file
+	  di dati del timbro una di queste righe:</p>
+
+	  <dl>
+	  <dt>"<code><b>tinter=normal</b></code>" (predefinito)</dt>
+	  <dd>È il modo di tinta normale. (Intervallo di tonalità
+            +/-&nbsp;18&nbsp;gradi, sostituzione 27.)</dd>
+
+	  <dt>"<code><b>tinter=anyhue</b></code>"</dt>
+	  <dd>Cambia tutte le tonalità del timbro. (Intervallo di tonalità
+            +/-&nbsp;180&nbsp;gradi.)</dd>
+
+	  <dt>"<code><b>tinter=narrow</b></code>"</dt>
+	  <dd>Come 'anyhue', ma con un angolo di tonalità più stretto.
+            (Intervallo di tonalità +/-&nbsp;6&nbsp;gradi, sostituzione 9.)</dd>
+
+	  <dt>"<code><b>tinter=vector</b></code>"</dt>
+	  <dd>Trasforma la scala 'dal nero al bianco' in quella 'dal nero al
+            colore scelto'.</dd>
+	  </dl>
+
+        </blockquote>
+      </blockquote>
+    </blockquote>
+
+    <h4>Timbri da non girare</h4>
+    <blockquote>
+      <p>Normalmente un timbro si può capovolgere, mostrare allo specchio, o
+      tutte e due le cose, con i pulsanti sotto il selettore dei timbri, in
+      basso a destra nella finestra di Tux&nbsp;Paint.</p>
+
+      <p>A volte non ha senso capovolgere o specchiare un timbro: per
+      esempio i timbri di lettere o numeri. Altre volte i timbri sono
+      simmetrici, quindi capovolgerli o specchiarli non serve.</p>
+
+      <p>Perché un timbro non si possa capovolgere, aggiungi al suo file di
+      dati l'opzione "<code><b>noflip</b></code>".</p>
+
+      <p>Perché un timbro non si possa specchiare, aggiungi al suo file di
+      dati una riga con la parola "<code><b>nomirror</b></code>".</p>
+    </blockquote>
+
+    <h4>Dimensione iniziale del timbro</h4>
+    <blockquote>
+      <p>Normalmente Tux&nbsp;Paint considera il timbro della dimensione
+      giusta per essere mostrato senza ridimensionarlo su una tela di
+      608x472, la tela originale di Tux&nbsp;Paint (quella di una finestra
+      di 800x600). Tux&nbsp;Paint poi adatta il timbro alla dimensione della
+      tela in uso e, se attivi, ai comandi di dimensione dei timbri.</p>
+
+      <p>Se il timbro risulta troppo grande o troppo piccolo, puoi indicare
+      un fattore di scala. Se il timbro è largo (o alto) 2,5 volte quanto
+      dovrebbe, aggiungi l'opzione "<code><b>scale 40%</b></code>", oppure
+      "<code><b>scale 5/2</b></code>", "<code><b>scale 2.5</b></code>" o
+      "<code><b>scale 2:5</b></code>". Se vuoi puoi mettere anche un
+      "<code><b>=</b></code>", come in "<code><b>scale=40%</b></code>".</p>
+    </blockquote>
+
+
+    <h4>Windows</h4>
+    <blockquote>
+      <p>Per creare questi file puoi usare Blocco note o WordPad. Salvali
+      come testo semplice, e controlla che il nome del file finisca con
+      "<code>.dat</code>" e non con "<code>.txt</code>"...</p>
+    </blockquote>
+  </blockquote>
+
+  <h3>Immagini già specchiate e capovolte</h3>
+  <blockquote>
+    <p>A volte conviene preparare a mano la versione specchiata di un
+    timbro, quella capovolta, o anche quella specchiata e capovolta. Per
+    esempio, immagina un camion dei pompieri con la scritta
+    "<i>Vigili&nbsp;del&nbsp;fuoco</i>" sulla fiancata: quando il timbro
+    viene specchiato, probabilmente non vuoi che la scritta compaia al
+    contrario!</p>
+
+    <p>Per far usare a Tux&nbsp;Paint una tua versione specchiata del
+    timbro, invece di specchiarlo da solo, crea un secondo file
+    "<code>.png</code>" o "<code>.svg</code>" con lo stesso nome, ma con
+    "<code><b>_mirror</b></code>" prima dell'estensione.</p>
+
+    <p>Per esempio, per il timbro "<code><b>camion.png</b></code>" crea un
+    altro file chiamato "<code><b>camion_mirror.png</b></code>", che verrà
+    usato quando il timbro viene specchiato (invece di una versione al
+    contrario di '<code>camion.png</code>').</p>
+
+    <p>Dalla versione 0.9.18 di Tux&nbsp;Paint si può fare lo stesso per
+    l'immagine capovolta, con "<code><b>_flip</b></code>" nel nome, e/o
+    per l'immagine specchiata e capovolta, chiamandola
+    "<code><b>_mirror_flip</b></code>".</p>
+
+    <p><b>Nota:</b> se si specchia e capovolge un'immagine e non c'è una
+    versione "<code>_mirror_flip</code>", ma c'è "<code>_flip</code>" o
+    "<code>_mirror</code>", viene usata quella, e poi specchiata o
+    capovolta.</p>
+  </blockquote>
+
+</blockquote>
+
+<hr size=1 noshade>
+
+
+<h2>Tipi di carattere</h2>
+<blockquote>
+  <img src="../../html/images/fontsizes.png" width=48 height=48 alt="" align=right>
+
+  <p>I tipi di carattere usati da Tux&nbsp;Paint sono TrueType&nbsp;Font
+  (TTF).</p>
+
+  <p>Basta metterli nella cartella "<code><b>fonts</b></code>".
+  Tux&nbsp;Paint carica il carattere e lo mette a disposizione in quattro
+  dimensioni diverse, nel selettore 'Lettere' degli strumenti 'Testo' ed
+  'Etichetta'.</p>
+
+  <br clear=all>
+</blockquote>
+
+<hr size=1 noshade>
+
+
+<h2>Starter</h2>
+<blockquote>
+  <img src="../../html/images/open_open.png" width=48 height=48 alt="" align=right>
+
+  <p>Le immagini 'Starter' compaiono nella finestra 'Nuovo', insieme agli
+  sfondi di un solo colore. (Nota: nelle versioni precedenti di
+  Tux&nbsp;Paint comparivano nella finestra 'Apri', insieme ai disegni
+  salvati.)</p>
+
+  <p>A differenza dei disegni fatti in Tux&nbsp;Paint e riaperti in
+  seguito, aprire uno Starter crea un nuovo disegno. Quando salvi, lo
+  Starter non viene sovrascritto. Inoltre, mentre modifichi il nuovo
+  disegno, il contenuto dello Starter originale continua ad
+  agire su di esso.</p>
+
+  <b>Stile album da colorare</b>
+
+  <blockquote>
+    <p>Lo Starter più semplice è come un'immagine di un album da colorare:
+    il contorno di una figura, da colorare e completare con altri
+    dettagli. In Tux&nbsp;Paint, mentre disegni, scrivi o metti timbri, il
+    contorno resta 'sopra' quello che disegni. Puoi cancellare le parti
+    del disegno che hai fatto tu, ma non il contorno.</p>
+
+    <p>Per creare questo tipo di Starter, disegna un contorno in un
+    programma di grafica, rendi trasparente il resto dell'immagine (in
+    Tux&nbsp;Paint risulterà bianco) e salvala in formato PNG.</p>
+
+    <p><b>Nota:</b> prima di Tux&nbsp;Paint 0.9.21 le immagini dovevano
+    essere nere e trasparenti. Dalla 0.9.21, se uno Starter è in bianco e
+    nero senza trasparenza, all'apertura il bianco diventa trasparente.</p>
+
+    <p><b>Nota:</b> prima di Tux&nbsp;Paint 0.9.22 gli Starter dovevano
+    essere in formato PNG o JPEG (solo per gli sfondi). Dalla 0.9.22
+    possono essere anche SVG (grafica vettoriale) o KPX (modelli di Kid
+    Pix, un altro programma di disegno per bambini: sono file speciali che
+    contengono semplicemente un'immagine JPEG).</p>
+
+    <p>Esempi: gli Starter <code>clock.svg</code> (un orologio da
+    completare con le lancette) e <code>school.svg</code> (una scuola),
+    aggiunti in questa versione.</p>
+  </blockquote>
+
+  <b>Stile scena</b>
+
+  <blockquote>
+    <p>Oltre al contorno in stile album da colorare, uno Starter può avere
+    anche un'immagine di sfondo separata. Il contorno funziona come
+    prima: non ci si può disegnare sopra, non si può cancellare e le
+    'Magie' non lo cambiano. Lo sfondo invece sì!</p>
+
+    <p>Quando si usa la 'Gomma' su un disegno fatto con questo tipo di
+    Starter, invece di far ricomparire un colore uniforme, come il bianco,
+    fa ricomparire lo sfondo originale dello Starter.</p>
+
+    <p>Con un contorno e uno sfondo si può creare uno Starter che dà
+    l'idea della profondità. Immagina uno sfondo con il mare e un contorno
+    con una barriera corallina: puoi disegnare (o timbrare) dei pesci, che
+    compariranno nel mare ma mai 'davanti' alla barriera.</p>
+
+    <p>Per creare questo tipo di Starter, crea un contorno (con la
+    trasparenza) come spiegato sopra, e salvalo in PNG. Poi crea un'altra
+    immagine (senza trasparenza) e salvala con lo stesso nome, ma con
+    "<code>-back</code>" in fondo al nome. (Per esempio,
+    "<code>reef-back.png</code>" è lo sfondo con il mare che va con il
+    contorno "<code>reef.png</code>", cioè il primo piano.) Lo sfondo può
+    essere PNG, JPEG o SVG.</p>
+  </blockquote>
+
+  <p>Le immagini degli Starter dovrebbero essere grandi quanto la tela di
+  Tux&nbsp;Paint. (Vedi la sezione "Caricare altre immagini in
+  Tux&nbsp;Paint" del <a href="README.html">manuale</a> per le
+  dimensioni.) Se non lo sono, vengono ridimensionate senza deformarle
+  (cioè mantenendo le proporzioni), ma i bordi potrebbero venire un po'
+  allungati.</p>
+
+  <p>Le immagini SVG vengono disegnate direttamente alla dimensione della
+  tela, quindi restano nitide anche nelle finestre grandi: basta che
+  abbiano le proporzioni della tela, per esempio 608x472.</p>
+
+  <p>Mettile nella cartella "<code><b>starters</b></code>". Quando in
+  Tux&nbsp;Paint si apre la finestra 'Nuovo', gli Starter compaiono dopo
+  i vari colori.</p>
+
+  <p><b>Nota:</b> in Tux&nbsp;Paint uno Starter non si può sovrascrivere,
+  perché aprirlo è come creare un nuovo disegno (solo che invece di essere
+  vuoto c'è già qualcosa da cui partire). Il comando 'Salva' crea un nuovo
+  disegno, come se si fosse usato il comando 'Nuovo'.</p>
+
+  <p><b>Nota:</b> gli Starter vengono 'collegati' ai disegni salvati con
+  un piccolo file di testo che ha lo stesso nome del disegno, ma
+  l'estensione "<code>.dat</code>". Così il contorno e l'eventuale sfondo
+  continuano ad agire sul disegno anche dopo che si è usciti da
+  Tux&nbsp;Paint, o che si è aperto o iniziato un altro disegno. (In altre
+  parole, un disegno fatto partendo da uno Starter ne sarà sempre
+  influenzato.) In questa versione, se lo Starter originale non c'è più,
+  lo sfondo viene ricavato dal disegno salvato.</p>
+
+  <br clear=all>
+</blockquote>
+
+<hr size=1 noshade>
+
+<h2>Modelli</h2>
+<blockquote>
+  <img src="../../html/images/open_open.png" width=48 height=48 alt="" align=right>
+
+  <p>Anche i 'modelli' (in inglese 'template') compaiono nella finestra
+  'Nuovo', insieme agli sfondi di un solo colore e agli Starter. (Nota:
+  prima della versione 0.9.22 Tux&nbsp;Paint non aveva i modelli.)</p>
+
+  <p>A differenza dei disegni fatti in Tux&nbsp;Paint e riaperti in
+  seguito, aprire un modello crea un nuovo disegno. Quando salvi, il
+  modello non viene sovrascritto. A differenza degli Starter, non c'è un
+  'livello' fisso sopra la tela: puoi disegnare su ogni sua parte.</p>
+
+  <p>Quando si usa la 'Gomma' su un disegno fatto con un modello, invece di
+  far ricomparire un colore uniforme, come il bianco, fa ricomparire
+  l'immagine originale del modello.</p>
+
+  <p>I modelli sono semplici immagini (in formato PNG, JPG, SVG o KPX).
+  Non serve prepararli o convertirli.</p>
+
+  <p>Le immagini dei modelli dovrebbero essere grandi quanto la tela di
+  Tux&nbsp;Paint. (Vedi la sezione "Caricare altre immagini in
+  Tux&nbsp;Paint" del <a href="README.html">manuale</a> per le
+  dimensioni.) Se non lo sono, vengono ridimensionate senza deformarle
+  (cioè mantenendo le proporzioni), ma i bordi potrebbero venire un po'
+  allungati. Come per gli Starter, le immagini SVG restano nitide a ogni
+  dimensione.</p>
+
+  <p>Mettili nella cartella "<code><b>templates</b></code>". Quando in
+  Tux&nbsp;Paint si apre la finestra 'Nuovo', i modelli compaiono dopo i
+  vari colori e gli Starter.</p>
+
+  <p>Esempi: i modelli <code>blackboard.svg</code> (una lavagna, da
+  provare con la magia 'Gesso'), <code>notebook_lined.svg</code> (quaderno
+  a righe), <code>notebook_squared.svg</code> (quaderno a quadretti) e
+  <code>music_staff.svg</code> (quaderno pentagrammato), aggiunti in
+  questa versione.</p>
+
+  <p><b>Nota:</b> in Tux&nbsp;Paint un modello non si può sovrascrivere,
+  perché aprirlo è come creare un nuovo disegno (solo che invece di essere
+  vuoto c'è già qualcosa da cui partire). Il comando 'Salva' crea un nuovo
+  disegno, come se si fosse usato il comando 'Nuovo'.</p>
+
+  <p><b>Nota:</b> i modelli vengono 'collegati' ai disegni salvati con un
+  piccolo file di testo che ha lo stesso nome del disegno, ma l'estensione
+  "<code>.dat</code>". Così lo sfondo resta disponibile (per esempio per la
+  'Gomma') anche dopo che si è usciti da Tux&nbsp;Paint, o che si è aperto
+  o iniziato un altro disegno. (In altre parole, un disegno fatto partendo
+  da un modello ne sarà sempre influenzato.)</p>
+
+  <br clear=all>
+</blockquote>
+
+<hr size=1 noshade>
+
+
+<h2>Traduzioni</h2>
+<blockquote>
+  <p>Tux&nbsp;Paint funziona in molte lingue, grazie alla libreria di
+  localizzazione "gettext". (Vedi <a href="../../html/OPTIONS.html">OPTIONS</a>,
+  in inglese, per cambiare la lingua di Tux&nbsp;Paint.)</p>
+
+  <p>Per tradurre Tux&nbsp;Paint in una nuova lingua, copia il file modello
+  delle traduzioni, "<code>tuxpaint.pot</code>" (nel codice sorgente di
+  Tux&nbsp;Paint, nella cartella "<code>src/po/</code>"). Rinomina la copia
+  come file "<code>.po</code>", con il nome adatto alla lingua in cui
+  traduci (per esempio "<code>es.po</code>" per lo spagnolo, oppure
+  "<code>pt_BR.po</code>" per il portoghese brasiliano, rispetto a
+  "<code>pt.po</code>" o "<code>pt_PT.po</code>" per il portoghese del
+  Portogallo).</p>
+
+  <p>Apri il nuovo file "<code>.po</code>" con un editor di testo
+  <i>semplice</i>, come Emacs, Pico o VI su Linux, o Blocco note su
+  Windows. Il testo inglese originale di Tux&nbsp;Paint è nelle righe che
+  iniziano con "<code>msgid</code>". Scrivi la traduzione di ogni testo
+  nella riga vuota "<code>msgstr</code>" subito sotto la riga
+  "<code>msgid</code>" corrispondente. (<i>Nota:</i> non togliere le
+  virgolette.)</p>
+
+  <p>Esempio:</p>
+
+  <blockquote>
+  <p><code>msgid "Smudge"<br>
+  msgstr "<u>Sfuma</u>"<br>
+  &nbsp;<br>
+  msgid "Click and move to draw large bricks."<br>
+  msgstr "<u>Fai clic e trascina per disegnare mattoni grandi.</u>"
+  </code></p>
+  </blockquote>
+
+  <p>C'è anche un programma grafico, <i><b>poEdit</b></i>
+  (<a href="http://www.poedit.net/">http://www.poedit.net/</a>), per Linux,
+  Windows e Mac&nbsp;OS&nbsp;X.</p>
+
+  <p><i>Nota:</i> conviene lavorare sempre sul modello <i>più recente</i>
+  dei testi di Tux&nbsp;Paint ("<code>tuxpaint.pot</code>"), perché si
+  aggiungono testi nuovi e ogni tanto quelli vecchi cambiano. Il catalogo
+  dei testi della prossima versione, non ancora uscita, si trova nel
+  repository CVS di Tux&nbsp;Paint (vedi
+  <a href="http://www.tuxpaint.org/download/source/cvs/">http://www.tuxpaint.org/download/source/cvs/</a>)
+  e sul sito di Tux&nbsp;Paint, in
+  <a href="http://www.tuxpaint.org/help/po/">http://www.tuxpaint.org/help/po/</a>.</p>
+
+  <p><i>In questa versione:</i> il comando
+  <code>devtools/po/update-po.sh&nbsp;it</code>, dalla cartella del
+  sorgente, rigenera "<code>tuxpaint.pot</code>" dal codice e aggiorna la
+  traduzione italiana ("<code>src/po/it.po</code>"); i testi nuovi o
+  cambiati restano da tradurre o sono segnati come "fuzzy". Funziona con i
+  soli programmi di gettext, senza intltool.</p>
+
+  <p>Per modificare una traduzione esistente, scarica il file
+  "<code>.po</code>" più recente di quella lingua e modificalo come
+  spiegato sopra.</p>
+
+  <p>Le traduzioni nuove o modificate si possono mandare a
+  Bill&nbsp;Kendrick, lo sviluppatore principale di Tux&nbsp;Paint, a
+  <a href="mailto:bill@newbreedsoftware.com">bill@newbreedsoftware.com</a>,
+  o alla mailing list "tuxpaint-i18n"
+  (vedi <a href="http://www.tuxpaint.org/lists/">http://www.tuxpaint.org/lists/</a>).</p>
+
+  <p>In alternativa, chi ha un account su
+  <a href="http://www.sourceforge.net/">SourceForge.net</a> può chiedere di
+  entrare nel progetto "<code>tuxpaint</code>" e avere l'accesso in
+  scrittura al repository del codice sorgente, per inviare direttamente
+  le modifiche.</p>
+
+  <p><i>Nota:</i> per aggiungere una lingua servono anche modifiche al
+  codice sorgente di Tux&nbsp;Paint (<code>/src/i18n.h</code> e
+  <code>/src/i18n.c</code>) e al <code>Makefile</code>, perché il catalogo
+  gettext "<code>.po</code>" venga compilato in un file "<code>.mo</code>"
+  e installato, per l'uso durante l'esecuzione.</p>
+
+</blockquote>
+
+<h2>Metodi di scrittura alternativi</h2>
+<blockquote>
+  <p>Dalla versione 0.9.17, lo strumento "Testo" di Tux&nbsp;Paint offre
+  metodi di scrittura alternativi per alcune lingue. Per esempio, quando
+  Tux&nbsp;Paint funziona in giapponese, il tasto <b>[Alt]&nbsp;destro</b>
+  passa tra i modi caratteri latini, Hiragana in caratteri latini e
+  Katakana in caratteri latini. Così si possono scrivere caratteri e
+  parole della lingua con lo strumento "Testo" premendo uno o più tasti su
+  una tastiera con caratteri latini (per esempio una tastiera QWERTY
+  americana).</p>
+
+  <p>Per creare un metodo di scrittura per una nuova lingua, crea un file
+  di testo con un nome basato sulla lingua (per esempio "<code>ja</code>"
+  per il giapponese) e l'estensione "<code>.im</code>" (per esempio
+  "<code>ja.im</code>").</p>
+
+  <p>Il file "<code>.im</code>" può avere più sezioni di corrispondenze
+  tra tasti e caratteri, per i diversi modi. Per esempio, in un sistema di
+  scrittura giapponese, premere <b>[K]</b>&nbsp;<b>[A]</b> nel modo
+  Hiragana produce un carattere Unicode diverso da quello che si ottiene
+  premendo <b>[K]</b>&nbsp;<b>[A]</b> nel modo Katakana.</p>
+
+  <p>Elenca le corrispondenze nel file, una per riga. Ogni riga deve
+  contenere (separati da spazi):</p>
+
+  <ul>
+  <li>il valore Unicode del carattere, in esadecimale (si possono
+    elencare più caratteri, separati da due punti (':'), così alcune
+    sequenze producono intere parole)
+  <li>la sequenza di tasti (i caratteri ASCII da scrivere per ottenere il
+    carattere Unicode)
+  <li>un indicatore (o "<code>-</code>")
+  </ul>
+
+  <p>Le altre sezioni di corrispondenze iniziano con una riga che contiene
+  la parola "<code>section</code>".</p>
+
+  <p>Esempio:</p>
+
+  <blockquote>
+  <p><code># Hiragana<br>
+  304B &nbsp; ka &nbsp; -<br>
+  304C &nbsp; ga &nbsp; -<br>
+  304D &nbsp; ki &nbsp; -<br>
+  304E &nbsp; gi &nbsp; -<br>
+  304D:3083 &nbsp; kya &nbsp; -<br>
+  3063:305F &nbsp; tta &nbsp; -<br>
+  &nbsp;<br>
+  # Katakana<br>
+  section<br>
+  30AB &nbsp; ka &nbsp; -<br>
+  30AC &nbsp; ga &nbsp; -<br>
+  30AD &nbsp; ki &nbsp; -<br>
+  30AE &nbsp; gi &nbsp; -
+  </code></p>
+  </blockquote>
+
+  <p><i>Nota:</i> nel file "<code>.im</code>" le righe vuote vengono
+  ignorate, come tutto il testo dopo il carattere "<code>#</code>"
+  (cancelletto), che si può quindi usare per i commenti, come
+  nell'esempio.</p>
+
+  <p><i>Nota:</i> il significato degli indicatori dipende dalla lingua, e
+  li gestisce il codice specifico della lingua in "<code>src/im.c</code>".
+  Per esempio, in coreano "<code>b</code>" serve per il Batchim, che può
+  passare al carattere successivo.</p>
+
+  <p><i>Nota:</i> per aggiungere un metodo di scrittura servono anche
+  modifiche al codice sorgente di Tux&nbsp;Paint (<code>/src/im.c</code>) e
+  al <code>Makefile</code>, perché i file "<code>.im</code>" vengano
+  installati, per l'uso durante l'esecuzione.</p>
+</blockquote>
+
+</body></html>

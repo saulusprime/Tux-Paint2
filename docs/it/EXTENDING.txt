@@ -1,0 +1,772 @@
+                                  Tux Paint
+                               versione 0.9.22
+                             Espandere Tux Paint
+
+                  Copyright 2002-2009 Bill Kendrick e altri
+                             New Breed Software
+
+                          bill@newbreedsoftware.com
+                          http://www.tuxpaint.org/
+
+                       14 giugno 2002 - 1 luglio 2009
+
+     Traduzione italiana, 2026, con le note su questo fork di Tux Paint.
+     __________________________________________________________________
+
+   Per aggiungere o cambiare cose come i pennelli e i timbri di Tux Paint,
+   basta mettere o togliere file sul disco.
+
+   Nota: perché le modifiche abbiano effetto bisogna riavviare Tux Paint.
+
+Dove vanno i file
+
+  File comuni
+
+     Tux Paint cerca i suoi file di dati nella sua cartella 'data'.
+
+    Linux e Unix
+
+     La posizione di questa cartella dipende dal valore di "DATA_PREFIX"
+     usato quando Tux Paint è stato compilato. Vedi INSTALL.txt per i
+     dettagli.
+
+     Normalmente la cartella è:
+
+     /usr/local/share/tuxpaint/
+
+     Se Tux Paint è stato installato da un pacchetto, è più probabile che
+     sia:
+
+     /usr/share/tuxpaint/
+
+     In questa versione, se è stato installato con ./dev.sh install dalla
+     cartella del sorgente, è:
+
+     ~/.local/share/tuxpaint/
+
+    Windows
+
+     Tux Paint cerca una cartella chiamata 'data' nella stessa cartella
+     del programma. È la cartella scelta dal programma di installazione
+     quando ha installato Tux Paint, per esempio:
+
+     C:\Program Files\TuxPaint\data
+
+    Mac OS X
+
+     Tux Paint tiene i suoi file di dati dentro l'applicazione
+     "Tux Paint" (che su Mac OS X è in realtà una cartella speciale).
+     Ecco come arrivare alle cartelle che contiene:
+    1. Apri il menu contestuale tenendo premuto il tasto [Ctrl] e facendo
+       clic sull'icona di Tux Paint nel Finder. (Se il mouse ha più di un
+       pulsante, basta fare clic destro sull'icona.)
+    2. Scegli "Mostra contenuto pacchetto" dal menu che compare. Si apre
+       una nuova finestra del Finder con dentro una cartella "Contents".
+    3. Apri la cartella "Contents" e poi la cartella "Resources" che
+       contiene.
+    4. Lì trovi le cartelle "starters", "stamps" e "brushes". I contenuti
+       nuovi messi in queste cartelle saranno disponibili per tutti gli
+       utenti che avviano questa copia (icona) di Tux Paint.
+
+     Nota: se installi una versione più recente di Tux Paint e
+     sostituisci o elimini quella vecchia, le modifiche fatte seguendo
+     queste istruzioni vanno perse: tieni una copia dei tuoi contenuti
+     nuovi (timbri, pennelli, ecc.).
+
+     Tux Paint cerca i file anche in una cartella "TuxPaint" che puoi
+     mettere nella cartella "Application Support" del sistema (in
+     "Libreria", nella radice del disco):
+
+     /Library/Application Support/TuxPaint/
+
+     E anche nella cartella "Application Support" dell'utente:
+
+     /Users/(nome utente)/Library/Application Support/TuxPaint/
+
+     Quando passi a una versione più recente di Tux Paint, il contenuto
+     di questa cartella TuxPaint resta com'è e continua a essere
+     disponibile per tutti gli utenti.
+       _______________________________________________________________
+
+  File personali
+
+     Pennelli, timbri, tipi di carattere, Starter e modelli possono anche
+     stare in una tua cartella personale, dove Tux Paint li trova.
+
+    Windows
+
+     La cartella personale di Tux Paint è dentro "Dati applicazioni". Per
+     esempio, sulle versioni più recenti di Windows:
+
+     C:\Documents and Settings\(nome utente)\Dati applicazioni\TuxPaint\
+
+    Mac OS X
+
+     La cartella personale di Tux Paint è dentro la cartella "Application
+     Support":
+
+     /Users/(nome utente)/Library/Application Support/TuxPaint/
+
+    Linux e Unix
+
+     La cartella personale di Tux Paint è "$(HOME)/.tuxpaint/" (o anche
+     "~/.tuxpaint/").
+
+     Cioè, se la tua cartella home è "/home/carla", la cartella di
+     Tux Paint è "/home/carla/.tuxpaint/".
+
+     Non dimenticare il punto (".") prima di 'tuxpaint'!
+
+     (L'opzione --datadir permette di usare un'altra cartella al posto di
+     questa.)
+
+     Per aggiungere pennelli, timbri, tipi di carattere, Starter e
+     modelli, crea nella cartella personale di Tux Paint le sottocartelle
+     "brushes", "stamps", "fonts", "starters" e "templates".
+
+     (Per esempio, un pennello chiamato "fiore.png" va in
+     "~/.tuxpaint/brushes/" su Linux o Unix.)
+     __________________________________________________________________
+
+Pennelli
+
+     I pennelli usati dagli strumenti 'Pittura' e 'Linee' di Tux Paint
+     sono semplici immagini PNG.
+
+     Il canale alfa (la trasparenza) dell'immagine PNG determina la forma
+     del pennello: i bordi della forma possono quindi essere sfumati
+     («anti-aliasing») e la forma può essere anche in parte trasparente!
+
+     I pixel in scala di grigi del pennello vengono disegnati con il
+     colore scelto in Tux Paint. I pixel colorati vengono tinti.
+
+     Le immagini dei pennelli non devono superare i 40 pixel di larghezza
+     e i 40 pixel di altezza (cioè la dimensione massima è 40 x 40).
+
+  Opzioni dei pennelli
+
+     Oltre alla forma, un pennello può avere altre caratteristiche. Per
+     dargliele serve un 'file di dati' del pennello.
+
+     Il file di dati di un pennello è un semplice file di testo che
+     contiene le opzioni.
+
+     Il file ha lo stesso nome dell'immagine PNG, ma l'estensione ".dat".
+     (Per esempio, il file di dati di "pennello.png" è il file di testo
+     "pennello.dat", nella stessa cartella.)
+
+    Spaziatura del pennello
+
+     Dalla versione 0.9.16 di Tux Paint si può indicare la spaziatura dei
+     pennelli (cioè ogni quanto vengono disegnati). Normalmente la
+     spaziatura è l'altezza del pennello divisa per 4.
+
+     Aggiungi al file di dati del pennello una riga "spacing=N", dove N è
+     la spaziatura che vuoi. (Più il numero è basso, più spesso il
+     pennello viene disegnato.)
+
+    Pennelli animati
+
+     Dalla versione 0.9.16 di Tux Paint si possono creare pennelli
+     animati. Mentre si usa il pennello, viene disegnato un fotogramma
+     dell'animazione dopo l'altro.
+
+     Disponi i fotogrammi uno accanto all'altro in un'immagine PNG larga.
+     Per esempio, se il pennello è 30x30 e ha 5 fotogrammi, l'immagine
+     deve essere 150x30.
+
+     Aggiungi al file di dati del pennello una riga "frames=N", dove N è
+     il numero di fotogrammi del pennello.
+
+     Nota: se preferisci che i fotogrammi vengano scelti a caso invece
+     che in ordine, aggiungi al file di dati anche una riga "random".
+
+    Pennelli direzionali
+
+     Dalla versione 0.9.16 di Tux Paint si possono creare pennelli
+     direzionali: mentre si usa il pennello, vengono disegnate forme
+     diverse a seconda della direzione in cui si muove.
+
+     Le forme per le varie direzioni sono disposte in una griglia 3x3 in
+     un'immagine PNG. Per esempio, se il pennello è 30x30, l'immagine
+     deve essere 90x90, con le forme di ogni direzione in una griglia
+     3x3. La casella centrale si usa quando non c'è movimento; quella in
+     alto a destra per il movimento verso l'alto e verso destra insieme;
+     e così via.
+
+     Aggiungi al file di dati del pennello una riga "directional".
+
+    Pennelli animati e direzionali
+
+     Si possono combinare in un pennello sia l'animazione sia la
+     direzione. Usa entrambe le opzioni ("frames=N" e "directional"), su
+     righe separate del file ".dat" del pennello.
+
+     Disponi il pennello in modo che le griglie 3x3 delle forme
+     direzionali siano una accanto all'altra in un'immagine PNG larga.
+     Per esempio, se il pennello è 30x30 e ci sono 5 fotogrammi,
+     l'immagine è 450x90. (I 150x90 pixel più a sinistra contengono le 9
+     forme direzionali del primo fotogramma, e così via.)
+
+     Metti le immagini PNG dei pennelli (ed eventuali file di dati) nella
+     cartella "brushes".
+
+     Nota: se i tuoi nuovi pennelli disegnano tutti quadrati o rettangoli
+     pieni, è perché hai dimenticato di usare la trasparenza alfa! Vedi
+     il documento "PNG.txt" per altre informazioni e consigli.
+     __________________________________________________________________
+
+Timbri
+
+     Tutti i file dei timbri vanno nella cartella "stamps". Conviene
+     creare lì dentro sottocartelle, anche a più livelli, per organizzare
+     i timbri. (Per esempio, una cartella "feste" con le sottocartelle
+     "halloween" e "natale".)
+
+  La raccolta completa dei timbri
+
+     (Solo in questa versione)
+
+     Tux Paint comprende solo pochi timbri di esempio (nella cartella
+     cartoon). La raccolta completa è distribuita a parte, nel pacchetto
+     tuxpaint-stamps: quasi mille timbri di animali, piante, cibi,
+     veicoli, persone, simboli e altro, divisi in categorie, quasi tutti
+     con la descrizione in italiano. La versione del 2025 funziona anche
+     con la 0.9.22.
+
+     Dalla cartella del sorgente, questo comando la aggiunge ai timbri di
+     Tux Paint (in ~/.local/share/tuxpaint/stamps/):
+
+     ./dev.sh stamps
+
+     Il comando scarica il pacchetto Debian tuxpaint-stamps-default,
+     senza installarlo e senza bisogno dei permessi di amministratore, e
+     ne copia solo i timbri. Si può anche indicare un pacchetto .deb già
+     scaricato, oppure una cartella "stamps" (o una cartella che ne
+     contiene una, come l'archivio sorgente di tuxpaint-stamps estratto):
+
+     ./dev.sh stamps tuxpaint-stamps-default_2025.03.31-1_all.deb
+     ./dev.sh stamps ~/Scaricati/tuxpaint-stamps-2025.03.31
+
+     All'avvio Tux Paint legge solo l'elenco dei timbri: le immagini e le
+     descrizioni vengono caricate quando servono, quindi la raccolta
+     completa non rallenta l'avvio. Per toglierla basta cancellare le
+     cartelle delle categorie in ~/.local/share/tuxpaint/stamps/
+     (lasciando cartoon); ./dev.sh uninstall toglie tutto Tux Paint,
+     timbri compresi.
+
+  Immagini
+
+     Un timbro di Tux Paint può essere fatto di diversi file. L'unico
+     obbligatorio è, ovviamente, l'immagine stessa.
+
+     Dalla versione 0.9.17 di Tux Paint i timbri possono essere immagini
+     bitmap PNG o immagini vettoriali SVG, a colori o in scala di grigi.
+     Il canale alfa (la trasparenza) delle immagini PNG determina la
+     forma vera e propria del timbro (altrimenti sul disegno verrebbe
+     timbrato un grosso rettangolo).
+
+     Le immagini PNG possono essere di qualsiasi dimensione, e Tux Paint
+     (normalmente) mostra dei pulsanti per ingrandire e rimpicciolire il
+     timbro.
+
+     Le immagini SVG sono vettoriali, e vengono ridimensionate in modo
+     adatto alla tela usata da Tux Paint.
+
+     Nota: se i tuoi nuovi timbri PNG hanno tutti un contorno
+     rettangolare di un solo colore (per esempio bianco o nero), è perché
+     hai dimenticato di usare la trasparenza alfa! Vedi il documento
+     "PNG.txt" per altre informazioni e consigli.
+
+     Nota: se i tuoi nuovi timbri SVG sembrano avere molto spazio vuoto
+     intorno, controlla che il 'documento' SVG non sia più grande delle
+     forme che contiene. Se invece vengono tagliati, controlla che il
+     'documento' sia abbastanza grande da contenerle. Vedi il documento
+     "SVG.txt" (in inglese) per altre informazioni e consigli.
+
+     Utenti esperti: la guida Advanced Stamps HOWTO (in inglese) spiega
+     in dettaglio come preparare immagini PNG che vengano ridimensionate
+     perfettamente quando si usano come timbri in Tux Paint.
+       _______________________________________________________________
+
+  Descrizione
+
+     La descrizione è un file di testo (".TXT") con lo stesso nome
+     dell'immagine PNG o SVG. (Per esempio, la descrizione di
+     "immagine.png" è nel file "immagine.txt", nella stessa cartella.)
+
+     La prima riga del file di testo è la descrizione del timbro in
+     inglese (americano). Il file deve essere codificato in UTF-8.
+
+    Altre lingue
+
+     Si possono aggiungere al file altre righe con la traduzione della
+     descrizione, da mostrare quando Tux Paint usa un'altra lingua (come
+     l'italiano o il francese).
+
+     La riga deve iniziare con il codice della lingua (per esempio "it"
+     per l'italiano e "zh_TW" per il cinese tradizionale), seguito da
+     ".utf8=" e dalla descrizione tradotta (codificata in UTF-8). Per
+     esempio:
+
+     An eggplant with fruit.
+     it.utf8=Una pianta di melanzane con un frutto.
+
+     Nel pacchetto sorgente dei timbri (tuxpaint-stamps), la cartella
+     "po" contiene degli script che convertono i file di testo nel
+     formato PO (e viceversa), per tradurli più facilmente in altre
+     lingue. Per i timbri di quella raccolta, quindi, le traduzioni non
+     andrebbero mai aggiunte o cambiate direttamente nei file .txt.
+
+     Se manca la traduzione nella lingua in cui sta funzionando
+     Tux Paint, viene usato il testo inglese.
+
+    Windows
+
+     Per creare o modificare questi file usa Blocco note o WordPad.
+     Salvali come testo semplice, e controlla che il nome del file
+     finisca con ".txt"...
+       _______________________________________________________________
+
+  Effetti sonori
+
+     File WAVE (".wav") o OGG Vorbis (".ogg") con lo stesso nome
+     dell'immagine PNG o SVG. (Per esempio, l'effetto sonoro di
+     "immagine.svg" è il file "immagine.wav", nella stessa cartella.)
+
+    Altre lingue
+
+     Per avere suoni diversi per ogni lingua (per esempio, se il suono è
+     una persona che pronuncia una parola e vuoi la parola tradotta),
+     crea anche dei file WAV o OGG con il codice della lingua nel nome,
+     nella forma "TIMBRO_LINGUA.EST".
+
+     L'effetto sonoro di "immagine.png", quando Tux Paint funziona in
+     italiano, sarà "immagine_it.wav"; in spagnolo "immagine_es.wav"; in
+     portoghese brasiliano "immagine_pt_BR.wav"; e così via...
+
+     Se non c'è un effetto sonoro per la lingua in uso, Tux Paint prova a
+     caricare il file sonoro 'predefinito' (per esempio "immagine.wav").
+
+     Nota: per i suoni descrittivi (non gli effetti sonori, come uno
+     scoppio o il cinguettio di un uccello), conviene usare la
+     descrizione parlata, spiegata qui sotto.
+       _______________________________________________________________
+
+  Descrizione parlata
+
+     File WAVE (".wav") o OGG Vorbis (".ogg") con lo stesso nome
+     dell'immagine PNG o SVG, seguito da "_desc". (Per esempio, la
+     descrizione parlata di "immagine.svg" è il file "immagine_desc.ogg",
+     nella stessa cartella.)
+
+    Altre lingue
+
+     Per le descrizioni in altre lingue, crea anche dei file WAV o OGG
+     con nel nome sia "_desc" sia il codice della lingua, nella forma
+     "TIMBRO_desc_LINGUA.EST".
+
+     La descrizione parlata di "immagine.png", quando Tux Paint funziona
+     in italiano, sarà "immagine_desc_it.wav"; in spagnolo
+     "immagine_desc_es.wav"; in portoghese brasiliano
+     "immagine_desc_pt_BR.wav"; e così via...
+
+     Se non c'è una descrizione parlata per la lingua in uso, Tux Paint
+     prova a caricare quella 'predefinita' (per esempio
+     "immagine_desc.wav").
+
+     (Nella raccolta completa ci sono descrizioni parlate in alcune
+     lingue, ma non in italiano.)
+       _______________________________________________________________
+
+  Opzioni dei timbri
+
+     Oltre all'immagine, alla descrizione e all'effetto sonoro, un timbro
+     può avere altre caratteristiche. Per dargliele serve un 'file di
+     dati' del timbro.
+
+     Il file di dati di un timbro è un semplice file di testo che
+     contiene le opzioni, una per riga.
+
+     Il file ha lo stesso nome dell'immagine PNG o SVG, ma l'estensione
+     ".dat". (Per esempio, il file di dati di "immagine.png" è il file di
+     testo "immagine.dat", nella stessa cartella.)
+
+    Timbri colorati
+
+     I timbri possono essere "colorabili" o "tingibili".
+
+      Colorabili
+
+     I timbri "colorabili" funzionano come i pennelli: si sceglie il
+     timbro per avere la forma, e poi il colore che deve avere. (Un
+     esempio sono i timbri dei simboli, come quelli matematici e
+     musicali.)
+
+     Dell'immagine originale si usa solo la trasparenza (il canale
+     "alfa"). Il timbro viene di un colore uniforme.
+
+     Aggiungi al file di dati del timbro una riga con la parola
+     "colorable".
+
+      Tingibili
+
+     I timbri "tingibili" sono simili a quelli "colorabili", ma i
+     dettagli dell'immagine originale restano. (In termini tecnici: si
+     usa l'immagine originale, ma la sua tonalità cambia secondo il
+     colore scelto.)
+
+     Aggiungi al file di dati del timbro una riga con la parola
+     "tintable".
+
+        Opzioni di tinta:
+
+     A seconda del contenuto del timbro, puoi far usare a Tux Paint uno
+     di diversi metodi per tingerlo. Aggiungi al file di dati del timbro
+     una di queste righe:
+
+   "tinter=normal" (predefinito)
+          È il modo di tinta normale. (Intervallo di tonalità
+          +/- 18 gradi, sostituzione 27.)
+
+   "tinter=anyhue"
+          Cambia tutte le tonalità del timbro. (Intervallo di tonalità
+          +/- 180 gradi.)
+
+   "tinter=narrow"
+          Come 'anyhue', ma con un angolo di tonalità più stretto.
+          (Intervallo di tonalità +/- 6 gradi, sostituzione 9.)
+
+   "tinter=vector"
+          Trasforma la scala 'dal nero al bianco' in quella 'dal nero al
+          colore scelto'.
+
+    Timbri da non girare
+
+     Normalmente un timbro si può capovolgere, mostrare allo specchio, o
+     tutte e due le cose, con i pulsanti sotto il selettore dei timbri,
+     in basso a destra nella finestra di Tux Paint.
+
+     A volte non ha senso capovolgere o specchiare un timbro: per esempio
+     i timbri di lettere o numeri. Altre volte i timbri sono simmetrici,
+     quindi capovolgerli o specchiarli non serve.
+
+     Perché un timbro non si possa capovolgere, aggiungi al suo file di
+     dati l'opzione "noflip".
+
+     Perché un timbro non si possa specchiare, aggiungi al suo file di
+     dati una riga con la parola "nomirror".
+
+    Dimensione iniziale del timbro
+
+     Normalmente Tux Paint considera il timbro della dimensione giusta
+     per essere mostrato senza ridimensionarlo su una tela di 608x472, la
+     tela originale di Tux Paint (quella di una finestra di 800x600).
+     Tux Paint poi adatta il timbro alla dimensione della tela in uso e,
+     se attivi, ai comandi di dimensione dei timbri.
+
+     Se il timbro risulta troppo grande o troppo piccolo, puoi indicare
+     un fattore di scala. Se il timbro è largo (o alto) 2,5 volte quanto
+     dovrebbe, aggiungi l'opzione "scale 40%", oppure "scale 5/2", "scale
+     2.5" o "scale 2:5". Se vuoi puoi mettere anche un "=", come in
+     "scale=40%".
+
+    Windows
+
+     Per creare questi file puoi usare Blocco note o WordPad. Salvali
+     come testo semplice, e controlla che il nome del file finisca con
+     ".dat" e non con ".txt"...
+
+  Immagini già specchiate e capovolte
+
+     A volte conviene preparare a mano la versione specchiata di un
+     timbro, quella capovolta, o anche quella specchiata e capovolta. Per
+     esempio, immagina un camion dei pompieri con la scritta
+     "Vigili del fuoco" sulla fiancata: quando il timbro viene
+     specchiato, probabilmente non vuoi che la scritta compaia al
+     contrario!
+
+     Per far usare a Tux Paint una tua versione specchiata del timbro,
+     invece di specchiarlo da solo, crea un secondo file ".png" o ".svg"
+     con lo stesso nome, ma con "_mirror" prima dell'estensione.
+
+     Per esempio, per il timbro "camion.png" crea un altro file chiamato
+     "camion_mirror.png", che verrà usato quando il timbro viene
+     specchiato (invece di una versione al contrario di 'camion.png').
+
+     Dalla versione 0.9.18 di Tux Paint si può fare lo stesso per
+     l'immagine capovolta, con "_flip" nel nome, e/o per l'immagine
+     specchiata e capovolta, chiamandola "_mirror_flip".
+
+     Nota: se si specchia e capovolge un'immagine e non c'è una versione
+     "_mirror_flip", ma c'è "_flip" o "_mirror", viene usata quella, e
+     poi specchiata o capovolta.
+     __________________________________________________________________
+
+Tipi di carattere
+
+     I tipi di carattere usati da Tux Paint sono TrueType Font (TTF).
+
+     Basta metterli nella cartella "fonts". Tux Paint carica il carattere
+     e lo mette a disposizione in quattro dimensioni diverse, nel
+     selettore 'Lettere' degli strumenti 'Testo' ed 'Etichetta'.
+     __________________________________________________________________
+
+Starter
+
+     Le immagini 'Starter' compaiono nella finestra 'Nuovo', insieme agli
+     sfondi di un solo colore. (Nota: nelle versioni precedenti di
+     Tux Paint comparivano nella finestra 'Apri', insieme ai disegni
+     salvati.)
+
+     A differenza dei disegni fatti in Tux Paint e riaperti in seguito,
+     aprire uno Starter crea un nuovo disegno. Quando salvi, lo Starter
+     non viene sovrascritto. Inoltre, mentre modifichi il nuovo disegno,
+     il contenuto dello Starter originale continua ad agire su di esso.
+     Stile album da colorare
+
+     Lo Starter più semplice è come un'immagine di un album da colorare:
+     il contorno di una figura, da colorare e completare con altri
+     dettagli. In Tux Paint, mentre disegni, scrivi o metti timbri, il
+     contorno resta 'sopra' quello che disegni. Puoi cancellare le parti
+     del disegno che hai fatto tu, ma non il contorno.
+
+     Per creare questo tipo di Starter, disegna un contorno in un
+     programma di grafica, rendi trasparente il resto dell'immagine (in
+     Tux Paint risulterà bianco) e salvala in formato PNG.
+
+     Nota: prima di Tux Paint 0.9.21 le immagini dovevano essere nere e
+     trasparenti. Dalla 0.9.21, se uno Starter è in bianco e nero senza
+     trasparenza, all'apertura il bianco diventa trasparente.
+
+     Nota: prima di Tux Paint 0.9.22 gli Starter dovevano essere in
+     formato PNG o JPEG (solo per gli sfondi). Dalla 0.9.22 possono
+     essere anche SVG (grafica vettoriale) o KPX (modelli di Kid Pix, un
+     altro programma di disegno per bambini: sono file speciali che
+     contengono semplicemente un'immagine JPEG).
+
+     Esempi: gli Starter clock.svg (un orologio da completare con le
+     lancette) e school.svg (una scuola), aggiunti in questa versione.
+
+     Stile scena
+
+     Oltre al contorno in stile album da colorare, uno Starter può avere
+     anche un'immagine di sfondo separata. Il contorno funziona come
+     prima: non ci si può disegnare sopra, non si può cancellare e le
+     'Magie' non lo cambiano. Lo sfondo invece sì!
+
+     Quando si usa la 'Gomma' su un disegno fatto con questo tipo di
+     Starter, invece di far ricomparire un colore uniforme, come il
+     bianco, fa ricomparire lo sfondo originale dello Starter.
+
+     Con un contorno e uno sfondo si può creare uno Starter che dà l'idea
+     della profondità. Immagina uno sfondo con il mare e un contorno con
+     una barriera corallina: puoi disegnare (o timbrare) dei pesci, che
+     compariranno nel mare ma mai 'davanti' alla barriera.
+
+     Per creare questo tipo di Starter, crea un contorno (con la
+     trasparenza) come spiegato sopra, e salvalo in PNG. Poi crea
+     un'altra immagine (senza trasparenza) e salvala con lo stesso nome,
+     ma con "-back" in fondo al nome. (Per esempio, "reef-back.png" è lo
+     sfondo con il mare che va con il contorno "reef.png", cioè il primo
+     piano.) Lo sfondo può essere PNG, JPEG o SVG.
+
+     Le immagini degli Starter dovrebbero essere grandi quanto la tela di
+     Tux Paint. (Vedi la sezione "Caricare altre immagini in Tux Paint"
+     del manuale per le dimensioni.) Se non lo sono, vengono
+     ridimensionate senza deformarle (cioè mantenendo le proporzioni), ma
+     i bordi potrebbero venire un po' allungati.
+
+     Le immagini SVG vengono disegnate direttamente alla dimensione della
+     tela, quindi restano nitide anche nelle finestre grandi: basta che
+     abbiano le proporzioni della tela, per esempio 608x472.
+
+     Mettile nella cartella "starters". Quando in Tux Paint si apre la
+     finestra 'Nuovo', gli Starter compaiono dopo i vari colori.
+
+     Nota: in Tux Paint uno Starter non si può sovrascrivere, perché
+     aprirlo è come creare un nuovo disegno (solo che invece di essere
+     vuoto c'è già qualcosa da cui partire). Il comando 'Salva' crea un
+     nuovo disegno, come se si fosse usato il comando 'Nuovo'.
+
+     Nota: gli Starter vengono 'collegati' ai disegni salvati con un
+     piccolo file di testo che ha lo stesso nome del disegno, ma
+     l'estensione ".dat". Così il contorno e l'eventuale sfondo
+     continuano ad agire sul disegno anche dopo che si è usciti da
+     Tux Paint, o che si è aperto o iniziato un altro disegno. (In altre
+     parole, un disegno fatto partendo da uno Starter ne sarà sempre
+     influenzato.) In questa versione, se lo Starter originale non c'è
+     più, lo sfondo viene ricavato dal disegno salvato.
+     __________________________________________________________________
+
+Modelli
+
+     Anche i 'modelli' (in inglese 'template') compaiono nella finestra
+     'Nuovo', insieme agli sfondi di un solo colore e agli Starter.
+     (Nota: prima della versione 0.9.22 Tux Paint non aveva i modelli.)
+
+     A differenza dei disegni fatti in Tux Paint e riaperti in seguito,
+     aprire un modello crea un nuovo disegno. Quando salvi, il modello
+     non viene sovrascritto. A differenza degli Starter, non c'è un
+     'livello' fisso sopra la tela: puoi disegnare su ogni sua parte.
+
+     Quando si usa la 'Gomma' su un disegno fatto con un modello, invece
+     di far ricomparire un colore uniforme, come il bianco, fa
+     ricomparire l'immagine originale del modello.
+
+     I modelli sono semplici immagini (in formato PNG, JPG, SVG o KPX).
+     Non serve prepararli o convertirli.
+
+     Le immagini dei modelli dovrebbero essere grandi quanto la tela di
+     Tux Paint. (Vedi la sezione "Caricare altre immagini in Tux Paint"
+     del manuale per le dimensioni.) Se non lo sono, vengono
+     ridimensionate senza deformarle (cioè mantenendo le proporzioni), ma
+     i bordi potrebbero venire un po' allungati. Come per gli Starter, le
+     immagini SVG restano nitide a ogni dimensione.
+
+     Mettili nella cartella "templates". Quando in Tux Paint si apre la
+     finestra 'Nuovo', i modelli compaiono dopo i vari colori e gli
+     Starter.
+
+     Esempi: i modelli blackboard.svg (una lavagna, da provare con la
+     magia 'Gesso'), notebook_lined.svg (quaderno a righe),
+     notebook_squared.svg (quaderno a quadretti) e music_staff.svg
+     (quaderno pentagrammato), aggiunti in questa versione.
+
+     Nota: in Tux Paint un modello non si può sovrascrivere, perché
+     aprirlo è come creare un nuovo disegno (solo che invece di essere
+     vuoto c'è già qualcosa da cui partire). Il comando 'Salva' crea un
+     nuovo disegno, come se si fosse usato il comando 'Nuovo'.
+
+     Nota: i modelli vengono 'collegati' ai disegni salvati con un
+     piccolo file di testo che ha lo stesso nome del disegno, ma
+     l'estensione ".dat". Così lo sfondo resta disponibile (per esempio
+     per la 'Gomma') anche dopo che si è usciti da Tux Paint, o che si è
+     aperto o iniziato un altro disegno. (In altre parole, un disegno
+     fatto partendo da un modello ne sarà sempre influenzato.)
+     __________________________________________________________________
+
+Traduzioni
+
+     Tux Paint funziona in molte lingue, grazie alla libreria di
+     localizzazione "gettext". (Vedi OPTIONS, in inglese, per cambiare la
+     lingua di Tux Paint.)
+
+     Per tradurre Tux Paint in una nuova lingua, copia il file modello
+     delle traduzioni, "tuxpaint.pot" (nel codice sorgente di Tux Paint,
+     nella cartella "src/po/"). Rinomina la copia come file ".po", con il
+     nome adatto alla lingua in cui traduci (per esempio "es.po" per lo
+     spagnolo, oppure "pt_BR.po" per il portoghese brasiliano, rispetto a
+     "pt.po" o "pt_PT.po" per il portoghese del Portogallo).
+
+     Apri il nuovo file ".po" con un editor di testo semplice, come
+     Emacs, Pico o VI su Linux, o Blocco note su Windows. Il testo
+     inglese originale di Tux Paint è nelle righe che iniziano con
+     "msgid". Scrivi la traduzione di ogni testo nella riga vuota
+     "msgstr" subito sotto la riga "msgid" corrispondente. (Nota: non
+     togliere le virgolette.)
+
+     Esempio:
+
+     msgid "Smudge"
+     msgstr "Sfuma"
+
+     msgid "Click and move to draw large bricks."
+     msgstr "Fai clic e trascina per disegnare mattoni grandi."
+
+     C'è anche un programma grafico, poEdit (http://www.poedit.net/), per
+     Linux, Windows e Mac OS X.
+
+     Nota: conviene lavorare sempre sul modello più recente dei testi di
+     Tux Paint ("tuxpaint.pot"), perché si aggiungono testi nuovi e ogni
+     tanto quelli vecchi cambiano. Il catalogo dei testi della prossima
+     versione, non ancora uscita, si trova nel repository CVS di
+     Tux Paint (vedi http://www.tuxpaint.org/download/source/cvs/) e sul
+     sito di Tux Paint, in http://www.tuxpaint.org/help/po/.
+
+     In questa versione: il comando devtools/po/update-po.sh it, dalla
+     cartella del sorgente, rigenera "tuxpaint.pot" dal codice e aggiorna
+     la traduzione italiana ("src/po/it.po"); i testi nuovi o cambiati
+     restano da tradurre o sono segnati come "fuzzy". Funziona con i soli
+     programmi di gettext, senza intltool.
+
+     Per modificare una traduzione esistente, scarica il file ".po" più
+     recente di quella lingua e modificalo come spiegato sopra.
+
+     Le traduzioni nuove o modificate si possono mandare a Bill Kendrick,
+     lo sviluppatore principale di Tux Paint, a
+     bill@newbreedsoftware.com, o alla mailing list "tuxpaint-i18n" (vedi
+     http://www.tuxpaint.org/lists/).
+
+     In alternativa, chi ha un account su SourceForge.net può chiedere di
+     entrare nel progetto "tuxpaint" e avere l'accesso in scrittura al
+     repository del codice sorgente, per inviare direttamente le
+     modifiche.
+
+     Nota: per aggiungere una lingua servono anche modifiche al codice
+     sorgente di Tux Paint (/src/i18n.h e /src/i18n.c) e al Makefile,
+     perché il catalogo gettext ".po" venga compilato in un file ".mo" e
+     installato, per l'uso durante l'esecuzione.
+
+Metodi di scrittura alternativi
+
+     Dalla versione 0.9.17, lo strumento "Testo" di Tux Paint offre
+     metodi di scrittura alternativi per alcune lingue. Per esempio,
+     quando Tux Paint funziona in giapponese, il tasto [Alt] destro passa
+     tra i modi caratteri latini, Hiragana in caratteri latini e Katakana
+     in caratteri latini. Così si possono scrivere caratteri e parole
+     della lingua con lo strumento "Testo" premendo uno o più tasti su
+     una tastiera con caratteri latini (per esempio una tastiera QWERTY
+     americana).
+
+     Per creare un metodo di scrittura per una nuova lingua, crea un file
+     di testo con un nome basato sulla lingua (per esempio "ja" per il
+     giapponese) e l'estensione ".im" (per esempio "ja.im").
+
+     Il file ".im" può avere più sezioni di corrispondenze tra tasti e
+     caratteri, per i diversi modi. Per esempio, in un sistema di
+     scrittura giapponese, premere [K] [A] nel modo Hiragana produce un
+     carattere Unicode diverso da quello che si ottiene premendo [K] [A]
+     nel modo Katakana.
+
+     Elenca le corrispondenze nel file, una per riga. Ogni riga deve
+     contenere (separati da spazi):
+     * il valore Unicode del carattere, in esadecimale (si possono
+       elencare più caratteri, separati da due punti (':'), così alcune
+       sequenze producono intere parole)
+     * la sequenza di tasti (i caratteri ASCII da scrivere per ottenere il
+       carattere Unicode)
+     * un indicatore (o "-")
+
+     Le altre sezioni di corrispondenze iniziano con una riga che
+     contiene la parola "section".
+
+     Esempio:
+
+     # Hiragana
+     304B   ka   -
+     304C   ga   -
+     304D   ki   -
+     304E   gi   -
+     304D:3083   kya   -
+     3063:305F   tta   -
+
+     # Katakana
+     section
+     30AB   ka   -
+     30AC   ga   -
+     30AD   ki   -
+     30AE   gi   -
+
+     Nota: nel file ".im" le righe vuote vengono ignorate, come tutto il
+     testo dopo il carattere "#" (cancelletto), che si può quindi usare
+     per i commenti, come nell'esempio.
+
+     Nota: il significato degli indicatori dipende dalla lingua, e li
+     gestisce il codice specifico della lingua in "src/im.c". Per
+     esempio, in coreano "b" serve per il Batchim, che può passare al
+     carattere successivo.
+
+     Nota: per aggiungere un metodo di scrittura servono anche modifiche
+     al codice sorgente di Tux Paint (/src/im.c) e al Makefile, perché i
+     file ".im" vengano installati, per l'uso durante l'esecuzione.
