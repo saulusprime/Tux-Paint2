@@ -17056,7 +17056,11 @@ static void handle_keymouse(SDLKey key, Uint8 updown, int steps, SDL_Rect *area1
       /* Not enter too deep in the areas at once */
       else if (area1 || area2)
       {
+	/* (Braces added, as the indentation meant: the second test of each
+	   area wasn't guarded.  Harmless, as r1 and r2 are zeroed above,
+	   so it could never pass without its area.) */
 	if (area1)
+	{
 	  if(oldpos_y - r1.y < r1.h && oldpos_y > r1.y)
 	  {
 	    if(oldpos_x - r1.x < steps)
@@ -17303,7 +17307,9 @@ static void handle_active(SDL_Event * event)
 	SDL_Flip(screen);
     }
   }
-  if (event->active.state & SDL_APPINPUTFOCUS|SDL_APPACTIVE)
+  /* (Parentheses added: "state & SDL_APPINPUTFOCUS|SDL_APPACTIVE" was
+     always true, so even the mouse leaving the window came here) */
+  if (event->active.state & (SDL_APPINPUTFOCUS | SDL_APPACTIVE))
   {
     if (event->active.gain == 1)
     {
