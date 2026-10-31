@@ -189,3 +189,25 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   "Cancella", script `erase.sh` e file di progetto. Prima dell'unione
   ogni modifica era già verificata sul suo branch; la build installata in
   `~/.local` ha lo stesso codice di `master`.
+- [x] 2026-10-31 — Schermo intero (branch `feature/fullscreen`, `3f43e1a`;
+  scelta dell'utente: "Alt+Invio + avvio nitido"):
+  - **Alt+Invio** passa da finestra a schermo intero e viceversa mentre si
+    disegna, anche nei dialoghi, senza perdere nulla. A schermo intero la
+    finestra viene ingrandita (1600×1200 → 2133×1600, bande nere ai lati);
+    tenendo premuto il tasto la modalità cambia una volta sola;
+  - **avvio a schermo intero nitido**: voce "Schermo intero" nel menu
+    dell'icona (`--fullscreen=native`); `fullscreen` senza dimensione usa
+    ora la risoluzione dello schermo (2560×1600, pulsanti da 128 px)
+    invece di ingrandire 800×600. Partito così, Alt+Invio resta a schermo
+    intero, perché una finestra grande quanto lo schermo non ci starebbe;
+  - corretti due difetti: `--fullscreen` e `-f` senza valore venivano
+    rifiutati (`65874c7`, già nella 0.9.22); con `native` la finestra,
+    uscendo dallo schermo intero, diventava di 2×2 pixel;
+  - strumenti di prova: azioni `key` e `info`, sessioni senza dimensione
+    (`77a1be3`);
+  - verifiche: a 800×600 schermata principale e dialoghi identici al
+    riferimento; andata e ritorno con Alt+Invio identici; clic a schermo
+    intero ingrandito arrivato al pulsante giusto; avvio con
+    `--fullscreen` e `--fullscreen=native` identici; finestra iniziale
+    ancora 1600×1200; lanciatore installato valido
+    (`desktop-file-validate`).

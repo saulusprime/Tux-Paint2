@@ -63,7 +63,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | **branch attivo**: tutto il lavoro, comprese le icone Lanczos e la correzione di "Cancella" (avanzamento rapido del 2026-10-31). Il lavoro nuovo va su un branch creato da qui |
+| `feature/fullscreen` | ultimo commit | **branch attivo**: schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`) e file di progetto. Parte da `master`; **da unire in `master`** con avanzamento rapido |
+| `master` | `e5a0cdc` | tutto il lavoro fino alle icone Lanczos e alla correzione di "Cancella" (avanzamento rapido del 2026-10-31) |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
 | `feature/sharper-icons` | `a3e6464` | già unito in `master` |
 | `feature/ui-scaling` | `f0f9036` | già unito in `master` |
@@ -75,10 +76,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   di cui 52 in `src/tuxpaint.c`, invariati rispetto alla prima build
   (ricontati da zero il 2026-10-31); quelli che indicano bug possibili sono
   nel TODO.
-- **Installato in `~/.local`**: la build di `master` (compilata su
-  `fix/erase-prompt-thumbnail`, stesso codice),
-  tutto funzionante, compresi Testo ed Etichetta. Lanciatore nel menu;
-  dati utente in `~/.tuxpaint/`.
+- **Installato in `~/.local`**: la build di `feature/fullscreen`, tutto
+  funzionante, compresi Testo ed Etichetta. Lanciatore nel menu, con la
+  voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
+  `~/.tuxpaint/`.
 - **Modifiche rispetto a 0.9.22**:
 
 | Area | Commit | Cosa |
@@ -90,6 +91,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Rifiniture UI | `c06ba8f` | opzione `buttonsize`; finestra iniziale più grande sugli schermi grandi; passo del mouse da tastiera proporzionale |
 | Icone più nitide | `7cb40aa` | ingrandimento Lanczos-3 delle immagini dell'interfaccia |
 | Richiesta "Cancella" | `4f95ada` | miniatura senza la barra nera sopra (difetto della 0.9.22); margine scalato della miniatura salvata |
+| Schermo intero | `65874c7`, `3f43e1a` (su `feature/fullscreen`) | Alt+Invio in finestra e a schermo intero; `fullscreen` senza dimensione usa la risoluzione dello schermo; voce "Schermo intero" nel lanciatore; `--fullscreen` senza valore accettato (difetto della 0.9.22) (§5bis) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -266,7 +268,7 @@ in `TODO.md`, sezione "Qualità del codice".
 4. **Codifica dei file**: alcuni documenti (es. `docs/CHANGES.txt`) contengono
    caratteri Latin-1 mescolati a UTF-8.
 5. **167 marcatori FIXME/TODO/XXX** nel sorgente (`src/` e `magic/src/`),
-   tra cui handle dei plugin mai scaricati (`magic_handle`, `src/tuxpaint.c:1303`) e leak
+   tra cui handle dei plugin mai scaricati (`magic_handle`, `src/tuxpaint.c:1306`) e leak
    segnalati da Valgrind in `src/fonts.c`.
 6. **Fork vs upstream**: il codice è fermo al 2014; upstream (tuxpaint.org) è
    oggi alla serie 0.9.3x con molte funzionalità nuove. Deciso il 2026-10-29
@@ -374,6 +376,43 @@ button_h`.
   dimensione reale della punta); timbri, testo e disegni sulla tela, che
   sono contenuto; i passi del joystick, configurabili con le sue opzioni.
 
+### Schermo intero (2026-10-31)
+
+- **Alt+Invio** (anche Alt+Invio del tastierino) passa da finestra a
+  schermo intero e viceversa, in ogni ciclo di eventi: schermata
+  principale e dialoghi. Tutti i cicli chiamano `poll_event()` invece di
+  `SDL_PollEvent()`; `poll_event()` intercetta il tasto, le sue ripetizioni
+  e il suo rilascio, quindi nessun ciclo lo vede e lo strumento Testo non
+  va a capo. F11 non si poteva usare: nella finestra Apri e con il mouse
+  da tastiera sposta la selezione.
+- `toggle_fullscreen()` usa `SDL_WM_ToggleFullScreen()`, che tiene la
+  stessa superficie: disegno e disposizione restano, e a schermo intero
+  sdl12-compat ingrandisce l'immagine con le proporzioni giuste. Sullo
+  schermo dell'utente 1600×1200 diventa 2133×1600 da x=213, con bande nere
+  ai lati. Il mouse viene riportato da solo alle coordinate logiche
+  (verificato con un clic su "Forme").
+  Aggiorna `fullscreen`, che decide anche se mostrare la scelta della
+  stampante, visibile solo in finestra.
+- Se la superficie è grande quanto il desktop (avvio con
+  `fullscreen=native`, o `fullscreen` senza dimensione), Alt+Invio non fa
+  nulla. Una finestra così grande non starebbe tra le barre di GNOME, e
+  mutter la terrebbe comunque a tutto schermo: prima di questo controllo,
+  lo stato interno diceva "finestra" mentre lo schermo restava pieno.
+- **`fullscreen` senza `windowsize`** (né `--WIDTHxHEIGHT`, né `orient`)
+  imposta `native_screensize`: si apre alla risoluzione dello schermo e la
+  UI scala, invece di ingrandire 800×600.
+- **`native`** chiede la dimensione del desktop (`desktop_w`, `desktop_h`,
+  letti una volta con `SDL_GetVideoInfo()` prima di aprire la finestra),
+  non più 0×0: con sdl12-compat una finestra creata a 0×0, uscendo dallo
+  schermo intero, diventa di 2×2 pixel.
+- **`--fullscreen` e `-f` senza valore** ora valgono "yes"
+  (`src/parse.gperf`). Prima uscivano con "needs a value" (codice 52),
+  anche se `--usage` li mostra così.
+- **Lanciatore**: `src/tuxpaint.desktop` ha l'azione `fullscreen` ("Full
+  screen", in italiano "Schermo intero") con `--fullscreen=native`; in
+  GNOME compare col clic destro sull'icona. `dev.sh install` corregge
+  anche la sua riga `Exec=`.
+
 ### Prove automatiche (`devtools/ui-test/`)
 
 Si lanciano dalla shell di VS Code e pilotano Tux Paint sull'host
@@ -395,13 +434,19 @@ Si lanciano dalla shell di VS Code e pilotano Tux Paint sull'host
 - `compare.py` confronta due serie di catture pixel per pixel.
 - `tp_session.py` è il motore.
   - Azioni: `click`, `tool`, `move`, `drag`, `wait`, `shot` (finestra),
-    `cursor` (cursore via XFixes).
+    `cursor` (cursore via XFixes), `key` (tasti X, es. `Alt_L+Return`,
+    con durata), `info` (posizione, dimensione e stato della finestra).
+  - Dimensione `-`: niente `--windowed --windowsize`, opzioni solo da
+    `TP_ARGS` (per esempio `--fullscreen=native`).
   - Variabili: `TP_BIN`, `TP_BUTTON`, `TP_ARGS`, `TP_SCALE`,
     `TP_START_WAIT`, `TP_LOG`, `TP_WRAP`, `TP_SOUND` (audio col driver
     SDL `dummy`).
   - Usa solo la finestra del processo che ha avviato (`_NET_WM_PID`), la
     porta in primo piano e non clicca mai se sotto il puntatore c'è
-    un'altra finestra: in quel caso scrive "STOP".
+    un'altra finestra. Non preme tasti se il focus della tastiera non è
+    lì. In entrambi i casi scrive "STOP".
+  - Rilegge la posizione della finestra prima di ogni azione del
+    puntatore: cambia passando a schermo intero.
 - `segv_backtrace.c`: libreria per `LD_PRELOAD` che stampa la pila delle
   chiamate ai crash, anche nei processi figli. Indirizzi da tradurre con
   `addr2line -f -e BINARIO 0xOFFSET` su un binario compilato con `-g`.
@@ -450,16 +495,29 @@ cartella temporanea.
 - **Pulizie**: mai `cd DIR && rm -rf *`, perché se il `cd` fallisce cancella
   la cartella corrente; il controllo di sicurezza l'ha già bloccato una
   volta. Usare cartelle di output nuove o percorsi espliciti.
+- **Schermo intero**: la finestra di prova copre tutto lo schermo; dirlo
+  all'utente quando gli si chiede di non toccare nulla. Con l'immagine
+  ingrandita (da finestra ad Alt+Invio), le coordinate dei clic sono
+  fisiche: x = 213 + x·4/3, y = y·4/3 per 1600×1200 su 2560×1600. Alla
+  risoluzione nativa coincidono con quelle logiche (`TP_BUTTON=128`).
+  All'avvio a schermo intero serve `TP_START_WAIT=7`.
+- **Uscendo dallo schermo intero** la finestra torna leggermente più in
+  basso (y da 274 a 348): la sistema mutter, non è un errore.
+- **Sessioni senza `--savedir`** usano `~/.tuxpaint` dell'utente: vanno
+  bene solo se non salvano e non cancellano nulla.
 
 ## 6. Prossimi passi consigliati
 
-1. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
+1. Provare a mano la voce "Schermo intero" del lanciatore (clic destro
+   sull'icona di Tux Paint) e Alt+Invio; poi unire `feature/fullscreen` in
+   `master` (avanzamento rapido).
+2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
-2. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
-3. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
+4. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
    codice").
-4. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
+5. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
    lavoro grafico, cioè disegnare immagini nuove.
 
 ---
@@ -1084,3 +1142,58 @@ Stato alla chiusura:
   branch nuovo.
 - La sezione "UI scalabile con la finestra" è chiusa per tutto ciò che si
   può fare via codice.
+
+### 2026-10-31 — Schermo intero
+
+Richiesta dell'utente: "manca la funzionalità per impostare a tutto
+schermo l'applicazione".
+
+Situazione trovata:
+- Lo schermo intero c'era solo all'avvio (`fullscreen=yes`,
+  `fullscreen=native`, `--native`): niente comando mentre il programma è
+  aperto, finestra non ridimensionabile né massimizzabile.
+- `fullscreen=yes` senza dimensione apriva 800×600 e lo lasciava
+  ingrandire a sdl12-compat: interfaccia sfocata.
+- F11 era già usato (finestra Apri, mouse da tastiera).
+
+Scelta dell'utente fra tre proposte: **Alt+Invio + avvio nitido**.
+Scartate: solo avvio a schermo intero; cambio al volo con interfaccia
+ridisegnata, lavoro grande e rischioso, rimasto nel TODO come P3.
+
+Fatto (branch `feature/fullscreen`, da `master`):
+- `3f43e1a`: `toggle_fullscreen()` e `poll_event()`, usata dai 9 cicli di
+  eventi; `fullscreen` senza dimensione → risoluzione dello schermo;
+  `native` con la dimensione del desktop; azione "Full screen"/"Schermo
+  intero" nel lanciatore; `dev.sh` corregge anche il suo `Exec=`; OPTIONS
+  (testo e HTML), pagina di manuale e `tuxpaint.conf` aggiornati.
+- `65874c7`: `--fullscreen` e `-f` senza valore accettati.
+- `77a1be3`: `tp_session.py` con azioni `key` e `info` e dimensione `-`.
+- Build installata in `~/.local`. Warning invariati (52 in
+  `src/tuxpaint.c`).
+
+Verifiche (desktop fermo, con il permesso dell'utente; diverse prove
+perché a schermo intero la finestra copre tutto):
+- A 800×600 `regress.sh` e `dialogs.sh`: tutto identico al riferimento.
+- Da finestra 1600×1200: Alt+Invio → 2560×1600 con l'immagine in
+  x=213…2345; di nuovo Alt+Invio → finestra identica a prima. Tenuto
+  premuto 1,5 s cambia una volta sola. Funziona anche con un dialogo
+  aperto. Un clic a schermo intero sceglie il pulsante giusto.
+- Avvio con `--fullscreen` e con `--fullscreen=native`: stessa schermata a
+  2560×1600, nitida, pulsanti da 128 px, clic corretti.
+- Senza opzioni la finestra è ancora 1600×1200.
+
+Scoperte:
+- `--fullscreen` senza valore usciva con "needs a value": le prime prove
+  di avvio a schermo intero non trovavano la finestra perché il programma
+  non partiva affatto. Difetto già nella 0.9.22.
+- Avvio nativo e Alt+Invio: la finestra diventava di 2×2 pixel al centro
+  dello schermo, perché la modalità era chiesta a 0×0. Chiedendo la
+  dimensione del desktop la finestra restava grande quanto lo schermo, e
+  mutter la teneva a tutto schermo. Si è deciso che in questo caso
+  Alt+Invio non fa nulla.
+- Nel primo script la richiesta a `sed` per `Exec=` non funzionava: con
+  `|` come separatore, `\|` non vale come alternativa. Usate due
+  espressioni.
+
+Da fare: prova a mano della voce "Schermo intero" dal menu dell'icona,
+che le prove automatiche non coprono; poi unire in `master`.

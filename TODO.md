@@ -20,8 +20,18 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 ## UI scalabile con la finestra
 
 Completa e unita in `master`: scala nativa, rifiniture e icone ingrandite
-con Lanczos. Vedi [ASIS.md](ASIS.md) e `HANDOFF.md` §5bis.
+con Lanczos. Schermo intero (Alt+Invio, avvio alla risoluzione dello
+schermo) sul branch `feature/fullscreen`. Vedi [ASIS.md](ASIS.md) e
+`HANDOFF.md` §5bis.
 
+- [ ] [P2] Unire `feature/fullscreen` in `master` (avanzamento rapido).
+- [ ] [P3] Schermo intero nitido anche partendo in finestra, e finestra
+  ridimensionabile. Oggi Alt+Invio ingrandisce l'immagine della finestra
+  (sullo schermo dell'utente 1600×1200 diventa 2133×1600, con bande nere
+  ai lati e un po' meno nitida). Per ridisegnare l'interfaccia alla nuova
+  dimensione bisognerebbe ricaricare tutte le immagini scalate e
+  ridimensionare tela, livelli e cronologia di Annulla. È l'opzione
+  scartata il 2026-10-31 perché grande e rischiosa.
 - [ ] [P3] Icone davvero nitide a scala > 1: servirebbero immagini nuove
   (PNG grandi o SVG) per pulsanti, strumenti, forme e magie, cioè un lavoro
   grafico. Nemmeno l'upstream le ha: nella versione attuale le icone degli
@@ -60,36 +70,36 @@ I difetti trovati nei warning sono nella sezione "Qualità del codice".
 
 ## Qualità del codice (dai warning della build del 2026-10-29)
 
-Numeri di riga aggiornati al 2026-10-31 (`master`);
+Numeri di riga aggiornati al 2026-10-31 (branch `feature/fullscreen`);
 se si spostano, cercare il testo o la funzione indicati.
 
 - [ ] [P2] **Doppio `free(unc_buff)`** nei percorsi di errore del
   caricamento di sfondo/primo piano incorporati nel PNG
-  (`src/tuxpaint.c:21638/21642` e `:21695/21699`, funzione `load_embedded_data`) — crash possibile
+  (`src/tuxpaint.c:21704/21708` e `:21761/21765`, funzione `load_embedded_data`) — crash possibile
   aprendo un disegno salvato danneggiato.
 - [ ] [P2] Operazioni su `cm.section` con comportamento indefinito
   (`-Wsequence-point`) in `src/im.c:899`, `:1085`, `:1271`, `:1481` —
   metodi di input giapponese/coreano/cinese.
 - [ ] [P2] `strtok` su stringa `const` e argomenti in più per `printf`
-  (`src/tuxpaint.c:22379`, `:22383`).
+  (`src/tuxpaint.c:22445`, `:22449`).
 - [ ] [P3] Variabili forse non inizializzate `left_y`, `right_x` nel
   plugin Fold (`magic/src/fold.c:172`, `:178`).
 - [ ] [P3] `abs()` intera usata su un `float` nel plugin Flower
   (`magic/src/flower.c:398`), si perde la parte decimale.
 - [ ] [P3] Confronto sempre vero sull'indirizzo di `filename`
   (`src/fonts.c:1290`).
-- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:16967`) e parentesi
-  mancanti in un `|` (`:17197`) — verificare che il comportamento sia
+- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:17033`) e parentesi
+  mancanti in un `|` (`:17263`) — verificare che il comportamento sia
   quello voluto.
 - [ ] [P3] API librsvg deprecate: `rsvg_handle_get_dimensions` e
-  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17680`, `:17757`).
+  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17746`, `:17823`).
 - [ ] [P3] Ripulire i restanti ~80 warning innocui (variabili e funzioni
   inutilizzate, confronti con e senza segno).
 
 ## Qualità del codice (dai FIXME nel sorgente)
 
 - [ ] [P2] Scaricare i plugin Magic all'uscita e togliere il limite fisso di
-  512 handle (`src/tuxpaint.c:1300-1303`, `magic_handle`).
+  512 handle (`src/tuxpaint.c:1303-1306`, `magic_handle`).
 - [ ] [P2] Memory leak segnalati da Valgrind in `src/fonts.c:1171` e `:1223`.
 - [ ] [P3] Barriera di memoria mancante nel thread di caricamento font
   (`src/fonts.c:1010`).
