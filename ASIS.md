@@ -183,3 +183,9 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     righe; riferimento a `magic_handle` aggiornato (§5); warning ricontati
     con una build da zero, sempre 96 (52 in `src/tuxpaint.c`);
   - `TODO.md`: dimensione di `src/tuxpaint.c` aggiornata.
+- [x] 2026-10-31 — Uniti `feature/sharper-icons` e
+  `fix/erase-prompt-thumbnail` in `master` (avanzamento rapido, nessun
+  push): icone ingrandite con Lanczos, correzione della richiesta
+  "Cancella", script `erase.sh` e file di progetto. Prima dell'unione
+  ogni modifica era già verificata sul suo branch; la build installata in
+  `~/.local` ha lo stesso codice di `master`.

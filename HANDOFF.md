@@ -63,9 +63,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | `f0f9036` | tutto il lavoro fino alle rifiniture della UI scalabile (unione per avanzamento rapido del 2026-10-30) |
-| `fix/erase-prompt-thumbnail` | ultimo commit | **branch attivo**: correzione della barra nera nella richiesta "Cancella" (`4f95ada`), script `erase.sh` e file di progetto. Parte da `feature/sharper-icons`; **da unire in `master`** con avanzamento rapido |
-| `feature/sharper-icons` | `a3e6464` | icone ingrandite con Lanczos (`7cb40aa`) e file di progetto; contenuto nel branch attivo |
+| `master` | ultimo commit | **branch attivo**: tutto il lavoro, comprese le icone Lanczos e la correzione di "Cancella" (avanzamento rapido del 2026-10-31). Il lavoro nuovo va su un branch creato da qui |
+| `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
+| `feature/sharper-icons` | `a3e6464` | già unito in `master` |
 | `feature/ui-scaling` | `f0f9036` | già unito in `master` |
 | `build/host-debian13` | `ec9ebe3` | già unito in `master` |
 
@@ -75,7 +75,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   di cui 52 in `src/tuxpaint.c`, invariati rispetto alla prima build
   (ricontati da zero il 2026-10-31); quelli che indicano bug possibili sono
   nel TODO.
-- **Installato in `~/.local`**: la build di `fix/erase-prompt-thumbnail`,
+- **Installato in `~/.local`**: la build di `master` (compilata su
+  `fix/erase-prompt-thumbnail`, stesso codice),
   tutto funzionante, compresi Testo ed Etichetta. Lanciatore nel menu;
   dati utente in `~/.tuxpaint/`.
 - **Modifiche rispetto a 0.9.22**:
@@ -87,8 +88,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | UI scalabile | `d346e60`, `321db8b`, `0c7bcf9` | schermata principale, dialoghi, cursori, schermata iniziale, tastiera a schermo (§5bis) |
 | Font di Testo/Etichetta | `b7021ac` | il processo figlio dei font esce con `_exit(0)`: prima andava in crash in `exit()`, nel gestore di Mesa ereditato, e il genitore scartava i font. Sostituisce il ripiego col thread `6d3f130` |
 | Rifiniture UI | `c06ba8f` | opzione `buttonsize`; finestra iniziale più grande sugli schermi grandi; passo del mouse da tastiera proporzionale |
-| Icone più nitide | `7cb40aa` (su `feature/sharper-icons`) | ingrandimento Lanczos-3 delle immagini dell'interfaccia |
-| Richiesta "Cancella" | `4f95ada` (su `fix/erase-prompt-thumbnail`) | miniatura senza la barra nera sopra (difetto della 0.9.22); margine scalato della miniatura salvata |
+| Icone più nitide | `7cb40aa` | ingrandimento Lanczos-3 delle immagini dell'interfaccia |
+| Richiesta "Cancella" | `4f95ada` | miniatura senza la barra nera sopra (difetto della 0.9.22); margine scalato della miniatura salvata |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -452,14 +453,14 @@ cartella temporanea.
 
 ## 6. Prossimi passi consigliati
 
-1. Unire in `master` le icone più nitide e la correzione della richiesta
-   "Cancella": avanzamento rapido a `fix/erase-prompt-thumbnail`.
-2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
+1. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
-3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
+2. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
    possibile all'apertura di un disegno salvato.
-4. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
+3. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
    codice").
+4. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
+   lavoro grafico, cioè disegnare immagini nuove.
 
 ---
 
@@ -1057,3 +1058,29 @@ Fatto:
 
 Stato alla chiusura: invariato. Branch attivo
 `fix/erase-prompt-thumbnail`, da unire in `master` con avanzamento rapido.
+
+### 2026-10-31 — Icone nitide e correzione di "Cancella" unite in master
+
+Richiesta dell'utente: continuare con la sezione "UI scalabile con la
+finestra" del TODO.
+
+Fatto:
+- `master` portato con avanzamento rapido (`git merge --ff-only`) a
+  `fix/erase-prompt-thumbnail`, che contiene anche
+  `feature/sharper-icons`. Nessun push.
+- Nessuna nuova prova a schermo prima dell'unione: le modifiche erano già
+  verificate sui loro branch. Le icone Lanczos con `regress.sh` e
+  `dialogs.sh`: a 800×600 identiche al riferimento, a scala 2 e 2,5 nitide.
+  La correzione di "Cancella" con `dialogs.sh` ed `erase.sh`. La
+  correzione tocca solo la richiesta e la miniatura salvata, che a 800×600
+  non cambia (`SCALED(20)` = 20), quindi non può influire sulla schermata
+  principale.
+- `TODO.md`: tolta la voce dell'unione. Nella sezione resta solo la voce
+  P3 sulle icone davvero nitide, che richiede immagini nuove.
+
+Stato alla chiusura:
+- Branch attivo `master`; `fix/erase-prompt-thumbnail` e
+  `feature/sharper-icons` sono già uniti. Il prossimo lavoro va su un
+  branch nuovo.
+- La sezione "UI scalabile con la finestra" è chiusa per tutto ciò che si
+  può fare via codice.

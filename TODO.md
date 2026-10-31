@@ -19,13 +19,9 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 
 ## UI scalabile con la finestra
 
-Completa: scala nativa, rifiniture e icone ingrandite con Lanczos. Vedi
-[ASIS.md](ASIS.md) e `HANDOFF.md` §5bis.
+Completa e unita in `master`: scala nativa, rifiniture e icone ingrandite
+con Lanczos. Vedi [ASIS.md](ASIS.md) e `HANDOFF.md` §5bis.
 
-- [ ] [P2] Unire in `master` `feature/sharper-icons` (ingrandimento
-  Lanczos, commit `7cb40aa`) e `fix/erase-prompt-thumbnail`, che parte da
-  lì: basta l'avanzamento rapido di `master` a
-  `fix/erase-prompt-thumbnail`.
 - [ ] [P3] Icone davvero nitide a scala > 1: servirebbero immagini nuove
   (PNG grandi o SVG) per pulsanti, strumenti, forme e magie, cioè un lavoro
   grafico. Nemmeno l'upstream le ha: nella versione attuale le icone degli
@@ -64,7 +60,7 @@ I difetti trovati nei warning sono nella sezione "Qualità del codice".
 
 ## Qualità del codice (dai warning della build del 2026-10-29)
 
-Numeri di riga aggiornati al 2026-10-31 (branch `fix/erase-prompt-thumbnail`);
+Numeri di riga aggiornati al 2026-10-31 (`master`);
 se si spostano, cercare il testo o la funzione indicati.
 
 - [ ] [P2] **Doppio `free(unc_buff)`** nei percorsi di errore del
