@@ -5,5 +5,10 @@ Exec=tuxpaint
 Icon=tuxpaint
 Terminal=false
 Categories=Education;Art;
+Actions=fullscreen;
 _GenericName=Drawing program
 _Comment=A drawing program for children.
+
+[Desktop Action fullscreen]
+_Name=Full screen
+Exec=tuxpaint --fullscreen=native

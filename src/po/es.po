@@ -744,6 +744,10 @@ msgstr "Un programa de dibujo."
 msgid "A drawing program for children."
 msgstr "Un programa de dibujo para niños."
 
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr "Pantalla completa"
+
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
 msgstr "Cambiar de color"

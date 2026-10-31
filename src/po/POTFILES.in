@@ -25,8 +25,10 @@ tuxpaint.desktop.in
 ../magic/src/flower.c
 ../magic/src/foam.c
 ../magic/src/fold.c
+../magic/src/fretwork.c
 ../magic/src/glasstile.c
 ../magic/src/grass.c
+../magic/src/halftone.c
 ../magic/src/kalidescope.c
 ../magic/src/light.c
 ../magic/src/metalpaint.c
@@ -53,3 +55,4 @@ tuxpaint.desktop.in
 ../magic/src/tornado.c
 ../magic/src/tv.c
 ../magic/src/waves.c
+../magic/src/xor.c

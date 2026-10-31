@@ -759,6 +759,10 @@ msgstr "Programa de dibuix"
 msgid "Tux Paint"
 msgstr "Tux Paint"
 
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr "Pantalla completa"
+
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
 msgstr "Altera colors"
