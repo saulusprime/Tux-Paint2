@@ -100,11 +100,14 @@ int do_ps_save(FILE * fi,
   time_t t = time(NULL);
   int rotate;
   float scale;
+  char *system_pprsize = NULL;
 
 
   /* Determine paper size: */
 
-  paperinit(); // FIXME: Should we do this at startup? -bjk 2007.06.25
+  /* (libpaper is set up here and let go of below, rather than at startup
+     and quit: it's only needed while printing) */
+  paperinit();
 
   if (pprsize == NULL)
   {
@@ -112,7 +115,8 @@ int do_ps_save(FILE * fi,
        in config file), ask the system.  It will return either their
        $PAPER env. var., the value from /etc/papersize, or NULL: */
 
-    pprsize = systempapername();
+    system_pprsize = systempapername();	/* (must be freed) */
+    pprsize = system_pprsize;
 
     if (pprsize == NULL)
     {
@@ -147,15 +151,33 @@ int do_ps_save(FILE * fi,
 
   ppr = paperinfo(pprsize);
 
-  ppr_w = paperpswidth(ppr);
-  ppr_h = paperpsheight(ppr);
+  if (ppr == NULL)
+  {
+    /* Unknown paper (e.g. a typo in the "papersize" option): use the
+       default one, rather than crash in paperpswidth() */
+    fprintf(stderr, "Unknown paper size '%s', using '%s'\n", pprsize,
+            defaultpapername());
+    ppr = paperinfo(defaultpapername());
+  }
+
+  if (ppr != NULL)
+  {
+    ppr_w = paperpswidth(ppr);
+    ppr_h = paperpsheight(ppr);
+  }
+  else
+  {
+    ppr_w = 595;  /* A4 */
+    ppr_h = 842;
+  }
 
 #ifdef DEBUG
   printf("Paper is %d x %d (%.2f\" x %.2f\")\n", ppr_w, ppr_h,
 	 (float) ppr_w / 72.0, (float) ppr_h / 72.0);
 #endif
 
-  paperdone(); // FIXME: Should we do this at quit? -bjk 2007.06.25
+  free(system_pprsize);
+  paperdone();
 
 
   /* Determine whether it's best to rotate the image: */
@@ -195,7 +217,10 @@ int do_ps_save(FILE * fi,
 #endif
 
 
-  // FIXME - doesn't seem to center well -bjk 2007.06.25
+  /* Center it.  (A FIXME here said it didn't seem to center well; checked
+     with devtools/print-test/ps_check.sh on A4 and Letter, rotated or not,
+     the margins are equal.  A printer's own unprintable margins can still
+     make it look off-center on paper.) */
   tlate_x = (ppr_w - printed_img_w) / 2;
   tlate_y = (ppr_h - printed_img_h) / 2;
 
@@ -305,47 +330,19 @@ int do_ps_save(FILE * fi,
   }
   else
   {
-    pid_t child_pid, w;
     int status;
 
-    child_pid = pclose(fi);
+    /* pclose() waits for the print command and returns how it ended.
+       (This used to treat that as a process ID to wait for, and to fail
+       whenever errno was left nonzero by anything earlier, so a print
+       that worked could be reported as failed.) */
+    status = pclose(fi);
 
-/* debug */
-/*
-    printf("pclose returned %d\n", child_pid); fflush(stdout);
-    printf("errno = %d\n", errno); fflush(stdout);
-*/
-
-    if (child_pid < 0 || (errno != 0 && errno != EAGAIN)) { /* FIXME: This right? */
-      return 0;
-    } else if (child_pid == 0) {
-      return 1;
-    }
-
-    do
-    {
-      w = waitpid(child_pid, &status, 0);
-
-/* debug */
-/*
-            if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
-            if (WIFEXITED(status)) {
-                printf("exited, status=%d\n", WEXITSTATUS(status));
-            } else if (WIFSIGNALED(status)) {
-                printf("killed by signal %d\n", WTERMSIG(status));
-            } else if (WIFSTOPPED(status)) {
-                printf("stopped by signal %d\n", WSTOPSIG(status));
-            } else if (WIFCONTINUED(status)) {
-                printf("continued\n");
-            }
-*/
-    }
-    while (w != -1 && !WIFEXITED(status) && !WIFSIGNALED(status));
-
-    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) /* Not happy exit */
+    if (status == -1)
       return 0;
 
-    return 1;
+    /* Happy only if the print command exited, and with 0 */
+    return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
   }
 }
 
