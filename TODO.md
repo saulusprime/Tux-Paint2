@@ -104,7 +104,7 @@ se si spostano, cercare il testo o la funzione indicati.
 - [ ] [P3] Barra di avanzamento da riattivare (`src/progressbar.c:74`).
 - [ ] [P3] Ordinamento case-insensitive di Starter/file
   (`src/dirwalk.c:261`, es. `Jigsaw*` vs `jigsaw*`).
-- [ ] [P3] Suddividere `src/tuxpaint.c` (~24.100 righe) in moduli.
+- [ ] [P3] Suddividere `src/tuxpaint.c` (~24.400 righe) in moduli.
 
 ## Feature e miglioramenti strumenti
 

@@ -177,3 +177,9 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     la colonna delle immagini nella richiesta, mentre Apri prima e dopo e
     tutti gli altri dialoghi restano identici al riferimento; rispondendo
     "No" il Cestino di prova resta vuoto.
+- [x] 2026-10-31 — Documentazione di progetto aggiornata:
+  - `HANDOFF.md`: nella mappa del repository (§2) aggiunti `dev.sh`,
+    `devtools/ui-test/` e i file di progetto; `src/tuxpaint.c` ora ~24.400
+    righe; riferimento a `magic_handle` aggiornato (§5); warning ricontati
+    con una build da zero, sempre 96 (52 in `src/tuxpaint.c`);
+  - `TODO.md`: dimensione di `src/tuxpaint.c` aggiornata.

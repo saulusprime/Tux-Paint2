@@ -71,9 +71,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
-- **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori. Warning: 52 in
-  `src/tuxpaint.c`, invariati rispetto alla prima build; quelli che
-  indicano bug possibili sono nel TODO.
+- **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori. Warning: 96,
+  di cui 52 in `src/tuxpaint.c`, invariati rispetto alla prima build
+  (ricontati da zero il 2026-10-31); quelli che indicano bug possibili sono
+  nel TODO.
 - **Installato in `~/.local`**: la build di `fix/erase-prompt-thumbnail`,
   tutto funzionante, compresi Testo ed Etichetta. Lanciatore nel menu;
   dati utente in `~/.tuxpaint/`.
@@ -100,7 +101,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Percorso | Contenuto |
 |----------|-----------|
-| [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.100 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
+| [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.400 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
 | [src/po/](src/po/) | 126 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`) |
 | [src/tuxpaint.conf](src/tuxpaint.conf) | Configurazione di default installata in `/etc` |
 | [magic/src/](magic/src/) | 47 plugin "Magic" (`.so` caricati a runtime), API in `src/tp_magic_api.h.in` |
@@ -116,6 +117,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | `win32/`, `macosx/`, `haiku/`, `hildon/`, `maemo/`, `visualc/` | Port per altre piattaforme (non rilevanti per Linux) |
 | [Makefile](Makefile) | Build system unico, niente autotools |
 | [tuxpaint.spec](tuxpaint.spec) | Spec RPM |
+| [dev.sh](dev.sh) | *Aggiunto nel fork*: build, installazione in `~/.local` e avvio sull'host (§4) |
+| [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`), §5bis |
+| `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
 ## 3. Documentazione letta
 
@@ -233,10 +237,11 @@ riesegue da solo sull'host con `flatpak-spawn --host`.
   (`COMPLETIONDIR`), anche con un `PREFIX` utente: in quel caso va
   sovrascritto anche `COMPLETIONDIR`.
 
-### Warning della build (2026-10-29)
+### Warning della build (2026-10-29, ricontati il 2026-10-31)
 
 96 in tutto: 52 in `src/tuxpaint.c`, 13 in `src/im.c`, il resto sparso nei
-plugin. Quasi tutti sono innocui: variabili o funzioni inutilizzate, confronti
+plugin. Ricontati con una build da zero il 2026-10-31: stessi numeri, le
+modifiche del fork non ne hanno aggiunti. Quasi tutti sono innocui: variabili o funzioni inutilizzate, confronti
 fra interi con e senza segno. Quelli che indicano bug possibili sono elencati
 in `TODO.md`, sezione "Qualità del codice".
 
@@ -260,7 +265,7 @@ in `TODO.md`, sezione "Qualità del codice".
 4. **Codifica dei file**: alcuni documenti (es. `docs/CHANGES.txt`) contengono
    caratteri Latin-1 mescolati a UTF-8.
 5. **167 marcatori FIXME/TODO/XXX** nel sorgente (`src/` e `magic/src/`),
-   tra cui handle dei plugin mai scaricati (`src/tuxpaint.c:1271`) e leak
+   tra cui handle dei plugin mai scaricati (`magic_handle`, `src/tuxpaint.c:1303`) e leak
    segnalati da Valgrind in `src/fonts.c`.
 6. **Fork vs upstream**: il codice è fermo al 2014; upstream (tuxpaint.org) è
    oggi alla serie 0.9.3x con molte funzionalità nuove. Deciso il 2026-10-29
@@ -1030,3 +1035,25 @@ Scoperte:
 Stato alla chiusura:
 - Branch attivo `fix/erase-prompt-thumbnail`, da unire in `master` insieme
   a `feature/sharper-icons` (avanzamento rapido).
+
+### 2026-10-31 — Documentazione di progetto aggiornata
+
+Richiesta dell'utente: aggiornare tutta la documentazione di progetto.
+
+Fatto:
+- Controllati `HANDOFF.md`, `TODO.md`, `ASIS.md` e
+  `devtools/ui-test/README.md` dopo la correzione della richiesta
+  "Cancella": stato, branch, prossimi passi e numeri di riga del TODO
+  erano già aggiornati.
+- §2: aggiunti alla mappa del repository i file del fork (`dev.sh`,
+  `devtools/ui-test/`, file di progetto); `src/tuxpaint.c` è passato da
+  ~24.100 a ~24.400 righe (anche in `TODO.md`).
+- §5: il riferimento agli handle dei plugin mai scaricati puntava a una
+  riga vecchia (1271); ora indica `magic_handle`, riga 1303.
+- §1 e §4: warning ricontati con `./dev.sh clean` e una build da zero: 96,
+  di cui 52 in `src/tuxpaint.c` e 13 in `src/im.c`, come alla prima build.
+  Build reinstallata in `~/.local`: il binario installato coincide con
+  quello compilato.
+
+Stato alla chiusura: invariato. Branch attivo
+`fix/erase-prompt-thumbnail`, da unire in `master` con avanzamento rapido.
