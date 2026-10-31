@@ -337,10 +337,7 @@ void string_draw_triangle_preview(magic_api * api, int which,
 				  SDL_Rect * update_rect)
 { 
   int middle_x, middle_y;
-  int w, h;
   scale_coords(&ox, &oy,&x, &y);
-  w=max(string_ox,x)-min(string_ox,x);
-  h=max(string_oy,y)-min(string_oy,y);
 
   /*
     This is enouth if you move the mouse slowly, but if you move the mouse fast,
@@ -369,11 +366,8 @@ void string_draw_angle_preview(magic_api * api, int which,
 			       SDL_Surface * canvas, SDL_Surface * snapshot, __attribute__((unused)) int ox, __attribute__ ((unused)) int oy, int x, int y,
 			       SDL_Rect * update_rect)
 { 
-  int w, h;
   int middle_x, middle_y;
   int dx, dy;
-  w=max(string_ox,x)-min(string_ox,x);
-  h=max(string_oy,y)-min(string_oy,y);
 
   update_rect->x=0;
   update_rect->y=0;

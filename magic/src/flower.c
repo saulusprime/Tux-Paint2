@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "tp_magic_api.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
@@ -395,7 +396,7 @@ static void flower_drawstalk(magic_api * api ATTRIBUTE_UNUSED, SDL_Surface * can
         else
           side = LEAFSIDE_RIGHT_UP;
       }
-      else if (abs(curve[i - 2].x - curve[i + 2].x) < 5)
+      else if (fabsf(curve[i - 2].x - curve[i + 2].x) < 5)
       {
         /* Mostly up; stick left- or right-downward: */
 

@@ -94,9 +94,6 @@ int scan_fill(magic_api * api, SDL_Surface * canvas, SDL_Surface * srfc, int x, 
 
 
 
-static const int mosaic_shaped_AMOUNT = 300;
-static const int mosaic_shaped_RADIUS = 16;
-static const double mosaic_shaped_SHARPEN = 1.0;
 Uint8 * mosaic_shaped_counted;
 Uint8 * mosaic_shaped_done;
 Uint8 mosaic_shaped_r, mosaic_shaped_g, mosaic_shaped_b;
@@ -186,7 +183,7 @@ int mosaic_shaped_init(magic_api * api)
         mosaic_shaped_snd_effect[i] = Mix_LoadWAV(fname);
     }
 
-    snprintf(api_data_directory_at_init, sizeof(api_data_directory_at_init), api->data_directory);
+    snprintf(api_data_directory_at_init, sizeof(api_data_directory_at_init), "%s", api->data_directory);	/* (was the format itself: a '%' in it broke it) */
     return (1);
 }
 
@@ -411,7 +408,7 @@ void mosaic_shaped_switchin(magic_api * api, int which, int mode ATTRIBUTE_UNUSE
     SDL_Rect  rect;
     SDL_Surface * surf_aux;
     Uint32 amask;
-    char fname[1024];
+    char fname[sizeof(api_data_directory_at_init) + 64];	/* (+ "images/magic/" and a pattern name) */
     mosaic_shaped_counted = (Uint8 *) malloc(sizeof(Uint8) * (canvas->w * canvas->h));
 
     if (mosaic_shaped_counted == NULL)

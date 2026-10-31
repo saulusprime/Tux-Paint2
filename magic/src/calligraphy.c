@@ -141,7 +141,6 @@ void calligraphy_drag(magic_api * api, int which ATTRIBUTE_UNUSED, SDL_Surface *
 {
   Point2D * curve;
   int i, n_points, thick, new_thick;
-  Uint32 colr;
   SDL_Rect src, dest;
 
 //  if (SDL_GetTicks() < calligraphy_last_time + 5)
@@ -189,11 +188,6 @@ void calligraphy_drag(magic_api * api, int which ATTRIBUTE_UNUSED, SDL_Surface *
   curve = (Point2D *) malloc(sizeof(Point2D) * n_points);
 
   calligraphy_ComputeBezier(calligraphy_control_points, n_points, curve);
-
-  colr = SDL_MapRGB(canvas->format, 
-		       calligraphy_r,
-		       calligraphy_g,
-		       calligraphy_b);
 
   new_thick = 40 - min((n_points /* / 2 */), 32);
 

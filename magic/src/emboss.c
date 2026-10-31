@@ -118,7 +118,7 @@ static void do_emboss(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * canv
   int xx, yy;
   Uint8 r1, g1, b1,
         r2, g2, b2;
-  int r, g, b;
+  int r;
   float h, s, v;
   int avg1, avg2;
 
@@ -141,7 +141,6 @@ static void do_emboss(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * canv
           r = 128 + (((avg1 - avg2) * 3) / 2);
           if (r < 0) r = 0;
           if (r > 255) r = 255;
-          g = b = r;
 
 	  v = (r / 255.0);
 

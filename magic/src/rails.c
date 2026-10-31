@@ -52,7 +52,7 @@ void rails_shutdown(magic_api * api);
 void rails_switchin(magic_api * api, int which, int mode, SDL_Surface * canvas);
 void rails_switchout(magic_api * api, int which, int mode, SDL_Surface * canvas);
 static int rails_math_ceil(int x, int y);
-inline unsigned int rails_get_segment(int x, int y);	
+static inline unsigned int rails_get_segment(int x, int y);	
 inline void rails_extract_coords_from_segment(unsigned int segment, Sint16 * x, Sint16 * y);
 static void rails_flip(void * ptr, SDL_Surface * dest, SDL_Surface * src);
 static void rails_flip_flop(void * ptr, SDL_Surface * dest, SDL_Surface * src);
@@ -194,7 +194,7 @@ static int rails_math_ceil(int x, int y)
  else return temp;
 }
 	
-inline unsigned int rails_get_segment(int x, int y)		
+static inline unsigned int rails_get_segment(int x, int y)		
 {
 	int xx; 													//segments are numerated just like pixels
 	int yy;														//in computer graphics: left upper (=1), ... ,right upper,

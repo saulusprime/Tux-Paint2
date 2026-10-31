@@ -88,9 +88,6 @@ void perspective_line(void * ptr_to_api, int which, SDL_Surface * canvas, SDL_Su
 
 
 
-static const int perspective_AMOUNT= 300;
-static const int perspective_RADIUS = 16;
-static const double perspective_SHARPEN = 1.0;
 Uint8 perspective_r, perspective_g, perspective_b;
 int corner;
 int dash;
@@ -384,11 +381,9 @@ void perspective_release(magic_api * api, int which,
 	  }
 	else
 	  {
-	    int aux_x, aux_y, aux_h, aux_w;
+	    int aux_h, aux_w;
 	    aux_h = canvas->h * canvas->h / new_h;
 	    aux_w =  canvas->w * aux_h / canvas->h;
-	    aux_x = canvas->w / 2 - aux_w / 2;
-	    aux_y = canvas->h / 2 - aux_h / 2;
 
 	    update_rect->x = canvas->w / 2 - aux_w / 2;
 	    update_rect->y = canvas->h / 2 - aux_h / 2;

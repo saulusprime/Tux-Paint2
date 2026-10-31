@@ -156,8 +156,6 @@ static void do_alien_pixel(void * ptr, int which ATTRIBUTE_UNUSED,
 // Do the effect for the full image
 static void do_alien_full(void * ptr,SDL_Surface * canvas, SDL_Surface * last, int which){
 
-	magic_api * api = (magic_api *) ptr;
-
 	int x,y;
 
 	for (y = 0; y < last->h; y++){

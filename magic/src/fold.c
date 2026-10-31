@@ -126,7 +126,7 @@ void fold_draw(magic_api * api, int which,
 {
   float right_step_x, right_step_y, left_step_x, left_step_y;
   float dist_x, dist_y;
-  int left_y, right_x;
+  int left_y = 0, right_x = 0;	/* (set and used under the same conditions) */
   float w, h;
   SDL_Surface * temp;
   temp=SDL_CreateRGBSurface(SDL_ANYFORMAT, canvas->w, canvas->h, canvas->format->BitsPerPixel,
@@ -197,6 +197,8 @@ void fold_draw(magic_api * api, int which,
   api->line((void *)api, which, canvas, snapshot, x, y, right_arm_x, right_arm_y, 1, fold_print_line);
   api->line((void *)api, which, canvas, snapshot, x, y, left_arm_x, left_arm_y, 1, fold_print_line);
   api->line((void *)api, which, canvas, snapshot, left_arm_x, left_arm_y, right_arm_x, right_arm_y, 1, fold_print_dark_line);
+
+  SDL_FreeSurface(temp);	/* (was leaked, a whole canvas, at every fold) */
 
 }
 
