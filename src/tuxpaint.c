@@ -1721,9 +1721,12 @@ static int cursor_left, cursor_x, cursor_y, cursor_textwidth;	/* canvas-relative
 static int old_cursor_x, old_cursor_y;
 static int cur_label, cur_select;
 static int been_saved;
-static char file_id[FILENAME_MAX];
-static char starter_id[FILENAME_MAX];
-static char template_id[FILENAME_MAX];
+/* (File names without their extension, so 256 is room enough; they were
+   FILENAME_MAX, i.e. 4096, which made GCC warn that paths built from them
+   could be cut short) */
+static char file_id[256];
+static char starter_id[256];
+static char template_id[256];
 static int brush_scroll;
 static int stamp_scroll[MAX_STAMP_GROUPS];
 static int font_scroll, magic_scroll, tool_scroll;
@@ -1891,7 +1894,7 @@ static void load_embedded_data(char * fname, SDL_Surface * org_surf);
 static int chunk_is_valid(const char * chunk_name, png_unknown_chunk unknown);
 Bytef * get_chunk_data (FILE * fp, char *fname, png_structp png_ptr,
 			png_infop info_ptr, const char *chunk_name,
-			png_unknown_chunk unknown, int *unc_size);
+			png_unknown_chunk unknown, int *unc_size, size_t min_size);
 static void get_new_file_id(void);
 static int do_quit(int tool);
 static int do_open(void);
@@ -11390,7 +11393,8 @@ static void load_starter_id(char *saved_id, FILE *fil)
   if (fi != NULL)
   {
     fgets(starter_id, sizeof(starter_id), fi);
-    starter_id[strlen(starter_id) - 1] = '\0';
+    if (strlen(starter_id) > 0)	/* (an empty line wrote before the array) */
+      starter_id[strlen(starter_id) - 1] = '\0';
 
     fscanf(fi, "%d", &starter_mirrored);
     fscanf(fi, "%d", &starter_flipped);
@@ -11428,7 +11432,8 @@ static void load_starter_id(char *saved_id, FILE *fil)
         if (!feof(fi) && color_tag == 'T')
             { 
                 fgets(template_id, sizeof(template_id), fi);
-                template_id[strlen(template_id) - 1] = '\0';
+                if (strlen(template_id) > 0)	/* (as above) */
+                  template_id[strlen(template_id) - 1] = '\0';
                 fscanf(fi, "%d", &template_personal);
                 printf("template = %s\n (Personal=%d)", template_id, template_personal);
             }
@@ -21429,8 +21434,11 @@ int chunk_is_valid(const char *chunk_name, png_unknown_chunk unknown)
   return (FALSE);
 }
 
+/* (min_size: how much uncompressed data the caller will read; less, in a
+   damaged file, fails like other errors rather than reading past it) */
 Bytef *get_chunk_data(FILE * fp, char *fname, png_structp png_ptr,
-		      png_infop info_ptr, const char *chunk_name, png_unknown_chunk unknown, int *unc_size)
+		      png_infop info_ptr, const char *chunk_name, png_unknown_chunk unknown, int *unc_size,
+		      size_t min_size)
 {
   unsigned int i;
 
@@ -21510,6 +21518,11 @@ Bytef *get_chunk_data(FILE * fp, char *fname, png_structp png_ptr,
   inflateInit(zstp);
   unc_err = inflate(zstp, Z_FINISH);
   inflateEnd(zstp);
+
+  if (unc_err == Z_STREAM_END && zstp->total_out < min_size)
+    unc_err = Z_DATA_ERROR;	/* (too little data for the picture) */
+
+  free(zstp);	/* (was leaked) */
 
   if (unc_err != Z_STREAM_END)
   {
@@ -21654,7 +21667,7 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 	  }
 	}
 	/* Also check what we have there */
-	if (chunk_is_valid("tpBK", unknowns[u]))
+	if (chunk_is_valid("tpBG", unknowns[u]))	/* (was "tpBK", which is never written) */
 	  have_background = TRUE;
 	if (chunk_is_valid("tpFG", unknowns[u]))
 	  have_foreground = TRUE;
@@ -21673,7 +21686,7 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 	  {
 	    printf("Valid tpLD\n");
 
-	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpLD", unknowns[u], &unc_size);
+	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpLD", unknowns[u], &unc_size, (size_t) 4 * ww * hh);
 	    if (unc_buff == NULL)
 	    {
 	      if (are_labels())
@@ -21711,7 +21724,7 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 	  {
 	    printf("Valid tpLL\n");
 
-	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpLL", unknowns[u], &unc_size);
+	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpLL", unknowns[u], &unc_size, 0);
 	    if (unc_buff == NULL)
 	    {
 	      SDL_FreeSurface(org_surf);
@@ -21754,22 +21767,20 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 	{
 	  if ((starter_modified || !img_starter_bkgd) && chunk_is_valid("tpBG", unknowns[u]))
 	  {
-	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpBG", unknowns[u], &unc_size);
+	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpBG", unknowns[u], &unc_size, (size_t) 3 * ww * hh);
 	    if (unc_buff == NULL)
 	      return;
 	    aux_surf =
 	      SDL_CreateRGBSurface(0, ww, hh, canvas->format->BitsPerPixel,
-				   canvas->format->Rmask, canvas->format->Gmask, canvas->format->Gmask, 0);
+				   canvas->format->Rmask, canvas->format->Gmask, canvas->format->Bmask, 0);	/* (Gmask was given as Bmask too) */
 	    if (aux_surf == NULL)
 	    {
 	      printf("Can't recover the background data embedded in %s, error in create aux image\n\n", fname);
 	      fclose(fp);
 	      png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-	      free(unc_buff);
+	      free(unc_buff);	/* (was freed twice) */
 
 	      draw_tux_text(TUX_OOPS, strerror(errno), 0);
-
-	      free(unc_buff);
 	      return;
 	    }
 	    SDL_LockSurface(aux_surf);
@@ -21800,6 +21811,13 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 
 	      autoscale_copy_smear_free(aux_surf, img_starter_bkgd, SDL_BlitSurface);
 	    }
+	    else
+	    {
+	      /* (Same size: use it as is.  This was missing, which left
+		 img_starter_bkgd pointing to the surface just freed, or NULL,
+		 and leaked aux_surf.) */
+	      img_starter_bkgd = aux_surf;
+	    }
 	    free(unc_buff);
 	  }
 
@@ -21807,7 +21825,7 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 	  {
 	    printf("Frgd!!!\n");
 
-	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpFG", unknowns[u], &unc_size);
+	    unc_buff = get_chunk_data(fp, fname, png_ptr, info_ptr, "tpFG", unknowns[u], &unc_size, (size_t) 4 * ww * hh);
 	    if (unc_buff == NULL)
 	      return;
 
@@ -21815,18 +21833,16 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 					    canvas->format->BitsPerPixel,
 					    canvas->format->Rmask,
 					    canvas->format->Gmask,
-                                            canvas->format->Gmask,
+                                            canvas->format->Bmask,	/* (Gmask was given as Bmask too) */
                                             TPAINT_AMASK);
 	    if (aux_surf == NULL)
 	    {
 	      printf("Can't recover the foreground data embedded in %s, error in create aux image\n\n", fname);
 	      fclose(fp);
 	      png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-	      free(unc_buff);
+	      free(unc_buff);	/* (was freed twice) */
 
 	      draw_tux_text(TUX_OOPS, strerror(errno), 0);
-
-	      free(unc_buff);
 	      return;
 	    }
 
