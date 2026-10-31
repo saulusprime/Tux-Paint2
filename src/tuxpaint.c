@@ -17783,6 +17783,8 @@ static SDL_Surface * load_svg(const char * file)
 #ifdef DEBUG
     fprintf(stderr, "rsvg_handle_new_from_file() failed\n");
 #endif
+    if (gerr != NULL)
+      g_error_free(gerr);	/* (was leaked, e.g. for each Starter that has no SVG) */
     return(NULL);
   }
 
@@ -20080,6 +20082,7 @@ static int do_color_picker(void)
   }
   
   SDL_BlitSurface(backup, NULL, screen, NULL);
+  SDL_FreeSurface(backup);	/* (was leaked: a whole screen at each use) */
 
 #ifndef NO_PROMPT_SHADOWS
   alpha_surf = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
@@ -21960,6 +21963,8 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 	}
       }
     }
+    else
+      SDL_FreeSurface(org_surf);	/* (no chunks of ours: was leaked, a whole canvas, at each open) */
   }
 
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
@@ -23678,6 +23683,8 @@ static void setup(void)
   tmp_imgcurdown = loadimage(DATA_PREFIX "images/ui/cursor_down_large.png");
   img_cursor_up = thumbnail(tmp_imgcurup, THUMB_W, THUMB_H, 0);
   img_cursor_down = thumbnail(tmp_imgcurdown, THUMB_W, THUMB_H, 0);
+  SDL_FreeSurface(tmp_imgcurup);	/* (these two were leaked) */
+  SDL_FreeSurface(tmp_imgcurdown);
 
   tmp_imgcurup = loadimage(DATA_PREFIX "images/ui/cursor_starter_up.png");
   tmp_imgcurdown = loadimage(DATA_PREFIX "images/ui/cursor_starter_down.png");

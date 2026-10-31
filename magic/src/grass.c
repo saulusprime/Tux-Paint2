@@ -157,6 +157,8 @@ void grass_shutdown(magic_api * api ATTRIBUTE_UNUSED)
 {
   if (grass_snd != NULL)
     Mix_FreeChunk(grass_snd);
+  if (img_grass != NULL)
+    SDL_FreeSurface(img_grass);	/* (was leaked: 256x256 pixels) */
 }
 
 // Record the color from Tux Paint:
