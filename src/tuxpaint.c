@@ -450,7 +450,12 @@ static void mtw(wchar_t * wtok, char * tok)
 #else
 
 #include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
+#ifndef LIBRSVG_CHECK_VERSION
+#define LIBRSVG_CHECK_VERSION(major, minor, micro) 0
+#endif
+#if !LIBRSVG_CHECK_VERSION(2, 36, 0)
+#include <librsvg/rsvg-cairo.h>	/* (newer rsvg.h includes it, and warns if it's included directly) */
+#endif
 /* #include "rsvg.h" */
 /* #include "rsvg-cairo.h" */
 #if !defined(RSVG_H) || !defined(RSVG_CAIRO_H)
@@ -17761,9 +17766,33 @@ static SDL_Surface * load_svg(const char * file)
     return(NULL);
   }
 
+#if LIBRSVG_CHECK_VERSION(2, 52, 0)
+  {
+    gdouble w, h;
+
+    /* (rsvg_handle_get_dimensions() is deprecated; this gives the same
+       size, once rounded, for all the SVGs shipped with Tux Paint) */
+    if (rsvg_handle_get_intrinsic_size_in_pixels(rsvg_handle, &w, &h))
+    {
+      rwidth = (int) (w + 0.5);
+      rheight = (int) (h + 0.5);
+    }
+    else
+    {
+      /* No size in pixels (e.g. given in percent): what the old call
+         works out from the rest of the document */
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      rsvg_handle_get_dimensions(rsvg_handle, &dimensions);
+      G_GNUC_END_IGNORE_DEPRECATIONS
+      rwidth = dimensions.width;
+      rheight = dimensions.height;
+    }
+  }
+#else
   rsvg_handle_get_dimensions(rsvg_handle, &dimensions);
   rwidth = dimensions.width;
   rheight = dimensions.height;
+#endif
 
 #ifdef DEBUG
   printf("SVG is %d x %d\n", rwidth, rheight);
@@ -17838,7 +17867,17 @@ static SDL_Surface * load_svg(const char * file)
 
   /* FIXME: We can use cairo_rotate() here to rotate stamps! -bjk 2007.06.21 */
 
+#if LIBRSVG_CHECK_VERSION(2, 52, 0)
+  {
+    /* (rsvg_handle_render_cairo() is deprecated: render the whole
+       document into its own size, which cairo_scale() above scales) */
+    RsvgRectangle viewport = { 0, 0, rwidth, rheight };
+
+    rsvg_handle_render_document(rsvg_handle, cr, &viewport, NULL);
+  }
+#else
   rsvg_handle_render_cairo(rsvg_handle, cr);
+#endif
 
 
   cairo_surface_finish(cairo_surf);
