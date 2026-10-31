@@ -21,6 +21,7 @@ tastiera: le finestre di prova compaiono sul suo schermo.
 | `tp_session.py` | Il motore: avvia Tux Paint, esegue le azioni, scrive su stdout un tar di PNG |
 | `regress.sh` | Una cattura per strumento della schermata principale |
 | `dialogs.sh` | Tutti i dialoghi (uscita, Apri, presentazione, Nuovo, selettore colore) |
+| `erase.sh` | Richiesta "Cancella" di Apri, con Cestino e cartella di salvataggio di prova |
 | `compare.py` | Confronta due cartelle di catture |
 | `segv_backtrace.c` | Pila delle chiamate ai crash, da caricare con `LD_PRELOAD` |
 
@@ -52,6 +53,15 @@ va come terzo argomento:
 ```sh
 $D/regress.sh $OUT/new1600 $N 1600x1200 96
 $D/dialogs.sh $OUT/dlg-new1600 $N 2
+```
+
+Richiesta "Cancella": disegna un punto, salva, apre, chiede di cancellare
+il primo disegno e risponde "No". Poi stampa le dimensioni delle miniature
+salvate e controlla che il Cestino di prova sia vuoto:
+
+```sh
+$D/erase.sh $OUT/erase800 $N
+$D/erase.sh $OUT/erase1600 $N 2
 ```
 
 Sessione libera:
