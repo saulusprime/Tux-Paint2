@@ -205,6 +205,10 @@ void parse_one_option(struct cfginfo *restrict tmpcfg, const char *str, const ch
     str = "windowsize";
   }
 
+  /* "--fullscreen" alone (as "--usage" shows it, and "-f") means "yes" */
+  if (!strcmp(str, "fullscreen") && !opt)
+    opt = PARSE_YES;
+
   if (!strcmp(str, "saveover"))
   {
     if (!strcmp(opt, "new")) {
