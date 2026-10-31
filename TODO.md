@@ -22,8 +22,10 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 Completa: scala nativa, rifiniture e icone ingrandite con Lanczos. Vedi
 [ASIS.md](ASIS.md) e `HANDOFF.md` §5bis.
 
-- [ ] [P2] Unire `feature/sharper-icons` (ingrandimento Lanczos, commit
-  `7cb40aa`) in `master`.
+- [ ] [P2] Unire in `master` `feature/sharper-icons` (ingrandimento
+  Lanczos, commit `7cb40aa`) e `fix/erase-prompt-thumbnail`, che parte da
+  lì: basta l'avanzamento rapido di `master` a
+  `fix/erase-prompt-thumbnail`.
 - [ ] [P3] Icone davvero nitide a scala > 1: servirebbero immagini nuove
   (PNG grandi o SVG) per pulsanti, strumenti, forme e magie, cioè un lavoro
   grafico. Nemmeno l'upstream le ha: nella versione attuale le icone degli
@@ -31,11 +33,13 @@ Completa: scala nativa, rifiniture e icone ingrandite con Lanczos. Vedi
 
 ## Bug
 
-- [ ] [P3] Richiesta "Cancella" di Apri: sopra la miniatura del disegno c'è
-  una barra nera. È un difetto preesistente, presente anche nel programma
-  originale a 800×600. Probabile causa: la miniatura è adattata mantenendo
-  le proporzioni (`thumbnail(img1, SCALED(80), SCALED(64), 1)` in
-  `do_prompt_image_flash_snd`) e lo spazio rimasto resta nero.
+- [ ] [P3] `thumbnail2()` con `keep_aspect` centra bene solo in un
+  riquadro quadrato: in uno rettangolare sposta l'immagine e lascia una
+  fascia vuota (nera se non c'è alfa). Era la causa della barra nera nella
+  richiesta "Cancella", corretta lì senza toccare `thumbnail2()`. Oggi è
+  latente: gli altri chiamanti usano riquadri quadrati e i plugin Magia passano
+  `keep_aspect` = 0. Correggerlo prima di usarlo con un riquadro
+  rettangolare.
 
 I difetti trovati nei warning sono nella sezione "Qualità del codice".
 
@@ -60,29 +64,29 @@ I difetti trovati nei warning sono nella sezione "Qualità del codice".
 
 ## Qualità del codice (dai warning della build del 2026-10-29)
 
-Numeri di riga aggiornati al 2026-10-30 (branch `feature/sharper-icons`);
+Numeri di riga aggiornati al 2026-10-31 (branch `fix/erase-prompt-thumbnail`);
 se si spostano, cercare il testo o la funzione indicati.
 
 - [ ] [P2] **Doppio `free(unc_buff)`** nei percorsi di errore del
   caricamento di sfondo/primo piano incorporati nel PNG
-  (`src/tuxpaint.c:21626/21630` e `:21683/21687`, funzione `load_embedded_data`) — crash possibile
+  (`src/tuxpaint.c:21638/21642` e `:21695/21699`, funzione `load_embedded_data`) — crash possibile
   aprendo un disegno salvato danneggiato.
 - [ ] [P2] Operazioni su `cm.section` con comportamento indefinito
   (`-Wsequence-point`) in `src/im.c:899`, `:1085`, `:1271`, `:1481` —
   metodi di input giapponese/coreano/cinese.
 - [ ] [P2] `strtok` su stringa `const` e argomenti in più per `printf`
-  (`src/tuxpaint.c:22367`, `:22371`).
+  (`src/tuxpaint.c:22379`, `:22383`).
 - [ ] [P3] Variabili forse non inizializzate `left_y`, `right_x` nel
   plugin Fold (`magic/src/fold.c:172`, `:178`).
 - [ ] [P3] `abs()` intera usata su un `float` nel plugin Flower
   (`magic/src/flower.c:398`), si perde la parte decimale.
 - [ ] [P3] Confronto sempre vero sull'indirizzo di `filename`
   (`src/fonts.c:1290`).
-- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:16955`) e parentesi
-  mancanti in un `|` (`:17185`) — verificare che il comportamento sia
+- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:16967`) e parentesi
+  mancanti in un `|` (`:17197`) — verificare che il comportamento sia
   quello voluto.
 - [ ] [P3] API librsvg deprecate: `rsvg_handle_get_dimensions` e
-  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17668`, `:17745`).
+  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17680`, `:17757`).
 - [ ] [P3] Ripulire i restanti ~80 warning innocui (variabili e funzioni
   inutilizzate, confronti con e senza segno).
 

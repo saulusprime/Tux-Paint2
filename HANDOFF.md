@@ -44,7 +44,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-10-30)
+## 1. Stato attuale (al 2026-10-31)
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -64,7 +64,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
 | `master` | `f0f9036` | tutto il lavoro fino alle rifiniture della UI scalabile (unione per avanzamento rapido del 2026-10-30) |
-| `feature/sharper-icons` | ultimo commit | **branch attivo**: icone ingrandite con Lanczos (`7cb40aa`) e file di progetto; **da unire in `master`** |
+| `fix/erase-prompt-thumbnail` | ultimo commit | **branch attivo**: correzione della barra nera nella richiesta "Cancella" (`4f95ada`), script `erase.sh` e file di progetto. Parte da `feature/sharper-icons`; **da unire in `master`** con avanzamento rapido |
+| `feature/sharper-icons` | `a3e6464` | icone ingrandite con Lanczos (`7cb40aa`) e file di progetto; contenuto nel branch attivo |
 | `feature/ui-scaling` | `f0f9036` | già unito in `master` |
 | `build/host-debian13` | `ec9ebe3` | già unito in `master` |
 
@@ -73,7 +74,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori. Warning: 52 in
   `src/tuxpaint.c`, invariati rispetto alla prima build; quelli che
   indicano bug possibili sono nel TODO.
-- **Installato in `~/.local`**: la build di `feature/sharper-icons`,
+- **Installato in `~/.local`**: la build di `fix/erase-prompt-thumbnail`,
   tutto funzionante, compresi Testo ed Etichetta. Lanciatore nel menu;
   dati utente in `~/.tuxpaint/`.
 - **Modifiche rispetto a 0.9.22**:
@@ -86,6 +87,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Font di Testo/Etichetta | `b7021ac` | il processo figlio dei font esce con `_exit(0)`: prima andava in crash in `exit()`, nel gestore di Mesa ereditato, e il genitore scartava i font. Sostituisce il ripiego col thread `6d3f130` |
 | Rifiniture UI | `c06ba8f` | opzione `buttonsize`; finestra iniziale più grande sugli schermi grandi; passo del mouse da tastiera proporzionale |
 | Icone più nitide | `7cb40aa` (su `feature/sharper-icons`) | ingrandimento Lanczos-3 delle immagini dell'interfaccia |
+| Richiesta "Cancella" | `4f95ada` (su `fix/erase-prompt-thumbnail`) | miniatura senza la barra nera sopra (difetto della 0.9.22); margine scalato della miniatura salvata |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -326,6 +328,13 @@ button_h`.
     `r_canvas.x`, le frecce alte `button_h / 2` e la riga di pulsanti a
     `r_canvas.h - button_h`.
     `THUMB_H = (r_canvas.h - button_h / 2 - button_h) / 4`.
+  - Le miniature salvate accanto ai disegni (`saved/.thumbs/`) misurano
+    `THUMB_W - SCALED(20)` × `THUMB_H - SCALED(20)`, come quelle della
+    griglia; se non coincidono, Apri le ridimensiona a ogni apertura.
+  - Nella richiesta "Cancella" la miniatura, se è più alta di
+    `SCALED(64)`, si riduce dentro `SCALED(80)` × `SCALED(64)` con un
+    calcolo esplicito delle proporzioni. Non usare la modalità
+    `keep_aspect` di `thumbnail()`: centra bene solo in riquadri quadrati.
 - **Resto dell'interfaccia** (fase 3):
   - **Cursori**: `get_cursor()` ingrandisce le bitmap XBM di un fattore
     intero `k = round(button_scale)`, con punto attivo `x·k + k/2`; il
@@ -373,6 +382,10 @@ Si lanciano dalla shell di VS Code e pilotano Tux Paint sull'host
   SCALA (intera), con `--savedir` su una copia di
   `~/.cache/tuxpaint-test-canon`: uscita, Apri con selezione,
   presentazione e riproduzione, Nuovo, selettore colore.
+- `erase.sh OUT BIN [SCALA]`: disegna un punto, salva, apre, chiede di
+  cancellare il primo disegno e risponde "No", con Cestino e cartella di
+  salvataggio di prova. Poi stampa le dimensioni delle miniature salvate
+  e il numero di file nel Cestino di prova, che deve essere 0.
 - `compare.py` confronta due serie di catture pixel per pixel.
 - `tp_session.py` è il motore.
   - Azioni: `click`, `tool`, `move`, `drag`, `wait`, `shot` (finestra),
@@ -420,8 +433,12 @@ cartella temporanea.
   finestra sotto il puntatore: STOP, si ripete.
 - **"Cancella" in Apri**: provarla solo con
   `TP_WRAP="env XDG_DATA_HOME=$HOME/.cache/tuxpaint-test-xdg"` e
-  `--savedir` di prova. Altrimenti un "Sì" sposta file veri nel Cestino
-  dell'utente.
+  `--savedir` di prova, come fa `erase.sh`. Altrimenti un "Sì" sposta file
+  veri nel Cestino dell'utente.
+- **Coordinate dei pulsanti di Apri**: a 800×600 la riga dei pulsanti va
+  da y=424 a y=472 (escluso). Cliccare al centro, y=448: un clic a y=472
+  cade fuori e la prova prosegue senza errori, ma la cattura mostra
+  un'altra schermata.
 - **Output perso**: stdout è bufferizzato e il processo muore con
   SIGKILL. Usare `TP_WRAP="stdbuf -oL -eL"` e `TP_LOG`.
 - **Pulizie**: mai `cd DIR && rm -rf *`, perché se il `cd` fallisce cancella
@@ -430,7 +447,8 @@ cartella temporanea.
 
 ## 6. Prossimi passi consigliati
 
-1. Unire `feature/sharper-icons` in `master` (icone più nitide).
+1. Unire in `master` le icone più nitide e la correzione della richiesta
+   "Cancella": avanzamento rapido a `fix/erase-prompt-thumbnail`.
 2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
 3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
@@ -960,3 +978,55 @@ Stato alla chiusura della sessione:
   `master`.
 - Nessuna modifica in sospeso nel repository, a parte `.vscode/` di
   VS Code, che non va committata.
+
+### 2026-10-31 — Barra nera nella richiesta "Cancella"
+
+Richiesta dell'utente: lavorare sul bug trovato, cioè la voce della
+sezione "Bug" del TODO.
+
+Analisi:
+- La richiesta "Cancella" di Apri mostra la miniatura del disegno, una
+  freccia e il cestino. Se la miniatura è più alta di `SCALED(64)`,
+  `do_prompt_image_flash_snd()` la riduceva con
+  `thumbnail(img1, SCALED(80), SCALED(64), 1)`.
+- In `thumbnail2()` la modalità `keep_aspect` calcola scala e spostamento
+  come se il riquadro fosse quadrato. Con 80×64 e una miniatura di
+  132×80, lo spostamento verticale risulta ((132 − 80) / 1,65) / 2 ≈ 15
+  pixel invece di 8: il disegno scende, la parte bassa viene tagliata e le
+  prime 15 righe non vengono scritte. Su una superficie senza alfa
+  restano nere.
+- Gli altri chiamanti con `keep_aspect` = 1 usano riquadri quadrati
+  (timbri 40×40, pulsanti); i plugin Magia passano sempre 0. Il difetto
+  di `thumbnail2()` è quindi latente: annotato nel TODO (Bug, P3), non
+  corretto, per non rischiare differenze di arrotondamento a 800×600.
+
+Fatto (branch `fix/erase-prompt-thumbnail`, da `feature/sharper-icons`):
+- `4f95ada`: dimensione con le proporzioni giuste calcolata a mano dentro
+  `SCALED(80)` × `SCALED(64)` e riduzione esatta con `keep_aspect` = 0.
+  Nella stessa occasione `do_save()` crea la miniatura salvata con
+  margine `SCALED(20)` invece di 20: era un residuo della UI scalabile, e
+  a scala 2 Apri ridimensionava ogni volta la miniatura da 284×180 a
+  264×160.
+- `784729b`: script `devtools/ui-test/erase.sh`.
+- Build installata in `~/.local`.
+
+Verifiche (desktop fermo, con il permesso dell'utente):
+- A 800×600, tra il riferimento e il nuovo binario, la richiesta
+  "Cancella" cambia solo nella colonna delle immagini a destra (80×167
+  pixel da (527, 152)): la barra nera è sparita e freccia e cestino
+  salgono.
+  Finestra Apri prima e dopo la risposta: identica.
+- `dialogs.sh` a 800×600: tutte e 9 le catture identiche al riferimento.
+- A scala 2: richiesta corretta, miniatura salvata 264×160.
+- In tutte le prove, rispondendo "No", i 3 disegni restano e il Cestino
+  di prova è vuoto.
+
+Scoperte:
+- Il primo tentativo cliccava "Cancella" a y=472, che è il bordo
+  inferiore escluso del pulsante. La richiesta non compariva e il
+  confronto dava "identico" senza errori. Annotato tra le insidie (§5bis);
+  lo script usa y=448.
+
+Stato alla chiusura:
+- Branch attivo `fix/erase-prompt-thumbnail`, da unire in `master` insieme
+  a `feature/sharper-icons` (avanzamento rapido).

@@ -158,3 +158,22 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     aggiornati;
   - nuovo `devtools/ui-test/README.md` con esempi d'uso.
 
+- [x] 2026-10-31 — Barra nera sopra la miniatura nella richiesta "Cancella"
+  di Apri (`4f95ada`, branch `fix/erase-prompt-thumbnail`):
+  - causa: la miniatura veniva ridotta a 80×64 con la modalità
+    `keep_aspect` di `thumbnail()`, che centra bene solo in un riquadro
+    quadrato. Il disegno finiva spostato in basso (di 15 pixel a 800×600)
+    e la fascia sopra restava nera. Difetto già presente nella 0.9.22;
+  - correzione: si calcola la dimensione che mantiene le proporzioni
+    dentro 80×64 e si riduce la miniatura esattamente a quella. Freccia e
+    cestino salgono di conseguenza;
+  - in più: la miniatura salvata accanto a ogni disegno ha il margine
+    `SCALED(20)`, come quelle della finestra Apri. A scala 2 ora misura
+    264×160 invece di 284×180, e Apri non la deve più ridimensionare a
+    ogni apertura;
+  - nuovo script `devtools/ui-test/erase.sh` (`784729b`) per la richiesta
+    "Cancella", con Cestino e cartella di salvataggio di prova;
+  - verifiche: barra sparita a 800×600 e a scala 2; a 800×600 cambia solo
+    la colonna delle immagini nella richiesta, mentre Apri prima e dopo e
+    tutti gli altri dialoghi restano identici al riferimento; rispondendo
+    "No" il Cestino di prova resta vuoto.
