@@ -64,6 +64,17 @@ $D/erase.sh $OUT/erase800 $N
 $D/erase.sh $OUT/erase1600 $N 2
 ```
 
+Schermo intero: con dimensione `-` lo script non passa `--windowed` né
+`--windowsize`, e le opzioni vengono da `TP_ARGS`. A schermo intero la
+finestra copre tutto lo schermo:
+
+```sh
+cd $HOME && flatpak-spawn --host --directory=$HOME \
+  --env=TP_BUTTON=128 --env=TP_START_WAIT=7 --env=TP_ARGS=--fullscreen=native \
+  python3 - - info:avvio shot:pieno key:Alt_L+Return wait:2 info:dopo \
+  < $D/tp_session.py | tar xf - -C $OUT
+```
+
 Sessione libera:
 
 ```sh
@@ -80,6 +91,8 @@ cd $HOME && flatpak-spawn --host --directory=$HOME \
 | `click:X,Y` | clic sinistro (coordinate moltiplicate per `TP_SCALE`) |
 | `tool:N` | clic sullo strumento N (dimensione da `TP_BUTTON`) |
 | `move:X,Y` | sposta il puntatore |
+| `key:K1+K2[:S]` | preme i tasti X indicati, in ordine (es. `Alt_L+Return`), li tiene premuti S secondi (default 0,1) e li rilascia al contrario |
+| `info:NOME` | scrive su stderr posizione, dimensione e stato della finestra |
 | `drag:X1,Y1,X2,Y2` | trascina (poco affidabile se l'utente usa il mouse) |
 | `wait:S` | attende S secondi |
 | `shot:NOME` | cattura la finestra in `NOME.png` |
@@ -100,4 +113,5 @@ cd $HOME && flatpak-spawn --host --directory=$HOME \
 
 Sicurezza: lo script usa solo la finestra del processo che ha avviato, la
 porta in primo piano e non clicca mai se sotto il puntatore c'è un'altra
-finestra. In quel caso scrive "STOP" e si ferma.
+finestra. Allo stesso modo non preme tasti se il focus della tastiera non è
+in quella finestra. In entrambi i casi scrive "STOP" e si ferma.
