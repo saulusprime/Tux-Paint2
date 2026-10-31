@@ -63,7 +63,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `quality/warnings` | ultimo commit | **branch attivo**: build senza warning, difetti e leak trovati lungo la strada (`b80ff08`…`7c3066f`) e file di progetto. Parte da `quality/fixme` |
+| `content/l10n` | ultimo commit | **branch attivo**: contenuti e localizzazione (`0aca7bd`…`bb2b180`) e file di progetto. Parte da `quality/warnings` |
+| `quality/warnings` | `922f264` | build senza warning, difetti e leak trovati lungo la strada (`b80ff08`…`7c3066f`). Parte da `quality/fixme`; contenuto nel branch attivo |
 | `quality/fixme` | `322d548` | FIXME del TODO e difetti trovati lungo la strada (`3ff7788`…`4a09172`). Parte da `feature/fullscreen`; contenuto nel branch attivo |
 | `feature/fullscreen` | `df1ed30` | schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`). Parte da `master`; contenuto nel branch attivo. **Da unire in `master`** tutti insieme, con avanzamento rapido a `quality/warnings`, dopo la prova a mano dello schermo intero |
 | `master` | `e5a0cdc` | tutto il lavoro fino alle icone Lanczos e alla correzione di "Cancella" (avanzamento rapido del 2026-10-31) |
@@ -77,8 +78,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
   `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `quality/warnings`, tutto
-  funzionante, compresi Testo ed Etichetta. Lanciatore nel menu, con la
+- **Installato in `~/.local`**: la build di `content/l10n`, tutto
+  funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
+  timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
   `~/.tuxpaint/`.
 - **Modifiche rispetto a 0.9.22**:
@@ -95,6 +97,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Schermo intero | `65874c7`, `3f43e1a` (su `feature/fullscreen`) | Alt+Invio in finestra e a schermo intero; `fullscreen` senza dimensione usa la risoluzione dello schermo; voce "Schermo intero" nel lanciatore; `--fullscreen` senza valore accettato (difetto della 0.9.22) (§5bis) |
 | FIXME e difetti trovati | `3ff7788`…`4a09172` (su `quality/fixme`) | plugin Magia senza limite fisso e scaricati all'uscita; font liberati all'uscita; stampa PostScript (carta sconosciuta, esito del comando); `--lang help` dalla tabella; ordinamento senza maiuscole; finestra Nuovo: `frame_heart`, modelli personali; crash con un file senza punto tra i plugin (§5ter, ASIS) |
 | Warning e leak | `b80ff08`…`7c3066f` (su `quality/warnings`) | build senza warning; disegni salvati: recupero dello sfondo incorporato e doppio `free`; Cestino (permessi, copia troncata, percorsi); leak a ogni uso (selettore colore, Apri, i tre dialoghi, SVG, Erba, Piega); librsvg senza API deprecate; formato in Mosaic Shaped; joystick e metodi di input (§5ter, ASIS) |
+| Contenuti e localizzazione | `0aca7bd`…`bb2b180` (su `content/l10n`) | `./dev.sh stamps` (raccolta completa dei timbri); ultima riga dei `.dat`/`.txt` dei timbri; `it.po` rivisto e modello rigenerato senza intltool; campione di punteggiatura dei font; azione "Schermo intero" nel modello del `.desktop`; sei Starter e modelli SVG per la scuola; manuale ed EXTENDING in italiano (§5quater, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -114,13 +117,13 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Percorso | Contenuto |
 |----------|-----------|
 | [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.500 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
-| [src/po/](src/po/) | 126 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`) |
+| [src/po/](src/po/) | 119 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`), più il modello `tuxpaint.pot` e gli script upstream (servono intltool) |
 | [src/tuxpaint.conf](src/tuxpaint.conf) | Configurazione di default installata in `/etc` |
 | [magic/src/](magic/src/) | 47 plugin "Magic" (`.so` caricati a runtime), API in `src/tp_magic_api.h.in` |
 | [data/](data/) | Risorse: 53 pennelli, font, immagini UI, suoni |
-| [stamps/](stamps/) | Solo pochi timbri (`cartoon/`); la collezione completa è il pacchetto separato `tuxpaint-stamps` |
-| [starters/](starters/) | 61 immagini "Starter" (contorni/cornici da colorare) |
-| [templates/](templates/) | 19 immagini "Template" (sfondi fotografici) |
+| [stamps/](stamps/) | Solo pochi timbri (`cartoon/`); la collezione completa è il pacchetto separato `tuxpaint-stamps`, che si aggiunge con `./dev.sh stamps` (§4) |
+| [starters/](starters/) | 63 immagini "Starter" (contorni/cornici da colorare), tra cui `clock.svg` e `school.svg` del fork |
+| [templates/](templates/) | 23 immagini "Template" (sfondi fotografici), tra cui lavagna e quaderni SVG del fork |
 | [osk/](osk/) | Layout della tastiera a schermo (`--onscreen-keyboard`) |
 | [im/](im/) | Metodi di input per giapponese, coreano, thai, cinese tradizionale |
 | [fonts/](fonts/) | Font specifici per locale (arabo, tibetano, greco, …) |
@@ -132,6 +135,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [dev.sh](dev.sh) | *Aggiunto nel fork*: build, installazione in `~/.local` e avvio sull'host (§4) |
 | [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`, `nodlclose.c`), §5bis |
 | [devtools/print-test/](devtools/print-test/) | *Aggiunto nel fork*: `ps_check.sh`, verifica della stampa PostScript con Ghostscript (§5ter) |
+| [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh`, rigenera il modello delle traduzioni senza intltool (§5quater) |
+| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py`, genera gli Starter e i modelli SVG per la scuola (§5quater) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
 ## 3. Documentazione letta
@@ -146,7 +151,7 @@ Tutta in [docs/](docs/), formato testo (con versione HTML in `docs/html/`):
 - [docs/FAQ.txt](docs/FAQ.txt) — problemi noti (stampa, salvataggio, audio, fullscreen).
 - [docs/CHANGES.txt](docs/CHANGES.txt) — changelog completo 2002-2014.
 - [docs/PNG.txt](docs/PNG.txt), [docs/SVG.txt](docs/SVG.txt) — formati immagine supportati.
-- [docs/it/](docs/it/) — traduzione italiana **parziale e datata** (README, FAQ, INSTALL, OPTIONS, PNG, AUTHORS; manca EXTENDING).
+- [docs/it/](docs/it/) — traduzione italiana: manuale (`README`) ed `EXTENDING` della 0.9.22, con le note sul fork (2026-10-31); `PNG.txt` e `COPIATURA.txt` vecchi ma validi; OPTIONS, INSTALL, AUTHORS (0.9.14-0.9.15) superati, con un avviso in testa che rimanda all'inglese.
 
 Nessun `CLAUDE.md`, nessun file di design o di decisioni interne: tutta la
 documentazione è quella upstream.
@@ -222,6 +227,7 @@ riesegue da solo sull'host con `flatpak-spawn --host`.
 ./dev.sh build      # compila (da zero se PREFIX è cambiato)
 ./dev.sh install    # compila e installa in $PREFIX, con lanciatore nel menu
 ./dev.sh run        # installa e avvia in finestra; altre opzioni in coda
+./dev.sh stamps     # aggiunge in $PREFIX la raccolta completa dei timbri
 ./dev.sh uninstall  # rimuove ciò che è installato in $PREFIX
 ./dev.sh clean      # rimuove gli artefatti di build
 ```
@@ -557,17 +563,69 @@ cartella temporanea.
   `git commit --fixup=…` e poi
   `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash BASE`.
 
+## 5quater. Contenuti e traduzioni: note (2026-10-31)
+
+- **Timbri**: `./dev.sh stamps` usa `apt-get download
+  tuxpaint-stamps-default` (circa 80 MB, nessun permesso di root) e
+  `dpkg-deb -x` in una cartella temporanea, poi copia solo
+  `usr/share/tuxpaint/stamps/`. Accetta anche un `.deb` o una cartella che
+  si chiami `stamps` o ne contenga una (l'archivio sorgente estratto);
+  rifiuta le altre. La versione 2025.03.31: 957 timbri (PNG e SVG, con i
+  doppioni PNG/SVG e le varianti `_mirror` contati una volta), 951 con la
+  descrizione, 932 in italiano, nessuna descrizione parlata in italiano.
+  La 0.9.22 all'avvio legge solo l'elenco dei file; miniature, `.dat` e
+  `.txt` si caricano quando il timbro compare nel selettore.
+- **Gruppi di timbri**: le frecce del selettore passano da una cartella di
+  primo livello all'altra (`animals`, `cartoon`, …); dentro un gruppo si
+  scorre con le frecce su e giù.
+- **Traduzioni**: intltool non c'è sull'host, quindi `src/po/update-po.sh`
+  non funziona. `devtools/po/update-po.sh it` fa la stessa cosa con
+  `xgettext`/`msguniq`/`msgmerge` (stesso modello, verificato sul vecchio
+  `tuxpaint.pot`) e solo per le lingue indicate. Non rigenera
+  `src/tuxpaint.desktop`: le traduzioni di nome e azione vanno tenute
+  allineate a mano ai `.po`. Un'emulazione di `intltool-merge` sui `.po`
+  ha dato lo stesso file. Per contare le stringhe mancanti di un
+  catalogo: `LC_ALL=C msgcmp --use-untranslated X.po tuxpaint.pot`.
+- **Commenti estratti**: xgettext (`--add-comments`) mette nel modello,
+  come nota per i traduttori, ogni commento subito prima di un
+  `gettext()`. Un commento per gli sviluppatori in quella posizione finisce
+  in tutti i cataloghi.
+- **Etichette dei pulsanti**: una riga sola, schiacciata in orizzontale
+  fino alla larghezza del pulsante. Fino a 15 caratteri circa si leggono;
+  oltre i 20 no. Nella revisione di `it.po` i nomi delle magie sono stati
+  tenuti entro questa misura. Le magie sono in ordine alfabetico del nome
+  tradotto, e ogni clic sulla freccia scorre di una riga.
+- **Finestra Nuovo per le prove** (800×600, griglia 4×4, freccia giù a
+  (400, 436), "Apri" a (120, 448)): ogni clic sulla freccia scorre di una
+  riga. Dopo 4 righe l'orologio è a (628, 174); dopo 12 la scuola è a
+  (172, 174); dopo 18 la lavagna è a (172, 74) e i quaderni sono nella
+  terza riga (pentagrammato, a righe, a quadretti a x = 324, 476, 628).
+- **Documentazione italiana**: l'HTML è il sorgente, i `.txt` si fanno con
+  `lynx -dump -nolist -width=80 -display_charset=utf-8
+  -assume_charset=utf-8 html/X.html > X.txt` in `docs/it`.
+  `docs/Makefile` userebbe `links`, che sull'host non c'è. Immagini e
+  documenti inglesi si raggiungono con `../../html/…`, come nella cartella
+  installata (`share/doc/tuxpaint/it/html`).
+- **SVG per Starter e modelli**: proporzioni 608×472. La 0.9.22 li
+  disegna alla dimensione della tela, quindi restano nitidi a ogni scala.
+  Per vederli senza Tux Paint, sull'host ci sono pycairo e librsvg via
+  `gi` (`Rsvg.Handle.render_document`).
+
 ## 6. Prossimi passi consigliati
 
 1. Provare a mano la voce "Schermo intero" del lanciatore (clic destro
    sull'icona di Tux Paint) e Alt+Invio; poi unire in `master` con
-   avanzamento rapido a `quality/warnings`, che contiene `quality/fixme`
-   e `feature/fullscreen`.
-2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
+   avanzamento rapido a `content/l10n`, che contiene `quality/warnings`,
+   `quality/fixme` e `feature/fullscreen`.
+2. Provare a mano i timbri nuovi (strumento Timbro, frecce per cambiare
+   categoria) e gli Starter e i modelli per la scuola (finestra Nuovo,
+   dopo i colori: orologio e scuola tra gli Starter, lavagna e quaderni
+   tra i modelli).
+3. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
-3. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
+4. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
    parte, magari partendo dall'unione dei tre dialoghi gemelli.
-4. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
+5. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
    lavoro grafico, cioè disegnare immagini nuove.
 
 ---
@@ -1356,3 +1414,47 @@ non ha fatto in tempo a uscire):
 
 Stato alla chiusura: branch attivo `quality/warnings`, installato. Resta
 nel TODO la suddivisione di `src/tuxpaint.c`.
+
+### 2026-10-31 — Contenuti e localizzazione
+
+Richiesta dell'utente: la sezione "Contenuti e localizzazione" del TODO.
+Fatte tutte e quattro le voci; branch `content/l10n`, da
+`quality/warnings`. Per la documentazione l'utente ha scelto, tra le
+opzioni proposte, manuale più EXTENDING (circa 80 KB su 190 KB di HTML
+inglese); gli altri file italiani hanno solo un avviso.
+
+Timbri: invece di copiare la raccolta nel repository (142 MB), un comando
+la prende dal pacchetto Debian. Prima di integrarla ho controllato la
+compatibilità con la 0.9.22: formati e parole chiave dei `.dat` sono tutti
+noti al loader. Ne è uscito un difetto della 0.9.22, l'ultima riga di un
+file senza a capo ignorata, che nella raccolta tocca un file. Le prove del
+comando hanno trovato due difetti miei, corretti prima del commit: la
+cartella temporanea non veniva cancellata (variabile `local` nella trap) e
+una cartella qualsiasi veniva accettata e copiata tra i timbri.
+
+`it.po` risultava completo, ma solo rispetto a un modello del 2014.
+Rigenerato il modello (senza intltool, che manca), è emerso che il
+campione di punteggiatura non ha mai funzionato in nessuna lingua (`\%` in
+C). Le 292 stringhe rilette hanno dato 44 correzioni. Il `.po` upstream più
+recente (0.9.23, 2017) ha le stesse traduzioni, quindi non serviva da
+riferimento. L'azione "Schermo intero", scritta a mano nel `.desktop`, si
+sarebbe persa al primo `update-po.sh`: ora è nel modello.
+
+Starter e modelli: sei SVG generati da uno script, controllati prima con
+librsvg e poi aperti in Tux Paint.
+
+Verifiche (desktop fermo, con il permesso dell'utente; una sessione
+ripetuta perché la finestra non era ancora in primo piano, e lo script si
+è fermato senza cliccare):
+- `regress.sh` e `dialogs.sh` a 800×600: identici al riferimento.
+- Interfaccia in italiano: tutte le pagine delle magie a 800×600, poi la
+  fine dell'elenco a 1600×1200 dopo aver accorciato i cinque nomi
+  illeggibili. Un timbro mostra la descrizione italiana ("Una rosella
+  adelaide."), la freccia passa alla categoria dopo.
+- Finestra Nuovo: scuola, lavagna, quaderno a righe, a quadretti,
+  pentagrammato e orologio aperti; l'orologio è nitido anche a scala 2.
+- Senza finestra: l'avvio con la raccolta completa resta immediato.
+
+Stato alla chiusura: branch attivo `content/l10n`, installato con i timbri.
+Nuove voci P3 nel TODO: il resto della documentazione italiana, gli altri
+cataloghi da allineare, etichette su due righe, una cartina dell'Italia.

@@ -24,7 +24,10 @@ con Lanczos. Schermo intero (Alt+Invio, avvio alla risoluzione dello
 schermo) sul branch `feature/fullscreen`. Vedi [ASIS.md](ASIS.md) e
 `HANDOFF.md` §5bis.
 
-- [ ] [P2] Unire `feature/fullscreen` in `master` (avanzamento rapido).
+- [ ] [P2] Unire in `master`, con avanzamento rapido a `content/l10n`, i
+  branch in catena `feature/fullscreen` → `quality/fixme` →
+  `quality/warnings` → `content/l10n`, dopo la prova a mano dello schermo
+  intero.
 - [ ] [P3] Schermo intero nitido anche partendo in finestra, e finestra
   ridimensionabile. Oggi Alt+Invio ingrandisce l'immagine della finestra
   (sullo schermo dell'utente 1600×1200 diventa 2133×1600, con bande nere
@@ -104,17 +107,30 @@ elencati qui.
 - [ ] [P3] Tastiera a schermo: etichette AltGr e caratteri non-BMP
   (`src/onscreen_keyboard.c:1219`, `:1074`).
 - [ ] [P3] Halftone: angolo per canale colore (`magic/src/halftone.c:277`).
+- [ ] [P3] Etichette lunghe dei pulsanti su due righe: oggi
+  `do_render_button_label()` le schiaccia in orizzontale fino alla
+  larghezza del pulsante, e oltre i 15 caratteri circa diventano
+  difficili da leggere (in italiano per esempio "Mosaico a esagoni",
+  "Tinta bagnata"; in inglese "Symmetric Left/Right").
 
 ## Contenuti e localizzazione
 
-- [ ] [P2] Integrare o documentare il pacchetto `tuxpaint-stamps` (nel repo
-  ci sono solo i timbri `cartoon/`).
-- [ ] [P2] Revisione della traduzione italiana (`src/po/it.po`) — stringhe
-  mancanti o fuzzy.
-- [ ] [P3] Aggiornare la documentazione italiana in `docs/it/` e tradurre
-  `EXTENDING.txt` (manca).
-- [ ] [P3] Nuovi Starter/Template a tema scolastico (formati PNG/SVG, vedi
-  `docs/EXTENDING.txt`).
+Le quattro voci del 2026-10-29 sono chiuse (branch `content/l10n`, vedi
+[ASIS.md](ASIS.md)): raccolta completa dei timbri con `./dev.sh stamps`,
+`it.po` rivisto, manuale ed EXTENDING in italiano, sei Starter e modelli
+per la scuola.
+
+- [ ] [P3] Tradurre il resto della documentazione italiana (OPTIONS, FAQ,
+  ADVANCED-STAMPS-HOWTO, INSTALL): scelto di non farlo il 2026-10-31. I
+  vecchi file italiani hanno in testa un avviso che rimanda all'inglese.
+- [ ] [P3] Allineare le altre traduzioni al modello attuale
+  (`devtools/po/update-po.sh LINGUA…`): oggi solo `it.po` è allineato.
+  Dei 119 cataloghi, oltre a `it` hanno tutte le stringhe `ca`, `de`, `es`
+  e `fr`; a cento manca solo "Full screen" (l'azione del lanciatore),
+  quattordici più vecchi hanno da 2 a 16 stringhe in meno (per esempio
+  `si.po`, `bm.po`, `zu.po`).
+- [ ] [P3] Cartina dell'Italia con le regioni come Starter: servono dati
+  geografici con una licenza adatta (per esempio ISTAT, CC BY).
 
 ## Distribuzione (fuori obiettivo per ora)
 

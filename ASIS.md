@@ -287,3 +287,33 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   - verifiche: a 800×600 schermata principale e dialoghi identici al
     riferimento; nessun errore di memoria con ASan; `erase.sh` ora può
     rispondere Sì e usare un Cestino di prova altrove (`7c3066f`).
+- [x] 2026-10-31 — Contenuti e localizzazione (branch `content/l10n`, da
+  `quality/warnings`), le quattro voci della sezione:
+  - **timbri** (`13d8635`): `./dev.sh stamps` aggiunge la raccolta
+    completa da `tuxpaint-stamps-default` di Debian (2025.03.31),
+    scaricato con `apt-get download` e non installato, o da un `.deb` o
+    una cartella `stamps`. 957 timbri, 932 con la descrizione in
+    italiano; formati e opzioni dei `.dat` tutti noti alla 0.9.22.
+    L'avvio non rallenta (immagini e descrizioni si caricano quando
+    servono). Corretto un difetto della 0.9.22 (`0aca7bd`): l'ultima riga
+    di un `.dat` o `.txt` senza a capo veniva ignorata. Installata in
+    `~/.local`;
+  - **`it.po`** (`07ce1b1`): allineato al modello, rilette tutte le 292
+    stringhe e corrette 44 (refusi, due magie con lo stesso
+    nome, significati sbagliati, nomi troppo lunghi per i pulsanti;
+    dettagli nel commit). Il campione di punteggiatura per i font non
+    corrispondeva in nessuna lingua per un `\%` nel sorgente
+    (`af760fb`). Il modello si rigenera senza intltool con
+    `devtools/po/update-po.sh` (`481440f`), e l'azione "Schermo intero"
+    del lanciatore è nel modello e tradotta in ca/de/es/fr/it;
+  - **documentazione** (`bb2b180`): manuale (`README`) ed `EXTENDING`
+    tradotti dalla 0.9.22, con le novità del fork; agli altri file
+    italiani, della 0.9.14-0.9.15, un avviso che rimanda all'inglese
+    (scelta dell'utente: non tradurre OPTIONS, FAQ e il resto);
+  - **Starter e modelli** (`abca762`): orologio e scuola da colorare;
+    lavagna, quaderno a righe, a quadretti e pentagrammato. SVG nitidi a
+    ogni dimensione, generati da `devtools/content/school_svgs.py`;
+  - verifiche: a 800×600 schermata principale e dialoghi identici al
+    riferimento; a schermo in italiano le etichette di tutte le magie, un
+    timbro con la descrizione italiana e i sei file nuovi aperti dalla
+    finestra Nuovo, anche a 1600×1200.
