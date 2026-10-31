@@ -1005,9 +1005,13 @@ static void loadfonts(SDL_Surface * screen, const char *const dir)
 
   groupfonts();
 
+  /* Make the font lists visible to other threads before the flags saying
+     they're ready (readers also wait for this thread with SDL_WaitThread()) */
+#ifdef __GNUC__
+  __sync_synchronize();
+#endif
   font_thread_done = 1;
   waiting_for_fonts = 0;
-  // FIXME: need a memory barrier here
   return 0;			// useless, wanted by threading library
 }
 
@@ -1149,6 +1153,37 @@ void run_font_scanner(SDL_Surface * screen, const char *restrict const locale)
 }
 
 
+/* What receive_some_font_info() got: user_font_families[] point into
+   these until free_received_font_info().  (Valgrind used to report them
+   as leaked: nothing kept their start, nor freed them.) */
+static char *font_info_buf;
+static family_info *font_info_families;
+
+/* At exit: close the fonts opened from user_font_families[], and free
+   them and what they point into */
+void free_received_font_info(void)
+{
+  int i;
+
+  for (i = 0; i < num_font_families; i++)
+  {
+    if (user_font_families[i] != NULL && user_font_families[i]->handle != NULL)
+    {
+      TuxPaint_Font_CloseFont(user_font_families[i]->handle);
+      user_font_families[i]->handle = NULL;
+    }
+  }
+
+  free(user_font_families);
+  user_font_families = NULL;
+  num_font_families = 0;
+
+  free(font_info_families);
+  font_info_families = NULL;
+  free(font_info_buf);
+  font_info_buf = NULL;
+}
+
 void receive_some_font_info(SDL_Surface * screen)
 {
   char *buf = NULL;
@@ -1167,8 +1202,6 @@ void receive_some_font_info(SDL_Surface * screen)
     if (buf_size <= buf_fill * 9 / 8 + 128)
     {
       buf_size = buf_size * 5 / 4 + 256;
-
-      // FIXME: Valgrind says this leaks -bjk 2007.07.19
       buf = realloc(buf, buf_size);
     }
     rc = read(font_socket_fd, buf + buf_fill, buf_size - buf_fill);
@@ -1181,7 +1214,11 @@ void receive_some_font_info(SDL_Surface * screen)
       switch (errno)
       {
       default:
-	return;
+	/* Read error: give up, as if the scanner had died (below).
+	   (This used to return, leaking buf and leaving the scanner
+	   unwaited-for, and fonts were never marked as done.) */
+	font_thread_aborted = 1;
+	break;
       case EAGAIN:
 	;			// satisfy a C syntax abomination
 	p = (struct pollfd)
@@ -1193,6 +1230,7 @@ void receive_some_font_info(SDL_Surface * screen)
       case EINTR:
 	continue;
       }
+      break;
     }
     buf_fill += rc;
     if (!rc || font_thread_aborted)
@@ -1204,6 +1242,7 @@ void receive_some_font_info(SDL_Surface * screen)
   if (WIFSIGNALED(status) || font_thread_aborted)
   {
     printf("child killed by signal %u\n", WTERMSIG(status));
+    free(buf);
     user_font_families = NULL;
     num_font_families = 0;
     font_thread_done = 1;
@@ -1219,9 +1258,9 @@ void receive_some_font_info(SDL_Surface * screen)
   printf("Got %u bytes with %u families.\n", buf_fill, num_font_families);
 #endif
   user_font_families = malloc(num_font_families * sizeof *user_font_families);
-
-  // FIXME: Valgrind says this malloc() is leaked -bjk 2007.07.19
   fip = malloc(num_font_families * sizeof **user_font_families);
+  font_info_buf = buf;
+  font_info_families = fip;
 
   i = num_font_families;
   while (i--)

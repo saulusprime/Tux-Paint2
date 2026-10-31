@@ -116,6 +116,7 @@ void reliable_write(int fd, const void *buf, size_t count);
 static void reliable_read(int fd, void *buf, size_t count);
 void run_font_scanner(SDL_Surface * screen, const char *restrict const locale);
 void receive_some_font_info(SDL_Surface * screen);
+void free_received_font_info(void);
 #endif
 
 //////////////////////////////////////////////////////////////////////

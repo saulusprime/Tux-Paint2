@@ -3170,7 +3170,8 @@ static void mainloop(void)
 #else
 		while (!font_thread_done && !font_thread_aborted)
 		{
-		  /* FIXME: should have a read-depends memory barrier around here */
+		  /* (No memory barrier needed: SDL_WaitThread() below waits
+		     for the font thread before we use what it loaded) */
 		  show_progress_bar(screen);
 		  SDL_Delay(20);
 		}
@@ -12575,7 +12576,7 @@ static void cleanup(void)
   }
 
 #ifdef FORKED_FONTS
-  free(user_font_families);	/* we'll leak the bodies... oh well */
+  free_received_font_info();
 #else
   for (i = 0; i < num_font_families; i++)
   {
