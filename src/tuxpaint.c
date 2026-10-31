@@ -11060,9 +11060,8 @@ static char *loaddesc(const char *const fname, Uint8 * locale_text)
 
     do
     {
-      fgets(buf, sizeof(buf), fi);
-
-      if (!feof(fi))
+      /* (Not feof(): a last line without a newline still counts) */
+      if (fgets(buf, sizeof(buf), fi) != NULL)
       {
 	strip_trailing_whitespace(buf);
 
@@ -11089,6 +11088,7 @@ static char *loaddesc(const char *const fname, Uint8 * locale_text)
 	      buf + strlen(wished_langs[i].lang_prefix))
 	  {
 	    lang_prefix = wished_langs[i].lang_prefix;
+	    free((char *) short_lang_prefix);
 	    short_lang_prefix = strdup(lang_prefix);
 	    /* When in doubt, cut off country code */
 	    if (strchr(short_lang_prefix, '_'))
@@ -11155,9 +11155,8 @@ static double loadinfo(const char *const fname, stamp_type * inf)
 
   do
   {
-    fgets(buf, sizeof buf, fi);
-
-    if (!feof(fi))
+    /* (Not feof(): a last line without a newline still counts) */
+    if (fgets(buf, sizeof buf, fi) != NULL)
     {
       strip_trailing_whitespace(buf);
 
