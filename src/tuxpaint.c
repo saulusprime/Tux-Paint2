@@ -19003,8 +19003,11 @@ static int do_new_dialog(void)
               f2 = &(fs[k].f);
               strcpy(fname2, f2->d_name);
 
-              if (strstr(fname2, fname) == fname2 &&
-                  strcasestr(fname2, ".svg") != NULL) {
+              /* (Same name plus ".svg"; just starting with the name, as it
+                 used to be, hid e.g. "frame_heart.png" behind
+                 "frame_hearts.svg") */
+              if (strncmp(fname2, fname, strlen(fname)) == 0 &&
+                  strcasecmp(fname2 + strlen(fname), ".svg") == 0) {
                 /* SVG of this bitmap exists; we'll skip it */
                 skip = 1;
               }
