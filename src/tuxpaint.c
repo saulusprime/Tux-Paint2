@@ -11892,6 +11892,7 @@ static int do_prompt_image_flash_snd(const char *const text,
 #endif
   int img1_w, img2_w, img3_w, max_img_w, img_x, img_y, offset;
   SDL_Surface *img1b;
+  int img1b_w, img1b_h;
   int free_img1b;
   int txt_left, txt_right, img_left, btn_left, txt_btn_left, txt_btn_right;
   int val_x, val_y, motioner;
@@ -12008,7 +12009,18 @@ static int do_prompt_image_flash_snd(const char *const text,
   {
     if (img1->h > SCALED(64) && img2 != NULL /* Only scale if it matters */)
     {
-      img1b = thumbnail(img1, SCALED(80), SCALED(64), 1);
+      /* Fit inside 80x64, keeping the aspect ratio.  (thumbnail()'s own
+         keep_aspect mode only centers correctly in a square box, and left
+         a black bar above the picture.) */
+      img1b_w = SCALED(80);
+      img1b_h = SCALED(64);
+
+      if (img1->w * img1b_h > img1->h * img1b_w)
+        img1b_h = max(1, img1->h * img1b_w / img1->w);
+      else
+        img1b_w = max(1, img1->w * img1b_h / img1->h);
+
+      img1b = thumbnail(img1, img1b_w, img1b_h, 0);
       free_img1b = 1;
     }
     else
@@ -13125,7 +13137,7 @@ static int do_save(int tool, int dont_show_success_results)
 
   debug(fname);
 
-  thm = thumbnail(save_canvas, THUMB_W - 20, THUMB_H - 20, 0);
+  thm = thumbnail(save_canvas, THUMB_W - SCALED(20), THUMB_H - SCALED(20), 0);
 
   fi = fopen(fname, "wb");
   if (fi == NULL)
