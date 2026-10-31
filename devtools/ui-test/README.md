@@ -102,7 +102,13 @@ cd $HOME && flatpak-spawn --host --directory=$HOME --env=TP_BIN=$HOME/.cache/tux
 
 Con `LD_PRELOAD=$HOME/.cache/nodlclose.so` in `TP_WRAP` (compilata da
 `nodlclose.c`) aggiungere anche `verify_asan_link_order=0` ad
-`ASAN_OPTIONS`.
+`ASAN_OPTIONS`. Per pile complete anche nelle librerie senza frame
+pointer: `fast_unwind_on_malloc=0:malloc_context_size=12`, molto più lento
+(dare più tempo prima di Esci e dopo Sì).
+
+Cestino: `erase.sh OUT BIN [SCALA [RISPOSTA]]` risponde "yes" se richiesto;
+`TP_TEST_XDG=/tmp/prova-cestino` mette il Cestino di prova su un altro
+filesystem, così lo spostamento deve copiare.
 
 Senza finestra: con `SDL_VIDEODRIVER=dummy` Tux Paint parte senza aprire
 nulla sullo schermo. Basta per controllare che l'avvio non vada in crash

@@ -251,3 +251,39 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     pulita;
   - non fatto: la suddivisione di `src/tuxpaint.c` in moduli, rimasta nel
     TODO come lavoro da pianificare.
+- [x] 2026-10-31 — Qualità del codice, dai warning della build (branch
+  `quality/warnings`, da `quality/fixme`): **0 warning** (erano 96), anche
+  nella build AddressSanitizer a `-O1`. Difetti veri trovati e corretti:
+  - **disegni salvati** (`b80ff08`): il recupero degli strati incorporati
+    nel PNG cercava lo sfondo come `tpBK` invece di `tpBG`, non assegnava
+    uno sfondo grande quanto la tela (puntatore a memoria liberata),
+    scambiava le maschere blu/verde, liberava due volte i dati nei
+    percorsi d'errore e poteva leggere oltre la fine di un file
+    danneggiato. Verificato a schermo: un disegno fatto da un modello che
+    poi manca, riaperto, con la gomma mostra il bianco nella versione
+    vecchia e il modello in quella nuova;
+  - **Cestino** (`806b445`): cartelle create con modo `0x777` (senza
+    scrittura per il proprietario), copia di ripiego troncata a multipli
+    di 1024 byte, percorsi con `sprintf` in 256 byte. Verificato con il
+    Cestino su un altro filesystem: prima il disegno andava perso, ora è
+    nel Cestino intero (5324 byte);
+  - **memoria a ogni uso** (`11824a3`, `5a9f15f`): elenco dei file dei tre
+    dialoghi, copia dello schermo del selettore colore, copia della tela
+    a ogni apertura di un disegno, immagini dei cursori, errori di
+    librsvg, immagine del plugin Erba, superficie del plugin Piega a ogni
+    piega (`c1f5562`). Con ASan, la stessa sessione: da 3,46 MB a 432
+    byte (nelle librerie);
+  - **altro**: stringa di formato in Mosaic Shaped (`c1f5562`);
+    comportamento indefinito nei metodi di input e `strtok` su una
+    stringa non nostra, con overflow oltre 256 pulsanti
+    (`joystick-buttons-ignore`, `ed77f9c`); parentesi in
+    `handle_active()` e graffe in `handle_keymouse()` (`364af89`);
+    percorsi di Starter e modelli (`d346e60`); una `magic_api` sola e
+    percorsi delle cartelle dei plugin liberati (`b7cd9f9`);
+  - **librsvg** (`7d499fb`): API non deprecate; i 19 SVG installati
+    rendono identici al pixel a quattro dimensioni;
+  - pulizia (`060141d`): codice morto, formati `size_t`, `sound_fnames[]`
+    spostato in `tuxpaint.c` come chiedeva il suo FIXME;
+  - verifiche: a 800×600 schermata principale e dialoghi identici al
+    riferimento; nessun errore di memoria con ASan; `erase.sh` ora può
+    rispondere Sì e usare un Cestino di prova altrove (`7c3066f`).

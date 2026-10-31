@@ -68,54 +68,25 @@ I difetti trovati nei warning sono nella sezione "Qualità del codice".
 - [ ] [P3] Porting a SDL2 — escluso per ora (decisione del 2026-10-29); da
   riconsiderare solo se `sdl12-compat` dovesse dare problemi seri.
 
-## Qualità del codice (dai warning della build del 2026-10-29)
+## Qualità del codice (dai warning della build)
 
-Numeri di riga aggiornati al 2026-10-31 (branch `quality/fixme`);
-se si spostano, cercare il testo o la funzione indicati.
-
-- [ ] [P2] **Doppio `free(unc_buff)`** nei percorsi di errore del
-  caricamento di sfondo/primo piano incorporati nel PNG
-  (`src/tuxpaint.c:21768/21772` e `:21825/21829`, funzione `load_embedded_data`) — crash possibile
-  aprendo un disegno salvato danneggiato.
-- [ ] [P2] Operazioni su `cm.section` con comportamento indefinito
-  (`-Wsequence-point`) in `src/im.c:899`, `:1085`, `:1271`, `:1481` —
-  metodi di input giapponese/coreano/cinese.
-- [ ] [P2] `strtok` su stringa `const` e argomenti in più per `printf`
-  (`src/tuxpaint.c:22509`, `:22513`).
-- [ ] [P3] Variabili forse non inizializzate `left_y`, `right_x` nel
-  plugin Fold (`magic/src/fold.c:172`, `:178`).
-- [ ] [P3] `abs()` intera usata su un `float` nel plugin Flower
-  (`magic/src/flower.c:398`), si perde la parte decimale.
-- [ ] [P3] Confronto sempre vero sull'indirizzo di `filename`
-  (`src/fonts.c:1290`).
-- [ ] [P3] Indentazione fuorviante (`src/tuxpaint.c:17046`) e parentesi
-  mancanti in un `|` (`:17276`) — verificare che il comportamento sia
-  quello voluto.
-- [ ] [P3] API librsvg deprecate: `rsvg_handle_get_dimensions` e
-  `rsvg_handle_render_cairo` (`src/tuxpaint.c:17759`, `:17836`).
-- [ ] [P3] Ripulire i restanti ~80 warning innocui (variabili e funzioni
-  inutilizzate, confronti con e senza segno).
+Fatto il 2026-10-31 (branch `quality/warnings`, vedi [ASIS.md](ASIS.md)):
+la build è senza warning, anche quella con AddressSanitizer a `-O1`. Un
+warning nuovo va guardato subito.
 
 ## Qualità del codice (dai FIXME nel sorgente)
 
-Le otto voci scelte il 2026-10-29 sono chiuse (branch `quality/fixme`,
-vedi [ASIS.md](ASIS.md)). Nel sorgente restano altri FIXME minori, non
+Le otto voci scelte il 2026-10-29 sono chiuse (branch `quality/fixme`),
+così come i leak dei plugin e di `magic_api_struct` (`quality/warnings`);
+vedi [ASIS.md](ASIS.md). Nel sorgente restano altri FIXME minori, non
 elencati qui.
 
 - [ ] [P3] Suddividere `src/tuxpaint.c` (~24.500 righe) in moduli. Non
   fatto il 2026-10-31: è un lavoro lungo, da pianificare a parte (per
   esempio estraendo prima le parti più isolate: dialoghi Apri/Nuovo/
-  presentazione, stampa, caricamento dei timbri, plugin Magia).
-- [ ] [P3] Plugin Magia che nel loro `shutdown()` non liberano tutto:
-  circa 260 KB a ogni uscita. Lo si vede con AddressSanitizer da quando i
-  plugin vengono scaricati (`3ff7788`); con `dlclose()` reso nullo
-  (`devtools/ui-test/nodlclose.c`) quei blocchi tornano raggiungibili.
-  Per sapere quali plugin sono, serve una build ASan dei plugin.
-- [ ] [P3] `magic_api_struct`: ne viene allocata una per ogni cartella di
-  plugin, e quella delle cartelle precedenti si perde (circa 300 byte);
-  `shutdown()` e gli altri richiami ricevono sempre l'ultima, con la
-  `data_directory` dell'ultima cartella. Tenerne una per cartella e
-  liberarle all'uscita.
+  presentazione, stampa, caricamento dei timbri, plugin Magia). I tre
+  dialoghi sono copie quasi uguali (un FIXME chiede di unirli): i leak di
+  `fs` erano in tutti e tre.
 
 ## Feature e miglioramenti strumenti
 

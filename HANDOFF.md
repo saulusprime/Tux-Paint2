@@ -63,8 +63,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `quality/fixme` | ultimo commit | **branch attivo**: FIXME del TODO e difetti trovati lungo la strada (`3ff7788`…`4a09172`), strumenti di prova e file di progetto. Parte da `feature/fullscreen` |
-| `feature/fullscreen` | `df1ed30` | schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`). Parte da `master`; contenuto in `quality/fixme`. **Da unire in `master`** insieme, con avanzamento rapido a `quality/fixme`, dopo la prova a mano dello schermo intero |
+| `quality/warnings` | ultimo commit | **branch attivo**: build senza warning, difetti e leak trovati lungo la strada (`b80ff08`…`7c3066f`) e file di progetto. Parte da `quality/fixme` |
+| `quality/fixme` | `322d548` | FIXME del TODO e difetti trovati lungo la strada (`3ff7788`…`4a09172`). Parte da `feature/fullscreen`; contenuto nel branch attivo |
+| `feature/fullscreen` | `df1ed30` | schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`). Parte da `master`; contenuto nel branch attivo. **Da unire in `master`** tutti insieme, con avanzamento rapido a `quality/warnings`, dopo la prova a mano dello schermo intero |
 | `master` | `e5a0cdc` | tutto il lavoro fino alle icone Lanczos e alla correzione di "Cancella" (avanzamento rapido del 2026-10-31) |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
 | `feature/sharper-icons` | `a3e6464` | già unito in `master` |
@@ -73,11 +74,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 - **Identità git**: `Paolo <lymphalab@outlook.it>`, configurata solo nel
   repository (`.git/config`).
-- **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori. Warning: 96,
-  di cui 52 in `src/tuxpaint.c`, invariati rispetto alla prima build
-  (ricontati da zero il 2026-10-31); quelli che indicano bug possibili sono
-  nel TODO.
-- **Installato in `~/.local`**: la build di `quality/fixme`, tutto
+- **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
+  2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
+  `-O1`. Un warning nuovo è un segnale da guardare.
+- **Installato in `~/.local`**: la build di `quality/warnings`, tutto
   funzionante, compresi Testo ed Etichetta. Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
   `~/.tuxpaint/`.
@@ -94,6 +94,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Richiesta "Cancella" | `4f95ada` | miniatura senza la barra nera sopra (difetto della 0.9.22); margine scalato della miniatura salvata |
 | Schermo intero | `65874c7`, `3f43e1a` (su `feature/fullscreen`) | Alt+Invio in finestra e a schermo intero; `fullscreen` senza dimensione usa la risoluzione dello schermo; voce "Schermo intero" nel lanciatore; `--fullscreen` senza valore accettato (difetto della 0.9.22) (§5bis) |
 | FIXME e difetti trovati | `3ff7788`…`4a09172` (su `quality/fixme`) | plugin Magia senza limite fisso e scaricati all'uscita; font liberati all'uscita; stampa PostScript (carta sconosciuta, esito del comando); `--lang help` dalla tabella; ordinamento senza maiuscole; finestra Nuovo: `frame_heart`, modelli personali; crash con un file senza punto tra i plugin (§5ter, ASIS) |
+| Warning e leak | `b80ff08`…`7c3066f` (su `quality/warnings`) | build senza warning; disegni salvati: recupero dello sfondo incorporato e doppio `free`; Cestino (permessi, copia troncata, percorsi); leak a ogni uso (selettore colore, Apri, i tre dialoghi, SVG, Erba, Piega); librsvg senza API deprecate; formato in Mosaic Shaped; joystick e metodi di input (§5ter, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -249,13 +250,14 @@ riesegue da solo sull'host con `flatpak-spawn --host`.
   (`COMPLETIONDIR`), anche con un `PREFIX` utente: in quel caso va
   sovrascritto anche `COMPLETIONDIR`.
 
-### Warning della build (2026-10-29, ricontati il 2026-10-31)
+### Warning della build
 
-96 in tutto: 52 in `src/tuxpaint.c`, 13 in `src/im.c`, il resto sparso nei
-plugin. Ricontati con una build da zero il 2026-10-31: stessi numeri, le
-modifiche del fork non ne hanno aggiunti. Quasi tutti sono innocui: variabili o funzioni inutilizzate, confronti
-fra interi con e senza segno. Quelli che indicano bug possibili sono elencati
-in `TODO.md`, sezione "Qualità del codice".
+Il 2026-10-29 erano 96: 52 in `src/tuxpaint.c`, 13 in `src/im.c`, il resto
+nei plugin. Dal 2026-10-31 sono **0** (branch `quality/warnings`): una
+decina indicavano difetti veri (doppio `free`, comportamento indefinito,
+`sprintf` oltre i buffer, una stringa di formato, maschere dei colori), il
+resto era codice inutilizzato. Con `OPTFLAGS="-O1 …"` (build ASan) GCC fa
+altre analisi: anche lì 0.
 
 ## 5. Rischi e punti di attenzione
 
@@ -523,11 +525,20 @@ cartella temporanea.
   `~/.local`. Il rapporto dei leak arriva solo se Tux Paint esce da sé:
   la sessione deve cliccare Esci e poi Sì, a (205, 250) a 800×600.
   Comandi in `devtools/ui-test/README.md`. Valgrind sull'host non c'è.
-- **Leak che restano** (a ogni uscita, nessun errore di memoria): circa
-  260 KB dei plugin Magia, che non liberano tutto in `shutdown()` (si
-  vedono da quando i plugin vengono scaricati; con `nodlclose.so`
-  tornano raggiungibili); circa 115 KB senza pila, probabilmente nelle
-  librerie; pochi byte di `magic_api_struct` (TODO).
+- **Pile complete**: le librerie (SDL2, sdl12-compat, glib) sono senza
+  frame pointer, e la pila di un blocco perso si ferma a `malloc`. Con
+  `ASAN_OPTIONS=…:fast_unwind_on_malloc=0:malloc_context_size=12` la
+  pila è completa, ma tutto è molto più lento: dare più tempo prima di
+  Esci e dopo Sì (in un tentativo il programma non ha fatto in tempo a
+  uscire, e senza uscita non c'è rapporto). Per sapere se è uscito da sé:
+  `current_id.txt` nella cartella di salvataggio viene scritto solo alla
+  chiusura normale.
+- **Leak che restano** (2026-10-31, sessione con Testo, Apri, Nuovo,
+  selettore colore, Esci): 432 byte in 4 blocchi senza pila, nelle
+  librerie. Erano 3,46 MB, quasi tutti di Tux Paint e a ogni uso.
+- **Cestino su un altro filesystem**: `/tmp` e `/home` sono partizioni
+  diverse, quindi `TP_TEST_XDG=/tmp/… erase.sh OUT BIN 1 yes` costringe
+  `trash()` a copiare invece di rinominare.
 - **Senza finestra**: `SDL_VIDEODRIVER=dummy` fa partire Tux Paint senza
   aprire nulla. Basta per i crash all'avvio, non per cliccare: senza
   input non si può nemmeno farlo uscire in modo pulito (SIGTERM apre la
@@ -550,15 +561,13 @@ cartella temporanea.
 
 1. Provare a mano la voce "Schermo intero" del lanciatore (clic destro
    sull'icona di Tux Paint) e Alt+Invio; poi unire in `master` con
-   avanzamento rapido a `quality/fixme`, che contiene anche
-   `feature/fullscreen`.
+   avanzamento rapido a `quality/warnings`, che contiene `quality/fixme`
+   e `feature/fullscreen`.
 2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
-3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
-   possibile all'apertura di un disegno salvato.
-4. Gli altri difetti segnalati dai warning (`TODO.md`, "Qualità del
-   codice").
-5. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
+3. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
+   parte, magari partendo dall'unione dei tre dialoghi gemelli.
+4. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
    lavoro grafico, cioè disegnare immagini nuove.
 
 ---
@@ -1302,3 +1311,48 @@ Verifiche:
 
 Da fare: unire in `master` (con `feature/fullscreen`); la suddivisione di
 `src/tuxpaint.c` e i leak dei plugin restano nel TODO.
+
+### 2026-10-31 — Qualità del codice: build senza warning, leak
+
+Richiesta dell'utente: continuare con la qualità del codice. Fatta la
+sezione dei warning e chiuse due voci P3 dei FIXME (leak dei plugin,
+`magic_api_struct`). Branch `quality/warnings`, da `quality/fixme`.
+
+Metodo: ogni warning guardato nel contesto, non solo zittito. Su 96, una
+decina erano difetti veri; il resto codice inutilizzato o formati. Per i
+leak: sessioni AddressSanitizer chiuse con Esci, poi con le pile complete
+(`fast_unwind_on_malloc=0`) per vedere chi alloca dentro le librerie.
+
+Difetti trovati, oltre a quelli dei warning (dettagli in ASIS):
+- `load_embedded_data()`: oltre al doppio `free` del TODO, il blocco
+  dello sfondo cercato col nome sbagliato, lo sfondo non assegnato nel
+  caso comune (dimensione uguale alla tela), le maschere blu/verde
+  scambiate. Con il doppio `free` erano quattro difetti nella stessa
+  funzione.
+- `trash()`: `mkdir(…, 0x777)` (esadecimale) e la copia a blocchi interi:
+  con il Cestino su un altro filesystem il disegno cancellato andava
+  perso del tutto.
+- Leak a ogni uso: la finestra Apri perdeva una tela intera a ogni
+  disegno aperto senza blocchi propri; il selettore colore uno schermo
+  intero a ogni uso; i tre dialoghi il loro elenco di file.
+- Piega: una superficie grande quanto la tela persa a ogni piega. Erba:
+  l'immagine di 256×256 mai liberata (erano i ~260 KB "dei plugin").
+
+Verifiche (desktop fermo, con il permesso dell'utente; cinque giri, due
+ripetuti: una volta Tux Paint ha perso il primo piano e lo script si è
+fermato da solo, un'altra il programma, rallentato dalle pile complete,
+non ha fatto in tempo a uscire):
+- `regress.sh` e `dialogs.sh` a 800×600: identici al riferimento.
+- `erase.sh` con risposta Sì e Cestino in `/tmp`: vecchio → cartella
+  `Trash` con modo 1565, disegno perso; nuovo → modi 0700, disegno intero.
+- Disegno da un modello personale, salvato, poi modello tolto, riaperto e
+  gomma: vecchio bianco, nuovo magenta.
+- ASan, stessa sessione (Testo, Apri, Nuovo, selettore colore annullato,
+  Esci): da 3,46 MB in 233 blocchi a 432 byte in 4, nessun errore.
+- Senza finestra: `joystick-buttons-ignore` con un valore fuori
+  intervallo, valido, e con 257 valori.
+- librsvg: confronto pixel per pixel di vecchie e nuove chiamate sui 19
+  SVG installati, a quattro dimensioni; nessuna delle due perde memoria.
+
+Stato alla chiusura: branch attivo `quality/warnings`, installato. Resta
+nel TODO la suddivisione di `src/tuxpaint.c`.
