@@ -699,6 +699,9 @@ static int button_size_wanted = 0;
    get a bigger window */
 static int window_size_given = 0;
 
+/* The desktop's size, from before the window was opened (0 if unknown) */
+static int desktop_w = 0, desktop_h = 0;
+
 /* Scale a size or position from the 48x48-button design to the current size */
 #define SCALED(x) ((int) ((x) * button_scale + 0.5))
 
@@ -1987,6 +1990,69 @@ int file_exists(char * path);
 
 static int bypass_splash_wait;
 
+/* Switch between fullscreen and a window, keeping the same screen surface
+   (the picture and the layout don't change; in fullscreen SDL stretches
+   them to fit the screen) */
+static void toggle_fullscreen(void)
+{
+  /* Fullscreen at the desktop's own size (e.g. "fullscreen=native"): a
+     window that big wouldn't fit, and the window manager would keep it
+     covering the screen anyway, so stay fullscreen */
+  if (fullscreen && desktop_w > 0 &&
+      screen->w >= desktop_w && screen->h >= desktop_h)
+    return;
+
+  if (SDL_WM_ToggleFullScreen(screen))
+  {
+    fullscreen = !fullscreen;
+    SDL_Flip(screen);
+  }
+  else
+  {
+    fprintf(stderr, "\nWarning: Can't switch between fullscreen and window\n"
+	    "The Simple DirectMedia Layer error that occurred was:\n"
+	    "%s\n\n", SDL_GetError());
+  }
+}
+
+/* SDL_PollEvent(), but [Alt]+[Enter] toggles fullscreen here, in every
+   event loop, and never reaches the caller (nor does its key repeat, nor
+   the matching key release) */
+static int poll_event(SDL_Event * event)
+{
+  static int fullscreen_key_down = 0;
+  SDLKey key;
+
+  while (SDL_PollEvent(event))
+  {
+    if (event->type == SDL_KEYDOWN || event->type == SDL_KEYUP)
+    {
+      key = event->key.keysym.sym;
+
+      if (key == SDLK_RETURN || key == SDLK_KP_ENTER)
+      {
+	if (event->type == SDL_KEYDOWN && (event->key.keysym.mod & KMOD_ALT))
+	{
+	  if (!fullscreen_key_down)
+	    toggle_fullscreen();
+
+	  fullscreen_key_down = 1;
+	  continue;
+	}
+	else if (event->type == SDL_KEYUP && fullscreen_key_down)
+	{
+	  fullscreen_key_down = 0;
+	  continue;
+	}
+      }
+    }
+
+    return 1;
+  }
+
+  return 0;
+}
+
 /* Wait for a keypress or mouse click.
    counter is in 1/10 second units */
 static void do_wait(int counter)
@@ -2001,7 +2067,7 @@ static void do_wait(int counter)
 
   do
   {
-    while (SDL_PollEvent(&event))
+    while (poll_event(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -2225,7 +2291,7 @@ static void mainloop(void)
     pre_event_time = SDL_GetTicks();
 
 
-    while (SDL_PollEvent(&event))
+    while (poll_event(&event))
     {
       current_event_time = SDL_GetTicks();
 
@@ -7553,7 +7619,7 @@ int generate_fontconfig_cache_spinner(SDL_Surface * screen)
     SDL_Flip(screen);
     SDL_Delay(20);
 
-    while (SDL_PollEvent(&event) > 0) {
+    while (poll_event(&event) > 0) {
       if (event.type == SDL_QUIT ||
           (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
         printf("Aborting!\n"); fflush(stdout);
@@ -12150,7 +12216,7 @@ static int do_prompt_image_flash_snd(const char *const text,
 
   do
   {
-    while (SDL_PollEvent(&event))
+    while (poll_event(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -14365,7 +14431,7 @@ static int do_open(void)
           update_list = 0;
         }
 
-	while (SDL_PollEvent(&event))
+	while (poll_event(&event))
 	  {
         if (event.type == SDL_QUIT)
         {
@@ -15410,7 +15476,7 @@ static int do_slideshow(void)
 
     /* Was a call to SDL_WaitEvent(&event); before, 
        changed to this while loop in order to get joystick working */
-    while (SDL_PollEvent(&event))
+    while (poll_event(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -15855,7 +15921,7 @@ static void play_slideshow(int * selected, int num_selected, char * dirname,
 
       do
       {
-	while (SDL_PollEvent(&event))
+	while (poll_event(&event))
 	{
 	  if (event.type == SDL_QUIT)
 	  {
@@ -19232,7 +19298,7 @@ static int do_new_dialog(void)
 
     /* Was a call to SDL_WaitEvent(&event); before, 
        changed to this while loop in order to get joystick working */
-    while(SDL_PollEvent(&event))
+    while(poll_event(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -20021,7 +20087,7 @@ static int do_color_picker(void)
 
   do
   {
-    while (SDL_PollEvent(&event))
+    while (poll_event(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -22917,6 +22983,26 @@ static void setup(void)
     SDL_ShowCursor (SDL_DISABLE);
 
 
+  /* SDL tells the desktop's size only until the window is opened */
+
+  {
+    const SDL_VideoInfo *info = SDL_GetVideoInfo();
+
+    if (info != NULL && info->current_w > 0 && info->current_h > 0)
+    {
+      desktop_w = info->current_w;
+      desktop_h = info->current_h;
+    }
+  }
+
+
+  /* Fullscreen with no size asked for: use the screen's own resolution
+     (the interface scales to fit it), rather than stretching 800x600 */
+
+  if (fullscreen && !window_size_given && !rotate_orientation)
+    native_screensize = 1;
+
+
   /* Deal with orientation rotation option */
 
   if (rotate_orientation)
@@ -22944,8 +23030,11 @@ static void setup(void)
     }
     else
     {
-      WINDOW_WIDTH = 0;
-      WINDOW_HEIGHT = 0;
+      /* The desktop's own size rather than 0x0 ("any"): with sdl12-compat
+         a window made at 0x0 shrinks to 2x2 pixels if it ever leaves
+         fullscreen */
+      WINDOW_WIDTH = desktop_w;
+      WINDOW_HEIGHT = desktop_h;
     }
   }
 
@@ -22954,20 +23043,15 @@ static void setup(void)
      whole multiple of the default size that fits comfortably, so the buttons
      don't end up tiny */
 
-  if (!fullscreen && !window_size_given)
+  if (!fullscreen && !window_size_given && desktop_w > 0)
   {
-    const SDL_VideoInfo *info = SDL_GetVideoInfo();
+    int k = min((desktop_w * 9 / 10) / WINDOW_WIDTH,
+                (desktop_h * 85 / 100) / WINDOW_HEIGHT);
 
-    if (info != NULL && info->current_w > 0 && info->current_h > 0)
+    if (k > 1)
     {
-      int k = min((info->current_w * 9 / 10) / WINDOW_WIDTH,
-                  (info->current_h * 85 / 100) / WINDOW_HEIGHT);
-
-      if (k > 1)
-      {
-        WINDOW_WIDTH *= k;
-        WINDOW_HEIGHT *= k;
-      }
+      WINDOW_WIDTH *= k;
+      WINDOW_HEIGHT *= k;
     }
   }
 

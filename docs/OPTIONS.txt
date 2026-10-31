@@ -84,10 +84,18 @@ Windows Users
 
        fullscreen=yes
                Run the program in full screen mode, rather than in a window.
+               If no "windowsize" is given, the screen's current resolution
+               is used, as with "fullscreen=native".
 
        fullscreen=native
                Run the program in full screen mode. Additionally, assume the
                screen's current resolution (set by the operating system).
+
+               While Tux Paint is running, [Alt]+[Enter] switches between
+               full screen and a window. The layout doesn't change: in full
+               screen the window's picture is stretched to fit the screen.
+               If Tux Paint was started in full screen at the screen's own
+               resolution, it stays in full screen.
 
        windowsize=SIZE
 

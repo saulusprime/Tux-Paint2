@@ -114,6 +114,7 @@ Exec=tuxpaint
 Icon=tuxpaint
 Terminal=false
 Categories=Education;Art;
+Actions=fullscreen;
 GenericName=Drawing program
 GenericName[ach]=Purugram me goc
 GenericName[af]=Tekenprogram
@@ -337,3 +338,12 @@ Comment[zam]=Diif program paar keé men Dibuj paar biét biss
 Comment[zh_CN]=孩子的绘图程序。
 Comment[zh_TW]=適合兒童的畫圖程式
 Comment[zu]=Iprogremu yokudweba yezingane.
+
+[Desktop Action fullscreen]
+Name=Full screen
+Name[ca]=Pantalla completa
+Name[de]=Vollbild
+Name[es]=Pantalla completa
+Name[fr]=Plein écran
+Name[it]=Schermo intero
+Exec=tuxpaint --fullscreen=native

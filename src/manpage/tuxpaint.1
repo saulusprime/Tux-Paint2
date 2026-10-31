@@ -256,6 +256,12 @@ configuration files. (See below.)
 .TP 8
 .B \-\-fullscreen \-\-windowed
 Run \fITux Paint\fP in full-screen mode, or in a window (default).
+Without a window size (\-\-WIDTHxHEIGHT), full-screen mode uses the
+screen's current resolution, as with \-\-native.
+While \fITux Paint\fP is running, [Alt]+[Enter] switches between full
+screen and a window; the layout doesn't change, so in full screen the
+picture is stretched to fit.  If \fITux Paint\fP was started in full screen
+at the screen's own resolution, it stays in full screen.
 
 .TP 8
 .B \-\-allowscreensaver \-\-disablescreensaver

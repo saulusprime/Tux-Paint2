@@ -121,12 +121,20 @@ New Breed Software</p>
   <dt><code><b>fullscreen=yes</b></code></dt>
   <dd>
     Run the program in full screen mode, rather than in a window.
+    If no "<code>windowsize</code>" is given, the screen's current
+    resolution is used, as with "<code>fullscreen=native</code>".
   </dd>
 
   <dt><code><b>fullscreen=native</b></code></dt>
   <dd>
-    Run the program in full screen mode. Additionally, assume the
-    screen's current resolution (set by the operating system).
+    <p>Run the program in full screen mode. Additionally, assume the
+    screen's current resolution (set by the operating system).</p>
+
+    <p>While Tux Paint is running, <b>[Alt]+[Enter]</b> switches between
+    full screen and a window. The layout doesn't change: in full screen
+    the window's picture is stretched to fit the screen. If Tux Paint was
+    started in full screen at the screen's own resolution, it stays in
+    full screen.</p>
   </dd>
 
   <dt><code><b>windowsize=<i>SIZE</i></b></code></dt>

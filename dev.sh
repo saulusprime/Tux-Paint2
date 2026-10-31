@@ -55,8 +55,10 @@ do_build() {
 do_install() {
   do_build
   make "${MAKE_VARS[@]}" install
-  # The stock launcher runs "tuxpaint" from $PATH, which may lack $PREFIX/bin
-  sed -i "s|^Exec=tuxpaint\$|Exec=$PREFIX/bin/tuxpaint|" \
+  # The stock launcher (and its "Full screen" action) runs "tuxpaint" from
+  # $PATH, which may lack $PREFIX/bin
+  sed -i -e "s|^Exec=tuxpaint\$|Exec=$PREFIX/bin/tuxpaint|" \
+    -e "s|^Exec=tuxpaint |Exec=$PREFIX/bin/tuxpaint |" \
     "$PREFIX/share/applications/tuxpaint.desktop"
 }
 
