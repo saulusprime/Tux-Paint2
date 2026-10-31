@@ -198,7 +198,7 @@ void loadfont_callback(SDL_Surface * screen, const char *restrict const dir,
 	  user_font_styles[num_font_styles]->score += charset_works(font, gettext(",.?!"));
 
 	  // uncommon punctuation (e.g., '@', '#', '*', etc.)
-	  user_font_styles[num_font_styles]->score += charset_works(font, gettext("`\%_@$~#{<(^&*"));
+	  user_font_styles[num_font_styles]->score += charset_works(font, gettext("`\\%_@$~#{<(^&*"));
 
 	  // digits (e.g., '0', '1' and '7')
 	  user_font_styles[num_font_styles]->score += charset_works(font, gettext("017"));
