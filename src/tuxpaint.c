@@ -24110,13 +24110,18 @@ static int trash(char * path) {
 #ifdef UNLINK_ONLY
   return(unlink(path));
 #else
-  char fname[MAX_PATH], trashpath[MAX_PATH],
-       dest[MAX_PATH], infoname[MAX_PATH],
+/* (Paths were built with sprintf() into 256-byte buffers, from
+   $XDG_DATA_HOME or $HOME, which can be longer) */
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+  char fname[MAX_PATH], trashpath[PATH_MAX],
+       dest[PATH_MAX + MAX_PATH + 16], infoname[PATH_MAX + MAX_PATH + 16],
        bname[MAX_PATH], ext[MAX_PATH];
   char deldate[32];
   struct tm tim;
   time_t now;
-  int cnt;
+  int cnt, n;	/* (n: length of trashpath) */
   FILE * fi, * fo;
   unsigned char buf[1024];
   size_t len;
@@ -24143,21 +24148,28 @@ static int trash(char * path) {
   /* Move file into Trash folder */
 
   if (getenv("XDG_DATA_HOME") != NULL) {
-    sprintf(trashpath, "%s/Trash", getenv("XDG_DATA_HOME"));
+    n = snprintf(trashpath, sizeof(trashpath), "%s/Trash", getenv("XDG_DATA_HOME"));
   } else if (getenv("HOME") != NULL) {
-    sprintf(trashpath, "%s/.local/share/Trash", getenv("HOME"));
+    n = snprintf(trashpath, sizeof(trashpath), "%s/.local/share/Trash", getenv("HOME"));
   } else {
     debug("Can't move to trash! Deleting instead.");
     return(unlink(path));
   }
 
-  mkdir(trashpath, 0x777);
-  sprintf(dest, "%s/files", trashpath);
-  mkdir(dest, 0x777);
-  sprintf(dest, "%s/info", trashpath);
-  mkdir(dest, 0x777);
+  if (n < 0 || n >= (int) sizeof(trashpath)) {
+    debug("Trash path too long! Deleting instead.");
+    return(unlink(path));
+  }
 
-  sprintf(dest, "%s/files/%s", trashpath, fname);
+  /* (0700, as the Trash specification says; this was 0x777, i.e. odd
+     modes with no write permission, when it had to create them) */
+  mkdir(trashpath, 0700);
+  snprintf(dest, sizeof(dest), "%s/files", trashpath);
+  mkdir(dest, 0700);
+  snprintf(dest, sizeof(dest), "%s/info", trashpath);
+  mkdir(dest, 0700);
+
+  snprintf(dest, sizeof(dest), "%s/files/%s", trashpath, fname);
 
   strcpy(bname, fname);
   if (strstr(bname, ".") != NULL) {
@@ -24168,14 +24180,14 @@ static int trash(char * path) {
     return(unlink(path));
   }
 
-  sprintf(infoname, "%s/info/%s.trashinfo", trashpath, fname);
+  snprintf(infoname, sizeof(infoname), "%s/info/%s.trashinfo", trashpath, fname);
 
   cnt = 1;
   while (file_exists(dest) && cnt < 100) {
-    sprintf(fname, "%s_%d.%s", bname, cnt, ext);
+    snprintf(fname, sizeof(fname), "%s_%d.%s", bname, cnt, ext);
 
-    sprintf(dest, "%s/files/%s", trashpath, fname);
-    sprintf(infoname, "%s/info/%s.trashinfo", trashpath, fname);
+    snprintf(dest, sizeof(dest), "%s/files/%s", trashpath, fname);
+    snprintf(infoname, sizeof(infoname), "%s/info/%s.trashinfo", trashpath, fname);
     cnt++;
   }
 
@@ -24200,11 +24212,10 @@ static int trash(char * path) {
       fclose(fi);
       return(unlink(path));
     }
-    while (!feof(fi)) {
-      len = fread(buf, sizeof(buf), 1, fi);
-      if (len > 0) {
-        fwrite(buf, sizeof(buf), 1, fo);
-      }
+    /* (Byte counts: this read and wrote whole 1024-byte blocks only, and
+       lost the end of the file) */
+    while ((len = fread(buf, 1, sizeof(buf), fi)) > 0) {
+      fwrite(buf, 1, len, fo);
     }
     fclose(fi);
     fclose(fo);
