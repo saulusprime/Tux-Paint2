@@ -15069,6 +15069,7 @@ static int do_open(void)
     free(d_names);
     free(d_exts);
     free(d_places);
+    free(fs);	/* (was leaked every time) */
 
 
     if (slideshow)
@@ -15864,6 +15865,7 @@ static int do_slideshow(void)
   free(d_names);
   free(d_exts);
   free(selected);
+  free(fs);	/* (was leaked every time) */
 
 
   return go_back;
@@ -18166,7 +18168,7 @@ static void load_magic_plugins(void)
   struct dirent *f;
   char fname[512];
   char objname[512];
-  char funcname[512];
+  char funcname[sizeof(objname) + 32];	/* (objname + "_get_description" etc.) */
 
   num_plugin_files = 0;
   num_magics = 0;
@@ -19899,7 +19901,11 @@ static int do_new_dialog(void)
       if (which == NUM_COLORS - 1)
       {
         if (do_color_picker() == 0)
-	  return(0);
+        {
+          /* (Clean up below; this returned at once, leaking it all) */
+          which = -1;
+          goto cleanup_and_return;
+        }
       }
 
       /* FIXME: Don't do anything and go back to Open dialog if they
@@ -19949,6 +19955,7 @@ static int do_new_dialog(void)
 
   /* Clean up: */
 
+cleanup_and_return:
   free_surface_array(thumbs, num_files);
 
   free(thumbs);
@@ -19968,6 +19975,7 @@ static int do_new_dialog(void)
   free(d_names);
   free(d_exts);
   free(d_places);
+  free(fs);	/* (was leaked every time) */
 
   return(which != -1);
 }
@@ -24265,7 +24273,10 @@ static int trash(char * path) {
 
   cnt = 1;
   while (file_exists(dest) && cnt < 100) {
-    snprintf(fname, sizeof(fname), "%s_%d.%s", bname, cnt, ext);
+    if (snprintf(fname, sizeof(fname), "%s_%d.%s", bname, cnt, ext) >= (int) sizeof(fname)) {
+      debug("Numbered name too long! Deleting instead.");
+      return(unlink(path));
+    }
 
     snprintf(dest, sizeof(dest), "%s/files/%s", trashpath, fname);
     snprintf(infoname, sizeof(infoname), "%s/info/%s.trashinfo", trashpath, fname);
