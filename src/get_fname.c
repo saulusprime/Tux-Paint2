@@ -51,11 +51,11 @@
 const char *savedir;
 const char *datadir;
 
-// FIXME: We shouldn't be allocating memory all the time.
-//        There should be distinct functions for each directory.
-//        There should be distinct functions for each thread,
-//        for caller-provided space, and maybe callee strdup.
-//        That's at most 4 functions per Tux Paint thread.
+/* Returns a newly allocated path, which the caller must free().
+   (A FIXME here wished for no allocations, with distinct functions per
+   directory and thread.  There are only ~30 callers, at startup, in dialogs
+   and when saving or opening, never in a drawing loop, so the cost doesn't
+   matter; kept as is.) */
 
 char *get_fname(const char *const name, int kind)
 {

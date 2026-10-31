@@ -11666,7 +11666,7 @@ static void load_template(char *img_id)
   if (template_personal == 0)
     dirname = strdup(DATA_PREFIX "templates");
   else
-    dirname = get_fname("templates", DIR_SAVE);
+    dirname = get_fname("templates", DIR_DATA);	/* (where do_new_dialog() lists them; was DIR_SAVE) */
 
   /* Clear them to NULL first: */
   img_starter = NULL;

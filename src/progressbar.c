@@ -71,6 +71,9 @@ void show_progress_bar(SDL_Surface * screen)
   oldtime = newtime;
 
 
-  /* FIXME: RESURRECT THIS (bjk 2006.02.18) */
-  //eat_sdl_events();
+  /* (A FIXME here asked to bring back eat_sdl_events(), off since 2006.
+     It stays off: this is called from dialogs and Magic tools too, not only
+     at startup, and that function quit at once when the window was closed,
+     without offering to save, and threw away clicks and keys meant for
+     them.) */
 }
