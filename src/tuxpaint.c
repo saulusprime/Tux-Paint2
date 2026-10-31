@@ -1300,13 +1300,15 @@ typedef struct magic_s {
 } magic_t;
 
 
-/* FIXME: Drop the 512 constants :^P */
+/* (These arrays grow as plugins load; see grow_magic_arrays()) */
 
 static int num_plugin_files;	/* How many shared object files we went through */
-static void * magic_handle[512];	/* Handle to shared object (to be unloaded later) */ /* FIXME: Unload them! */
-static magic_funcs_t magic_funcs[512];	/* Pointer to shared objects' functions */
+static int max_plugin_files;	/* Room in magic_handle[] and magic_funcs[] */
+static void ** magic_handle;	/* Handle to shared object (unloaded in cleanup()) */
+static magic_funcs_t * magic_funcs;	/* Pointer to shared objects' functions */
 
-static magic_t magics[512];
+static magic_t * magics;
+static int max_magics;	/* Room in magics[] */
 static int num_magics;	/* How many magic tools were loaded (note: shared objs may report more than 1 tool) */
 
 enum {
@@ -12615,7 +12617,10 @@ static void cleanup(void)
 #endif
 
   for (i = 0; i < num_plugin_files; i++)
+  {
     magic_funcs[i].shutdown(magic_api_struct);
+    SDL_UnloadObject(magic_handle[i]);
+  }
 
   free_cursor(&cursor_hand);
   free_cursor(&cursor_arrow);
@@ -18043,6 +18048,45 @@ static SDL_Surface * load_kpx(const char * file)
 }
 
 
+/* Make room for one more plugin file, and for 'tools' more Magic tools
+   (new entries are zeroed, as the fixed-size arrays used to be) */
+
+static void grow_magic_arrays(int tools)
+{
+  int old;
+
+  if (num_plugin_files >= max_plugin_files)
+  {
+    old = max_plugin_files;
+    max_plugin_files = max_plugin_files * 2 + 16;
+    magic_handle = realloc(magic_handle, max_plugin_files * sizeof *magic_handle);
+    magic_funcs = realloc(magic_funcs, max_plugin_files * sizeof *magic_funcs);
+
+    if (magic_handle != NULL && magic_funcs != NULL)
+    {
+      memset(magic_handle + old, 0, (max_plugin_files - old) * sizeof *magic_handle);
+      memset(magic_funcs + old, 0, (max_plugin_files - old) * sizeof *magic_funcs);
+    }
+  }
+
+  if (magics == NULL || num_magics + tools > max_magics)
+  {
+    old = max_magics;
+    max_magics = (num_magics + tools) * 2 + 16;
+    magics = realloc(magics, max_magics * sizeof *magics);
+
+    if (magics != NULL)
+      memset(magics + old, 0, (max_magics - old) * sizeof *magics);
+  }
+
+  if (magic_handle == NULL || magic_funcs == NULL || magics == NULL)
+  {
+    fprintf(stderr, "\nError: Out of memory while loading the Magic tools\n");
+    exit(1);
+  }
+}
+
+
 static void load_magic_plugins(void)
 {
   int res, n, i, plc;
@@ -18056,6 +18100,7 @@ static void load_magic_plugins(void)
 
   num_plugin_files = 0;
   num_magics = 0;
+  grow_magic_arrays(0);
 
   for (plc = 0; plc < NUM_MAGIC_PLACES; plc++)
   {
@@ -18132,9 +18177,11 @@ static void load_magic_plugins(void)
                extension: */
 
 	    strcpy(objname, f->d_name);
-            strcpy(strchr(objname, '.'), "");
+            if (strchr(objname, '.') != NULL)	/* (A file without one used to crash us) */
+              *strchr(objname, '.') = '\0';
 
 
+            grow_magic_arrays(0);
 	    magic_handle[num_plugin_files] = SDL_LoadObject(fname);
 	  
             if (magic_handle[num_plugin_files] != NULL)
@@ -18378,6 +18425,8 @@ static void load_magic_plugins(void)
                 else
                 {
                   int j;
+
+                  grow_magic_arrays(n);
 
 		  for (i = 0; i < n; i++)
 		  {
