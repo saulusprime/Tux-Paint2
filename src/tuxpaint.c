@@ -12640,6 +12640,14 @@ static void cleanup(void)
     SDL_UnloadObject(magic_handle[i]);
   }
 
+  if (magic_api_struct != NULL)
+  {
+    free(magic_api_struct->tp_version);
+    free(magic_api_struct->data_directory);
+    free(magic_api_struct);
+    magic_api_struct = NULL;
+  }
+
   free_cursor(&cursor_hand);
   free_cursor(&cursor_arrow);
   free_cursor(&cursor_watch);
@@ -18181,8 +18189,16 @@ static void load_magic_plugins(void)
     {
       /* Set magic API hooks: */
 
-      magic_api_struct = (magic_api *) malloc(sizeof(magic_api));
-      magic_api_struct->tp_version = strdup(VER_VERSION);
+      /* (One struct for all places, freed in cleanup(); only
+         data_directory changes for each place's plugins.  One used to be
+         allocated per place, and the earlier ones were lost.) */
+      if (magic_api_struct == NULL)
+      {
+        magic_api_struct = (magic_api *) malloc(sizeof(magic_api));
+        magic_api_struct->tp_version = strdup(VER_VERSION);
+      }
+      else
+        free(magic_api_struct->data_directory);
 
       if (plc == MAGIC_PLACE_GLOBAL)
         magic_api_struct->data_directory = strdup(DATA_PREFIX);
@@ -18544,6 +18560,8 @@ static void load_magic_plugins(void)
 
       closedir(d);
     }
+
+    free(place);	/* (was leaked) */
   }
 
 
