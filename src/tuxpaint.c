@@ -11464,9 +11464,9 @@ static void load_starter_id(char *saved_id, FILE *fil)
 
 static SDL_Surface * load_starter_helper(char * path_and_basename, const char * extension, SDL_Surface * (*load_func)(const char *)) {
   char * ext;
-  char fname[256];
+  char fname[512];	/* (path_and_basename has up to 255 characters, plus ".ext") */
   SDL_Surface * surf;
-  int i;
+  size_t i;
 
   ext = strdup(extension);
   snprintf(fname, sizeof(fname), "%s.%s", path_and_basename, ext);
@@ -11489,7 +11489,7 @@ static SDL_Surface * load_starter_helper(char * path_and_basename, const char * 
 static void load_starter(char *img_id)
 {
   char *dirname;
-  char fname[256];
+  char fname[256], fname_back[256];
   SDL_Surface *tmp_surf;
 
   /* Determine path to starter files: */
@@ -11502,6 +11502,16 @@ static void load_starter(char *img_id)
   /* Clear them to NULL first: */
   img_starter = NULL;
   img_starter_bkgd = NULL;
+
+  /* Paths to try with each extension (these were rebuilt for each one,
+     and cut short without notice if too long) */
+  if (snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id) >= (int) sizeof(fname) ||
+      snprintf(fname_back, sizeof(fname_back), "%s/%s-back", dirname, img_id) >= (int) sizeof(fname_back))
+  {
+    fprintf(stderr, "Starter path too long: %s/%s\n", dirname, img_id);
+    free(dirname);
+    return;
+  }
 
   /* Load the core image: */
   tmp_surf = NULL;
@@ -11544,30 +11554,26 @@ static void load_starter(char *img_id)
   /* (Try SVG) */
   if (tmp_surf == NULL)
   {
-    snprintf(fname, sizeof(fname), "%s/%s-back", dirname, img_id);
-    tmp_surf = load_starter_helper(fname, "svg", &load_svg);
+    tmp_surf = load_starter_helper(fname_back, "svg", &load_svg);
   }
 #endif
 
   /* (JPEG) */
   if (tmp_surf == NULL)
   {
-    snprintf(fname, sizeof(fname), "%s/%s-back", dirname, img_id);
-    tmp_surf = load_starter_helper(fname, "jpeg", &IMG_Load);
+    tmp_surf = load_starter_helper(fname_back, "jpeg", &IMG_Load);
   }
 
   if (tmp_surf == NULL)
   {
     /* (Then just JPG) */
-    snprintf(fname, sizeof(fname), "%s/%s-back", dirname, img_id);
-    tmp_surf = load_starter_helper(fname, "jpg", &IMG_Load);
+    tmp_surf = load_starter_helper(fname_back, "jpg", &IMG_Load);
   }
 
   /* (Failed? Try PNG next) */
   if (tmp_surf == NULL)
   {
-    snprintf(fname, sizeof(fname), "%s/%s-back", dirname, img_id);
-    tmp_surf = load_starter_helper(fname, "png", &IMG_Load);
+    tmp_surf = load_starter_helper(fname_back, "png", &IMG_Load);
   }
 
   if (tmp_surf != NULL)
@@ -11689,15 +11695,21 @@ static void load_template(char *img_id)
   img_starter = NULL;
   img_starter_bkgd = NULL;
 
+  /* Path to try with each extension (see load_starter()) */
+  if (snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id) >= (int) sizeof(fname))
+  {
+    fprintf(stderr, "Template path too long: %s/%s\n", dirname, img_id);
+    free(dirname);
+    return;
+  }
+
   /* (Try loading a KPX) */
-  snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
   tmp_surf = load_starter_helper(fname, "kpx", &myIMG_Load);
 
 #ifndef NOSVG
   /* (Failed? Try SVG next) */
   if (tmp_surf == NULL) 
   {
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "svg", &load_svg);
   }
 #endif
