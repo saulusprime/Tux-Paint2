@@ -278,7 +278,7 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     stringa non nostra, con overflow oltre 256 pulsanti
     (`joystick-buttons-ignore`, `ed77f9c`); parentesi in
     `handle_active()` e graffe in `handle_keymouse()` (`364af89`);
-    percorsi di Starter e modelli (`d346e60`); una `magic_api` sola e
+    percorsi di Starter e modelli (`d346c78`); una `magic_api` sola e
     percorsi delle cartelle dei plugin liberati (`b7cd9f9`);
   - **librsvg** (`7d499fb`): API non deprecate; i 19 SVG installati
     rendono identici al pixel a quattro dimensioni;
