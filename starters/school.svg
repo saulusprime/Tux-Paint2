@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="608" height="472" viewBox="0 0 608 472">
+<title>School building</title>
+<!-- Made for this fork of Tux Paint (devtools/content/school_svgs.py), 2026. GNU GPL v2 or later, like Tux Paint. -->
+<g fill="none" stroke="#000000" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="150" y="190" width="308" height="240"/>
+<rect x="40" y="250" width="110" height="180"/>
+<rect x="458" y="250" width="110" height="180"/>
+<path d="M138 190 L304 100 L470 190 Z"/>
+<rect x="32" y="238" width="126" height="12"/>
+<rect x="450" y="238" width="126" height="12"/>
+<circle cx="304" cy="152" r="26"/>
+<path d="M304 152 V134 M304 152 H318"/>
+<path d="M304 100 V40"/>
+<path d="M304 42 H352 V70 H304"/>
+<path d="M320 42 V70 M336 42 V70"/>
+<rect x="172" y="214" width="40" height="52"/>
+<path d="M192 214 V266 M172 236 H212"/>
+<rect x="236" y="214" width="40" height="52"/>
+<path d="M256 214 V266 M236 236 H276"/>
+<rect x="332" y="214" width="40" height="52"/>
+<path d="M352 214 V266 M332 236 H372"/>
+<rect x="396" y="214" width="40" height="52"/>
+<path d="M416 214 V266 M396 236 H436"/>
+<rect x="172" y="300" width="40" height="52"/>
+<path d="M192 300 V352 M172 322 H212"/>
+<rect x="396" y="300" width="40" height="52"/>
+<path d="M416 300 V352 M396 322 H436"/>
+<path d="M262 414 V318 A42 42 0 0 1 346 318 V414"/>
+<path d="M304 414 V276"/>
+<circle cx="294" cy="372" r="3"/><circle cx="314" cy="372" r="3"/>
+<rect x="248" y="414" width="112" height="8"/>
+<rect x="236" y="422" width="136" height="8"/>
+<rect x="62" y="276" width="24" height="40"/>
+<rect x="62" y="346" width="24" height="40"/>
+<rect x="106" y="276" width="24" height="40"/>
+<rect x="106" y="346" width="24" height="40"/>
+<rect x="480" y="276" width="24" height="40"/>
+<rect x="480" y="346" width="24" height="40"/>
+<rect x="524" y="276" width="24" height="40"/>
+<rect x="524" y="346" width="24" height="40"/>
+<path d="M0 430 H608"/>
+<circle cx="66" cy="70" r="30"/>
+<path d="M106.0 70.0 L120.0 70.0 M94.3 98.3 L104.2 108.2 M66.0 110.0 L66.0 124.0 M37.7 98.3 L27.8 108.2 M26.0 70.0 L12.0 70.0 M37.7 41.7 L27.8 31.8 M66.0 30.0 L66.0 16.0 M94.3 41.7 L104.2 31.8"/>
+<path d="M420 58 a18 18 0 0 1 30 -14 a22 22 0 0 1 40 6 a16 16 0 0 1 6 30 H422 a12 12 0 0 1 -2 -22 Z"/>
+<path d="M494 122 a18 18 0 0 1 30 -14 a22 22 0 0 1 40 6 a16 16 0 0 1 6 30 H496 a12 12 0 0 1 -2 -22 Z"/>
+</g>
+</svg>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="608" height="472" viewBox="0 0 608 472">
+<title>Music manuscript paper</title>
+<!-- Made for this fork of Tux Paint (devtools/content/school_svgs.py), 2026. GNU GPL v2 or later, like Tux Paint. -->
+<rect width="608" height="472" fill="#fdfdfa"/>
+<path d="M32 40H576 M32 48H576 M32 56H576 M32 64H576 M32 72H576 M32 110H576 M32 118H576 M32 126H576 M32 134H576 M32 142H576 M32 180H576 M32 188H576 M32 196H576 M32 204H576 M32 212H576 M32 250H576 M32 258H576 M32 266H576 M32 274H576 M32 282H576 M32 320H576 M32 328H576 M32 336H576 M32 344H576 M32 352H576 M32 390H576 M32 398H576 M32 406H576 M32 414H576 M32 422H576" stroke="#3a3a3a" stroke-width="1" fill="none"/>
+<path d="M32 40V72M576 40V72 M32 110V142M576 110V142 M32 180V212M576 180V212 M32 250V282M576 250V282 M32 320V352M576 320V352 M32 390V422M576 390V422" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>
+</svg>

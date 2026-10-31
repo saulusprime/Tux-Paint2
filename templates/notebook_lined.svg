@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="608" height="472" viewBox="0 0 608 472">
+<title>Lined notebook paper</title>
+<!-- Made for this fork of Tux Paint (devtools/content/school_svgs.py), 2026. GNU GPL v2 or later, like Tux Paint. -->
+<rect width="608" height="472" fill="#fdfdfa"/>
+<path d="M0 56H608 M0 80H608 M0 104H608 M0 128H608 M0 152H608 M0 176H608 M0 200H608 M0 224H608 M0 248H608 M0 272H608 M0 296H608 M0 320H608 M0 344H608 M0 368H608 M0 392H608 M0 416H608 M0 440H608" stroke="#93b4dc" stroke-width="1" fill="none"/>
+<path d="M64 0V472" stroke="#e07a7a" stroke-width="1.4" fill="none"/>
+</svg>
