@@ -500,6 +500,43 @@ static void mtw(wchar_t * wtok, char * tok)
 #include "colors.h"
 #include "shapes.h"
 #include "sounds.h"
+
+#ifndef NOSOUND
+/* Sound file filenames: */
+
+static const char *sound_fnames[NUM_SOUNDS] = {
+  DATA_PREFIX "sounds/harp.wav",
+  DATA_PREFIX "sounds/click.wav",
+  DATA_PREFIX "sounds/bleep.wav",
+  DATA_PREFIX "sounds/bubble.wav",
+  DATA_PREFIX "sounds/stamp.wav",
+  DATA_PREFIX "sounds/line_start.wav",
+  DATA_PREFIX "sounds/line_end.wav",
+  DATA_PREFIX "sounds/scroll.wav",
+  DATA_PREFIX "sounds/paint1.wav",
+  DATA_PREFIX "sounds/paint2.wav",
+  DATA_PREFIX "sounds/paint3.wav",
+  DATA_PREFIX "sounds/paint4.wav",
+  DATA_PREFIX "sounds/eraser1.wav",
+  DATA_PREFIX "sounds/eraser2.wav",
+  DATA_PREFIX "sounds/save.wav",
+  DATA_PREFIX "sounds/prompt.wav",
+  DATA_PREFIX "sounds/flip.wav",
+  DATA_PREFIX "sounds/mirror.wav",
+  DATA_PREFIX "sounds/keyclick.wav",
+  DATA_PREFIX "sounds/typewriterbell.wav",
+  DATA_PREFIX "sounds/return.wav",
+  DATA_PREFIX "sounds/shrink.wav",
+  DATA_PREFIX "sounds/grow.wav",
+  DATA_PREFIX "sounds/italic_on.wav",
+  DATA_PREFIX "sounds/italic_off.wav",
+  DATA_PREFIX "sounds/areyousure.wav",
+  DATA_PREFIX "sounds/youcannot.wav",
+  DATA_PREFIX "sounds/tuxok.wav",
+  DATA_PREFIX "sounds/thick.wav",
+  DATA_PREFIX "sounds/thin.wav"
+};
+#endif
 #include "tip_tux.h"
 #include "great.h"
 
@@ -650,18 +687,6 @@ static void debug(const char *const str)
   fflush(stderr);
 #endif
 }
-
-static const char *getfilename(const char *path)
-{
-  char *p;
-
-  if ((p = strrchr(path, '\\')) != NULL)
-    return p + 1;
-  if ((p = strrchr(path, '/')) != NULL)
-    return p + 1;
-  return path;
-}
-
 
 /* sizing */
 
@@ -1816,7 +1841,6 @@ static void rect_xor(int x1, int y1, int x2, int y2);
 static void draw_blinking_cursor(void);
 static void hide_blinking_cursor(void);
 
-static void reset_brush_counter_and_frame(void);
 static void reset_brush_counter(void);
 
 #ifdef LOW_QUALITY_STAMP_OUTLINE
@@ -1935,7 +1959,6 @@ static void draw_image_title(int t, SDL_Rect dest);
 static void handle_keymouse(SDLKey key, Uint8 updown, int steps, SDL_Rect *area1, SDL_Rect *area2);
 static void handle_keymouse_buttons(SDLKey key, int *whicht, int *whichc, SDL_Rect real_r_tools);
 static void handle_active(SDL_Event * event);
-static char *remove_slash(char *path);
 /*static char *replace_tilde(const char* const path);*/
 #ifdef NO_SDLPANGO
 static void anti_carriage_return(int left, int right, int cur_top,
@@ -1948,7 +1971,6 @@ static SDL_Surface *duplicate_surface(SDL_Surface * orig);
 static void mirror_starter(void);
 static void flip_starter(void);
 static int valid_click(Uint8 button);
-static int in_circle(int x, int y);
 static int in_circle_rad(int x, int y, int rad);
 static int paintsound(int size);
 static void load_magic_plugins(void);
@@ -5654,12 +5676,6 @@ static void brush_draw(int x1, int y1, int x2, int y2, int update)
   }
 }
 
-void reset_brush_counter_and_frame(void)
-{
-  brush_counter = 999;
-  brush_frame = 0;
-}
-
 void reset_brush_counter(void)
 {
   brush_counter = 999;
@@ -7536,7 +7552,7 @@ static void loadstamp_callback(SDL_Surface * screen,
     show_progress_bar(screen);
 
     if (dotext > files[i].str && !strcasecmp(dotext, ext)
-	&& (dotext - files[i].str + 1 + dirlen < sizeof fname)
+	&& ((size_t) (dotext - files[i].str) + 1 + dirlen < sizeof fname)
 	&& !strcasestr(files[i].str, mirror_ext)
 	&& !strcasestr(files[i].str, flip_ext)
 	&& !strcasestr(files[i].str, mirrorflip_ext))
@@ -7621,7 +7637,7 @@ static int load_user_fonts_stub(void *vp)
 #ifndef NO_SDLPANGO
 volatile long fontconfig_thread_done = 0;
 
-int generate_fontconfig_cache_spinner(SDL_Surface * screen)
+static int generate_fontconfig_cache_spinner(SDL_Surface * screen)
 {
   SDL_Event event;
 
@@ -7686,6 +7702,7 @@ static int generate_fontconfig_cache_real(void)
 
 static int generate_fontconfig_cache(void *vp)
 {
+  (void) vp;
   return generate_fontconfig_cache_real();
 }
 #endif
@@ -9471,9 +9488,8 @@ static SDL_Surface *thumbnail2(SDL_Surface * src, int max_x, int max_y,
 #ifndef LOW_QUALITY_THUMBNAILS
 
 #ifdef GAMMA_CORRECTED_THUMBNAILS
-      /* per: http://www.4p8.com/eric.brasseur/gamma.html */
-      float gamma = 2.2;
-      float gamma_invert = 1.0 / gamma;
+      /* per: http://www.4p8.com/eric.brasseur/gamma.html
+         (the sRGB tables below replaced pow() with a 2.2 gamma) */
 #endif
  
       tr = 0;
@@ -11521,21 +11537,18 @@ static void load_starter(char *img_id)
   {
     /* Try loading an SVG */
 
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "svg", &load_svg);
   }
 #endif
 
   if (tmp_surf == NULL)
   {
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "png", &IMG_Load);
   }
 
   if (tmp_surf == NULL)
   {
     /* Try loading a KPX */
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "kpx", &myIMG_Load);
   }
     
@@ -11717,20 +11730,17 @@ static void load_template(char *img_id)
   /* (JPEG) */
   if (tmp_surf == NULL)
   {
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "jpeg", &IMG_Load);
   }
   if (tmp_surf == NULL)
   {
     /* (Then just JPG) */
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "jpg", &IMG_Load);
   }
 
   /* (Failed? Try PNG next) */
   if (tmp_surf == NULL)
   {
-    snprintf(fname, sizeof(fname), "%s/%s", dirname, img_id);
     tmp_surf = load_starter_helper(fname, "png", &IMG_Load);
   }
 
@@ -11988,7 +11998,7 @@ static int do_prompt_image_flash_snd(const char *const text,
   int i;
   SDL_Surface *alpha_surf;
 #endif
-  int img1_w, img2_w, img3_w, max_img_w, img_x, img_y, offset;
+  int img1_w, img2_w, img3_w, max_img_w, img_y, offset;
   SDL_Surface *img1b;
   int img1b_w, img1b_h;
   int free_img1b;
@@ -12172,7 +12182,6 @@ static int do_prompt_image_flash_snd(const char *const text,
 
   /* Draw the images (if any, and if not animated): */
 
-  img_x = img_left;
   img_y = SCALED(100) + PROMPTOFFSETY + SCALED(4);
 
   if (img1b != NULL)
@@ -13322,9 +13331,9 @@ static void set_chunk_data(unsigned char **chunk_data, size_t * chunk_data_len, 
 
   strcat(headers, "Tuxpaint\n");
   strcat(headers, "Tuxpaint_" VER_VERSION "\n");
-  sprintf(line, "%d%s", uncompressed_size, "\n");
+  sprintf(line, "%lu%s", (unsigned long) uncompressed_size, "\n");	/* (size_t, was printed with %d) */
   strcat(headers, line);
-  sprintf(line, "%d%s", dataLen, "\n");
+  sprintf(line, "%lu%s", (unsigned long) dataLen, "\n");
   strcat(headers, line);
 
   headersLen = strlen(headers);
@@ -13379,7 +13388,10 @@ static void do_png_embed_data(png_structp png_ptr)
   unsigned char *chunk_data;
   Bytef *compressed_data;
 
-  char *ldata, *fname;
+  char *ldata;
+#ifdef fmemopen_alternative
+  char *fname;
+#endif
   FILE *lfi;
   int list_ctr = 0;
   Uint32 pix;
@@ -13721,7 +13733,7 @@ static void do_png_embed_data(png_structp png_ptr)
       template_id[0] != '\0' || canvas_color_r != 255 || canvas_color_g != 255 || canvas_color_b != 255)
   {
     /* Usually the .dat data are less than 100 bytes, hope this keeps line and char_stream in the safe side */
-    line = calloc(256, 1);
+    line = calloc(sizeof(template_id) + 16, 1);	/* (room for "T" + template_id + "\n") */
     char_stream = calloc(256 + sizeof(starter_id) + sizeof(template_id) , 1);
 
     sprintf(char_stream, "%s\n", starter_id);
@@ -13732,7 +13744,7 @@ static void do_png_embed_data(png_structp png_ptr)
     sprintf(line, "c%d %d %d\n", canvas_color_r, canvas_color_g, canvas_color_b);
     strcat(char_stream, line);
 
-    sprintf(line, "T%s\n", template_id);
+    snprintf(line, sizeof(template_id) + 16, "T%s\n", template_id);	/* (line had 256 bytes; a long name overflowed it) */
     strcat(char_stream, line);
 
     sprintf(line, "%d\n", template_personal);
@@ -17069,29 +17081,32 @@ static void handle_keymouse(SDLKey key, Uint8 updown, int steps, SDL_Rect *area1
 	      left = max(r1.x + r1.w - 1, oldpos_x - steps);
 	  }
 
-	if(oldpos_x - r1.x < r1.w && oldpos_x > r1.x)
-	{
-	  if(oldpos_y - r1.y < steps)
-	    bottom = min(r1.y + 1, oldpos_y + steps);
-	  else if (oldpos_y - r1.y - r1.h < steps)
-	    up = max(r1.y + r1.h - 1, oldpos_y - steps);
+	  if(oldpos_x - r1.x < r1.w && oldpos_x > r1.x)
+	  {
+	    if(oldpos_y - r1.y < steps)
+	      bottom = min(r1.y + 1, oldpos_y + steps);
+	    else if (oldpos_y - r1.y - r1.h < steps)
+	      up = max(r1.y + r1.h - 1, oldpos_y - steps);
+	  }
 	}
 
-      if (area2)
-	if(oldpos_y - r2.y < r2.h && oldpos_y > r2.y)
+	if (area2)
 	{
-	  if(oldpos_x - r2.x < steps)
-	    right = min(oldpos_x + steps, r2.x + 1);
-	  else if (oldpos_x - r2.x - r2.w < steps)
-	    left = max(r2.x + r2.w - 1, oldpos_x - steps);
-	}
+	  if(oldpos_y - r2.y < r2.h && oldpos_y > r2.y)
+	  {
+	    if(oldpos_x - r2.x < steps)
+	      right = min(oldpos_x + steps, r2.x + 1);
+	    else if (oldpos_x - r2.x - r2.w < steps)
+	      left = max(r2.x + r2.w - 1, oldpos_x - steps);
+	  }
 
-	if(oldpos_x - r2.x < r2.w && oldpos_x > r2.x)
-	{
-	  if(oldpos_y - r2.y < steps)
-	    bottom = min(r2.y + 1, oldpos_y + steps);
-	  else if (oldpos_y - r2.y - r2.h < steps)
-	    up = max(r2.y + r2.h - 1, oldpos_y - steps);
+	  if(oldpos_x - r2.x < r2.w && oldpos_x > r2.x)
+	  {
+	    if(oldpos_y - r2.y < steps)
+	      bottom = min(r2.y + 1, oldpos_y + steps);
+	    else if (oldpos_y - r2.y - r2.h < steps)
+	      up = max(r2.y + r2.h - 1, oldpos_y - steps);
+	  }
 	}
       }
     }
@@ -17328,21 +17343,6 @@ static void handle_active(SDL_Event * event)
 }
 
 
-/* removes a single '\' or '/' from end of path */
-
-static char *remove_slash(char *path)
-{
-  int len = strlen(path);
-
-  if (!len)
-    return path;
-
-  if (path[len - 1] == '/' || path[len - 1] == '\\')
-    path[len - 1] = 0;
-
-  return path;
-}
-
 /* replace '~' at the beginning of a path with home directory */
 /*
 static char *replace_tilde(const char* const path)
@@ -17566,14 +17566,6 @@ static int valid_click(Uint8 button)
     return (0);
 }
 
-
-static int in_circle(int x, int y)
-{
-  if ((x * x) + (y * y) - (16 * 16) < 0)
-    return (1);
-  else
-    return (0);
-}
 
 static int in_circle_rad(int x, int y, int rad)
 {
@@ -20917,6 +20909,8 @@ static void derender_node(struct label_node** ref_head)
 {
   SDL_Rect r_tmp_derender;
 
+  (void) ref_head;
+
   r_tmp_derender.w = label->w;
   r_tmp_derender.h = label->h;
   r_tmp_derender.x = 0;
@@ -21008,7 +21002,7 @@ static void load_info_about_label_surface(FILE * lfi)
     float new_to_old_ratio;
     int old_pos;
     int new_pos;
-    int x, y, pix_size;
+    int x, y;
     Uint8 a;
   
     /* Clear label surface */
@@ -21696,7 +21690,7 @@ void load_embedded_data(char *fname, SDL_Surface * org_surf)
 /* First we search for the things that usually were in the .dat file, so if a starter or a template is found and if it is not modified, we can load it clean (i.e. not rebluring a blured when scaled one)*/
       for (u = 0; u < num_unknowns; u++)
       {
-	printf("%s, %d\n", unknowns[u].name, unknowns[u].size);
+	printf("%s, %lu\n", unknowns[u].name, (unsigned long) unknowns[u].size);
 
 	if (chunk_is_valid("tpDT", unknowns[u]))
 	{
@@ -22934,7 +22928,7 @@ static void do_lock_file(void)
   free(lock_fname);
 }
 
-int TP_EventFilter(const SDL_Event * event)
+static int TP_EventFilter(const SDL_Event * event)
 {
   if (event->type == SDL_QUIT ||
       event->type == SDL_ACTIVEEVENT ||
@@ -24105,14 +24099,18 @@ static void claim_to_be_ready(void)
 
 int main(int argc, char *argv[])
 {
-  int i;	
+#ifdef DEBUG
+  /* (Start-up timing, only shown when debugging) */
   CLOCK_TYPE time1;
   CLOCK_TYPE time2;
   CLOCK_TYPE time3;
+#endif
 
   (void)argc;
 
+#ifdef DEBUG
   CLOCK_ASM(time1);
+#endif
 
   // do not add code (slowness) here unless required for scanning fonts
   progname = argv[0];
@@ -24131,7 +24129,9 @@ int main(int argc, char *argv[])
   chdir_to_binary(argv[0]);
   setup_config(argv);
 
+#ifdef DEBUG
   CLOCK_ASM(time2);
+#endif
 #ifdef FORKED_FONTS
   // must start ASAP, but depends on locale which in turn needs the config
 #ifdef NO_SDLPANGO
@@ -24162,11 +24162,11 @@ int main(int argc, char *argv[])
   /* Set up! */
   setup();
 
+#ifdef DEBUG
   CLOCK_ASM(time3);
 
-#ifdef DEBUG
   printf("Seconds in early start-up: %.3f\n", (double) (time2 - time1) / CLOCK_SPEED);
-  printf("Seconds in late start-up:  %.3f\n", (double) (time2 - time1) / CLOCK_SPEED);
+  printf("Seconds in late start-up:  %.3f\n", (double) (time3 - time2) / CLOCK_SPEED);	/* (was time2 - time1 again) */
 #endif
 
 
@@ -24212,7 +24212,7 @@ static int trash(char * path) {
 
   /* FIXME: This is Freedesktop.org-centric -bjk 2011.04.16 */
 
-  if (basename(path) == NULL) {
+  if (basename(path) == NULL || strlen(basename(path)) >= sizeof(fname)) {
     debug("Can't get basename! Deleting instead.");
     return(unlink(path));
   }

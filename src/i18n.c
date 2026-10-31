@@ -793,7 +793,6 @@ static int set_current_language(const char *restrict locale_choice) MUST_CHECK;
 static int set_current_language(const char *restrict loc)
 {
   int i;
-  int y_nudge = 0;
   char * oldloc;
   char *env_language;
 

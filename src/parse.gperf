@@ -297,5 +297,5 @@ void parse_one_option(struct cfginfo *restrict tmpcfg, const char *str, const ch
     exit(53);
   }
 
-  memcpy(offset+(char*)tmpcfg, &opt, sizeof(char*));
+  memcpy(offset+(char*)tmpcfg, &opt, sizeof opt);
 }

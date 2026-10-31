@@ -158,24 +158,6 @@ unsigned text_size = 4;		// initial text size
 int button_label_y_nudge;
 
 
-#ifndef NO_SDLPANGO
-static TuxPaint_Font *try_alternate_font(int size)
-{
-  char str[128];
-  char prefix[64];
-  char *p;
-
-  strcpy(prefix, lang_prefix);
-  if ((p = strrchr(prefix, '_')) != NULL)
-  {
-    *p = 0;
-    snprintf(str, sizeof(str), "%sfonts/locale/%s.ttf", DATA_PREFIX, prefix);
-
-    return TuxPaint_Font_OpenFont("", str, size);
-  }
-  return NULL;
-}
-#endif
 
 #ifdef NO_SDLPANGO
 TuxPaint_Font *load_locale_font(TuxPaint_Font * fallback, int size)
@@ -213,21 +195,6 @@ TuxPaint_Font *load_locale_font(TuxPaint_Font * fallback, int size)
     }
 #endif
 
-#ifndef NO_SDLPANGO
-    if (!ret)
-    {
-      ret = try_alternate_font(size);
-      if (!ret)
-      {
-	fprintf(stderr,
-		"\nWarning: Can't load font for this locale:\n"
-		"%s\n"
-		"The Simple DirectMedia Layer error that occurred was:\n"
-		"%s\n\n" "Will use default (American English) instead.\n\n", str, SDL_GetError());
-	button_label_y_nudge = smash_i18n();
-      }
-    }
-#endif
     return ret ? ret : fallback;
   }
 }
@@ -1326,29 +1293,18 @@ TuxPaint_Font *getfonthandle(int desire)
     return NULL;
   }
 
-  if (fi->filename != NULL)
-  {
+  /* (fi->filename is an array, never NULL; an "else" here never ran) */
 #ifdef DEBUG
-    printf("Setting 'name' to fi->filename[%d (0x%x)]\n", (int) text_state, (int) text_state);
-    fflush(stdout);
+  printf("Setting 'name' to fi->filename[%d (0x%x)]\n", (int) text_state, (int) text_state);
+  fflush(stdout);
 #endif
 
-    name = fi->filename[text_state];
+  name = fi->filename[text_state];
 
 #ifdef DEBUG
-    printf("Which is: %s\n", name);
-    fflush(stdout);
+  printf("Which is: %s\n", name);
+  fflush(stdout);
 #endif
-  }
-  else
-  {
-#ifdef DEBUG    //EP fixed typo: replaced DBEUG with DEBUG
-    printf("fi->filename is NULL\n");
-    fflush(stdout);
-#endif
-
-    name = NULL;
-  }
 
   if (fi->handle)
   {
