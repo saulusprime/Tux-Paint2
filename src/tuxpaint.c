@@ -18932,7 +18932,11 @@ static int do_new_dialog(void)
     f = &(fs[j].f);
     place = fs[j].place;
 
-    if ((place == PLACE_PERSONAL_TEMPLATES_DIR || place == PLACE_TEMPLATES_DIR) && oldplace != place)
+    /* (Only at the first templates place: when the system templates came
+       after personal ones, this moved past the personal ones, which were
+       then taken for Starters and never loaded) */
+    if ((place == PLACE_PERSONAL_TEMPLATES_DIR || place == PLACE_TEMPLATES_DIR) &&
+        oldplace != place && first_template == -1)
       first_template = num_files;
 
     oldplace = place;
