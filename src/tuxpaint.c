@@ -22519,19 +22519,25 @@ static void setup_config(char *argv[])
     }
   if(tmpcfg.joystick_buttons_ignore)
     {
-      int i;
-      char * token;
+      char * buttons, * token;
 
-      token = strtok(tmpcfg.joystick_buttons_ignore, ",");
+      /* (strtok() writes into the string, which isn't ours: use a copy) */
+      buttons = strdup(tmpcfg.joystick_buttons_ignore);
+      token = strtok(buttons, ",");
       while (token != NULL) {
         if (strtof(token, NULL) < 0 || strtof(token, NULL) > 254) {
 	  /* FIXME: Find better exit code */
-	  printf("Joystick buttons must be between 0 and 254", tmpcfg.joystick_button_print);
+	  printf("Joystick buttons must be between 0 and 254 (got %s)\n", token);
+	  exit(1);
+        }
+        if (joystick_buttons_ignore_len >= (int) (sizeof joystick_buttons_ignore / sizeof joystick_buttons_ignore[0])) {
+	  printf("Too many joystick buttons to ignore\n");
 	  exit(1);
         }
         joystick_buttons_ignore[joystick_buttons_ignore_len++] = strtof(token, NULL);
         token = strtok(NULL, ",");
       }
+      free(buttons);
     }
 
 
