@@ -227,8 +227,10 @@ static const language_to_locale_struct language_to_locale_array[] = {
   {"american-english", "C"},
   {"acholi", "ach_UG.UTF-8"},
   {"acoli", "ach_UG.UTF-8"},
+  {"afrikaans", "af_ZA.UTF-8"},
   {"akan", "ak_GH.UTF-8"},
   {"twi-fante", "ak_GH.UTF-8"},
+  {"albanian", "sq_AL.UTF-8"},
   {"amharic", "am_ET.UTF-8"},
   {"arabic", "ar_SA.UTF-8"},
   {"aragones", "an_ES.UTF-8"},
@@ -236,138 +238,128 @@ static const language_to_locale_struct language_to_locale_array[] = {
   {"hayeren", "hy_AM.UTF-8"},
   {"assamese", "as_IN.UTF-8"},
   {"asturian", "ast_ES.UTF-8"},
+  {"australian-english", "en_AU.UTF-8"},
   {"azerbaijani", "az_AZ.UTF-8"},
   {"bambara", "bm_ML.UTF-8"},
-  {"bosnian", "bs_BA.UTF-8"},
-  {"croatian", "hr_HR.UTF-8"},
-  {"hrvatski", "hr_HR.UTF-8"},
-  {"catalan", "ca_ES.UTF-8"},
-  {"catala", "ca_ES.UTF-8"},
-  {"valencian", "ca_ES.UTF-8@valencia"},
-  {"valencia", "ca_ES.UTF-8@valencia"},
-  {"kiga", "cgg_UG.UTF-8"},
-  {"chiga", "cgg_UG.UTF-8"},
+  {"basque", "eu_ES.UTF-8"},
+  {"euskara", "eu_ES.UTF-8"},
   {"belarusian", "be_BY.UTF-8"},
   {"bielaruskaja", "be_BY.UTF-8"},
+  {"bokmal", "nb_NO.UTF-8"},
+  {"bosnian", "bs_BA.UTF-8"},
+  {"brazilian", "pt_BR.UTF-8"},
+  {"brazilian-portuguese", "pt_BR.UTF-8"},
+  {"portugues-brazilian", "pt_BR.UTF-8"},
+  {"breton", "br_FR.UTF-8"},
+  {"brezhoneg", "br_FR.UTF-8"},
+  {"british", "en_GB.UTF-8"},
+  {"british-english", "en_GB.UTF-8"},
+  {"bulgarian", "bg_BG.UTF-8"},
+  {"canadian-english", "en_CA.UTF-8"},
+  {"catalan", "ca_ES.UTF-8"},
+  {"catala", "ca_ES.UTF-8"},
+  {"chinese", "zh_CN.UTF-8"},
+  {"simplified-chinese", "zh_CN.UTF-8"},
+  {"traditional-chinese", "zh_TW.UTF-8"},
+  {"croatian", "hr_HR.UTF-8"},
+  {"hrvatski", "hr_HR.UTF-8"},
   {"czech", "cs_CZ.UTF-8"},
   {"cesky", "cs_CZ.UTF-8"},
   {"danish", "da_DK.UTF-8"},
   {"dansk", "da_DK.UTF-8"},
+  {"dutch", "nl_NL.UTF-8"},
+  {"nederlands", "nl_NL.UTF-8"},
+  {"esperanto", "eo.UTF-8"},
+  {"estonian", "et_EE.UTF-8"},
+  {"faroese", "fo_FO.UTF-8"},
+  {"finnish", "fi_FI.UTF-8"},
+  {"suomi", "fi_FI.UTF-8"},
+  {"french", "fr_FR.UTF-8"},
+  {"francais", "fr_FR.UTF-8"},
+  {"fula", "ff_SN.UTF-8"},
+  {"fulah", "ff_SN.UTF-8"},
+  {"pulaar-fulfulde", "ff_SN.UTF-8"},
+  {"gaelic", "ga_IE.UTF-8"},
+  {"irish-gaelic", "ga_IE.UTF-8"},
+  {"gaidhlig", "ga_IE.UTF-8"},
+  {"galician", "gl_ES.UTF-8"},
+  {"galego", "gl_ES.UTF-8"},
+  {"georgian", "ka_GE"},
   {"german", "de_DE.UTF-8"},
   {"deutsch", "de_DE.UTF-8"},
-  {"estonian", "et_EE.UTF-8"},
   {"greek", "el_GR.UTF-8"},
   {"gronings", "gos_NL.UTF-8"},
   {"zudelk-veenkelonioals", "gos_NL.UTF-8"},
   {"gujarati", "gu_IN.UTF-8"},
-  {"british-english", "en_GB.UTF-8"},
-  {"british", "en_GB.UTF-8"},
-  {"australian-english", "en_AU.UTF-8"},
-  {"canadian-english", "en_CA.UTF-8"},
-  {"southafrican-english", "en_ZA.UTF-8"},
-  {"esperanto", "eo.UTF-8"},
-  {"spanish", "es_ES.UTF-8"},
-  {"mexican", "es_MX.UTF-8"},
-  {"mexican-spanish", "es_MX.UTF-8"},
-  {"espanol-mejicano", "es_MX.UTF-8"},
-  {"espanol", "es_ES.UTF-8"},
-  {"persian", "fa_IR.UTF-8"},
-  {"fula", "ff_SN.UTF-8"},
-  {"fulah", "ff_SN.UTF-8"},
-  {"pulaar-fulfulde", "ff_SN.UTF-8"},
-  {"finnish", "fi_FI.UTF-8"},
-  {"suomi", "fi_FI.UTF-8"},
-  {"faroese", "fo_FO.UTF-8"},
-  {"french", "fr_FR.UTF-8"},
-  {"francais", "fr_FR.UTF-8"},
-  {"gaelic", "ga_IE.UTF-8"},
-  {"irish-gaelic", "ga_IE.UTF-8"},
-  {"gaidhlig", "ga_IE.UTF-8"},
-  {"scottish", "gd_GB.UTF-8"},
-  {"ghaidhlig", "gd_GB.UTF-8"},
-  {"scottish-gaelic", "gd_GB.UTF-8"},
-  {"galician", "gl_ES.UTF-8"},
-  {"galego", "gl_ES.UTF-8"},
   {"hebrew", "he_IL.UTF-8"},
   {"hindi", "hi_IN.UTF-8"},
   {"hungarian", "hu_HU.UTF-8"},
   {"magyar", "hu_HU.UTF-8"},
-  {"indonesian", "id_ID.UTF-8"},
-  {"bahasa-indonesia", "id_ID.UTF-8"},
   {"icelandic", "is_IS.UTF-8"},
   {"islenska", "is_IS.UTF-8"},
+  {"indonesian", "id_ID.UTF-8"},
+  {"bahasa-indonesia", "id_ID.UTF-8"},
+  {"inuktitut", "iu_CA.UTF-8"},
   {"italian", "it_IT.UTF-8"},
   {"italiano", "it_IT.UTF-8"},
-  {"inuktitut", "iu_CA.UTF-8"},
   {"japanese", "ja_JP.UTF-8"},
-  {"venda", "ve_ZA.UTF-8"},
-  {"venetian", "vec.UTF-8"},
-  {"veneto", "vec.UTF-8"},
-  {"vietnamese", "vi_VN.UTF-8"},
-  {"afrikaans", "af_ZA.UTF-8"},
-  {"albanian", "sq_AL.UTF-8"},
-  {"breton", "br_FR.UTF-8"},
-  {"brezhoneg", "br_FR.UTF-8"},
-  {"bulgarian", "bg_BG.UTF-8"},
-  {"welsh", "cy_GB.UTF-8"},
-  {"cymraeg", "cy_GB.UTF-8"},
-  {"bokmal", "nb_NO.UTF-8"},
-  {"basque", "eu_ES.UTF-8"},
-  {"euskara", "eu_ES.UTF-8"},
-  {"georgian", "ka_GE"},
+  {"kannada", "kn_IN.UTF-8"},
+  {"khmer", "km_KH.UTF-8"},
+  {"kiga", "cgg_UG.UTF-8"},
+  {"chiga", "cgg_UG.UTF-8"},
   {"kinyarwanda", "rw_RW.UTF-8"},
   {"klingon", "tlh.UTF-8"},
   {"tlhIngan", "tlh.UTF-8"},
-  {"kannada", "kn_IN.UTF-8"},
+  {"konkani-devaganari", "kok_IN.UTF-8"},
+  {"konkani-roman", "kok@roman"},
   {"korean", "ko_KR.UTF-8"},
   {"kurdish", "ku_TR.UTF-8"},
-  {"tamil", "ta_IN.UTF-8"},
-  {"telugu", "te_IN.UTF-8"},
+  {"latvian", "lv_LV.UTF-8"},
   {"lithuanian", "lt_LT.UTF-8"},
   {"lietuviu", "lt_LT.UTF-8"},
-  {"latvian", "lv_LV.UTF-8"},
   {"luganda", "lg_UG.UTF-8"},
   {"luxembourgish", "lb_LU.UTF-8"},
   {"letzebuergesch", "lb_LU.UTF-8"},
-  {"konkani-devaganari", "kok_IN.UTF-8"},
-  {"konkani-roman", "kok@roman"},
   {"maithili", "mai_IN.UTF-8"},
   {"macedonian", "mk_MK.UTF-8"},
-  {"mongolian", "mn_MN.UTF-8"},
+  {"malay", "ms_MY.UTF-8"},
+  {"malayalam", "ml_IN.UTF-8"},
   {"manipuri-bengali", "mni_IN.UTF-8"},
   {"manipuri-meitei-mayek", "mni@meiteimayek"},
   {"marathi", "mr_IN.UTF-8"},
-  {"malay", "ms_MY.UTF-8"},
+  {"mexican", "es_MX.UTF-8"},
+  {"mexican-spanish", "es_MX.UTF-8"},
+  {"espanol-mejicano", "es_MX.UTF-8"},
+  {"mongolian", "mn_MN.UTF-8"},
+  {"ndebele", "nr_ZA.UTF-8"},
   {"nepali", "ne_NP.UTF-8"},
-  {"dutch", "nl_NL.UTF-8"},
-  {"nederlands", "nl_NL.UTF-8"},
+  {"northern-sotho", "nso_ZA.UTF-8"},
+  {"sesotho-sa-leboa", "nso_ZA.UTF-8"},
   {"norwegian", "nn_NO.UTF-8"},
   {"nynorsk", "nn_NO.UTF-8"},
   {"norsk", "nn_NO.UTF-8"},
-  {"ndebele", "nr_ZA.UTF-8"},
-  {"northern-sotho", "nso_ZA.UTF-8"},
-  {"sesotho-sa-leboa", "nso_ZA.UTF-8"},
   {"occitan", "oc_FR.UTF-8"},
-  {"odia", "or_IN.UTF-8"}, // Proper spelling
-  {"oriya", "or_IN.UTF-8"}, // Alternative
-  {"ojibwe", "oj_CA.UTF-8"}, // Proper spelling
-  {"ojibway", "oj_CA.UTF-8"}, // For compatibility
-  {"punjabi", "pa_IN.UTF-8"},
-  {"panjabi", "pa_IN.UTF-8"},
+  {"odia", "or_IN.UTF-8"},	// Proper spelling
+  {"oriya", "or_IN.UTF-8"},	// Alternative
+  {"ojibwe", "oj_CA.UTF-8"},	// Proper spelling
+  {"ojibway", "oj_CA.UTF-8"},	// For compatibility
+  {"persian", "fa_IR.UTF-8"},
   {"polish", "pl_PL.UTF-8"},
   {"polski", "pl_PL.UTF-8"},
-  {"brazilian-portuguese", "pt_BR.UTF-8"},
-  {"portugues-brazilian", "pt_BR.UTF-8"},
-  {"brazilian", "pt_BR.UTF-8"},
   {"portuguese", "pt_PT.UTF-8"},
   {"portugues", "pt_PT.UTF-8"},
+  {"punjabi", "pa_IN.UTF-8"},
+  {"panjabi", "pa_IN.UTF-8"},
   {"romanian", "ro_RO.UTF-8"},
   {"russian", "ru_RU.UTF-8"},
   {"russkiy", "ru_RU.UTF-8"},
   {"sanskrit", "sa_IN.UTF-8"},
   {"santali-devaganari", "sat_IN.UTF-8"},
   {"santali-ol-chiki", "sat@olchiki"},
-  {"serbian", "sr_RS.UTF-8"}, /* Was sr_YU, but that's not in /usr/share/i18n/SUPPORTED, and sr_RS is -bjk 2014.08.04 */
+  {"scottish", "gd_GB.UTF-8"},
+  {"scottish-gaelic", "gd_GB.UTF-8"},
+  {"ghaidhlig", "gd_GB.UTF-8"},
+  {"serbian", "sr_RS.UTF-8"},	/* Was sr_YU, but that's not in /usr/share/i18n/SUPPORTED, and sr_RS is -bjk 2014.08.04 */
   {"serbian-latin", "sr_RS@latin"},
   {"shuswap", "shs_CA.UTF-8"},
   {"secwepemctin", "shs_CA.UTF-8"},
@@ -375,161 +367,82 @@ static const language_to_locale_struct language_to_locale_array[] = {
   {"slovak", "sk_SK.UTF-8"},
   {"slovenian", "sl_SI.UTF-8"},
   {"slovensko", "sl_SI.UTF-8"},
+  {"southafrican-english", "en_ZA.UTF-8"},
   {"songhay", "son.UTF-8"},
+  {"spanish", "es_ES.UTF-8"},
+  {"espanol", "es_ES.UTF-8"},
   {"sundanese", "su_ID.UTF-8"},
+  {"swahili", "sw_TZ.UTF-8"},
   {"swedish", "sv_SE.UTF-8"},
   {"svenska", "sv_SE.UTF-8"},
-  {"swahili", "sw_TZ.UTF-8"},
   {"tagalog", "tl_PH.UTF-8"},
+  {"tamil", "ta_IN.UTF-8"},
+  {"telugu", "te_IN.UTF-8"},
   {"thai", "th_TH.UTF-8"},
+  {"twi", "tw_GH.UTF-8"},
   {"tibetan", "bo_CN.UTF-8"},	/* Based on: http://texinfo.org/pipermail/texinfo-pretest/2005-April/000334.html */
   {"turkish", "tr_TR.UTF-8"},
-  {"twi", "tw_GH.UTF-8"},
   {"ukrainian", "uk_UA.UTF-8"},
+  {"valencian", "ca_ES.UTF-8@valencia"},
+  {"valencia", "ca_ES.UTF-8@valencia"},
+  {"venda", "ve_ZA.UTF-8"},
+  {"venetian", "vec.UTF-8"},
+  {"veneto", "vec.UTF-8"},
+  {"vietnamese", "vi_VN.UTF-8"},
   {"walloon", "wa_BE.UTF-8"},
   {"walon", "wa_BE.UTF-8"},
   {"wolof", "wo_SN.UTF-8"},
+  {"welsh", "cy_GB.UTF-8"},
+  {"cymraeg", "cy_GB.UTF-8"},
   {"xhosa", "xh_ZA.UTF-8"},
-  {"chinese", "zh_CN.UTF-8"},
-  {"simplified-chinese", "zh_CN.UTF-8"},
-  {"traditional-chinese", "zh_TW.UTF-8"},
   {"zapotec", "zam.UTF-8"},
   {"miahuatlan-zapotec", "zam.UTF-8"},
-  {"khmer", "km_KH.UTF-8"},
-  {"malayalam", "ml_IN.UTF-8"},
   {"zulu", "zu_ZA.UTF-8"}
 };
 
-/* FIXME: All this should REALLY be array-based!!! */
-/* Show available languages: */
+/* Show available languages, from language_to_locale_array[] (which lists
+   them in this order): one line per locale, its names in columns */
 static void show_lang_usage(int exitcode)
 {
   FILE * f = exitcode ? stderr : stdout;
   const char *const prg = "tuxpaint";
+  static const int stops[] = { 2, 15, 38 };	/* columns for the names */
+  const int n = sizeof language_to_locale_array / sizeof language_to_locale_array[0];
+  int i, j, col, stop, first;
+
   fprintf(f,
 	  "\n"
-	  "Usage: %s [--lang LANGUAGE]\n" "\n" "LANGUAGE may be one of:\n"
-/* C */  "  english      american-english\n"
-/* ach */"  acholi       acoli\n"
-/* af */ "  afrikaans\n"
-/* ak */ "  akan         twi-fante\n"
-/* sq */ "  albanian\n"
-/* am */ "  amharic\n"
-/* ar */ "  arabic\n"
-/* an */ "  aragones\n"
-/* hy */ "  armenian     hayeren\n"
-/* as */ "  assamese\n"
-/* ast */"  asturian\n"
-/* en_AU */ "  australian-english\n"
-/* az */ "  azerbaijani\n"
-/* bm */ "  bambara\n"
-/* eu */ "  basque       euskara\n"
-/* be */ "  belarusian   bielaruskaja\n"
-/* nb */ "  bokmal\n"
-/* bs */ "  bosnian\n"
-/* pt_BR */ "  brazilian    brazilian-portuguese   portugues-brazilian\n"
-/* br */ "  breton       brezhoneg\n"
-/* en_GB */ "  british      british-english\n"
-/* bg_BG */ "  bulgarian\n"
-/* en_CA */ "  canadian-english\n"
-/* ca */ "  catalan      catala\n"
-/* zh_CN */ "  chinese      simplified-chinese\n"
-/* zh_TW */ "               traditional-chinese\n"
-/* hr */ "  croatian     hrvatski\n"
-/* cs */ "  czech        cesky\n"
-/* da */ "  danish       dansk\n"
-/* nl */ "  dutch        nederlands\n"
-/* eo */ "  esperanto\n"
-/* et */ "  estonian\n"
-/* fo */ "  faroese\n"
-/* fi */ "  finnish      suomi\n"
-/* fr */ "  french       francais\n"
-/* ff */ "  fula         fulah                  pulaar-fulfulde\n"
-/* ga */ "  gaelic       irish-gaelic           gaidhlig\n"
-/* gl */ "  galician     galego\n"
-/* ka */ "  georgian\n"
-/* de */ "  german       deutsch\n"
-/* el */ "  greek\n"
-/* gos */"  gronings     zudelk-veenkelonioals\n"
-/* gu */ "  gujarati\n"
-/* he */ "  hebrew\n"
-/* hi */ "  hindi\n"
-/* hu */ "  hungarian    magyar\n"
-/* is */ "  icelandic    islenska\n"
-/* id */ "  indonesian   bahasa-indonesia\n"
-/* iu */ "  inuktitut\n"
-/* it */ "  italian      italiano\n"
-/* ja */ "  japanese\n"
-/* kn */ "  kannada\n"
-/* km */ "  khmer\n"
-/* cgg */"  kiga         chiga\n"
-/* rw */ "  kinyarwanda\n"
-/* tlh */"  klingon      tlhIngan\n"
-/* kok */"  konkani-devaganari\n"
-/* kok@roman */"  konkani-roman\n"
-/* ko */ "  korean\n"
-/* ku */ "  kurdish\n"
-/* lv */ "  latvian\n"
-/* lt */ "  lithuanian   lietuviu\n"
-/* lg */ "  luganda\n"
-/* lb */ "  luxembourgish letzebuergesch\n"
-/* mai */"  maithili\n"
-/* mk */ "  macedonian\n"
-/* ms */ "  malay\n"
-/* ml */ "  malayalam\n"
-/* mni */ "  manipuri-bengali\n"
-/* mni@meiteimayek */ "  manipuri-meitei-mayek\n"
-/* nr */ "  marathi\n"
-/* es_MX */ "  mexican      mexican-spanish        espanol-mejicano\n"
-/* mn */ "  mongolian\n"
-/* nr */ "  ndebele\n"
-/* ne */ "  nepali\n"
-/* nso */"  northern-sotho                      sesotho-sa-leboa\n"
-/* nn */ "  norwegian    nynorsk                norsk\n"
-/* oc */ "  occitan\n"
-/* or */ "  odia         oriya\n"
-/* oj */ "  ojibwe       ojibway\n"
-/* fa */ "  persian\n"
-/* pl */ "  polish       polski\n"
-/* pt */ "  portuguese   portugues\n"
-/* pa */ "  punjabi      panjabi\n"
-/* ro */ "  romanian\n"
-/* ru */ "  russian      russkiy\n"
-/* sa */ "  sanskrit\n"
-/* sat */"  santali-devaganari\n"
-/* sat@olchiki */"  santali-ol-chiki\n"
-/* gd */ "  scottish     scottish-gaelic        ghaidhlig\n"
-/* sr */ "  serbian\n"
-/* sr@latin */ "  serbian-latin\n"
-/* shs*/ "  shuswap      secwepemctin\n"
-/* si */ "  sinhala\n"
-/* sk */ "  slovak\n"
-/* sl */ "  slovenian    slovensko\n"
-/* en_ZA */ "  southafrican-english\n"
-/* son */ "  songhay\n"
-/* es */ "  spanish      espanol\n"
-/* su */ "  sundanese\n"
-/* sw */ "  swahili\n"
-/* sv */ "  swedish      svenska\n"
-/* tl */ "  tagalog\n"
-/* ta */ "  tamil\n"
-/* te */ "  telugu\n"
-/* th */ "  thai\n"
-/* twi */ "  twi\n"
-/* bo */ "  tibetan\n"
-/* tr */ "  turkish\n"
-/* uk */ "  ukrainian\n"
-/* ca@valencia */  "  valencian    valencia\n"
-/* ve */ "  venda\n"
-/* vec */"  venetian     veneto\n"
-/* vi */ "  vietnamese\n"
-/* wa */ "  walloon      walon\n"
-/* wo */ "  wolof\n"
-/* cy */ "  welsh        cymraeg\n"
-/* xh */ "  xhosa\n"
-/* zam */"  zapotec      miahuatlan-zapotec\n"
-/* zu */ "  zulu\n"
-          "\n", prg);
+	  "Usage: %s [--lang LANGUAGE]\n" "\n" "LANGUAGE may be one of:\n", prg);
+
+  col = 0;
+  for (i = 0; i < n; i++)
+  {
+    first = (i == 0 || strcmp(language_to_locale_array[i].locale,
+                              language_to_locale_array[i - 1].locale));
+    if (first && i > 0)
+    {
+      fprintf(f, "\n");
+      col = 0;
+    }
+
+    /* Next column past what's printed, or just a space after the last one */
+    stop = first ? 0 : col + 1;
+    for (j = 0; j < (int) (sizeof stops / sizeof stops[0]); j++)
+    {
+      if (stops[j] >= stop)
+      {
+        stop = stops[j];
+        break;
+      }
+    }
+    if (stop < col + !first)
+      stop = col + 1;
+
+    fprintf(f, "%*s%s", stop - col, "", language_to_locale_array[i].language);
+    col = stop + strlen(language_to_locale_array[i].language);
+  }
+
+  fprintf(f, "\n\n");
   exit(exitcode);
 }
 
