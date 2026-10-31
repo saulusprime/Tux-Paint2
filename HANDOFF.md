@@ -63,7 +63,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `feature/fullscreen` | ultimo commit | **branch attivo**: schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`) e file di progetto. Parte da `master`; **da unire in `master`** con avanzamento rapido |
+| `quality/fixme` | ultimo commit | **branch attivo**: FIXME del TODO e difetti trovati lungo la strada (`3ff7788`…`4a09172`), strumenti di prova e file di progetto. Parte da `feature/fullscreen` |
+| `feature/fullscreen` | `df1ed30` | schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`). Parte da `master`; contenuto in `quality/fixme`. **Da unire in `master`** insieme, con avanzamento rapido a `quality/fixme`, dopo la prova a mano dello schermo intero |
 | `master` | `e5a0cdc` | tutto il lavoro fino alle icone Lanczos e alla correzione di "Cancella" (avanzamento rapido del 2026-10-31) |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
 | `feature/sharper-icons` | `a3e6464` | già unito in `master` |
@@ -76,7 +77,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   di cui 52 in `src/tuxpaint.c`, invariati rispetto alla prima build
   (ricontati da zero il 2026-10-31); quelli che indicano bug possibili sono
   nel TODO.
-- **Installato in `~/.local`**: la build di `feature/fullscreen`, tutto
+- **Installato in `~/.local`**: la build di `quality/fixme`, tutto
   funzionante, compresi Testo ed Etichetta. Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
   `~/.tuxpaint/`.
@@ -92,19 +93,26 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Icone più nitide | `7cb40aa` | ingrandimento Lanczos-3 delle immagini dell'interfaccia |
 | Richiesta "Cancella" | `4f95ada` | miniatura senza la barra nera sopra (difetto della 0.9.22); margine scalato della miniatura salvata |
 | Schermo intero | `65874c7`, `3f43e1a` (su `feature/fullscreen`) | Alt+Invio in finestra e a schermo intero; `fullscreen` senza dimensione usa la risoluzione dello schermo; voce "Schermo intero" nel lanciatore; `--fullscreen` senza valore accettato (difetto della 0.9.22) (§5bis) |
+| FIXME e difetti trovati | `3ff7788`…`4a09172` (su `quality/fixme`) | plugin Magia senza limite fisso e scaricati all'uscita; font liberati all'uscita; stampa PostScript (carta sconosciuta, esito del comando); `--lang help` dalla tabella; ordinamento senza maiuscole; finestra Nuovo: `frame_heart`, modelli personali; crash con un file senza punto tra i plugin (§5ter, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
     (§5bis);
   - `tuxpaint-test-canon/`: cartella di salvataggio con due disegni, da
     copiare in `tuxpaint-test/` prima delle prove dei dialoghi;
-  - `tuxpaint-test-xdg/`: Cestino di prova.
+  - `tuxpaint-test-xdg/`: Cestino di prova;
+  - `tuxpaint-test-data/` (con `plugins/README` senza punto e un modello
+    magenta) e `tuxpaint-test-data2/` (solo il modello): cartelle dati di
+    prova per `--datadir`. Il riferimento va in crash con la prima;
+  - `tuxpaint-asan/` (`quality/fixme`) e `tuxpaint-asan-base/` (`master`):
+    worktree con build AddressSanitizer (§5ter); `nodlclose.so`, compilata
+    da `devtools/ui-test/nodlclose.c`.
 
 ## 2. Mappa del repository
 
 | Percorso | Contenuto |
 |----------|-----------|
-| [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.400 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
+| [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.500 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
 | [src/po/](src/po/) | 126 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`) |
 | [src/tuxpaint.conf](src/tuxpaint.conf) | Configurazione di default installata in `/etc` |
 | [magic/src/](magic/src/) | 47 plugin "Magic" (`.so` caricati a runtime), API in `src/tp_magic_api.h.in` |
@@ -121,7 +129,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [Makefile](Makefile) | Build system unico, niente autotools |
 | [tuxpaint.spec](tuxpaint.spec) | Spec RPM |
 | [dev.sh](dev.sh) | *Aggiunto nel fork*: build, installazione in `~/.local` e avvio sull'host (§4) |
-| [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`), §5bis |
+| [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`, `nodlclose.c`), §5bis |
+| [devtools/print-test/](devtools/print-test/) | *Aggiunto nel fork*: `ps_check.sh`, verifica della stampa PostScript con Ghostscript (§5ter) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
 ## 3. Documentazione letta
@@ -267,9 +276,9 @@ in `TODO.md`, sezione "Qualità del codice".
    se il fork verrà distribuito anche su Windows.
 4. **Codifica dei file**: alcuni documenti (es. `docs/CHANGES.txt`) contengono
    caratteri Latin-1 mescolati a UTF-8.
-5. **167 marcatori FIXME/TODO/XXX** nel sorgente (`src/` e `magic/src/`),
-   tra cui handle dei plugin mai scaricati (`magic_handle`, `src/tuxpaint.c:1306`) e leak
-   segnalati da Valgrind in `src/fonts.c`.
+5. **Marcatori FIXME/TODO/XXX** nel sorgente (`src/` e `magic/src/`):
+   erano 167, ora 156. Le otto voci scelte per il TODO sono state chiuse il
+   2026-10-31 (§5ter, ASIS); gli altri sono minori.
 6. **Fork vs upstream**: il codice è fermo al 2014; upstream (tuxpaint.org) è
    oggi alla serie 0.9.3x con molte funzionalità nuove. Deciso il 2026-10-29
    di restare sulla 0.9.22: l'upstream resta una fonte di idee da portare a
@@ -506,11 +515,43 @@ cartella temporanea.
 - **Sessioni senza `--savedir`** usano `~/.tuxpaint` dell'utente: vanno
   bene solo se non salvano e non cancellano nulla.
 
+## 5ter. Qualità del codice: strumenti e note (2026-10-31)
+
+- **AddressSanitizer**: build a parte in un worktree (`~/.cache/tuxpaint-asan`)
+  con `make PREFIX=$HOME/.local OPTFLAGS="-O1 -g -fsanitize=address
+  -fno-omit-frame-pointer" tuxpaint`. Usa i dati e i plugin installati in
+  `~/.local`. Il rapporto dei leak arriva solo se Tux Paint esce da sé:
+  la sessione deve cliccare Esci e poi Sì, a (205, 250) a 800×600.
+  Comandi in `devtools/ui-test/README.md`. Valgrind sull'host non c'è.
+- **Leak che restano** (a ogni uscita, nessun errore di memoria): circa
+  260 KB dei plugin Magia, che non liberano tutto in `shutdown()` (si
+  vedono da quando i plugin vengono scaricati; con `nodlclose.so`
+  tornano raggiungibili); circa 115 KB senza pila, probabilmente nelle
+  librerie; pochi byte di `magic_api_struct` (TODO).
+- **Senza finestra**: `SDL_VIDEODRIVER=dummy` fa partire Tux Paint senza
+  aprire nulla. Basta per i crash all'avvio, non per cliccare: senza
+  input non si può nemmeno farlo uscire in modo pulito (SIGTERM apre la
+  richiesta d'uscita e un secondo SIGTERM risponde "No").
+- **Stampa**: `devtools/print-test/ps_check.sh [OUTDIR]` compila un
+  programmino con `obj/postscript_print.o` e misura i margini con
+  Ghostscript. Prova anche un formato carta sconosciuto e i comandi di
+  stampa riusciti e falliti. `OBJ=DIR` usa gli oggetti di un altro albero,
+  per esempio `~/.cache/tuxpaint-baseline/obj`.
+- **Finestra Nuovo da tastiera**: F7 scende di una riga (4 elementi) e si
+  ferma all'ultimo, F11 torna indietro di uno, Invio apre. L'elenco è:
+  colori, Starter personali, Starter, modelli personali, modelli (19).
+- **Commit di più argomenti in un file**: niente `git add -p` (non
+  interattivo); si possono selezionare i blocchi del diff con uno script
+  e `git apply --cached`. Per correggere un commit non pubblicato:
+  `git commit --fixup=…` e poi
+  `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash BASE`.
+
 ## 6. Prossimi passi consigliati
 
 1. Provare a mano la voce "Schermo intero" del lanciatore (clic destro
-   sull'icona di Tux Paint) e Alt+Invio; poi unire `feature/fullscreen` in
-   `master` (avanzamento rapido).
+   sull'icona di Tux Paint) e Alt+Invio; poi unire in `master` con
+   avanzamento rapido a `quality/fixme`, che contiene anche
+   `feature/fullscreen`.
 2. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
    apre da solo una finestra 1600×1200 sul tuo schermo.
 3. Correggere il doppio `free` di `unc_buff` (`TODO.md`, P2): è un crash
@@ -1197,3 +1238,67 @@ Scoperte:
 
 Da fare: prova a mano della voce "Schermo intero" dal menu dell'icona,
 che le prove automatiche non coprono; poi unire in `master`.
+
+### 2026-10-31 — Qualità del codice: FIXME nel sorgente
+
+Richiesta dell'utente: lavorare sulla sezione "Qualità del codice (dai
+FIXME nel sorgente)" del TODO.
+
+Fatto (branch `quality/fixme`, da `feature/fullscreen`, per avere
+installata una build con lo schermo intero), voce per voce:
+1. **Plugin Magia, 512 handle mai scaricati** (`3ff7788`): array che
+   crescono, plugin scaricati in `cleanup()`. Leggendo il caricatore:
+   nessun controllo dei limiti, e `strcpy(strchr(objname, '.'), "")` con
+   un file senza punto (es. `README` in `~/.tuxpaint/plugins/`) mandava in
+   crash l'avvio. Il primo tentativo usciva sempre con "Out of memory":
+   `grow_magic_arrays(0)` non allocava `magics`. L'ho visto subito con
+   la prova senza finestra; corretto prima di proseguire.
+2. **Leak dei font segnalati da Valgrind** (`bc2b4c7`): con il processo
+   figlio dei font, `cleanup()` liberava solo l'array dei puntatori. Il
+   primo tentativo, tenere i blocchi in variabili statiche, non serviva:
+   il compilatore elimina variabili solo scritte, e ASan li dava ancora
+   persi. Ora `free_received_font_info()` chiude i font e libera tutto.
+   Corretto anche l'errore di lettura dal processo figlio.
+3. **Barriera di memoria** nel thread dei font (stesso commit): aggiunta
+   prima dei flag; chi legge aspetta già il thread con `SDL_WaitThread()`.
+   Su Linux il thread non si usa.
+4. **Stampa PostScript** (`b96ae5d`): centratura già giusta, misurata;
+   libpaper lasciata dov'è; trovati e corretti il crash con un formato
+   carta sconosciuto e l'esito sbagliato dei comandi di stampa. Il
+   confronto col riferimento conferma che i due difetti c'erano.
+5. **`get_fname()`** (`fe89e9c`): lasciata com'è (30 chiamate, nessuna in
+   un ciclo di disegno). Esaminando i chiamanti: `load_template()`
+   cercava i modelli personali nella cartella sbagliata.
+6. **`--lang help` dalla tabella** (`a2c83b1`).
+7. **Barra di avanzamento**: il FIXME non chiedeva di riattivare la
+   barra, che funziona, ma `eat_sdl_events()`. Lasciata spenta, con il
+   motivo nel codice (`fe89e9c`).
+8. **Ordinamento senza maiuscole** (`902e403`).
+9. **Suddividere `src/tuxpaint.c`**: non fatto, resta nel TODO.
+
+Difetti trovati lungo la strada, oltre a quelli già detti:
+- `13ff28c`: nella finestra Nuovo un'immagine bitmap veniva nascosta da
+  qualunque SVG il cui nome cominciasse con il suo: `frame_heart.png`
+  non compariva mai, per via di `frame_hearts.svg`.
+- `4a09172`: i modelli personali non si aprivano mai. `first_template`
+  veniva spostato sui modelli di sistema e quelli personali erano presi
+  per Starter. È saltato fuori nella prova a schermo: con il primo
+  correttivo la tela restava bianca anche nella versione nuova.
+
+Verifiche:
+- Senza finestra (`SDL_VIDEODRIVER=dummy`, `--datadir` con un `README`
+  tra i plugin): riferimento in crash (139), nuovo vivo dopo 20 s.
+- `ps_check.sh`: margini uguali in tutti i casi; carta "foo" → A4 con
+  avviso (il riferimento va in crash); `cat` e `gzip` riusciti, `false`
+  e uscita 1 falliti (il riferimento dava fallite anche quelle riuscite).
+- `--lang help`: due sole righe diverse, attese; stesse 175 coppie.
+- A schermo (desktop fermo, con il permesso dell'utente, due giri):
+  `regress.sh` e `dialogs.sh` a 800×600 identici al riferimento; modello
+  personale magenta aperto dalla finestra Nuovo (prima: tela bianca);
+  AddressSanitizer chiuso con Esci: nessun errore di memoria; leak
+  scesi da 513 KB (master) a 379 KB, e i 260 KB in più che restano
+  vengono dai plugin (con `nodlclose.so` scendono a 117 KB).
+- Warning invariati (52 in `src/tuxpaint.c`). Build installata.
+
+Da fare: unire in `master` (con `feature/fullscreen`); la suddivisione di
+`src/tuxpaint.c` e i leak dei plugin restano nel TODO.

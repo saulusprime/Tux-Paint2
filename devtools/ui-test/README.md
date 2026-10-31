@@ -24,6 +24,7 @@ tastiera: le finestre di prova compaiono sul suo schermo.
 | `erase.sh` | Richiesta "Cancella" di Apri, con Cestino e cartella di salvataggio di prova |
 | `compare.py` | Confronta due cartelle di catture |
 | `segv_backtrace.c` | Pila delle chiamate ai crash, da caricare con `LD_PRELOAD` |
+| `nodlclose.c` | Rende nullo `dlclose()`, da caricare con `LD_PRELOAD`: separa nei rapporti di AddressSanitizer la memoria dei plugin |
 
 ## Esempi
 
@@ -83,6 +84,30 @@ cd $HOME && flatpak-spawn --host --directory=$HOME \
   python3 - 1600x1200 move:48,16 wait:1 click:48,16 tool:7 shot:magie \
   < $D/tp_session.py | tar xf - -C $OUT
 ```
+
+Memoria, con AddressSanitizer: una build a parte in un worktree, poi una
+sessione che chiude Tux Paint col pulsante Esci (con SIGKILL non c'è
+rapporto). Sì della richiesta d'uscita a (205, 250) a 800×600:
+
+```sh
+flatpak-spawn --host bash -c 'cd ~/Sviluppo/tuxpaint &&
+  git worktree add --detach ~/.cache/tuxpaint-asan HEAD; cd ~/.cache/tuxpaint-asan &&
+  make -j4 PREFIX=$HOME/.local OPTFLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer" tuxpaint'
+cd $HOME && flatpak-spawn --host --directory=$HOME --env=TP_BIN=$HOME/.cache/tuxpaint-asan/tuxpaint \
+  --env=TP_START_WAIT=15 --env=TP_ARGS=--savedir=$HOME/.cache/tuxpaint-test \
+  --env=TP_WRAP="env ASAN_OPTIONS=detect_leaks=1:log_path=$HOME/.cache/tp-asan/run" \
+  python3 - 800x600 move:48,16 wait:2 click:48,16 wait:2 tool:4 wait:8 \
+  tool:15 wait:3 click:205,250 wait:15 < $D/tp_session.py > /dev/null
+```
+
+Con `LD_PRELOAD=$HOME/.cache/nodlclose.so` in `TP_WRAP` (compilata da
+`nodlclose.c`) aggiungere anche `verify_asan_link_order=0` ad
+`ASAN_OPTIONS`.
+
+Senza finestra: con `SDL_VIDEODRIVER=dummy` Tux Paint parte senza aprire
+nulla sullo schermo. Basta per controllare che l'avvio non vada in crash
+(`timeout -s KILL 20 …`: codice 137 se era ancora vivo, 139 se è andato in
+crash), non per cliccare.
 
 ## Azioni di `tp_session.py`
 

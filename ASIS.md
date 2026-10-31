@@ -211,3 +211,43 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     `--fullscreen` e `--fullscreen=native` identici; finestra iniziale
     ancora 1600×1200; lanciatore installato valido
     (`desktop-file-validate`).
+- [x] 2026-10-31 — Qualità del codice, dai FIXME nel sorgente (branch
+  `quality/fixme`, da `feature/fullscreen`). Otto voci su nove chiuse,
+  più cinque difetti trovati lungo la strada:
+  - **Plugin Magia** (`3ff7788`): niente più limite fisso di 512 (gli
+    array crescono, prima si poteva scrivere oltre la fine); plugin
+    scaricati all'uscita; un file senza punto nella cartella dei plugin
+    (es. `README`) faceva andare in crash l'avvio. Verificato senza
+    finestra: il riferimento va in crash (codice 139), il nuovo parte;
+  - **Font** (`bc2b4c7`): i "leak" di Valgrind erano i dati ricevuti dal
+    processo dei font e i font aperti, mai liberati all'uscita ("we'll
+    leak the bodies"): ora `free_received_font_info()`. Un errore di
+    lettura dal processo dei font ora viene gestito. Barriera di memoria
+    nel thread dei font (build senza processo figlio). Con
+    AddressSanitizer i leak dei font (circa 395 KB) sono spariti;
+  - **Stampa PostScript** (`b96ae5d`): la centratura era già giusta
+    (verificata con il nuovo `devtools/print-test/ps_check.sh` e
+    Ghostscript); corretti due difetti della 0.9.22: un formato carta
+    sconosciuto mandava in crash la stampa, e una stampa riuscita poteva
+    risultare fallita (risultato di `pclose()` usato come un PID, `errno`
+    vecchio); libpaper resta inizializzata solo durante la stampa;
+  - **`get_fname()`** e **barra di avanzamento** (`fe89e9c`): lasciate
+    come sono, con il motivo scritto al posto del FIXME (le allocazioni
+    non costano nulla; riattivare `eat_sdl_events()` farebbe uscire senza
+    salvare). Nello stesso commit: i modelli personali si caricavano dalla
+    cartella di salvataggio invece che da quella dei dati;
+  - **lingue** (`a2c83b1`): `--lang help` generato dalla tabella delle
+    lingue, stesse 175 coppie nome/locale; cambiano solo due righe
+    d'impaginazione;
+  - **ordinamento** (`902e403`): Starter, modelli, timbri e pennelli
+    ordinati ignorando maiuscole e minuscole (`Jigsaw_*` accanto a
+    `jigsaw`);
+  - **finestra Nuovo**: lo Starter `frame_heart.png` non compariva mai,
+    nascosto da `frame_hearts.svg` (`13ff28c`); i modelli personali non si
+    aprivano mai, scambiati per Starter (`4a09172`). Verificato a schermo
+    con un modello di prova: prima tela bianca, ora il modello;
+  - verifiche: a 800×600 schermata principale e dialoghi identici al
+    riferimento; nessun errore di memoria con AddressSanitizer, uscita
+    pulita;
+  - non fatto: la suddivisione di `src/tuxpaint.c` in moduli, rimasta nel
+    TODO come lavoro da pianificare.
