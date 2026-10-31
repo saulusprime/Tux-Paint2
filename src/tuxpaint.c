@@ -10312,12 +10312,19 @@ static void enable_avail_tools(void)
 
 static int compare_dirent2s(struct dirent2 *f1, struct dirent2 *f2)
 {
+  int c;
+
 #ifdef DEBUG
   printf("compare_dirents: %s\t%s\n", f1->f.d_name, f2->f.d_name);
 #endif
 
   if (f1->place == f2->place)
-    return (strcmp(f1->f.d_name, f2->f.d_name));
+  {
+    /* Ignore case, to keep e.g. the "Jigsaw*" and "jigsaw*" Starters
+       together; then by case, so the order is still fixed */
+    c = strcasecmp(f1->f.d_name, f2->f.d_name);
+    return (c ? c : strcmp(f1->f.d_name, f2->f.d_name));
+  }
   else
     return (f1->place - f2->place);
 }
