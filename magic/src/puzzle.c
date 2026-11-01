@@ -28,23 +28,17 @@
 
 
 #include <time.h>	//for time()
+#include <stdlib.h>
 #include "tp_magic_api.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 
 #define RATIO 5		//change this value to get bigger puzzle
 
-//TODO: Fullscreen mode
-//In fullscreen mode RATIO _should_ be 1
-//<=> puzzle_gcd=gcd(canvas->h, canvas->w);
-//else not whole the screen will be affected
-
-
 static Mix_Chunk * puzzle_snd;
 static int puzzle_gcd=0;		//length of side of each rectangle; 0 is temporary value.
 // static int puzzle_rect_q=4;		//quantity of rectangles when using paint mode. Must be an odd value - but it's even!
-static int rects_w, rects_h;
-SDL_Surface * canvas_backup;
+static SDL_Surface * piece_backup;	//a piece, while two trade places
 
 Uint32 puzzle_api_version(void) ;
 int puzzle_init(magic_api * api);
@@ -143,21 +137,31 @@ int gcd(int a, int b)		//greatest common divisor
 
 void puzzle_switchin(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED, SDL_Surface * canvas)
 {
+	int shorter = (canvas->w < canvas->h ? canvas->w : canvas->h);
+
+	/* Pieces whose side divides both sides of the canvas, if that's not
+	   too small or too big for it (the canvas changes size with Tux
+	   Paint's window); otherwise about 1/12 of its shorter side */
 	puzzle_gcd=RATIO*gcd(canvas->w, canvas->h);
-	rects_w=(unsigned int)canvas->w/puzzle_gcd;
-	rects_h=(unsigned int)canvas->h/puzzle_gcd;
-        canvas_backup = SDL_CreateRGBSurface(SDL_ANYFORMAT,canvas->w, canvas->h, canvas->format->BitsPerPixel, canvas->format->Rmask, canvas->format->Gmask, canvas->format->Bmask, canvas->format->Amask);
+	if (puzzle_gcd < shorter / 20 || puzzle_gcd > shorter / 8)
+		puzzle_gcd = shorter / 12;
+	if (puzzle_gcd < 8)
+		puzzle_gcd = 8;
+
+	if (piece_backup != NULL)
+		SDL_FreeSurface(piece_backup);
+        piece_backup = SDL_CreateRGBSurface(SDL_ANYFORMAT, puzzle_gcd, puzzle_gcd, canvas->format->BitsPerPixel, canvas->format->Rmask, canvas->format->Gmask, canvas->format->Bmask, canvas->format->Amask);
 }
 
 void puzzle_switchout(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED, SDL_Surface * canvas ATTRIBUTE_UNUSED)
 {
-  SDL_FreeSurface(canvas_backup);
-  canvas_backup = NULL;
+  SDL_FreeSurface(piece_backup);
+  piece_backup = NULL;
 }
 
 int puzzle_modes(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
 {
-  return(MODE_PAINT);
+  return(MODE_PAINT | MODE_FULLSCREEN);
 }
 
 static void puzzle_draw(void * ptr, int which_tool ATTRIBUTE_UNUSED,
@@ -168,9 +172,7 @@ static void puzzle_draw(void * ptr, int which_tool ATTRIBUTE_UNUSED,
   magic_api * api = (magic_api *) ptr;
 	
   Uint8 r;		//r - random value
-  SDL_Rect rect_this, rect_that;
-
-  SDL_BlitSurface(canvas, NULL, canvas_backup, NULL);
+  SDL_Rect rect_this, rect_that, rect_backup;
 
   x = (x / puzzle_gcd) * puzzle_gcd;
   y = (y / puzzle_gcd) * puzzle_gcd;
@@ -187,22 +189,22 @@ static void puzzle_draw(void * ptr, int which_tool ATTRIBUTE_UNUSED,
 	   switch(r)
 	   {
 		case 0:		//upper
-			if (y>puzzle_gcd) 
+			if (y>=puzzle_gcd) 
 				rect_that.y=y-puzzle_gcd;
 			
 		break;
 		case 1:		//right
 			if (x<canvas->w-puzzle_gcd) 
-				rect_that.x=x-puzzle_gcd;
+				rect_that.x=x+puzzle_gcd;
 		
 		break;
 		case 2:		//lower
 			if (y<canvas->h-puzzle_gcd) 
-				rect_that.y=y-puzzle_gcd;
+				rect_that.y=y+puzzle_gcd;
 		
 		break;
 		case 3:		//left
-			if (x>puzzle_gcd) 
+			if (x>=puzzle_gcd) 
 				rect_that.x=x-puzzle_gcd;
 		break;
 	   }
@@ -213,9 +215,85 @@ static void puzzle_draw(void * ptr, int which_tool ATTRIBUTE_UNUSED,
 	   rect_that.h=rect_that.w=puzzle_gcd;
 
   
-  SDL_BlitSurface(canvas, &rect_this, canvas, &rect_that);
-  SDL_BlitSurface(canvas_backup, &rect_that, canvas, &rect_this);
+  /* (Blitting changes the rectangles: clipped to the surfaces) */
+  rect_backup = rect_that;
+  SDL_BlitSurface(canvas, &rect_backup, piece_backup, NULL);
+  rect_backup = rect_that;
+  SDL_BlitSurface(canvas, &rect_this, canvas, &rect_backup);
+  SDL_BlitSurface(piece_backup, NULL, canvas, &rect_this);
   }
+}
+
+/* The entire picture: all the pieces in a random place. The ones at the
+   right and bottom edges may be narrower, if the canvas isn't a multiple
+   of the pieces' size; they only trade places with pieces of their size */
+static void puzzle_shuffle(SDL_Surface * canvas, SDL_Surface * last)
+{
+  int cols, rows, n, i, j, k, group;
+  SDL_Rect * pieces, src, dest;
+  int * members;
+
+  cols = (canvas->w + puzzle_gcd - 1) / puzzle_gcd;
+  rows = (canvas->h + puzzle_gcd - 1) / puzzle_gcd;
+  n = cols * rows;
+
+  pieces = (SDL_Rect *) malloc(sizeof(SDL_Rect) * n);
+  members = (int *) malloc(sizeof(int) * n);
+  if (pieces == NULL || members == NULL)
+  {
+    free(pieces);
+    free(members);
+    return;
+  }
+
+  for (i = 0; i < n; i++)
+  {
+    pieces[i].x = (i % cols) * puzzle_gcd;
+    pieces[i].y = (i / cols) * puzzle_gcd;
+    pieces[i].w = (pieces[i].x + puzzle_gcd <= canvas->w ? puzzle_gcd : canvas->w - pieces[i].x);
+    pieces[i].h = (pieces[i].y + puzzle_gcd <= canvas->h ? puzzle_gcd : canvas->h - pieces[i].y);
+  }
+
+  /* Groups: whole pieces, the right column, the bottom row, the corner */
+  for (group = 0; group < 4; group++)
+  {
+    k = 0;
+    for (i = 0; i < n; i++)
+    {
+      int narrow = (pieces[i].w < puzzle_gcd), short_one = (pieces[i].h < puzzle_gcd);
+
+      if (narrow + short_one * 2 == group)
+        members[k++] = i;
+    }
+
+    /* Shuffle them (Fisher-Yates), then put each piece of the picture
+       where its place in the shuffled list says */
+    for (i = k - 1; i > 0; i--)
+    {
+      int tmp;
+
+      j = rand() % (i + 1);
+      tmp = members[i];
+      members[i] = members[j];
+      members[j] = tmp;
+    }
+
+    j = 0;
+    for (i = 0; i < n; i++)
+    {
+      int narrow = (pieces[i].w < puzzle_gcd), short_one = (pieces[i].h < puzzle_gcd);
+
+      if (narrow + short_one * 2 != group)
+        continue;
+
+      src = pieces[members[j++]];
+      dest = pieces[i];
+      SDL_BlitSurface(last, &src, canvas, &dest);
+    }
+  }
+
+  free(pieces);
+  free(members);
 }
 
 void puzzle_drag(magic_api * api, int which, SDL_Surface * canvas,
@@ -235,10 +313,21 @@ void puzzle_drag(magic_api * api, int which, SDL_Surface * canvas,
 	update_rect->w=canvas->w;
 }
 
-void puzzle_click(magic_api * api, int which, int mode ATTRIBUTE_UNUSED,
+void puzzle_click(magic_api * api, int which, int mode,
 	           SDL_Surface * canvas, SDL_Surface * last,
 	           int x, int y, SDL_Rect * update_rect)
 {
+	if (mode == MODE_FULLSCREEN)
+	{
+		puzzle_shuffle(canvas, last);
+
+		update_rect->x=0;
+		update_rect->y=0;
+		update_rect->h=canvas->h;
+		update_rect->w=canvas->w;
+		return;
+	}
+
 	puzzle_drag(api, which, canvas, last, x, y, x, y, update_rect);
 }
 
