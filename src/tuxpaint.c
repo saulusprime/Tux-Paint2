@@ -2047,6 +2047,9 @@ static int charsize(Uint16 c);
 static SDL_Surface * load_kpx(const char * file);
 #ifndef NOSVG
 static SDL_Surface * load_svg(const char * file);
+#ifndef OLD_SVG
+static SDL_Surface * load_svg_at(const char * file, float ui_scale);
+#endif
 static float pick_best_scape(unsigned int orig_w, unsigned int orig_h,
                       unsigned int max_w, unsigned int max_h);
 static SDL_Surface * myIMG_Load_RWops(const char * file);
@@ -8179,10 +8182,34 @@ static SDL_Surface *loadimage(const char *const fname)
 }
 
 
-/* Load a UI image (with errors), resized to the current button size: */
+/* Load a UI image (with errors), resized to the current button size. With
+   buttons bigger than 48x48, an SVG version of it (the same name, but
+   ".svg", and the same size) is drawn at that size instead, if there's
+   one: sharper than the enlarged PNG. */
 
 static SDL_Surface *loadimagerb(const char *const fname)
 {
+#if !defined(NOSVG) && !defined(OLD_SVG)
+  size_t len = strlen(fname);
+
+  if (button_scale > 1 && len > 4 && !strcasecmp(fname + len - 4, ".png"))
+  {
+    char svgname[1024];
+    SDL_Surface *s = NULL;
+    FILE *fi;
+
+    if (snprintf(svgname, sizeof(svgname), "%.*s.svg", (int) len - 4, fname) <
+        (int) sizeof(svgname) && (fi = fopen(svgname, "r")) != NULL)
+    {
+      fclose(fi);
+      s = load_svg_at(svgname, button_scale);
+    }
+
+    if (s != NULL)
+      return (s);
+  }
+#endif
+
   return (scale_ui_image(loadimage(fname)));
 }
 
@@ -18077,8 +18104,9 @@ static SDL_Surface * load_svg(const char * file)
 
 #else
 
-/* New libcairo2, rsvg and rsvg-cairo based code */
-static SDL_Surface * load_svg(const char * file)
+/* New libcairo2, rsvg and rsvg-cairo based code: at the size that fits
+   the canvas best, or at ui_scale times the SVG's own size if not 0 */
+static SDL_Surface * load_svg_at(const char * file, float ui_scale)
 {
   cairo_surface_t * cairo_surf;
   cairo_t * cr;
@@ -18147,14 +18175,23 @@ static SDL_Surface * load_svg(const char * file)
 
   /* Pick best scale to render to (for the canvas in this instance of Tux Paint) */
   
-  scale = pick_best_scape(rwidth, rheight, r_canvas.w, r_canvas.h);
+  if (ui_scale > 0)
+  {
+    /* (Rounded as SCALED() would) */
+    scale = ui_scale;
+    width = (int) (rwidth * scale + 0.5);
+    height = (int) (rheight * scale + 0.5);
+  }
+  else
+  {
+    scale = pick_best_scape(rwidth, rheight, r_canvas.w, r_canvas.h);
+    width = ((float) rwidth * scale);
+    height = ((float) rheight * scale);
+  }
 
 #ifdef DEBUG
   printf("best scale is %.4f\n", scale);
 #endif
-
-  width = ((float) rwidth * scale);
-  height = ((float) rheight * scale);
 
 #ifdef DEBUG
   printf("scaling to %d x %d (%f scale)\n", width, height, scale);
@@ -18284,6 +18321,12 @@ static SDL_Surface * load_svg(const char * file)
   cairo_destroy(cr);
 
   return(sdl_surface);
+}
+
+
+static SDL_Surface * load_svg(const char * file)
+{
+  return(load_svg_at(file, 0));
 }
 
 #endif
