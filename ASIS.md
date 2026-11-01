@@ -407,3 +407,11 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     testo di Tux trovato e corretto, poi nessun errore; circa 19 KB persi
     in Pango/fontconfig, ricreando i font a ogni cambio di misura (resta
     nel TODO).
+- [x] 2026-11-01 — Pubblicazione sulla repo GitHub dell'utente — remote
+  `github` (`saulusprime/Tux-Paint2`, via SSH), tutti i 14 branch
+  caricati e collegati al loro; `master` predefinito; `origin` (LliureX)
+  non toccato.
+- [x] 2026-11-01 — Unione in `master` di `feature/dialog-resize` —
+  avanzamento rapido (contiene `feature/more-svg-icons`), su richiesta
+  dell'utente prima della prova a mano, che resta nel TODO; caricato su
+  `github`.

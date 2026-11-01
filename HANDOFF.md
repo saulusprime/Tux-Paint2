@@ -71,9 +71,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `feature/dialog-resize` | ultimo commit | **branch attivo**: i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto. Parte da `feature/more-svg-icons`. **Da unire in `master`**, dopo una prova a mano, con avanzamento rapido fino a qui |
-| `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`). Parte da `master`; contenuto nel branch attivo |
-| `master` | `baead7c` | tutto fino a "Feature e miglioramenti strumenti" (avanzamento rapido del 2026-11-01 a `feature/tools`, che conteneva `feature/svg-icons` e `feature/resizable`) |
+| `master` | ultimo commit | tutto, fino a "UI scalabile con la finestra": avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`. Il lavoro nuovo parte da qui, su un branch nuovo |
+| `feature/dialog-resize` | come `master` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
+| `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`); già unito in `master` |
 | `feature/tools`, `feature/svg-icons`, `feature/resizable`, `content/l10n`, `quality/warnings`, `quality/fixme`, `feature/fullscreen` | | già uniti in `master` |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
 | `feature/sharper-icons` | `a3e6464` | già unito in `master` |
@@ -85,7 +85,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
   `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `feature/dialog-resize`, tutto
+- **Installato in `~/.local`**: la build di `master`, tutto
   funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
   timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
@@ -846,6 +846,10 @@ cartella temporanea.
 
 ## 6. Prossimi passi consigliati
 
+Le prove a mano 1 e 2 riguardano lavoro già in `master`, unito su
+richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
+un branch nuovo.
+
 1. Provare a mano la finestra ridimensionabile e Alt+Invio, anche con un
    dialogo aperto (Apri, Nuovo, il selettore colore, la richiesta
    d'uscita, una presentazione), e le icone delle magie a 1600×1200.
@@ -853,12 +857,10 @@ cartella temporanea.
    immagine), la Schiuma con un colore, la tastiera a schermo
    (`--onscreen-keyboard`), e ascoltare i suoni nuovi (Mezzatinta, Puzzle,
    Colore e bianco, Punto croce).
-3. Poi unire in `master` con avanzamento rapido a `feature/dialog-resize`,
-   che contiene `feature/more-svg-icons`.
-4. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
+3. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
    (finestra Nuovo, dopo i colori).
-5. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
-6. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
+4. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
+5. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
    parte, magari partendo dall'unione dei tre dialoghi gemelli.
 
 ---
@@ -1848,5 +1850,12 @@ Richiesta dell'utente: sincronizzare tutto su
 - Push di `master` per primo, così è il branch predefinito, poi di tutti
   i 14 branch con `-u`: ognuno segue il suo su `github`, anche `master`
   (prima seguiva `origin/master`). Nessun tag. `origin` non è toccato.
-- `master` resta a `baead7c`: l'unione di `feature/dialog-resize`
-  aspetta ancora la prova a mano; dopo si fa e si carica anche quella.
+- Al primo push `master` era a `baead7c`. Subito dopo l'utente ha chiesto
+  di portare tutto su `master`: avanzamento rapido a
+  `feature/dialog-resize` (contiene `feature/more-svg-icons`), caricato su
+  `github`. La prova a mano prevista prima dell'unione non c'è stata e
+  resta tra i prossimi passi (§6).
+
+Stato alla chiusura: `master` uguale a `feature/dialog-resize`, tutti i
+branch in pari su `github`; il lavoro nuovo parte da `master` su un
+branch nuovo.

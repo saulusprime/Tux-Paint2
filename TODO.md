@@ -19,15 +19,12 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 
 ## UI scalabile con la finestra
 
-Completa: le voci del 2026-11-01 sono chiuse (vedi [ASIS.md](ASIS.md) e
-`HANDOFF.md` §5bis). `master` arriva fino a "Feature e miglioramenti
-strumenti"; le icone SVG nuove e i dialoghi sono sui branch
-`feature/more-svg-icons` e `feature/dialog-resize`.
+Completa: le voci del 2026-11-01 sono chiuse e unite in `master` (vedi
+[ASIS.md](ASIS.md) e `HANDOFF.md` §5bis).
 
-- [ ] [P2] Unire in `master` con avanzamento rapido a
-  `feature/dialog-resize` (contiene `feature/more-svg-icons`), dopo una
-  prova a mano: ridimensionamenti e Alt+Invio anche con un dialogo
-  aperto, icone delle magie a 1600×1200.
+- [ ] [P2] Prova a mano, ora che è in `master` (unito su richiesta
+  dell'utente prima della prova): ridimensionamenti e Alt+Invio anche con
+  un dialogo aperto, icone delle magie a 1600×1200.
 - [ ] [P3] Ogni cambio di misura perde da pochi byte a circa 3 KB dentro
   Pango/fontconfig: SDL_Pango crea una fontmap per ogni font, e
   `change_screen()` ricrea quelli dell'interfaccia. Rimedio possibile:
@@ -89,14 +86,13 @@ elencati qui.
 
 ## Feature e miglioramenti strumenti
 
-Le nove voci del 2026-10-29 sono chiuse (branch `feature/tools`, vedi
-[ASIS.md](ASIS.md) e `HANDOFF.md` §5quinquies).
+Le nove voci del 2026-10-29 sono chiuse e unite in `master` (branch
+`feature/tools`, vedi [ASIS.md](ASIS.md) e `HANDOFF.md` §5quinquies).
 
-- [ ] [P2] Unire `feature/tools` in `master` dopo una prova a mano: le
-  quattro magie a tutta immagine, Punto croce, Schiuma colorata, Puzzle,
-  Mezzatinta, i suoni nuovi, la tastiera a schermo, le etichette su due
-  righe. Parte da `feature/svg-icons`, quindi lo contiene: basta un
-  avanzamento rapido fino a qui.
+- [ ] [P2] Prova a mano, ora che è in `master` (unito il 2026-11-01 su
+  scelta dell'utente prima della prova): le quattro magie a tutta
+  immagine, Punto croce, Schiuma colorata, Puzzle, Mezzatinta, i suoni
+  nuovi, la tastiera a schermo, le etichette su due righe.
 - [ ] [P3] Testo ed Etichetta: i caratteri oltre U+FFFF arrivano giusti
   nel testo, ma i font di questi strumenti passano da SDL_ttf 2.0.11, che
   sa disegnare solo i caratteri a 16 bit (ora mette il carattere di
