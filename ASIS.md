@@ -317,3 +317,23 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     riferimento; a schermo in italiano le etichette di tutte le magie, un
     timbro con la descrizione italiana e i sei file nuovi aperti dalla
     finestra Nuovo, anche a 1600×1200.
+- [x] 2026-11-01 — UI scalabile con la finestra, le tre voci della
+  sezione:
+  - **unione in `master`**: avanzamento rapido a `content/l10n`
+    (`0787bf2`), dopo la prova a mano dello schermo intero da parte
+    dell'utente;
+  - **finestra ridimensionabile e schermo intero nitido** (branch
+    `feature/resizable`, `54b36d4`…`7672e81`): era l'opzione scartata il
+    2026-10-31. L'interfaccia si rifà alla nuova dimensione; il disegno,
+    lo Starter o il modello, la cronologia di Annulla e le etichette si
+    adattano alla nuova tela senza deformarsi, e tornando alla dimensione
+    di prima tornano com'erano. Corretti lungo la strada due leak, tre
+    plugin Magia (Halftone, Foam, Glass Tile) e il valore di
+    `fullscreen` (11 invece di 1);
+  - **icone nitide** (branch `feature/svg-icons`, `a34374b`, `b9e7dfb`):
+    con pulsanti più grandi di 48×48 le icone di strumenti (16, con
+    potrace) e forme (16, disegnate a mano) vengono da SVG. Le cornici dei
+    pulsanti sono rimaste PNG: a 2,67× non c'è differenza visibile;
+  - verifiche: a 800×600 identico al riferimento; ridimensionamenti e
+    Alt+Invio a schermo; AddressSanitizer senza errori (882 byte persi,
+    nelle librerie).

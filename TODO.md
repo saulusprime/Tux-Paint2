@@ -19,26 +19,21 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 
 ## UI scalabile con la finestra
 
-Completa e unita in `master`: scala nativa, rifiniture e icone ingrandite
-con Lanczos. Schermo intero (Alt+Invio, avvio alla risoluzione dello
-schermo) sul branch `feature/fullscreen`. Vedi [ASIS.md](ASIS.md) e
-`HANDOFF.md` §5bis.
+Completa. In `master` fino all'unione del 2026-11-01; finestra
+ridimensionabile, schermo intero nitido e icone SVG di strumenti e forme
+sui branch `feature/resizable` e `feature/svg-icons`. Vedi [ASIS.md](ASIS.md)
+e `HANDOFF.md` §5bis.
 
-- [ ] [P2] Unire in `master`, con avanzamento rapido a `content/l10n`, i
-  branch in catena `feature/fullscreen` → `quality/fixme` →
-  `quality/warnings` → `content/l10n`, dopo la prova a mano dello schermo
-  intero.
-- [ ] [P3] Schermo intero nitido anche partendo in finestra, e finestra
-  ridimensionabile. Oggi Alt+Invio ingrandisce l'immagine della finestra
-  (sullo schermo dell'utente 1600×1200 diventa 2133×1600, con bande nere
-  ai lati e un po' meno nitida). Per ridisegnare l'interfaccia alla nuova
-  dimensione bisognerebbe ricaricare tutte le immagini scalate e
-  ridimensionare tela, livelli e cronologia di Annulla. È l'opzione
-  scartata il 2026-10-31 perché grande e rischiosa.
-- [ ] [P3] Icone davvero nitide a scala > 1: servirebbero immagini nuove
-  (PNG grandi o SVG) per pulsanti, strumenti, forme e magie, cioè un lavoro
-  grafico. Nemmeno l'upstream le ha: nella versione attuale le icone degli
-  strumenti sono ancora PNG da 40×30.
+- [ ] [P2] Unire in `master` con avanzamento rapido a `feature/svg-icons`
+  (contiene `feature/resizable`), dopo una prova a mano di
+  ridimensionamento e Alt+Invio.
+- [ ] [P3] Icone che restano PNG ingrandite: quelle delle magie
+  (`magic/icons/`, 94, spesso fotografiche), altoparlante e cuffia, e le
+  immagini dei dialoghi (Sì/No, frecce, cestino…). Le cornici dei
+  pulsanti no: sono sfumature, già rese bene.
+- [ ] [P3] Durante un dialogo il ridimensionamento mostra l'immagine
+  tagliata o con bande nere fino al ritorno al disegno: i dialoghi non
+  sanno rifare la loro disposizione.
 
 ## Bug
 

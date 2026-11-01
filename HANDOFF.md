@@ -63,11 +63,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `content/l10n` | ultimo commit | **branch attivo**: contenuti e localizzazione (`0aca7bd`…`bb2b180`) e file di progetto. Parte da `quality/warnings` |
-| `quality/warnings` | `922f264` | build senza warning, difetti e leak trovati lungo la strada (`b80ff08`…`7c3066f`). Parte da `quality/fixme`; contenuto nel branch attivo |
-| `quality/fixme` | `322d548` | FIXME del TODO e difetti trovati lungo la strada (`3ff7788`…`4a09172`). Parte da `feature/fullscreen`; contenuto nel branch attivo |
-| `feature/fullscreen` | `df1ed30` | schermo intero (`3f43e1a`), `--fullscreen` senza valore (`65874c7`), azioni `key`/`info` negli strumenti di prova (`77a1be3`). Parte da `master`; contenuto nel branch attivo. **Da unire in `master`** tutti insieme, con avanzamento rapido a `quality/warnings`, dopo la prova a mano dello schermo intero |
-| `master` | `e5a0cdc` | tutto il lavoro fino alle icone Lanczos e alla correzione di "Cancella" (avanzamento rapido del 2026-10-31) |
+| `feature/svg-icons` | ultimo commit | **branch attivo**: icone SVG di strumenti e forme (`a34374b`, `b9e7dfb`) e file di progetto. Parte da `feature/resizable` |
+| `feature/resizable` | `7672e81` | finestra ridimensionabile e schermo intero nitido, con i leak e i plugin sistemati lungo la strada (`54b36d4`…`7672e81`). Parte da `master`; contenuto nel branch attivo. **Da unire in `master`** con avanzamento rapido al branch attivo, dopo una prova a mano |
+| `master` | `0787bf2` | tutto il lavoro fino a contenuti e localizzazione (avanzamento rapido del 2026-11-01 a `content/l10n`) |
+| `content/l10n`, `quality/warnings`, `quality/fixme`, `feature/fullscreen` | | già uniti in `master` |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
 | `feature/sharper-icons` | `a3e6464` | già unito in `master` |
 | `feature/ui-scaling` | `f0f9036` | già unito in `master` |
@@ -78,7 +77,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
   `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `content/l10n`, tutto
+- **Installato in `~/.local`**: la build di `feature/svg-icons`, tutto
   funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
   timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
@@ -98,6 +97,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | FIXME e difetti trovati | `3ff7788`…`4a09172` (su `quality/fixme`) | plugin Magia senza limite fisso e scaricati all'uscita; font liberati all'uscita; stampa PostScript (carta sconosciuta, esito del comando); `--lang help` dalla tabella; ordinamento senza maiuscole; finestra Nuovo: `frame_heart`, modelli personali; crash con un file senza punto tra i plugin (§5ter, ASIS) |
 | Warning e leak | `b80ff08`…`7c3066f` (su `quality/warnings`) | build senza warning; disegni salvati: recupero dello sfondo incorporato e doppio `free`; Cestino (permessi, copia troncata, percorsi); leak a ogni uso (selettore colore, Apri, i tre dialoghi, SVG, Erba, Piega); librsvg senza API deprecate; formato in Mosaic Shaped; joystick e metodi di input (§5ter, ASIS) |
 | Contenuti e localizzazione | `0aca7bd`…`bb2b180` (su `content/l10n`) | `./dev.sh stamps` (raccolta completa dei timbri); ultima riga dei `.dat`/`.txt` dei timbri; `it.po` rivisto e modello rigenerato senza intltool; campione di punteggiatura dei font; azione "Schermo intero" nel modello del `.desktop`; sei Starter e modelli SVG per la scuola; manuale ed EXTENDING in italiano (§5quater, ASIS) |
+| Ridisegno alla nuova dimensione | `54b36d4`…`7672e81` (su `feature/resizable`) | finestra ridimensionabile; Alt+Invio a schermo intero nitido alla risoluzione dello schermo; disegno, Annulla, Starter ed etichette adattati alla nuova tela; plugin Halftone, Foam e Glass Tile con la tela che cambia; due leak (§5bis, ASIS) |
+| Icone SVG | `a34374b`, `b9e7dfb` (su `feature/svg-icons`) | con pulsanti più grandi di 48×48, le icone di strumenti e forme vengono da SVG (§5bis, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -136,7 +137,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`, `nodlclose.c`), §5bis |
 | [devtools/print-test/](devtools/print-test/) | *Aggiunto nel fork*: `ps_check.sh`, verifica della stampa PostScript con Ghostscript (§5ter) |
 | [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh`, rigenera il modello delle traduzioni senza intltool (§5quater) |
-| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py`, genera gli Starter e i modelli SVG per la scuola (§5quater) |
+| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
 ## 3. Documentazione letta
@@ -402,7 +403,8 @@ button_h`.
   e il suo rilascio, quindi nessun ciclo lo vede e lo strumento Testo non
   va a capo. F11 non si poteva usare: nella finestra Apri e con il mouse
   da tastiera sposta la selezione.
-- `toggle_fullscreen()` usa `SDL_WM_ToggleFullScreen()`, che tiene la
+- *Dal 2026-11-01 vale solo nei dialoghi, vedi la sezione seguente.*
+  `toggle_fullscreen()` usa `SDL_WM_ToggleFullScreen()`, che tiene la
   stessa superficie: disegno e disposizione restano, e a schermo intero
   sdl12-compat ingrandisce l'immagine con le proporzioni giuste. Sullo
   schermo dell'utente 1600×1200 diventa 2133×1600 da x=213, con bande nere
@@ -429,6 +431,77 @@ button_h`.
   screen", in italiano "Schermo intero") con `--fullscreen=native`; in
   GNOME compare col clic destro sull'icona. `dev.sh install` corregge
   anche la sua riga `Exec=`.
+
+### Ridisegno alla nuova dimensione (2026-11-01)
+
+- **Cosa**: la finestra si ridimensiona, e Alt+Invio passa a uno schermo
+  intero vero, alla risoluzione dello schermo. In entrambi i casi
+  `change_screen()` rifà tutto per la nuova dimensione, come se Tux Paint
+  fosse partito lì.
+- **Chi lo fa**: il ciclo principale, in testa a ogni giro, quando
+  `screen_change_wanted()` dice che serve e nessun tasto del mouse è
+  premuto. `poll_event()` registra le richieste: Alt+Invio
+  (`fullscreen_request`) e `SDL_VIDEORESIZE` (`resize_w`/`resize_h`, usati
+  250 ms dopo l'ultimo evento). Gli eventi di ridimensionamento arrivati
+  a schermo intero si ignorano. Nei dialoghi Alt+Invio fa come prima
+  (immagine ingrandita) e il ciclo principale rende nitido al ritorno. Un
+  ridimensionamento durante un dialogo mostra l'immagine tagliata o con
+  bande nere fino al ritorno; se si torna alla stessa dimensione, il
+  ciclo principale ridisegna e basta.
+- **Prima di cambiare** (nel ciclo principale): testo in corso completato
+  come al cambio di strumento; rotazione di una forma annullata (è solo
+  XOR sullo schermo); `magic_switchout()`; tastiera a schermo liberata
+  (usa le immagini dei pulsanti). `old_x`/`old_y` vanno a -1: i contorni
+  di timbro e gomma sotto il mouse sono XOR, e il primo movimento dopo il
+  ridisegno li "cancellerebbe" dove non ci sono più.
+- **`change_screen()`**: `free_ui_images()`, `free_ui_fonts()`,
+  `setup_screen_layout()`, poi di nuovo font, `load_ui_images()`,
+  `render_ui_titles()`, `create_color_buttons()`, icone delle magie da
+  `get_icon()` dei plugin, `create_button_labels()`, `create_cursors()`
+  (il puntatore corrente sostituito prima di liberare i vecchi).
+  Timbri: miniature liberate e `processed = 0`, così dimensioni e limiti
+  si ricalcolano quando servono. `magic_api_struct->canvas_w/h`
+  aggiornati.
+- **`resize_canvas()`**: `get_picture_rect()` prende `canvas_content`
+  (la parte con il disegno), allargata a quello che è stato disegnato o
+  etichettato fuori; quel rettangolo viene scalato per stare nella nuova
+  tela, centrato. Intorno: lo sfondo dello Starter o del modello
+  (allungato come fa `autoscale_copy_smear_free()`) o il colore della
+  tela. Stessa sorte per sfondo, contorno dello Starter (trasparente
+  intorno), buffer di Annulla in uso (da `oldest_undo` a `newest_undo`) ed
+  etichette (posizione, bitmap scalata, dimensione del testo più vicina).
+  `canvas_content` si azzera a tutta la tela quando nasce un disegno
+  nuovo (avvio, Apri, Nuovo). Così andata e ritorno ridanno il disegno
+  di prima. Il ricampionamento (`resample_rect()`) usa un filtro
+  triangolare, largo quanto un pixel d'origine quando riduce, con alfa
+  premoltiplicato.
+- **sdl12-compat 1.2.68 e mutter**: `SDL_RESIZABLE` funziona e arriva
+  `SDL_VIDEORESIZE`, ma `TP_EventFilter()` lo scartava. Passare da e verso
+  lo schermo intero con il solo `SDL_SetVideoMode()` lascia la finestra
+  altrove e più bassa (1600×1126 invece di 1600×1200), con una raffica di
+  ridimensionamenti spuri. Passando prima da `SDL_WM_ToggleFullScreen()`
+  mutter rimette la finestra com'era, salvo se una finestra non c'è mai
+  stata (`been_windowed`): da uno schermo intero di partenza, il toggle
+  dà una finestra grande quanto il desktop, che mutter tiene a tutto
+  schermo, quindi lì si usa solo `SDL_SetVideoMode()`. A ogni andata e
+  ritorno mutter abbassa un po' la finestra (74 e poi 52 pixel). I test
+  con programmini SDL a parte sono stati decisivi: il comportamento di
+  mutter dipende anche dai tempi.
+- **`fullscreen`** valeva 11 con `--fullscreen` (`strcmp()`), ora 0 o 1.
+- **Plugin Magia**: Halftone, Foam e Glass Tile creavano una volta sola
+  copie o maschere grandi quanto la tela, ora le rifanno se la tela è
+  cambiata; gli altri le fanno in `switchin()`.
+- **Icone SVG**: con pulsanti più grandi di 48×48, `loadimagerb()` usa
+  l'SVG con lo stesso nome del PNG (stessa dimensione di disegno),
+  disegnato da `load_svg_at()` alla scala dei pulsanti. A 48×48 restano i
+  PNG, identici. Forme: `devtools/content/shape_icons.py`, a mano dalle
+  misure dei PNG. Strumenti: `devtools/content/trace_icons.py`, con
+  potrace (`apt-get download potrace libpotrace0`, `dpkg-deb -x`, poi una
+  cartella con `bin/` e `lib/`), in tre livelli: parti chiare, inchiostro
+  leggero (nero al 40%: le icone sono nere con trasparenza, non grigie),
+  nero. Non convertiti: altoparlante e cuffia (sfumati come foto), le
+  cornici dei pulsanti (sfumature a gel, già rese bene dal Lanczos: a
+  2,67× non si vede differenza), le icone delle magie.
 
 ### Prove automatiche (`devtools/ui-test/`)
 
@@ -613,20 +686,15 @@ cartella temporanea.
 
 ## 6. Prossimi passi consigliati
 
-1. Provare a mano la voce "Schermo intero" del lanciatore (clic destro
-   sull'icona di Tux Paint) e Alt+Invio; poi unire in `master` con
-   avanzamento rapido a `content/l10n`, che contiene `quality/warnings`,
-   `quality/fixme` e `feature/fullscreen`.
-2. Provare a mano i timbri nuovi (strumento Timbro, frecce per cambiare
-   categoria) e gli Starter e i modelli per la scuola (finestra Nuovo,
-   dopo i colori: orologio e scuola tra gli Starter, lavagna e quaderni
-   tra i modelli).
-3. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince: ora
-   apre da solo una finestra 1600×1200 sul tuo schermo.
+1. Provare a mano la finestra ridimensionabile (trascinando il bordo, e
+   massimizzando) e Alt+Invio, anche con un disegno, un modello e
+   un'etichetta; poi unire in `master` con avanzamento rapido a
+   `feature/svg-icons`, che contiene `feature/resizable`.
+2. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
+   (finestra Nuovo, dopo i colori).
+3. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
 4. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
    parte, magari partendo dall'unione dei tre dialoghi gemelli.
-5. Icone davvero nitide (`TODO.md`, P3): solo se si decide di fare il
-   lavoro grafico, cioè disegnare immagini nuove.
 
 ---
 
@@ -1458,3 +1526,49 @@ ripetuta perché la finestra non era ancora in primo piano, e lo script si
 Stato alla chiusura: branch attivo `content/l10n`, installato con i timbri.
 Nuove voci P3 nel TODO: il resto della documentazione italiana, gli altri
 cataloghi da allineare, etichette su due righe, una cartina dell'Italia.
+
+### 2026-11-01 — UI scalabile: unione, ridisegno alla nuova dimensione, icone SVG
+
+Richiesta dell'utente: la sezione "UI scalabile con la finestra" del
+TODO. Alle tre domande (unione, ridisegno, icone) l'utente ha risposto:
+prova a mano fatta, quindi unire; finestra ridimensionabile più Alt+Invio
+nitido; cornici dei pulsanti più icone di strumenti e forme.
+
+- **Unione**: `master` portato con avanzamento rapido a `content/l10n`
+  (`0787bf2`), nessun push.
+- **Ridisegno** (branch `feature/resizable`): il caricamento delle cose
+  fatte per la dimensione dei pulsanti è uscito da `setup()` in funzioni,
+  che `change_screen()` usa per rifarle; `resize_canvas()` adatta disegno,
+  livelli, Annulla ed etichette (§5bis). Trovati e corretti lungo la
+  strada: due leak (nomi dei timbri PNG con un SVG, percorso della
+  miniatura a ogni salvataggio), tre plugin che non reggevano una tela
+  più grande, il titolo "Colori" non ridisegnato, i contorni XOR fantasma.
+  Il punto più lungo è stato capire sdl12-compat e mutter: filtro degli
+  eventi, ordine delle chiamate per tornare in finestra, il caso di chi
+  parte a schermo intero (§5bis).
+- **Icone** (branch `feature/svg-icons`): 16 icone delle forme in SVG
+  disegnato a mano, 16 degli strumenti vettorializzate con potrace. Le
+  cornici dei pulsanti, a differenza di quanto previsto, sono rimaste
+  PNG: a 2,67× il Lanczos le rende senza difetti visibili, perché sono
+  sfumature morbide; rifarle avrebbe solo cambiato il loro aspetto.
+
+Verifiche (desktop fermo, con il permesso dell'utente, in più giri):
+- A 800×600 schermata principale e dialoghi identici al riferimento, a
+  ogni passo (anche con gli SVG: lì restano i PNG).
+- Ridimensionamenti 800×600 → 1600×1200 → 1000×700 → 800×600: il disegno
+  torna allo stesso posto e della stessa misura; Ctrl+Z annulla l'ultimo
+  tratto, quindi anche la cronologia è stata adattata.
+- Alt+Invio da finestra e ritorno, due volte: la finestra torna a
+  1600×1200. Da schermo intero di partenza: finestra 1600×1200, poi di
+  nuovo schermo intero. Dalla finestra Nuovo: immagine ingrandita, nitida
+  dopo Esc.
+- Con AddressSanitizer: Mezzatinta, Schiuma e Vetrocemento usati prima e
+  dopo un ingrandimento, testo durante Alt+Invio, etichetta durante un
+  ridimensionamento, timbri, uscita pulita: nessun errore di memoria,
+  persi 882 byte nelle librerie. Una prima sessione era partita con un
+  binario ASan vecchio, che non vedeva i ridimensionamenti: va sempre
+  ricopiato il sorgente nel worktree prima di ricompilare.
+- Icone: prima e dopo a 1600×1200, e le forme a schermo intero.
+
+Stato alla chiusura: branch attivo `feature/svg-icons`, installato; da
+provare a mano e unire in `master`.
