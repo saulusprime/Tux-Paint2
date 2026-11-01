@@ -309,6 +309,14 @@ void halftone_line_callback(void * ptr, int which ATTRIBUTE_UNUSED,
 void halftone_switchin(magic_api * api, int which ATTRIBUTE_UNUSED, 
                  int mode ATTRIBUTE_UNUSED, SDL_Surface * canvas)
 {
+  /* (Tux Paint's canvas may have been resized since) */
+  if (canvas_backup != NULL &&
+      (canvas_backup->w != canvas->w || canvas_backup->h != canvas->h))
+  {
+    SDL_FreeSurface(canvas_backup);
+    canvas_backup = NULL;
+  }
+
   if (canvas_backup == NULL)
     canvas_backup = SDL_CreateRGBSurface(SDL_ANYFORMAT, api->canvas_w, api->canvas_h, canvas->format->BitsPerPixel, canvas->format->Rmask, canvas->format->Gmask, canvas->format->Bmask, canvas->format->Amask);
 

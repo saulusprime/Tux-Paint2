@@ -41,6 +41,7 @@ static Uint8 foam_r, foam_g, foam_b;
 static int foam_mask_w, foam_mask_h;
 static int * foam_mask, * foam_mask_tmp;
 static SDL_Surface * foam_7, * foam_5, * foam_3, * foam_1;
+static int foam_bubbles_w, foam_bubbles_h;	/* canvas size they're made for */
 
 Uint32 foam_api_version(void);
 int foam_init(magic_api * api);
@@ -70,30 +71,56 @@ int foam_requires_colors(magic_api * api, int which);
 Uint32 foam_api_version(void) { return(TP_MAGIC_API_VERSION); }
 
 
-// No setup required:
-int foam_init(magic_api * api)
+static void foam_free_bubbles(void)
+{
+  if (foam_1 != NULL)
+    SDL_FreeSurface(foam_1);
+  if (foam_3 != NULL)
+    SDL_FreeSurface(foam_3);
+  if (foam_5 != NULL)
+    SDL_FreeSurface(foam_5);
+  if (foam_7 != NULL)
+    SDL_FreeSurface(foam_7);
+  foam_1 = foam_3 = foam_5 = foam_7 = NULL;
+}
+
+// The bubbles, sized for a w x h canvas:
+static void foam_make_bubbles(magic_api * api, int w, int h)
 {
   char fname[1024];
   SDL_Surface * foam_data;
 
-  snprintf(fname, sizeof(fname), "%s/sounds/magic/foam.ogg",
-	    api->data_directory);
-  foam_snd = Mix_LoadWAV(fname);
+  foam_free_bubbles();
 
   snprintf(fname, sizeof(fname), "%s/images/magic/foam_data.png",
 	    api->data_directory);
   foam_data = IMG_Load(fname);
 
-  foam_7 = api->scale(foam_data, ((api->canvas_w / FOAM_PROP) * 4) / 4,
-				 ((api->canvas_h / FOAM_PROP) * 4) / 4, 0);
-  foam_5 = api->scale(foam_data, ((api->canvas_w / FOAM_PROP) * 3) / 4,
-				 ((api->canvas_h / FOAM_PROP) * 3) / 4, 0);
-  foam_3 = api->scale(foam_data, ((api->canvas_w / FOAM_PROP) * 2) / 4,
-				 ((api->canvas_h / FOAM_PROP) * 2) / 4, 0);
-  foam_1 = api->scale(foam_data, ((api->canvas_w / FOAM_PROP) * 1) / 4,
-				 ((api->canvas_h / FOAM_PROP) * 1) / 4, 0);
+  foam_7 = api->scale(foam_data, ((w / FOAM_PROP) * 4) / 4,
+				 ((h / FOAM_PROP) * 4) / 4, 0);
+  foam_5 = api->scale(foam_data, ((w / FOAM_PROP) * 3) / 4,
+				 ((h / FOAM_PROP) * 3) / 4, 0);
+  foam_3 = api->scale(foam_data, ((w / FOAM_PROP) * 2) / 4,
+				 ((h / FOAM_PROP) * 2) / 4, 0);
+  foam_1 = api->scale(foam_data, ((w / FOAM_PROP) * 1) / 4,
+				 ((h / FOAM_PROP) * 1) / 4, 0);
 
   SDL_FreeSurface(foam_data);
+
+  foam_bubbles_w = w;
+  foam_bubbles_h = h;
+}
+
+// No setup required:
+int foam_init(magic_api * api)
+{
+  char fname[1024];
+
+  snprintf(fname, sizeof(fname), "%s/sounds/magic/foam.ogg",
+	    api->data_directory);
+  foam_snd = Mix_LoadWAV(fname);
+
+  foam_make_bubbles(api, api->canvas_w, api->canvas_h);
   
   return(1);
 }
@@ -183,6 +210,15 @@ void foam_click(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, in
 	           int x ATTRIBUTE_UNUSED, int y ATTRIBUTE_UNUSED, SDL_Rect * update_rect)
 {
   int i;
+
+  /* (Tux Paint's canvas may have been resized since) */
+  if (foam_mask != NULL &&
+      (foam_mask_w != canvas->w / FOAM_PROP || foam_mask_h != canvas->h / FOAM_PROP))
+  {
+    free(foam_mask);
+    free(foam_mask_tmp);
+    foam_mask = foam_mask_tmp = NULL;
+  }
 
   if (foam_mask == NULL)
   {
@@ -407,17 +443,10 @@ void foam_shutdown(magic_api * api ATTRIBUTE_UNUSED)
   if (foam_snd != NULL)
     Mix_FreeChunk(foam_snd);
 
-  if (foam_mask != NULL)
-    free(foam_mask);
+  free(foam_mask);
+  free(foam_mask_tmp);
  
-  if (foam_1 != NULL)
-    SDL_FreeSurface(foam_1);
-  if (foam_3 != NULL)
-    SDL_FreeSurface(foam_3);
-  if (foam_5 != NULL)
-    SDL_FreeSurface(foam_5);
-  if (foam_7 != NULL)
-    SDL_FreeSurface(foam_7);
+  foam_free_bubbles();
 }
 
 // Record the color from Tux Paint:
@@ -434,8 +463,11 @@ int foam_requires_colors(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_U
   return 0;  /* FIXME: Would be nice to tint the bubbles */
 }
 
-void foam_switchin(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED,  SDL_Surface * canvas ATTRIBUTE_UNUSED)
+void foam_switchin(magic_api * api, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED,  SDL_Surface * canvas)
 {
+  /* (Tux Paint's canvas may have been resized since) */
+  if (canvas->w != foam_bubbles_w || canvas->h != foam_bubbles_h)
+    foam_make_bubbles(api, canvas->w, canvas->h);
 }
 
 void foam_switchout(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED, SDL_Surface * canvas ATTRIBUTE_UNUSED)

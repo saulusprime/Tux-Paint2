@@ -69,6 +69,22 @@ static int * * glasstile_hit;
 static int glasstile_hit_xsize;
 static int glasstile_hit_ysize;
 
+static void glasstile_free_hit(void)
+{
+  int y;
+
+  if (glasstile_hit != NULL)
+  {
+    for (y = 0; y < glasstile_hit_ysize; y++)
+    {
+      if (glasstile_hit[y] != NULL)
+        free(glasstile_hit[y]);
+    }
+    free(glasstile_hit);
+    glasstile_hit = NULL;
+  }
+}
+
 // No setup required:
 int glasstile_init(magic_api * api)
 {
@@ -251,6 +267,12 @@ void glasstile_click(magic_api * api, int which, int mode,
 {
   int xx, yy;
 
+  /* (Tux Paint's canvas may have been resized since) */
+  if (glasstile_hit != NULL &&
+      (glasstile_hit_ysize != (canvas->h / GT_SIZE) + 1 ||
+       glasstile_hit_xsize != (canvas->w / GT_SIZE) + 1))
+    glasstile_free_hit();
+
   if (glasstile_hit == NULL)
   {
     glasstile_hit_ysize = (canvas->h / GT_SIZE) + 1;
@@ -293,20 +315,10 @@ void glasstile_release(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNU
 // No setup happened:
 void glasstile_shutdown(magic_api * api ATTRIBUTE_UNUSED)
 {
-  int y;
-
   if (glasstile_snd != NULL)
     Mix_FreeChunk(glasstile_snd);
   
-  if (glasstile_hit != NULL)
-  {
-    for (y = 0; y < glasstile_hit_ysize; y++)
-    {
-      if (glasstile_hit[y] != NULL)
-        free(glasstile_hit[y]);
-    }
-    free(glasstile_hit);
-  }
+  glasstile_free_hit();
 }
 
 // Record the color from Tux Paint:
