@@ -3,4 +3,5 @@
                   By Bill Kendrick <bill@newbreedsoftware.com>
 
    This makes the picture look like a cartoon - with thick outlines and
-   bright, solid colors - wherever you move the mouse.
+   bright, solid colors - wherever you move the mouse. Its full-image mode
+   turns the entire picture into a cartoon with one click.

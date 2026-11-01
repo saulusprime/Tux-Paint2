@@ -3,4 +3,5 @@
                   By Bill Kendrick <bill@newbreedsoftware.com>
 
    This makes parts of the picture (where you move the mouse) look like a
-   chalk drawing.
+   chalk drawing. Its full-image mode turns the entire picture into a chalk
+   drawing with one click.

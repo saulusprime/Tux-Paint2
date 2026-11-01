@@ -1,0 +1,9 @@
+                         Tux Paint "Magic" Tool: Puzzle
+
+                By Adam 'foo-script' Rakowski <foo-script@o2.pl>
+
+   Click on parts of your picture to mix up their pieces, like a jigsaw
+   puzzle coming apart.
+
+   Its full-image mode puts all the pieces of the picture in a random place
+   with one click.

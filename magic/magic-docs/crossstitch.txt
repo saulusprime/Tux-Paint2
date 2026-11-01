@@ -1,0 +1,10 @@
+                      Tux Paint "Magic" Tool: Cross Stitch
+
+                Written for this fork of Tux Paint 0.9.22 (2026)
+
+   This turns the picture into embroidery: wherever you drag the mouse, it
+   becomes fabric with an "x" of thread in each little square, the color of
+   the picture there. White parts stay bare fabric, and even a thin line
+   becomes a row of stitches.
+
+   Its full-image mode embroiders the entire picture with one click.

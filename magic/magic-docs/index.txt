@@ -10,6 +10,7 @@
    * Color and White
    * Color Shift
    * Confetti
+   * Cross Stitch
    * Darken
    * Distortion
    * Drip
@@ -36,6 +37,7 @@
    * Noise
    * Perspective
    * Picasso
+   * Puzzle
    * Rails
    * Rain
    * Rainbow

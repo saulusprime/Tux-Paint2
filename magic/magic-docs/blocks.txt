@@ -4,4 +4,4 @@
                       Albert Cahalan <albert@users.sf.net>
 
    This makes the picture blocky looking ("pixelated") wherever you drag the
-   mouse.
+   mouse. Its full-image mode makes the entire picture blocky with one click.

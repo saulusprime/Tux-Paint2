@@ -4,4 +4,5 @@
 
    Click and drag the mouse to draw foamy bubbles. The more you drag the
    mouse in a particular spot, the more likely small bubbles will combine to
-   form bigger bubbles.
+   form bigger bubbles. The bubbles take the color you choose; with white,
+   they're plain soap bubbles.
