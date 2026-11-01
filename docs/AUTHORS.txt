@@ -167,6 +167,15 @@ $Id: AUTHORS.txt,v 1.291 2014/08/16 14:28:00 perepujal Exp $
   Peter Poláčik
   m4tx
 
+  This fork of Tux Paint 0.9.22
+  (https://github.com/saulusprime/Tux-Paint2): window that can be resized,
+  with the interface scaling to it and dialogs that follow; sharp
+  fullscreen with Alt+Enter; SVG icons; Cross Stitch Magic tool, and more
+  Magic tools with a fullscreen mode; sounds for Cross Stitch, Halftone,
+  Puzzle and Color & White; school starters and templates; Italian manual;
+  bug, leak and warning fixes. By:
+  Paolo Pierno
+
 * Graphics
 
   * UI buttons - Created using "AquaPro" button script in The GIMP

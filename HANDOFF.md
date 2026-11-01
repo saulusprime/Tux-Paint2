@@ -72,7 +72,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
 | `master` | ultimo commit | tutto, fino a "UI scalabile con la finestra": avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`. Il lavoro nuovo parte da qui, su un branch nuovo |
-| `feature/dialog-resize` | come `master` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
+| `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
+| `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
 | `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`); già unito in `master` |
 | `feature/tools`, `feature/svg-icons`, `feature/resizable`, `content/l10n`, `quality/warnings`, `quality/fixme`, `feature/fullscreen` | | già uniti in `master` |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
@@ -1859,3 +1860,19 @@ Richiesta dell'utente: sincronizzare tutto su
 Stato alla chiusura: `master` uguale a `feature/dialog-resize`, tutti i
 branch in pari su `github`; il lavoro nuovo parte da `master` su un
 branch nuovo.
+
+### 2026-11-01 — L'utente tra i contributori
+
+Richiesta dell'utente: aggiungere anche sé stesso, Paolo Pierno, come
+contributore.
+
+- `docs/AUTHORS.txt`, in fondo a "Design and Coding", come gli altri
+  contributori: una voce per questo fork, con il link alla repo GitHub e
+  in breve il lavoro fatto, firmata Paolo Pierno. Niente email (quella
+  dell'utente serve solo per l'identità git).
+- `magic/src/crossstitch.c`, l'unico plugin nuovo del fork, che non aveva
+  autore nell'intestazione: "by Paolo Pierno".
+- `docs/it/AUTHORS.txt` non è toccato: è di una versione vecchia e
+  rimanda già a quello inglese.
+- Branch `docs/authors`, unito in `master` con avanzamento rapido e
+  caricato su `github`. L'identità git resta `Paolo`.

@@ -415,3 +415,6 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   avanzamento rapido (contiene `feature/more-svg-icons`), su richiesta
   dell'utente prima della prova a mano, che resta nel TODO; caricato su
   `github`.
+- [x] 2026-11-01 — Paolo Pierno tra i contributori — voce per il fork in
+  `docs/AUTHORS.txt` e autore di `crossstitch.c`; branch `docs/authors`,
+  unito in `master` e caricato su `github`.
