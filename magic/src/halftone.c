@@ -23,7 +23,7 @@ enum {
 
 
 const char * snd_filenames[NUM_TOOLS] = {
-  "halftone.wav",
+  "halftone.ogg",
 };
 
 const char * icon_filenames[NUM_TOOLS] = {
@@ -89,13 +89,7 @@ int halftone_init(magic_api * api)
              "%s/sounds/magic/%s",
 	     api->data_directory, snd_filenames[i]);
 
-/* FIXME    snd_effect[i] = Mix_LoadWAV(fname);
-    if (snd_effect[i] == NULL) {
-      SDL_FreeSurface(canvas_backup);
-      SDL_FreeSurface(square);
-      return(0);
-    }
-*/
+    snd_effect[i] = Mix_LoadWAV(fname);
   }
 
 
@@ -182,11 +176,9 @@ void halftone_drag(magic_api * api, int which, SDL_Surface * canvas,
   update_rect->w = (x + 16) - update_rect->x;
   update_rect->h = (y + 16) - update_rect->y;
 
-/* FIXME
   api->playsound(snd_effect[which],
                  (x * 255) / canvas->w, // pan
 	         255); // distance
-*/
 }
 
 enum {

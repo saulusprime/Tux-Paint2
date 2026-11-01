@@ -78,7 +78,7 @@ int puzzle_init(magic_api * api)
 {
   char fname[1024];
 
-  snprintf(fname, sizeof(fname), "%s/sounds/magic/puzzle.wav",
+  snprintf(fname, sizeof(fname), "%s/sounds/magic/puzzle.ogg",
 	    api->data_directory);
   puzzle_snd = Mix_LoadWAV(fname);
 

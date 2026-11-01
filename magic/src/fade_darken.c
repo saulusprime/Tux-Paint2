@@ -237,7 +237,7 @@ void fade_darken_click(magic_api * api, int which, int mode,
     update_rect->w = canvas->w;
     update_rect->h = canvas->h;
 
-    /* FIXME: Play sfx */
+    api->playsound(snd_effects[which], 128, 255);
   }
 }
 
