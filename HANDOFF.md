@@ -26,7 +26,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    o una voce da fare.
 2. Controllare il branch: `git branch -v`. Il lavoro nuovo si fa su un
    branch dedicato, **mai direttamente su `master`**. Si committa solo su
-   richiesta, si fa push solo su richiesta (finora mai).
+   richiesta, si fa push solo su richiesta, sul remote `github` (§1).
 3. La shell di VS Code è un sandbox Flatpak: compilazione ed esecuzione
    avvengono **sull'host**. `./dev.sh build|install|run` passa da solo
    all'host (§4); per altri comandi usare
@@ -55,13 +55,19 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   `https://github.com/lliurex/tuxpaint.git`. Il commit iniziale
   (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16) importa il
   sorgente 0.9.22 così come pacchettizzato in Ubuntu.
+- **Repository dell'utente**: remote `github` =
+  `git@github.com:saulusprime/Tux-Paint2.git` (pubblico,
+  `https://github.com/saulusprime/Tux-Paint2`), via SSH con la chiave
+  dell'utente. Dal 2026-11-01 ci sono tutti i branch, ognuno collegato al
+  suo (`git push` dal branch basta); `master` è il predefinito. `origin`
+  resta LliureX, solo da leggere.
 - **Decisioni prese** (2026-10-29):
   - **Strategia**: si resta sulla **0.9.22 con SDL 1.2** (tramite
     sdl12-compat) e la si corregge. Niente riallineamento all'upstream né
     porting a SDL2, per ora.
   - **Obiettivo**: **sperimentazione personale**. Target solo Linux;
     packaging, distribuzione e altre piattaforme non sono priorità.
-- **Branch** (niente è pubblicato su `origin`):
+- **Branch** (tutti pubblicati su `github`, niente su `origin`):
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
@@ -1831,3 +1837,16 @@ Verifiche (desktop fermo, con il permesso dell'utente, in più giri):
 
 Stato alla chiusura: branch attivo `feature/dialog-resize`, installato in
 `~/.local`; da provare a mano e unire in `master`.
+
+### 2026-11-01 — Pubblicazione sulla repo GitHub dell'utente
+
+Richiesta dell'utente: sincronizzare tutto su
+`https://github.com/saulusprime/Tux-Paint2`, che era vuota.
+
+- Aggiunto il remote `github` (SSH: la chiave dell'host autentica già
+  come saulusprime; `gh` non c'è e per HTTPS non ci sono credenziali).
+- Push di `master` per primo, così è il branch predefinito, poi di tutti
+  i 14 branch con `-u`: ognuno segue il suo su `github`, anche `master`
+  (prima seguiva `origin/master`). Nessun tag. `origin` non è toccato.
+- `master` resta a `baead7c`: l'unione di `feature/dialog-resize`
+  aspetta ancora la prova a mano; dopo si fa e si carica anche quella.
