@@ -137,8 +137,11 @@ versione 0.9.14, era di Flavio "Iron Bishop" Pastore (2004).</small></p>
     (vedi "<a href="#loading_into">Caricare altre immagini</a>" per le
     dimensioni della tela).</li>
 
-  <li><b>Schermo intero.</b> <b>[Alt]</b>&nbsp;+&nbsp;<b>[Invio]</b> passa
-    dalla finestra allo schermo intero e viceversa. Con l'opzione
+  <li><b>Schermo intero e finestra ridimensionabile.</b>
+    <b>[Alt]</b>&nbsp;+&nbsp;<b>[Invio]</b> passa dalla finestra allo schermo
+    intero e viceversa, e la finestra si può allargare o restringere
+    trascinandone il bordo: l'interfaccia si ridisegna per la nuova
+    dimensione e il disegno si adatta alla nuova tela. Con l'opzione
     <code>--fullscreen</code> (o <code>fullscreen=yes</code> nel file di
     configurazione) senza indicare una dimensione, Tux&nbsp;Paint si apre
     direttamente alla risoluzione dello schermo. Nel menu del desktop,
@@ -276,9 +279,9 @@ versione 0.9.14, era di Flavio "Iron Bishop" Pastore (2004).</small></p>
       <i>Tux&nbsp;Paint&nbsp;Config.</i> o in altri modi: vedi la
       documentazione delle <a href="../../html/OPTIONS.html">opzioni</a>
       (in inglese) per i dettagli. In questa versione la finestra si apre
-      già più grande sugli schermi grandi, e
-      <b>[Alt]</b>&nbsp;+&nbsp;<b>[Invio]</b> passa allo schermo
-      intero.</p>
+      già più grande sugli schermi grandi, si può ridimensionare
+      trascinandone il bordo, e <b>[Alt]</b>&nbsp;+&nbsp;<b>[Invio]</b>
+      passa allo schermo intero.</p>
     </dd>
 
 
@@ -1002,12 +1005,21 @@ versione 0.9.14, era di Flavio "Iron Bishop" Pastore (2004).</small></p>
         <p><i>(Solo in questa versione)</i></p>
 
         <p>Premendo <b>[Alt]</b>&nbsp;+&nbsp;<b>[Invio]</b> si passa dalla
-        finestra allo schermo intero, e viceversa. Se Tux&nbsp;Paint è
-        partito in una finestra, a schermo intero l'immagine della finestra
-        viene ingrandita per riempire lo schermo. Per avere l'interfaccia
-        alla piena risoluzione dello schermo, avvia Tux&nbsp;Paint
-        direttamente a schermo intero: con la voce "Schermo intero" del
-        menu dell'icona, o con l'opzione "<code>--fullscreen</code>".</p>
+        finestra allo schermo intero, alla risoluzione dello schermo, e
+        viceversa. Anche trascinando il bordo della finestra per
+        ridimensionarla, l'interfaccia si ridisegna per la nuova dimensione
+        e il disegno viene adattato alla nuova tela senza deformarlo: se le
+        proporzioni sono diverse, intorno al disegno si vede lo sfondo.
+        Tornando alla dimensione di prima, il disegno torna com'era (solo un
+        po' meno nitido, perché ridimensionato due volte).</p>
+
+        <p>Mentre è aperta una finestra di dialogo (come "Apri" o "Nuovo"),
+        l'immagine viene solo ingrandita o tagliata; l'interfaccia si
+        ridisegna quando si torna al disegno.</p>
+
+        <p>Si può anche avviare Tux&nbsp;Paint direttamente a schermo
+        intero: con la voce "Schermo intero" del menu dell'icona, o con
+        l'opzione "<code>--fullscreen</code>".</p>
       </dd>
       </dl>
     </blockquote>

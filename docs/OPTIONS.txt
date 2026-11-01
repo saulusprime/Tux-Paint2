@@ -92,10 +92,14 @@ Windows Users
                screen's current resolution (set by the operating system).
 
                While Tux Paint is running, [Alt]+[Enter] switches between
-               full screen and a window. The layout doesn't change: in full
-               screen the window's picture is stretched to fit the screen.
-               If Tux Paint was started in full screen at the screen's own
-               resolution, it stays in full screen.
+               full screen (at the screen's own resolution) and a window,
+               and the window can be resized by dragging its border. The
+               interface is laid out again for the new size, and the
+               picture is scaled to fit the new canvas, keeping its shape
+               (where the proportions differ, the background shows around
+               it). While a dialog (such as "Open" or "New") is open, the
+               picture is only stretched; the layout is redone when going
+               back to the drawing.
 
        windowsize=SIZE
 

@@ -93,12 +93,15 @@ Obiettivi
        della finestra, sugli schermi grandi Tux Paint si apre in una
        finestra più grande (vedi "Caricare altre immagini" per le
        dimensioni della tela).
-     * Schermo intero. [Alt] + [Invio] passa dalla finestra allo schermo
-       intero e viceversa. Con l'opzione --fullscreen (o fullscreen=yes
-       nel file di configurazione) senza indicare una dimensione,
-       Tux Paint si apre direttamente alla risoluzione dello schermo. Nel
-       menu del desktop, l'icona di Tux Paint ha anche la voce "Schermo
-       intero" (clic destro sull'icona).
+     * Schermo intero e finestra ridimensionabile. [Alt] + [Invio] passa
+       dalla finestra allo schermo intero e viceversa, e la finestra si
+       può allargare o restringere trascinandone il bordo: l'interfaccia
+       si ridisegna per la nuova dimensione e il disegno si adatta alla
+       nuova tela. Con l'opzione --fullscreen (o fullscreen=yes nel file
+       di configurazione) senza indicare una dimensione, Tux Paint si apre
+       direttamente alla risoluzione dello schermo. Nel menu del desktop,
+       l'icona di Tux Paint ha anche la voce "Schermo intero" (clic destro
+       sull'icona).
      * Raccolta completa dei timbri. Il programma comprende solo pochi
        timbri di esempio. La raccolta completa (quasi mille timbri, quasi
        tutti con la descrizione in italiano) si installa con il comando
@@ -195,8 +198,9 @@ Schermata principale
           Tux Paint. La si può cambiare con il programma di configurazione
           Tux Paint Config. o in altri modi: vedi la documentazione delle
           opzioni (in inglese) per i dettagli. In questa versione la
-          finestra si apre già più grande sugli schermi grandi, e
-          [Alt] + [Invio] passa allo schermo intero.
+          finestra si apre già più grande sugli schermi grandi, si può
+          ridimensionare trascinandone il bordo, e [Alt] + [Invio] passa
+          allo schermo intero.
 
    A destra: il selettore
           Il selettore mostra cose diverse a seconda dello strumento
@@ -674,12 +678,21 @@ Gli strumenti
           (Solo in questa versione)
 
           Premendo [Alt] + [Invio] si passa dalla finestra allo schermo
-          intero, e viceversa. Se Tux Paint è partito in una finestra, a
-          schermo intero l'immagine della finestra viene ingrandita per
-          riempire lo schermo. Per avere l'interfaccia alla piena
-          risoluzione dello schermo, avvia Tux Paint direttamente a
-          schermo intero: con la voce "Schermo intero" del menu
-          dell'icona, o con l'opzione "--fullscreen".
+          intero, alla risoluzione dello schermo, e viceversa. Anche
+          trascinando il bordo della finestra per ridimensionarla,
+          l'interfaccia si ridisegna per la nuova dimensione e il disegno
+          viene adattato alla nuova tela senza deformarlo: se le
+          proporzioni sono diverse, intorno al disegno si vede lo sfondo.
+          Tornando alla dimensione di prima, il disegno torna com'era
+          (solo un po' meno nitido, perché ridimensionato due volte).
+
+          Mentre è aperta una finestra di dialogo (come "Apri" o "Nuovo"),
+          l'immagine viene solo ingrandita o tagliata; l'interfaccia si
+          ridisegna quando si torna al disegno.
+
+          Si può anche avviare Tux Paint direttamente a schermo intero:
+          con la voce "Schermo intero" del menu dell'icona, o con
+          l'opzione "--fullscreen".
      __________________________________________________________________
 
                       Caricare altre immagini in Tux Paint
