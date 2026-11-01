@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 15:38+0100\n"
+"POT-Creation-Date: 2026-11-01 08:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -398,7 +398,7 @@ msgstr ""
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7759
+#: ../tools.h:98 ../tuxpaint.c:8212
 msgid "Open"
 msgstr ""
 
@@ -521,179 +521,179 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr ""
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2183
+#: ../tuxpaint.c:2348
 msgid "Do you really want to quit?"
 msgstr ""
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2186
+#: ../tuxpaint.c:2351
 msgid "Yes, I’m done!"
 msgstr ""
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2189 ../tuxpaint.c:2216
+#: ../tuxpaint.c:2354 ../tuxpaint.c:2381
 msgid "No, take me back!"
 msgstr ""
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2193
+#: ../tuxpaint.c:2358
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr ""
 
-#: ../tuxpaint.c:2194 ../tuxpaint.c:2199
+#: ../tuxpaint.c:2359 ../tuxpaint.c:2364
 msgid "Yes, save it!"
 msgstr ""
 
-#: ../tuxpaint.c:2195 ../tuxpaint.c:2200
+#: ../tuxpaint.c:2360 ../tuxpaint.c:2365
 msgid "No, don’t bother saving!"
 msgstr ""
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2198
+#: ../tuxpaint.c:2363
 msgid "Save your picture first?"
 msgstr ""
 
 #. Error opening picture
-#: ../tuxpaint.c:2203
+#: ../tuxpaint.c:2368
 msgid "Can’t open that picture!"
 msgstr ""
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2206 ../tuxpaint.c:2211 ../tuxpaint.c:2220 ../tuxpaint.c:2227
-#: ../tuxpaint.c:2236
+#: ../tuxpaint.c:2371 ../tuxpaint.c:2376 ../tuxpaint.c:2385 ../tuxpaint.c:2392
+#: ../tuxpaint.c:2401
 msgid "OK"
 msgstr ""
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2210
+#: ../tuxpaint.c:2375
 msgid "There are no saved files!"
 msgstr ""
 
 #. Verification of print action
-#: ../tuxpaint.c:2214
+#: ../tuxpaint.c:2379
 msgid "Print your picture now?"
 msgstr ""
 
-#: ../tuxpaint.c:2215
+#: ../tuxpaint.c:2380
 msgid "Yes, print it!"
 msgstr ""
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2219
+#: ../tuxpaint.c:2384
 msgid "Your picture has been printed!"
 msgstr ""
 
 #. We got an error printing
-#: ../tuxpaint.c:2223
+#: ../tuxpaint.c:2388
 msgid "Sorry! Your picture could not be printed!"
 msgstr ""
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2226
+#: ../tuxpaint.c:2391
 msgid "You can’t print yet!"
 msgstr ""
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2230
+#: ../tuxpaint.c:2395
 msgid "Erase this picture?"
 msgstr ""
 
-#: ../tuxpaint.c:2231
+#: ../tuxpaint.c:2396
 msgid "Yes, erase it!"
 msgstr ""
 
-#: ../tuxpaint.c:2232
+#: ../tuxpaint.c:2397
 msgid "No, don’t erase it!"
 msgstr ""
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2235
+#: ../tuxpaint.c:2400
 msgid "Remember to use the left mouse button!"
 msgstr ""
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2443
+#: ../tuxpaint.c:2746
 msgid "Sound muted."
 msgstr ""
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2448
+#: ../tuxpaint.c:2751
 msgid "Sound unmuted."
 msgstr ""
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3195
+#: ../tuxpaint.c:3498
 msgid "Please wait…"
 msgstr ""
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7762
+#: ../tuxpaint.c:8215
 msgid "Erase"
 msgstr ""
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7765
+#: ../tuxpaint.c:8218
 msgid "Slides"
 msgstr ""
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7768
+#: ../tuxpaint.c:8221
 msgid "Back"
 msgstr ""
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7771
+#: ../tuxpaint.c:8224
 msgid "Next"
 msgstr ""
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7774
+#: ../tuxpaint.c:8227
 msgid "Play"
 msgstr ""
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8674
+#: ../tuxpaint.c:9325
 msgid "Aa"
 msgstr ""
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:12016
+#: ../tuxpaint.c:12671
 msgid "Yes"
 msgstr ""
 
-#: ../tuxpaint.c:12020
+#: ../tuxpaint.c:12675
 msgid "No"
 msgstr ""
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:13083
+#: ../tuxpaint.c:13606
 msgid "Replace the picture with your changes?"
 msgstr ""
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:13087
+#: ../tuxpaint.c:13610
 msgid "Yes, replace the old one!"
 msgstr ""
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:13091
+#: ../tuxpaint.c:13614
 msgid "No, save a new file!"
 msgstr ""
 
-#: ../tuxpaint.c:14339
+#: ../tuxpaint.c:14863
 msgid "Choose the picture you want, then click “Open”."
 msgstr ""
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:15371 ../tuxpaint.c:15699
+#: ../tuxpaint.c:15896 ../tuxpaint.c:16224
 msgid "Choose the pictures you want, then click “Play”."
 msgstr ""
 
-#: ../tuxpaint.c:22849
+#: ../tuxpaint.c:23395
 msgid "Pick a color."
 msgstr ""
 
@@ -735,28 +735,36 @@ msgid ""
 "perpendicularly to open or close the blinds."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+msgid "Click to make your entire picture blocky."
+msgstr ""
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr ""
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr ""
 
@@ -797,7 +805,11 @@ msgstr ""
 msgid "Cartoon"
 msgstr ""
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+msgid "Click to turn your entire picture into a cartoon."
+msgstr ""
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr ""
 
@@ -807,6 +819,18 @@ msgstr ""
 
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:56
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:62
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:63
+msgid "Click to embroider your entire picture with cross stitches."
 msgstr ""
 
 #: ../../magic/src/distortion.c:142
@@ -821,7 +845,11 @@ msgstr ""
 msgid "Emboss"
 msgstr ""
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+msgid "Click to emboss your entire picture."
+msgstr ""
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr ""
 
@@ -874,11 +902,11 @@ msgstr ""
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr ""
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr ""
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr ""
 
@@ -903,15 +931,15 @@ msgstr ""
 msgid "Click to surround your picture with repetitive patterns."
 msgstr ""
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr ""
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr ""
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr ""
 
@@ -1104,15 +1132,15 @@ msgstr ""
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr ""
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr ""
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr ""
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr ""
 
