@@ -19,6 +19,8 @@ ACTION is one of:
   wait:SEC    sleep
   shot:NAME   capture the window to NAME.png
   info:NAME   print the window's position, size and map state to stderr
+  resize:W,H  ask the window manager to resize the window to W x H (as
+              dragging its border would), then wait 1.5 seconds
 Writes a tar archive of the PNGs to stdout.
 
 Safety: only the window of the Tux Paint process started here is used (by
@@ -26,7 +28,8 @@ _NET_WM_PID; other Tux Paint windows, e.g. the user's, are ignored). It is
 activated first, and before every pointer action the script checks that it
 is the topmost window under the pointer; if not (e.g. it opened behind
 another window), it stops without clicking. Likewise it never presses keys
-unless the keyboard focus is in that window.
+unless the keyboard focus is in that window (after asking the window
+manager once more to focus it).
 """
 import ctypes, io, os, subprocess, sys, tarfile, tempfile, time
 
@@ -216,6 +219,10 @@ try:
             focus, revert = ctypes.c_ulong(), ctypes.c_int()
             x11.XGetInputFocus(dpy, ctypes.byref(focus), ctypes.byref(revert))
             if focus.value in (0, 1) or toplevel(focus.value) != toplevel(int(wid, 16)):
+                # (e.g. after a resize or a fullscreen switch): ask once more
+                activate(int(wid, 16))
+                x11.XGetInputFocus(dpy, ctypes.byref(focus), ctypes.byref(revert))
+            if focus.value in (0, 1) or toplevel(focus.value) != toplevel(int(wid, 16)):
                 sys.stderr.write("STOP: the keyboard focus (0x%x) is not in Tux Paint; "
                                  "not pressing keys\n" % focus.value)
                 break
@@ -249,6 +256,11 @@ try:
             ti = tarfile.TarInfo(arg + ".png")
             ti.size = len(buf.getvalue())
             out.addfile(ti, io.BytesIO(buf.getvalue()))
+        elif kind == "resize":
+            w, h = (int(v) for v in arg.split(","))
+            x11.XResizeWindow(dpy, ctypes.c_ulong(int(wid, 16)), w, h)
+            x11.XFlush(dpy)
+            time.sleep(1.5)
         elif kind == "info":
             info = subprocess.run(["xwininfo", "-id", wid], capture_output=True, text=True).stdout
             got = {}
