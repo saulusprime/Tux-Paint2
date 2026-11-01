@@ -1064,30 +1064,6 @@ static void apply_surface (int x, int y, SDL_Surface *source, SDL_Surface *desti
 }
 
 
-/* /\* NOTE: This is a duplicate of wcstou16 in tuxpaint.c */
-
-/*    This conversion is required on platforms where Uint16 doesn't match wchar_t. */
-/*    On Windows, wchar_t is 16-bit, elsewhere it is 32-bit. */
-/*    Mismatch caused by the use of Uint16 for unicode characters by SDL, SDL_ttf. */
-/*    I guess wchar_t is really only suitable for internal use ... *\/ */
-/* static Uint16 *wcstou16(const wchar_t * str) */
-/* { */
-/*   unsigned int i, len = wcslen(str); */
-/*   Uint16 *res = malloc((len + 1) * sizeof(Uint16)); */
-
-/*   for (i = 0; i < len + 1; ++i) */
-/*   { */
-/*     /\* This is a bodge, but it seems unlikely that a case-conversion */
-/*        will cause a change from one utf16 character into two.... */
-/*        (though at least UTF-8 suffers from this problem) *\/ */
-
-/*     // FIXME: mangles non-BMP characters rather than using UTF-16 surrogates! */
-/*     res[i] = (Uint16) str[i]; */
-/*   } */
-
-/*   return res; */
-/* } */
-
 /* Stretches a button from the middle, keeping the extrems intact */
 static SDL_Surface * stretch_surface(SDL_Surface * orig, int width)
 {
@@ -1646,6 +1622,7 @@ struct osk_keyboard * osk_clicked(on_screen_keyboard *keyboard, int x, int y)
   char *name, *aux_name, *aux_list, *aux_list_ptr;
   wchar_t *wkeysym;
   wchar_t *ks;
+  Uint32 uc;
   on_screen_keyboard * new_keyboard;
 
 #ifdef DEBUG
@@ -1796,14 +1773,31 @@ struct osk_keyboard * osk_clicked(on_screen_keyboard *keyboard, int x, int y)
 	event.key.keysym.sym = SDLK_BACKSPACE;
 	event.key.keysym.unicode = '\b';
       }
-      else if (wcsncmp(L"NoSymbol", ks, 8 == 0))
+      else if (wcsncmp(L"NoSymbol", ks, 8) == 0)
+      {
+	free(mnemo);
+	free(wkeysym);
 	return(keyboard);
+      }
 
       else
+      {
 	if (keyboard->composed_type == 1)
-	  event.key.keysym.unicode = *keyboard->composed;
+	  uc = *keyboard->composed;
 	else
-	  event.key.keysym.unicode = keysym2unicode(mnemo2keysym(mnemo, keyboard), keyboard);
+	  uc = keysym2unicode(mnemo2keysym(mnemo, keyboard), keyboard);
+
+	/* SDL 1.2 carries 16-bit characters; others go as a UTF-16
+	   surrogate pair, two key presses that Tux Paint puts together */
+	if (uc > 0xFFFF && uc <= 0x10FFFF)
+	{
+	  event.key.keysym.unicode = 0xD800 + ((uc - 0x10000) >> 10);
+	  event.type = SDL_KEYDOWN;
+	  SDL_PushEvent(&event);
+	  uc = 0xDC00 + ((uc - 0x10000) & 0x3FF);
+	}
+	event.key.keysym.unicode = uc;
+      }
 
       clear_dead_sticks(keyboard);
       event.type = SDL_KEYDOWN;

@@ -1538,8 +1538,13 @@ static Uint16 *wcstou16(const wchar_t * str)
        will cause a change from one utf16 character into two....
        (though at least UTF-8 suffers from this problem) */
 
-    // FIXME: mangles non-BMP characters rather than using UTF-16 surrogates!
-    res[i] = (Uint16) str[i];
+    /* SDL_ttf 2.0 only draws the 16-bit characters (and doesn't know of
+       surrogate pairs): the others become the replacement character,
+       instead of a wrong one. SDL_Pango draws them all. */
+    if ((Uint32) str[i] > 0xFFFF)
+      res[i] = 0xFFFD;
+    else
+      res[i] = (Uint16) str[i];
   }
 
   return res;

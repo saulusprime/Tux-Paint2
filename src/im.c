@@ -665,6 +665,9 @@ static const wchar_t* charmap_search(CHARMAP* cm, wchar_t* s)
 */
 static int im_event_c(IM_DATA* im, SDL_keysym ks)
 {
+  /* The first half of a UTF-16 surrogate pair, waiting for the second */
+  static Uint16 high_surrogate = 0;
+
   /* Handle event requests */
   im->s[0] = L'\0';
   if(im->request != IM_REQ_TRANSLATE) return 0;
@@ -676,6 +679,24 @@ static int im_event_c(IM_DATA* im, SDL_keysym ks)
     case SDLK_RETURN:    im->s[0] = L'\r'; break;
     default:             im->s[0] = ks.unicode;
   }
+
+  /* SDL 1.2 gives 16-bit characters: one past U+FFFF comes in two halves
+     (the on-screen keyboard sends them so), which a 32-bit wchar_t holds
+     as one character */
+#if WCHAR_MAX > 0xFFFF
+  if (ks.unicode >= 0xD800 && ks.unicode <= 0xDBFF)
+  {
+    high_surrogate = ks.unicode;
+    im->s[0] = L'\0';
+  }
+  else if (ks.unicode >= 0xDC00 && ks.unicode <= 0xDFFF && high_surrogate)
+  {
+    im->s[0] = 0x10000 + ((high_surrogate - 0xD800) << 10) + (ks.unicode - 0xDC00);
+    high_surrogate = 0;
+  }
+  else
+    high_surrogate = 0;
+#endif
   im->s[1] = L'\0';
   im->buf[0] = L'\0';
 
