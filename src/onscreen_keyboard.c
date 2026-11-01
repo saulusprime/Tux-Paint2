@@ -77,8 +77,11 @@ struct osk_keyboard *osk_create(char *layout_name, SDL_Surface *canvas, SDL_Surf
   layout = load_layout(keyboard, layout_name);
   if (!layout)
   {
+    static char default_layout[] = "default.layout";
+
     printf("Error trying to load the required layout %s\n", layout_name);
-    layout = load_layout(keyboard, strdup("default.layout"));
+    free(keyboard->name);  /* (load_layout() sets it again) */
+    layout = load_layout(keyboard, default_layout);
     if (!layout)
     {
       printf("Error trying to load the default layout\n");
@@ -178,6 +181,7 @@ static struct osk_layout *load_layout(on_screen_keyboard *keyboard, char *layout
 	/* Fallback to default */
 	snprintf(filename, 255, "%sosk/default.layout", DATA_PREFIX);
 	fi = fopen(filename, "r");
+	free(keyboard->name);
 	keyboard->name = strdup("default.layout");
       }
     }
