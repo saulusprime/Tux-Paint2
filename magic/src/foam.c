@@ -43,6 +43,9 @@ static int * foam_mask, * foam_mask_tmp;
 static SDL_Surface * foam_7, * foam_5, * foam_3, * foam_1;
 static int foam_bubbles_w, foam_bubbles_h;	/* canvas size they're made for */
 
+/* The bubbles as they come, white; the ones above are tinted from these */
+static SDL_Surface * foam_white[4];
+
 Uint32 foam_api_version(void);
 int foam_init(magic_api * api);
 char * foam_get_description(magic_api * api, int which, int mode);
@@ -71,7 +74,7 @@ int foam_requires_colors(magic_api * api, int which);
 Uint32 foam_api_version(void) { return(TP_MAGIC_API_VERSION); }
 
 
-static void foam_free_bubbles(void)
+static void foam_free_tinted(void)
 {
   if (foam_1 != NULL)
     SDL_FreeSurface(foam_1);
@@ -82,6 +85,73 @@ static void foam_free_bubbles(void)
   if (foam_7 != NULL)
     SDL_FreeSurface(foam_7);
   foam_1 = foam_3 = foam_5 = foam_7 = NULL;
+}
+
+static void foam_free_bubbles(void)
+{
+  int i;
+
+  foam_free_tinted();
+
+  for (i = 0; i < 4; i++)
+  {
+    if (foam_white[i] != NULL)
+      SDL_FreeSurface(foam_white[i]);
+    foam_white[i] = NULL;
+  }
+}
+
+// A copy of a white bubble in the current color. Most of the color, but
+// some of the bubble's own white stays (for its shine), and with white
+// it's the bubble as it was:
+static SDL_Surface * foam_tint(magic_api * api, SDL_Surface * white)
+{
+  SDL_Surface * tinted;
+  int x, y;
+  Uint8 r, g, b, a;
+  float kr, kg, kb;
+
+  if (white == NULL)
+    return(NULL);
+
+  tinted = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, white->w, white->h,
+                                white->format->BitsPerPixel,
+                                white->format->Rmask, white->format->Gmask,
+                                white->format->Bmask, white->format->Amask);
+  if (tinted == NULL)
+    return(NULL);
+
+  kr = 0.2 + 0.8 * foam_r / 255.0;
+  kg = 0.2 + 0.8 * foam_g / 255.0;
+  kb = 0.2 + 0.8 * foam_b / 255.0;
+
+  SDL_LockSurface(white);
+  SDL_LockSurface(tinted);
+
+  for (y = 0; y < white->h; y++)
+  {
+    for (x = 0; x < white->w; x++)
+    {
+      SDL_GetRGBA(api->getpixel(white, x, y), white->format, &r, &g, &b, &a);
+      api->putpixel(tinted, x, y,
+                    SDL_MapRGBA(tinted->format, r * kr, g * kg, b * kb, a));
+    }
+  }
+
+  SDL_UnlockSurface(tinted);
+  SDL_UnlockSurface(white);
+
+  return(tinted);
+}
+
+static void foam_tint_bubbles(magic_api * api)
+{
+  foam_free_tinted();
+
+  foam_7 = foam_tint(api, foam_white[3]);
+  foam_5 = foam_tint(api, foam_white[2]);
+  foam_3 = foam_tint(api, foam_white[1]);
+  foam_1 = foam_tint(api, foam_white[0]);
 }
 
 // The bubbles, sized for a w x h canvas:
@@ -96,16 +166,18 @@ static void foam_make_bubbles(magic_api * api, int w, int h)
 	    api->data_directory);
   foam_data = IMG_Load(fname);
 
-  foam_7 = api->scale(foam_data, ((w / FOAM_PROP) * 4) / 4,
+  foam_white[3] = api->scale(foam_data, ((w / FOAM_PROP) * 4) / 4,
 				 ((h / FOAM_PROP) * 4) / 4, 0);
-  foam_5 = api->scale(foam_data, ((w / FOAM_PROP) * 3) / 4,
+  foam_white[2] = api->scale(foam_data, ((w / FOAM_PROP) * 3) / 4,
 				 ((h / FOAM_PROP) * 3) / 4, 0);
-  foam_3 = api->scale(foam_data, ((w / FOAM_PROP) * 2) / 4,
+  foam_white[1] = api->scale(foam_data, ((w / FOAM_PROP) * 2) / 4,
 				 ((h / FOAM_PROP) * 2) / 4, 0);
-  foam_1 = api->scale(foam_data, ((w / FOAM_PROP) * 1) / 4,
+  foam_white[0] = api->scale(foam_data, ((w / FOAM_PROP) * 1) / 4,
 				 ((h / FOAM_PROP) * 1) / 4, 0);
 
   SDL_FreeSurface(foam_data);
+
+  foam_tint_bubbles(api);
 
   foam_bubbles_w = w;
   foam_bubbles_h = h;
@@ -449,18 +521,24 @@ void foam_shutdown(magic_api * api ATTRIBUTE_UNUSED)
   foam_free_bubbles();
 }
 
-// Record the color from Tux Paint:
-void foam_set_color(magic_api * api ATTRIBUTE_UNUSED, Uint8 r, Uint8 g, Uint8 b)
+// Record the color from Tux Paint, and tint the bubbles with it:
+void foam_set_color(magic_api * api, Uint8 r, Uint8 g, Uint8 b)
 {
+  if (r == foam_r && g == foam_g && b == foam_b && foam_7 != NULL)
+    return;
+
   foam_r = r;
   foam_g = g;
   foam_b = b;
+
+  if (foam_white[0] != NULL)
+    foam_tint_bubbles(api);
 }
 
 // Use colors:
 int foam_requires_colors(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
 {
-  return 0;  /* FIXME: Would be nice to tint the bubbles */
+  return 1;
 }
 
 void foam_switchin(magic_api * api, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED,  SDL_Surface * canvas)
