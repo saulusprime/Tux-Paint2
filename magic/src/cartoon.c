@@ -107,10 +107,83 @@ char * cartoon_get_name(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UN
 }
 
 // Return our descriptions, localized:
-char * cartoon_get_description(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED)
+char * cartoon_get_description(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode)
 {
+  if (mode == MODE_FULLSCREEN)
+    return(strdup(gettext_noop(
+"Click to turn your entire picture into a cartoon.")));
+
   return(strdup(gettext_noop(
 "Click and move the mouse around to turn the picture into a cartoon.")));
+}
+
+// Convert the color at xx/yy to a more cartoony one:
+
+static void cartoon_color(magic_api * api, SDL_Surface * canvas, SDL_Surface * last,
+                          int xx, int yy)
+{
+  Uint8 r, g, b;
+  float hue, sat, val;
+
+  /* Get original color: */
+
+  SDL_GetRGB(api->getpixel(last, xx, yy), last->format, &r, &g, &b);
+
+  api->rgbtohsv(r, g, b, &hue, &sat, &val);
+
+  val = val - 0.5;
+  val = val * 4;
+  val = val + 0.5;
+
+  if (val < 0)
+    val = 0;
+  else if (val > 1.0)
+    val = 1.0;
+
+  val = floor(val * 4) / 4;
+  hue = floor(hue * 4) / 4;
+
+  sat = floor(sat * 4) / 4;
+
+  api->hsvtorgb(hue, sat, val, &r, &g, &b);
+
+  api->putpixel(canvas, xx, yy, SDL_MapRGB(canvas->format, r, g, b));
+}
+
+// Draw a dark outline at xx/yy if there's a large contrast change:
+
+static void cartoon_outline(magic_api * api, SDL_Surface * canvas, SDL_Surface * last,
+                            int xx, int yy)
+{
+  Uint8 r1, g1, b1, r2, g2, b2;
+  Uint8 r, g, b;
+
+  /* Get original color: */
+
+  SDL_GetRGB(api->getpixel(last, xx, yy), last->format, &r, &g, &b);
+
+  SDL_GetRGB(api->getpixel(last, xx + 1, yy),
+             last->format, &r1, &g1, &b1);
+
+  SDL_GetRGB(api->getpixel(last, xx + 1, yy + 1),
+             last->format, &r2, &g2, &b2);
+
+  if (abs(((r + g + b) / 3) - (r1 + g1 + b1) / 3) > OUTLINE_THRESH
+      || abs(((r + g + b) / 3) - (r2 + g2 + b2) / 3) >
+      OUTLINE_THRESH || abs(r - r1) > OUTLINE_THRESH
+      || abs(g - g1) > OUTLINE_THRESH
+      || abs(b - b1) > OUTLINE_THRESH
+      || abs(r - r2) > OUTLINE_THRESH
+      || abs(g - g2) > OUTLINE_THRESH
+      || abs(b - b2) > OUTLINE_THRESH)
+  {
+    api->putpixel(canvas, xx - 1, yy,
+             SDL_MapRGB(canvas->format, 0, 0, 0));
+    api->putpixel(canvas, xx, yy - 1,
+             SDL_MapRGB(canvas->format, 0, 0, 0));
+    api->putpixel(canvas, xx - 1, yy - 1,
+             SDL_MapRGB(canvas->format, 0, 0, 0));
+  }
 }
 
 // Do the effect:
@@ -120,9 +193,6 @@ static void do_cartoon(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * can
 {
   magic_api * api = (magic_api *) ptr;
   int xx, yy;
-  Uint8 r1, g1, b1, r2, g2, b2;
-  Uint8 r, g, b;
-  float hue, sat, val;
 
   /* First, convert colors to more cartoony ones: */
 
@@ -131,31 +201,7 @@ static void do_cartoon(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * can
     for (xx = x - 16; xx < x + 16; xx = xx + 1)
     {
       if (api->in_circle(xx - x, yy - y, 16))
-      {
-        /* Get original color: */
-
-        SDL_GetRGB(api->getpixel(last, xx, yy), last->format, &r, &g, &b);
-
-        api->rgbtohsv(r, g, b, &hue, &sat, &val);
-
-        val = val - 0.5;
-        val = val * 4;
-        val = val + 0.5;
-
-        if (val < 0)
-          val = 0;
-        else if (val > 1.0)
-          val = 1.0;
-
-        val = floor(val * 4) / 4;
-        hue = floor(hue * 4) / 4;
-
-        sat = floor(sat * 4) / 4;
-
-        api->hsvtorgb(hue, sat, val, &r, &g, &b);
-
-        api->putpixel(canvas, xx, yy, SDL_MapRGB(canvas->format, r, g, b));
-      }
+        cartoon_color(api, canvas, last, xx, yy);
     }
   }
 
@@ -166,34 +212,7 @@ static void do_cartoon(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * can
     for (xx = x - 16; xx < x + 16; xx++)
     {
       if (api->in_circle(xx - x, yy - y, 16))
-      {
-        /* Get original color: */
-
-        SDL_GetRGB(api->getpixel(last, xx, yy), last->format, &r, &g, &b);
-
-        SDL_GetRGB(api->getpixel(last, xx + 1, yy),
-                   last->format, &r1, &g1, &b1);
-
-        SDL_GetRGB(api->getpixel(last, xx + 1, yy + 1),
-                   last->format, &r2, &g2, &b2);
-
-        if (abs(((r + g + b) / 3) - (r1 + g1 + b1) / 3) > OUTLINE_THRESH
-            || abs(((r + g + b) / 3) - (r2 + g2 + b2) / 3) >
-            OUTLINE_THRESH || abs(r - r1) > OUTLINE_THRESH
-            || abs(g - g1) > OUTLINE_THRESH
-            || abs(b - b1) > OUTLINE_THRESH
-            || abs(r - r2) > OUTLINE_THRESH
-            || abs(g - g2) > OUTLINE_THRESH
-            || abs(b - b2) > OUTLINE_THRESH)
-        {
-          api->putpixel(canvas, xx - 1, yy,
-                   SDL_MapRGB(canvas->format, 0, 0, 0));
-          api->putpixel(canvas, xx, yy - 1,
-                   SDL_MapRGB(canvas->format, 0, 0, 0));
-          api->putpixel(canvas, xx - 1, yy - 1,
-                   SDL_MapRGB(canvas->format, 0, 0, 0));
-        }
-      }
+        cartoon_outline(api, canvas, last, xx, yy);
     }
   }
 }
@@ -211,17 +230,42 @@ void cartoon_drag(magic_api * api, int which, SDL_Surface * canvas,
   update_rect->x = ox - 16;
   update_rect->y = oy - 16;
   update_rect->w = (x + 16) - update_rect->x;
-  update_rect->h = (y + 16) - update_rect->h;
+  update_rect->h = (y + 16) - update_rect->y;
 
   api->playsound(cartoon_snd, (x * 255) / canvas->w, 255);
 }
 
 // Affect the canvas on click:
-void cartoon_click(magic_api * api, int which, int mode ATTRIBUTE_UNUSED,
+void cartoon_click(magic_api * api, int which, int mode,
 	           SDL_Surface * canvas, SDL_Surface * last,
 	           int x, int y, SDL_Rect * update_rect)
 {
-  cartoon_drag(api, which, canvas, last, x, y, x, y, update_rect);
+  int xx, yy;
+
+  if (mode == MODE_PAINT)
+  {
+    cartoon_drag(api, which, canvas, last, x, y, x, y, update_rect);
+    return;
+  }
+
+  /* The entire picture: */
+
+  for (yy = 0; yy < canvas->h; yy++)
+    for (xx = 0; xx < canvas->w; xx++)
+      cartoon_color(api, canvas, last, xx, yy);
+
+  api->update_progress_bar();
+
+  for (yy = 0; yy < canvas->h; yy++)
+    for (xx = 0; xx < canvas->w; xx++)
+      cartoon_outline(api, canvas, last, xx, yy);
+
+  update_rect->x = 0;
+  update_rect->y = 0;
+  update_rect->w = canvas->w;
+  update_rect->h = canvas->h;
+
+  api->playsound(cartoon_snd, 128, 255);
 }
 
 // Affect the canvas on release:
@@ -259,5 +303,5 @@ void cartoon_switchout(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNU
 
 int cartoon_modes(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
 {
-  return(MODE_PAINT); /* FIXME - Can also be turned into a full-image effect */
+  return(MODE_PAINT | MODE_FULLSCREEN);
 }

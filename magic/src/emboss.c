@@ -104,9 +104,42 @@ char * emboss_get_name(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNU
 }
 
 // Return our descriptions, localized:
-char * emboss_get_description(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode ATTRIBUTE_UNUSED)
+char * emboss_get_description(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED, int mode)
 {
+  if (mode == MODE_FULLSCREEN)
+    return(strdup(gettext_noop("Click to emboss your entire picture.")));
+
   return(strdup(gettext_noop("Click and drag the mouse to emboss the picture.")));
+}
+
+// Emboss the pixel at x/y:
+
+static void emboss_pixel(magic_api * api, SDL_Surface * canvas, SDL_Surface * last,
+                         int x, int y)
+{
+  Uint8 r1, g1, b1,
+        r2, g2, b2;
+  int r;
+  float h, s, v;
+  int avg1, avg2;
+
+  SDL_GetRGB(api->getpixel(last, x, y), last->format, &r1, &g1, &b1);
+  SDL_GetRGB(api->getpixel(last, x + 2, y + 2), last->format, &r2, &g2, &b2);
+
+  avg1 = (r1 + g1 + b1) / 3;
+  avg2 = (r2 + g2 + b2) / 3;
+
+  api->rgbtohsv(r1, g1, b1, &h, &s, &v);
+
+  r = 128 + (((avg1 - avg2) * 3) / 2);
+  if (r < 0) r = 0;
+  if (r > 255) r = 255;
+
+  v = (r / 255.0);
+
+  api->hsvtorgb(h, s, v, &r1, &g1, &b1);
+
+  api->putpixel(canvas, x, y, SDL_MapRGB(canvas->format, r1, g1, b1));
 }
 
 // Do the effect:
@@ -116,11 +149,6 @@ static void do_emboss(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * canv
 {
   magic_api * api = (magic_api *) ptr;
   int xx, yy;
-  Uint8 r1, g1, b1,
-        r2, g2, b2;
-  int r;
-  float h, s, v;
-  int avg1, avg2;
 
   for (yy = -16; yy < 16; yy++)
   {
@@ -129,25 +157,7 @@ static void do_emboss(void * ptr, int which ATTRIBUTE_UNUSED, SDL_Surface * canv
       if (api->in_circle(xx, yy, 16))
       {
         if (!api->touched(x + xx, y + yy))
-        {
-          SDL_GetRGB(api->getpixel(last, x + xx, y + yy), last->format, &r1, &g1, &b1);
-          SDL_GetRGB(api->getpixel(last, x + xx + 2, y + yy + 2), last->format, &r2, &g2, &b2);
-
-          avg1 = (r1 + g1 + b1) / 3;
-          avg2 = (r2 + g2 + b2) / 3;
-
-	  api->rgbtohsv(r1, g1, b1, &h, &s, &v);
-
-          r = 128 + (((avg1 - avg2) * 3) / 2);
-          if (r < 0) r = 0;
-          if (r > 255) r = 255;
-
-	  v = (r / 255.0);
-
-	  api->hsvtorgb(h, s, v, &r1, &g1, &b1);
-
-          api->putpixel(canvas, x + xx, y + yy, SDL_MapRGB(canvas->format, r1, g1, b1));
-        }
+          emboss_pixel(api, canvas, last, x + xx, y + yy);
       }
     }
   }
@@ -166,18 +176,37 @@ void emboss_drag(magic_api * api, int which, SDL_Surface * canvas,
   update_rect->x = ox - 16;
   update_rect->y = oy - 16;
   update_rect->w = (x + 16) - update_rect->x;
-  update_rect->h = (y + 16) - update_rect->h;
+  update_rect->h = (y + 16) - update_rect->y;
 
   api->playsound(emboss_snd,
                  (x * 255) / canvas->w, 255);
 }
 
 // Affect the canvas on click:
-void emboss_click(magic_api * api, int which, int mode ATTRIBUTE_UNUSED,
+void emboss_click(magic_api * api, int which, int mode,
 	           SDL_Surface * canvas, SDL_Surface * last,
 	           int x, int y, SDL_Rect * update_rect)
 {
-  emboss_drag(api, which, canvas, last, x, y, x, y, update_rect);
+  int xx, yy;
+
+  if (mode == MODE_PAINT)
+  {
+    emboss_drag(api, which, canvas, last, x, y, x, y, update_rect);
+    return;
+  }
+
+  /* The entire picture: */
+
+  for (yy = 0; yy < canvas->h; yy++)
+    for (xx = 0; xx < canvas->w; xx++)
+      emboss_pixel(api, canvas, last, xx, yy);
+
+  update_rect->x = 0;
+  update_rect->y = 0;
+  update_rect->w = canvas->w;
+  update_rect->h = canvas->h;
+
+  api->playsound(emboss_snd, 128, 255);
 }
 
 // Affect the canvas on release:
@@ -215,5 +244,5 @@ void emboss_switchout(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUS
 
 int emboss_modes(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
 {
-  return(MODE_PAINT); /* FIXME - Can also be turned into a full-image effect */
+  return(MODE_PAINT | MODE_FULLSCREEN);
 }

@@ -47,6 +47,9 @@ enum {
 
 static Mix_Chunk * snd_effect[NUM_TOOLS];
 
+/* How many times Chalk goes over the entire picture */
+#define CHALK_PASSES 6
+
 
 /* Our function prototypes: */
 
@@ -143,11 +146,17 @@ char * blocks_chalk_drip_get_name(magic_api * api ATTRIBUTE_UNUSED, int which)
 }
 
 // Return our descriptions, localized:
-char * blocks_chalk_drip_get_description(magic_api * api ATTRIBUTE_UNUSED, int which, int mode ATTRIBUTE_UNUSED)
+char * blocks_chalk_drip_get_description(magic_api * api ATTRIBUTE_UNUSED, int which, int mode)
 {
-  if (which == TOOL_BLOCKS)
+  if (which == TOOL_BLOCKS && mode == MODE_FULLSCREEN)
+    return(strdup(gettext_noop(
+"Click to make your entire picture blocky.")));
+  else if (which == TOOL_BLOCKS)
     return(strdup(gettext_noop(
 "Click and move the mouse around to make the picture blocky.")));
+  else if (which == TOOL_CHALK && mode == MODE_FULLSCREEN)
+    return(strdup(gettext_noop(
+"Click to turn your entire picture into a chalk drawing.")));
   else if (which == TOOL_CHALK)
     return(strdup(gettext_noop(
 "Click and move the mouse around to turn the picture into a chalk drawing.")));
@@ -156,6 +165,76 @@ char * blocks_chalk_drip_get_description(magic_api * api ATTRIBUTE_UNUSED, int w
 "Click and move the mouse around to make the picture drip.")));
 
   return(NULL);
+}
+
+// Make one 4x4 block, at xx/yy, the average color of what's there:
+
+static void blocks_chalk_drip_block(magic_api * api, SDL_Surface * canvas,
+                                    SDL_Surface * last, int xx, int yy)
+{
+  Uint32 pix[16];
+  Uint32 p_or = 0;
+  Uint32 p_and = ~0;
+  unsigned i = 16;
+  Uint8 r, g, b;
+  SDL_Rect dest;
+
+  while (i--)
+  {
+    Uint32 p_tmp;
+    p_tmp = api->getpixel(last, xx + (i >> 2), yy + (i & 3));
+    p_or |= p_tmp;
+    p_and &= p_tmp;
+    pix[i] = p_tmp;
+  }
+  if (p_or == p_and)    // if all pixels the same already
+  {
+    SDL_GetRGB(p_or, last->format, &r, &g, &b);
+  }
+  else                  // nope, must average them
+  {
+    double r_sum = 0.0;
+    double g_sum = 0.0;
+    double b_sum = 0.0;
+    i = 16;
+    while (i--)
+    {
+      SDL_GetRGB(pix[i], last->format, &r, &g, &b);
+      r_sum += api->sRGB_to_linear(r);
+      g_sum += api->sRGB_to_linear(g);
+      b_sum += api->sRGB_to_linear(b);
+    }
+    r = api->linear_to_sRGB(r_sum / 16.0);
+    g = api->linear_to_sRGB(g_sum / 16.0);
+    b = api->linear_to_sRGB(b_sum / 16.0);
+  }
+
+  /* Draw block: */
+
+  dest.x = xx;
+  dest.y = yy;
+  dest.w = 4;
+  dest.h = 4;
+
+  SDL_FillRect(canvas, &dest, SDL_MapRGB(canvas->format, r, g, b));
+}
+
+// Make one chalk smudge, around xx/yy, the color of what's there:
+
+static void blocks_chalk_drip_chalk(magic_api * api, SDL_Surface * canvas,
+                                    SDL_Surface * last, int xx, int yy)
+{
+  SDL_Rect dest;
+  Uint32 colr;
+
+  dest.x = xx + ((rand() % 5) - 2);
+  dest.y = yy + ((rand() % 5) - 2);
+  dest.w = (rand() % 4) + 2;
+  dest.h = (rand() % 4) + 2;
+
+  colr = api->getpixel(last, clamp(0, xx, canvas->w - 1),
+                       clamp(0, yy, canvas->h - 1));
+  SDL_FillRect(canvas, &dest, colr);
 }
 
 // Do the effect:
@@ -168,8 +247,6 @@ static void blocks_chalk_drip_linecb(void * ptr, int which,
   int xx, yy;
   int h;
   SDL_Rect src, dest;
-  Uint8 r, g, b;
-  Uint32 colr;
 
   if (which == TOOL_BLOCKS)
   {
@@ -181,72 +258,15 @@ static void blocks_chalk_drip_linecb(void * ptr, int which,
     if (!api->touched(x, y))
     {
       for (yy = y - 8; yy < y + 8; yy = yy + 4)
-      {
-      for (xx = x - 8; xx < x + 8; xx = xx + 4)
-      {
-        Uint32 pix[16];
-        Uint32 p_or = 0;
-        Uint32 p_and = ~0;
-        unsigned i = 16;
-        while (i--)
-        {
-          Uint32 p_tmp;
-          p_tmp = api->getpixel(last, xx + (i >> 2), yy + (i & 3));
-          p_or |= p_tmp;
-          p_and &= p_tmp;
-          pix[i] = p_tmp;
-        }
-        if (p_or == p_and)    // if all pixels the same already
-        {
-          SDL_GetRGB(p_or, last->format, &r, &g, &b);
-        }
-        else                  // nope, must average them
-        {
-          double r_sum = 0.0;
-          double g_sum = 0.0;
-          double b_sum = 0.0;
-          i = 16;
-          while (i--)
-          {
-            SDL_GetRGB(pix[i], last->format, &r, &g, &b);
-            r_sum += api->sRGB_to_linear(r);
-            g_sum += api->sRGB_to_linear(g);
-            b_sum += api->sRGB_to_linear(b);
-          }
-          r = api->linear_to_sRGB(r_sum / 16.0);
-          g = api->linear_to_sRGB(g_sum / 16.0);
-          b = api->linear_to_sRGB(b_sum / 16.0);
-        }
-
-        /* Draw block: */
-
-        dest.x = xx;
-        dest.y = yy;
-        dest.w = 4;
-        dest.h = 4;
-
-        SDL_FillRect(canvas, &dest, SDL_MapRGB(canvas->format, r, g, b));
-      }
-      }
+        for (xx = x - 8; xx < x + 8; xx = xx + 4)
+          blocks_chalk_drip_block(api, canvas, last, xx, yy);
     }
   }
   else if (which == TOOL_CHALK)
   {
-
     for (yy = y - 8; yy <= y + 8; yy = yy + 4)
-    {
       for (xx = x - 8; xx <= x + 8; xx = xx + 4)
-      {
-        dest.x = xx + ((rand() % 5) - 2);
-        dest.y = yy + ((rand() % 5) - 2);
-        dest.w = (rand() % 4) + 2;
-        dest.h = (rand() % 4) + 2;
-
-        colr = api->getpixel(last, clamp(0, xx, canvas->w - 1),
-                             clamp(0, yy, canvas->h - 1));
-        SDL_FillRect(canvas, &dest, colr);
-      }
-    }
+        blocks_chalk_drip_chalk(api, canvas, last, xx, yy);
   }
   else if (which == TOOL_DRIP)
   {
@@ -289,11 +309,45 @@ void blocks_chalk_drip_drag(magic_api * api, int which, SDL_Surface * canvas,
 }
 
 // Affect the canvas on click:
-void blocks_chalk_drip_click(magic_api * api, int which, int mode ATTRIBUTE_UNUSED,
+void blocks_chalk_drip_click(magic_api * api, int which, int mode,
 	           SDL_Surface * canvas, SDL_Surface * last,
 	           int x, int y, SDL_Rect * update_rect)
 {
-  blocks_chalk_drip_drag(api, which, canvas, last, x, y, x, y, update_rect);
+  int xx, yy, pass;
+
+  if (mode == MODE_PAINT)
+  {
+    blocks_chalk_drip_drag(api, which, canvas, last, x, y, x, y, update_rect);
+    return;
+  }
+
+  /* The entire picture: */
+
+  if (which == TOOL_BLOCKS)
+  {
+    for (yy = 0; yy < canvas->h; yy = yy + 4)
+      for (xx = 0; xx < canvas->w; xx = xx + 4)
+        blocks_chalk_drip_block(api, canvas, last, xx, yy);
+  }
+  else if (which == TOOL_CHALK)
+  {
+    /* Dragging goes over each spot several times; so do we */
+    for (pass = 0; pass < CHALK_PASSES; pass++)
+    {
+      for (yy = 0; yy < canvas->h + 4; yy = yy + 4)
+        for (xx = 0; xx < canvas->w + 4; xx = xx + 4)
+          blocks_chalk_drip_chalk(api, canvas, last, xx, yy);
+
+      api->update_progress_bar();
+    }
+  }
+
+  update_rect->x = 0;
+  update_rect->y = 0;
+  update_rect->w = canvas->w;
+  update_rect->h = canvas->h;
+
+  api->playsound(snd_effect[which], 128, 255);
 }
 
 // Affect the canvas on release:
@@ -311,6 +365,9 @@ void blocks_chalk_drip_shutdown(magic_api * api ATTRIBUTE_UNUSED)
 
   if (snd_effect[1] != NULL)
     Mix_FreeChunk(snd_effect[1]);
+
+  if (snd_effect[2] != NULL)
+    Mix_FreeChunk(snd_effect[2]);
 }
 
 // Record the color from Tux Paint:
@@ -333,7 +390,10 @@ void blocks_chalk_drip_switchout(magic_api * api ATTRIBUTE_UNUSED, int which ATT
 {
 }
 
-int blocks_chalk_drip_modes(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
+int blocks_chalk_drip_modes(magic_api * api ATTRIBUTE_UNUSED, int which)
 {
-  return(MODE_PAINT); /* FIXME - Blocks and Chalk, at least, can also be turned into a full-image effect */
+  if (which == TOOL_DRIP)
+    return(MODE_PAINT);
+
+  return(MODE_PAINT | MODE_FULLSCREEN);
 }
