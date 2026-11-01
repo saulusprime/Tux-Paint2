@@ -40,7 +40,10 @@ const char * descs[NUM_TOOLS] = {
 
 Mix_Chunk * snd_effect[NUM_TOOLS];
 
-static SDL_Surface * canvas_backup, * square;
+static SDL_Surface * canvas_backup;
+
+/* Distance between the dots of each ink, in pixels */
+#define DOT_SPACING 6
 
 /* Function Prototypes: */
 
@@ -81,7 +84,6 @@ int halftone_init(magic_api * api)
   char fname[1024];
 
   canvas_backup = NULL;
-  square = NULL;
 
   for (i = 0; i < NUM_TOOLS; i++)
   {
@@ -151,7 +153,6 @@ void halftone_shutdown(magic_api * api ATTRIBUTE_UNUSED)
     Mix_FreeChunk(snd_effect[i]);
 
   SDL_FreeSurface(canvas_backup);
-  SDL_FreeSurface(square);
 }
 
 void halftone_click(magic_api * api, int which, int mode ATTRIBUTE_UNUSED,
@@ -196,9 +197,11 @@ Uint8 chan_colors[NUM_CHANS][3] = {
   {   0,   0,   0 }
 };
 
+/* The angles of the inks' grids of dots, in degrees: the usual ones in
+   printing, which make small rosettes instead of a moire */
 int chan_angles[NUM_CHANS] = {
-  100,
   15,
+  75,
   0,
   45
 };
@@ -220,16 +223,12 @@ void halftone_line_callback(void * ptr, int which ATTRIBUTE_UNUSED,
                            SDL_Surface * canvas, SDL_Surface * snapshot ATTRIBUTE_UNUSED,
                            int x, int y)
 {
-  Uint8 r, g, b, or, og, ob;
+  Uint8 r, g, b;
   Uint32 total_r, total_g, total_b;
-  Uint32 pixel;
-  int xx, yy, xxx, yyy, channel, ox, oy, sqx, sqy;
-  SDL_Rect dest;
+  int xx, yy, channel, sx, sy;
+  float px, py, u, v, cu, cv, cx, cy, du, dv, dot, cover;
+  float paper[3], cmyk[4], co[NUM_CHANS], si[NUM_CHANS];
   magic_api * api = (magic_api *) ptr;
-  float cmyk[4];
-
-  pixel = SDL_MapRGB(square->format, 255, 255, 255);
-  SDL_FillRect(square, NULL, pixel);
 
   /* Lock to grid, centered around mouse */
   x = ((x / 8) - 1) * 8;
@@ -237,65 +236,70 @@ void halftone_line_callback(void * ptr, int which ATTRIBUTE_UNUSED,
 
   if (api->touched(x, y)) { return; }
 
-  for (xx = 0; xx < 16; xx = xx + 4) {
-    for (yy = 0; yy < 16; yy = yy + 4) {
-      /* Get avg color around the mouse */
-      total_r = total_g = total_b = 0;
-      for (xxx = 0; xxx < 4; xxx++) {
-        for (yyy = 0; yyy < 4; yyy++) {
-          SDL_GetRGB(api->getpixel(canvas_backup, x + xx + xxx, y + yy + yyy), canvas_backup->format, &r, &g, &b);
-          total_r += r;
-          total_g += g;
-          total_b += b;
-        }
-      }
-      total_r /= 16;
-      total_g /= 16;
-      total_b /= 16;
-
-      /* Convert to CMYK values */
-      halftone_rgb2cmyk(total_r, total_g, total_b, cmyk);
-
-      /* Draw C, M, Y and K blobs into our 'square' surface */
-      for (channel = 0; channel < NUM_CHANS; channel++) {
-        r = chan_colors[channel][0];
-        g = chan_colors[channel][1];
-        b = chan_colors[channel][2];
-
-        for (xxx = 0; xxx < 8; xxx++) {
-          for (yyy = 0; yyy < 8; yyy++) {
-            /* A circle blob, radius based upon channel (C, M, Y or K) strength for this color */
-
-            /* FIXME: Base it upon this channel's angle! -bjk 2011.07.17 */
-            ox = xxx;
-            oy = yyy;
-
-            sqx = (xx + ox) % 16;
-            sqy = (yy + oy) % 16;
-
-            if (api->in_circle(xxx - 4, yyy - 4, cmyk[channel] * 6.0)) {
-              SDL_GetRGB(api->getpixel(square, sqx, sqy), square->format, &or, &og, &ob);
-
-              if (or == 255 && og == 255 && ob == 255) {
-                /* If it's just white, put full color down */
-                pixel = SDL_MapRGB(square->format, r, g, b);
-              } else {
-                /* Otherwise, blend a little */
-                pixel = SDL_MapRGB(square->format, (r + or) / 2, (g + og) / 2, (b + ob) / 2);
-              }
-
-              api->putpixel(square, sqx, sqy, pixel);
-            }
-          }
-        }
-      }
-    }
+  for (channel = 0; channel < NUM_CHANS; channel++)
+  {
+    co[channel] = cos(chan_angles[channel] * M_PI / 180.0);
+    si[channel] = sin(chan_angles[channel] * M_PI / 180.0);
   }
 
-  dest.x = x;
-  dest.y = y;
+  /* Each pixel is worked out from where it is on the canvas, so squares
+     drawn over each other match */
 
-  SDL_BlitSurface(square, NULL, canvas, &dest);
+  for (yy = y; yy < y + 16; yy++) {
+    for (xx = x; xx < x + 16; xx++) {
+      paper[0] = paper[1] = paper[2] = 1.0;
+
+      for (channel = 0; channel < NUM_CHANS; channel++) {
+        /* The dot of this ink's (rotated) grid that the pixel is in, and
+           where its center is on the canvas */
+        px = xx + 0.5;
+        py = yy + 0.5;
+        u = px * co[channel] + py * si[channel];
+        v = - px * si[channel] + py * co[channel];
+        cu = (floor(u / DOT_SPACING) + 0.5) * DOT_SPACING;
+        cv = (floor(v / DOT_SPACING) + 0.5) * DOT_SPACING;
+        cx = cu * co[channel] - cv * si[channel];
+        cy = cu * si[channel] + cv * co[channel];
+
+        /* How much of this ink there is: from the avg color around the dot */
+        total_r = total_g = total_b = 0;
+        for (sy = -1; sy <= 1; sy++) {
+          for (sx = -1; sx <= 1; sx++) {
+            SDL_GetRGB(api->getpixel(canvas_backup,
+                                     cx + sx * DOT_SPACING / 3,
+                                     cy + sy * DOT_SPACING / 3),
+                       canvas_backup->format, &r, &g, &b);
+            total_r += r;
+            total_g += g;
+            total_b += b;
+          }
+        }
+        halftone_rgb2cmyk(total_r / 9, total_g / 9, total_b / 9, cmyk);
+
+        /* A dot covering about that much of its square (dots touch at
+           about 80%), with a soft edge */
+        dot = DOT_SPACING * 0.58 * sqrt(cmyk[channel]);
+        du = u - cu;
+        dv = v - cv;
+        cover = dot - sqrt(du * du + dv * dv) + 0.5;
+        if (cover <= 0.0)
+          continue;
+        if (cover > 1.0)
+          cover = 1.0;
+        if (dot < 0.5)
+          cover = cover * dot * 2.0;  /* (a tiny dot is a fainter one) */
+
+        /* Inks absorb what they don't reflect, as on paper */
+        paper[0] *= 1.0 - cover * (1.0 - chan_colors[channel][0] / 255.0);
+        paper[1] *= 1.0 - cover * (1.0 - chan_colors[channel][1] / 255.0);
+        paper[2] *= 1.0 - cover * (1.0 - chan_colors[channel][2] / 255.0);
+      }
+
+      api->putpixel(canvas, xx, yy,
+                    SDL_MapRGB(canvas->format, paper[0] * 255.0 + 0.5,
+                               paper[1] * 255.0 + 0.5, paper[2] * 255.0 + 0.5));
+    }
+  }
 }
 
 void halftone_switchin(magic_api * api, int which ATTRIBUTE_UNUSED, 
@@ -312,10 +316,7 @@ void halftone_switchin(magic_api * api, int which ATTRIBUTE_UNUSED,
   if (canvas_backup == NULL)
     canvas_backup = SDL_CreateRGBSurface(SDL_ANYFORMAT, api->canvas_w, api->canvas_h, canvas->format->BitsPerPixel, canvas->format->Rmask, canvas->format->Gmask, canvas->format->Bmask, canvas->format->Amask);
 
-  if (square == NULL)
-    square = SDL_CreateRGBSurface(SDL_ANYFORMAT, 16, 16, canvas->format->BitsPerPixel, canvas->format->Rmask, canvas->format->Gmask, canvas->format->Bmask, canvas->format->Amask);
-
-  /* FIXME: What to do if they come back NULL!? :( */
+  /* FIXME: What to do if it comes back NULL!? :( */
 
   SDL_BlitSurface(canvas, NULL, canvas_backup, NULL);
 }
