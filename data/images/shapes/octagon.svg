@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 40 30">
+<!-- Drawn after octagon.png (devtools/content/shape_icons.py) -->
+<polygon points="25.78,1.05 33.95,9.22 33.95,20.78 25.78,28.95 14.22,28.95 6.05,20.78 6.05,9.22 14.22,1.05" fill="none" stroke="#000" stroke-width="2.1" stroke-linejoin="miter"/>
+</svg>
