@@ -276,6 +276,9 @@ then the names of your functions must begin with "<code><b>zoom_</b></code>"
   This will appear on the button in the 'Magic' selector within
   Tux&nbsp;Paint.<br>
   <br>
+  Load it with "<code>api-&gt;load_icon()</code>" (see below), so that
+  it can be sharp on bigger buttons.<br>
+  <br>
   Tux Paint will free ("<code>SDL_FreeSurface()</code>") the surface upon
   exit.<br>
   <br>
@@ -578,6 +581,20 @@ plugin's functions.
   surface ("<code>canvas</code>") (ignoring the "<code>snapshot</code>
   surface) have no reason to use this function.  The "Blur" and "Smudge"
   tools that ship with Tux&nbsp;Paint are examples of such effects.<br>
+  <br>
+
+<li><code><b>SDL_Surface * load_icon(const&nbsp;char&nbsp;*&nbsp;filename)</b></code><br>
+  Loads the icon for "<code>get_icon()</code>": give it the path of
+  the PNG file, at its design size (e.g., 40x30).  When Tux&nbsp;Paint's
+  buttons are bigger than 48x48, it instead draws an SVG file with the
+  same name ("<code>icon.svg</code>" next to "<code>icon.png</code>"),
+  if there's one, sharp at the buttons' size; Tux&nbsp;Paint knows not to
+  scale that again.  Return what it gives.<br>
+  <br>
+  <b>Note:</b> Added in this fork of Tux&nbsp;Paint 0.9.22, at the end
+  of the "<code>magic_api</code>" structure, without changing the API
+  version.  Plugins that load their icon with "<code>IMG_Load()</code>"
+  keep working, but their icon is only enlarged.<br>
   <br>
 </ul>
 

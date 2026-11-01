@@ -92,14 +92,14 @@ int fold_get_tool_count(magic_api * api ATTRIBUTE_UNUSED)
   return 1;
 }
 
-SDL_Surface * fold_get_icon(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
+SDL_Surface * fold_get_icon(magic_api * api, int which ATTRIBUTE_UNUSED)
 {
   char fname[1024];
 
   snprintf(fname, sizeof(fname), "%s/images/magic/fold.png",
 	     api->data_directory);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 char * fold_get_name(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED) { return(gettext_noop("Fold")); }

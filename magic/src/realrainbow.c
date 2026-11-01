@@ -101,7 +101,7 @@ SDL_Surface * realrainbow_get_icon(magic_api * api, int which)
     snprintf(fname, sizeof(fname), "%s/images/magic/realrainbow-roygbiv.png",
              api->data_directory);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 char * realrainbow_get_name(magic_api * api ATTRIBUTE_UNUSED, int which)

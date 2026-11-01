@@ -451,6 +451,7 @@ int main(int argc, char * argv[])
   api.canvas_h = canvas->h;
   api.scale = api_scale;
   api.touched = api_touched;
+  api.load_icon = IMG_Load;  /* (no SVG version here) */
 
   srand(1);
   for (i = 6; i < argc; i++)

@@ -110,7 +110,7 @@ SDL_Surface * kalidescope_get_icon(magic_api * api, int which)
   snprintf(fname, sizeof(fname), "%s/images/magic/%s",
 	   api->data_directory, kal_icon_names[which]);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 // Return our names, localized:

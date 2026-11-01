@@ -189,7 +189,7 @@ SDL_Surface * crossstitch_get_icon(magic_api * api, int which)
   snprintf(fname, sizeof(fname), "%s/images/magic/%s",
            api->data_directory, crossstitch_icon_filenames[which]);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 char * crossstitch_get_name(magic_api * api ATTRIBUTE_UNUSED, int which)

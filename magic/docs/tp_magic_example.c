@@ -190,9 +190,12 @@ SDL_Surface * example_get_icon(magic_api * api, int which)
 	     api->data_directory, icon_filenames[which]);
 
 
-  // Try to load the image, and return the results to Tux Paint:
+  // Try to load the image, and return the results to Tux Paint.
+  // ("api->load_icon()" is like "IMG_Load()", but when Tux Paint's buttons
+  // are bigger than 48x48 it draws "one.svg" instead of "one.png", if
+  // there is such a file, sharp at their size.)
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 

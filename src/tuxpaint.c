@@ -1864,6 +1864,9 @@ static SDL_Cursor *get_cursor(unsigned char *bits, unsigned char *mask_bits,
 			      unsigned int x, unsigned int y);
 static void seticon(void);
 static SDL_Surface *loadimage(const char *const fname);
+static SDL_Surface *load_svg_version(const char *const fname);
+static SDL_Surface *magic_load_icon(const char *fname);
+static SDL_Surface *get_magic_icon(int which);
 static SDL_Surface *loadimagerb(const char *const fname);
 static SDL_Surface *scale_ui_image(SDL_Surface * s);
 static SDL_Surface *do_loadimage(const char *const fname, int abort_on_error);
@@ -8350,7 +8353,10 @@ static SDL_Surface *loadimage(const char *const fname)
    ".svg", and the same size) is drawn at that size instead, if there's
    one: sharper than the enlarged PNG. */
 
-static SDL_Surface *loadimagerb(const char *const fname)
+/* With buttons bigger than 48x48, the SVG file with the same name as a PNG
+   interface image, drawn at the buttons' size; NULL if there's none (or
+   at 48x48, where the PNGs are used as they are) */
+static SDL_Surface *load_svg_version(const char *const fname)
 {
 #if !defined(NOSVG) && !defined(OLD_SVG)
   size_t len = strlen(fname);
@@ -8358,22 +8364,63 @@ static SDL_Surface *loadimagerb(const char *const fname)
   if (button_scale > 1 && len > 4 && !strcasecmp(fname + len - 4, ".png"))
   {
     char svgname[1024];
-    SDL_Surface *s = NULL;
     FILE *fi;
 
     if (snprintf(svgname, sizeof(svgname), "%.*s.svg", (int) len - 4, fname) <
         (int) sizeof(svgname) && (fi = fopen(svgname, "r")) != NULL)
     {
       fclose(fi);
-      s = load_svg_at(svgname, button_scale);
+      return (load_svg_at(svgname, button_scale));
     }
-
-    if (s != NULL)
-      return (s);
   }
+#else
+  (void) fname;
 #endif
 
+  return (NULL);
+}
+
+static SDL_Surface *loadimagerb(const char *const fname)
+{
+  SDL_Surface *s = load_svg_version(fname);
+
+  if (s != NULL)
+    return (s);
+
   return (scale_ui_image(loadimage(fname)));
+}
+
+
+/* The icon of a Magic tool: plugins load it with the API's load_icon()
+   (as the PNG file, design size), and Tux Paint scales it to the buttons.
+   When there's an SVG version, load_icon() gives it already at their
+   size, so it's remembered here, not to be scaled again. */
+
+static SDL_Surface *magic_icon_at_scale;
+
+static SDL_Surface *magic_load_icon(const char *fname)
+{
+  SDL_Surface *s = load_svg_version(fname);
+
+  if (s != NULL)
+  {
+    magic_icon_at_scale = s;
+    return (s);
+  }
+
+  return (IMG_Load(fname));
+}
+
+static SDL_Surface *get_magic_icon(int which)
+{
+  SDL_Surface *icon;
+
+  magic_icon_at_scale = NULL;
+  icon = magic_funcs[magics[which].handle_idx].get_icon(magic_api_struct, magics[which].idx);
+  if (icon != NULL && icon == magic_icon_at_scale)
+    return (icon);
+
+  return (scale_ui_image(icon));
 }
 
 
@@ -18782,6 +18829,7 @@ static void load_magic_plugins(void)
       magic_api_struct->canvas_h = canvas->h;
       magic_api_struct->scale = magic_scale;
       magic_api_struct->touched = magic_touched;
+      magic_api_struct->load_icon = magic_load_icon;
 
 
       do
@@ -19088,7 +19136,7 @@ static void load_magic_plugins(void)
 		    else
 		    	magics[num_magics].mode = MODE_FULLSCREEN;
 
-		    magics[num_magics].img_icon = scale_ui_image(magic_funcs[num_plugin_files].get_icon(magic_api_struct, i));
+		    magics[num_magics].img_icon = get_magic_icon(num_magics);
 
 #ifdef DEBUG
 		    printf("-- %s\n", magics[num_magics].name);
@@ -24555,7 +24603,7 @@ static int change_screen(int w, int h, int full)
   render_ui_titles();
   create_color_buttons();
   for (i = 0; i < num_magics; i++)
-    magics[i].img_icon = scale_ui_image(magic_funcs[magics[i].handle_idx].get_icon(magic_api_struct, magics[i].idx));
+    magics[i].img_icon = get_magic_icon(i);
   create_button_labels();
 
   resize_canvas(r_canvas.w, r_canvas.h);

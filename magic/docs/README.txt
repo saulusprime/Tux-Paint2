@@ -213,6 +213,9 @@ Interfaces
              than 40x40.) This will appear on the button in the 'Magic'
              selector within Tux Paint.
 
+             Load it with "api->load_icon()" (see below), so that it can be
+             sharp on bigger buttons.
+
              Tux Paint will free ("SDL_FreeSurface()") the surface upon exit.
 
              Note: Called once for each Magic tool your plugin claims to
@@ -458,6 +461,19 @@ Interfaces
              surface ("canvas") (ignoring the "snapshot surface) have no
              reason to use this function. The "Blur" and "Smudge" tools that
              ship with Tux Paint are examples of such effects.
+
+           * SDL_Surface * load_icon(const char * filename)
+             Loads the icon for "get_icon()": give it the path of the PNG
+             file, at its design size (e.g., 40x30). When Tux Paint's
+             buttons are bigger than 48x48, it instead draws an SVG file with
+             the same name ("icon.svg" next to "icon.png"), if there's one,
+             sharp at the buttons' size; Tux Paint knows not to scale that
+             again. Return what it gives.
+
+             Note: Added in this fork of Tux Paint 0.9.22, at the end of the
+             "magic_api" structure, without changing the API version.
+             Plugins that load their icon with "IMG_Load()" keep working,
+             but their icon is only enlarged.
 
     Informational
 

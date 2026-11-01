@@ -93,14 +93,14 @@ int shift_get_tool_count(magic_api * api ATTRIBUTE_UNUSED)
 }
 
 // Load our icons:
-SDL_Surface * shift_get_icon(magic_api * api ATTRIBUTE_UNUSED, int which ATTRIBUTE_UNUSED)
+SDL_Surface * shift_get_icon(magic_api * api, int which ATTRIBUTE_UNUSED)
 {
   char fname[1024];
 
   snprintf(fname, sizeof(fname), "%s/images/magic/shift.png",
 	   api->data_directory);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 // Return our names, localized:

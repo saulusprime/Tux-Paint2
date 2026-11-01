@@ -131,7 +131,7 @@ SDL_Surface * distortion_get_icon(magic_api * api, int which ATTRIBUTE_UNUSED)
 
   // Try to load the image, and return the results to Tux Paint:
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 

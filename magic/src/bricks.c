@@ -113,7 +113,7 @@ SDL_Surface * bricks_get_icon(magic_api * api, int which)
 	     api->data_directory);
   }
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 // Return our names, localized:

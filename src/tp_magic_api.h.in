@@ -153,6 +153,16 @@ typedef struct magic_api_t {
      clicked; useful for not applying the same effect from 'last' to 'canvas'
      more than once per click-and-drag sequence */
   Uint8 (*touched)(int, int);
+
+  /* Loads a tool's icon, for 'get_icon()': give it the path of the PNG
+     file, at its design size (e.g., 40x30). With buttons bigger than
+     48x48, it instead draws an SVG file with the same name ("icon.svg"
+     next to "icon.png"), if there's one, already at the buttons' size;
+     Tux Paint knows not to scale that again. Return what it gives.
+     (Added in this fork of Tux Paint 0.9.22, at the end of the structure,
+     without changing the API version: plugins that use IMG_Load() for
+     their icon keep working.) */
+  SDL_Surface * (*load_icon)(const char *);
 } magic_api;
 
 

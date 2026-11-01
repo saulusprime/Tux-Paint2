@@ -110,7 +110,7 @@ SDL_Surface * rosette_get_icon(magic_api * api, int which)
 		snprintf(fname, sizeof(fname), "%s/images/magic/rosette.png", api->data_directory);
 	else snprintf(fname, sizeof(fname), "%s/images/magic/picasso.png", api->data_directory);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 char * rosette_get_name(magic_api * api ATTRIBUTE_UNUSED, int which) { if (!which) return strdup(gettext_noop("Rosette")); else return strdup(gettext_noop("Picasso"));}

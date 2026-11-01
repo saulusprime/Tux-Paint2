@@ -94,7 +94,7 @@ SDL_Surface * waves_get_icon(magic_api * api, int which)
   if (!which) snprintf(fname, sizeof(fname), "%s/images/magic/waves.png", api->data_directory);
   else snprintf(fname, sizeof(fname), "%s/images/magic/wavelet.png", api->data_directory);
 
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 // Return our names, localized:

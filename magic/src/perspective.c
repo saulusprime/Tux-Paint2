@@ -174,7 +174,7 @@ int perspective_get_tool_count(magic_api * api ATTRIBUTE_UNUSED){
 SDL_Surface * perspective_get_icon(magic_api * api, int which){
   char fname[1024];
   snprintf(fname, sizeof(fname), "%simages/magic/%s", api->data_directory, perspective_icon_filenames[which]);
-  return(IMG_Load(fname));
+  return(api->load_icon(fname));
 }
 
 // Return our names, localized:
