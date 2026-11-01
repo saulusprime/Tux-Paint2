@@ -477,8 +477,9 @@ install-magic-plugins:
 	@cp magic/*.$(SO_TYPE) $(MAGIC_PREFIX)
 	@chmod a+r,g-w,o-w $(MAGIC_PREFIX)/*.$(SO_TYPE)
 	@install -d $(DATA_PREFIX)/images/magic
-	@cp magic/icons/*.png $(DATA_PREFIX)/images/magic
-	@chmod a+r,g-w,o-w $(DATA_PREFIX)/images/magic/*.png
+	@cp magic/icons/*.png magic/icons/*.svg $(DATA_PREFIX)/images/magic
+	@chmod a+r,g-w,o-w $(DATA_PREFIX)/images/magic/*.png \
+			$(DATA_PREFIX)/images/magic/*.svg
 	@install -d $(DATA_PREFIX)/sounds/magic
 	@cp magic/sounds/*.wav magic/sounds/*.ogg $(DATA_PREFIX)/sounds/magic
 	@chmod a+r,g-w,o-w $(DATA_PREFIX)/sounds/magic/*.wav \

@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 """Vectorize greyscale UI icons (black line art) into SVG, with potrace.
 
-usage: trace_icons.py POTRACE_DIR ICON.png...    (writes ICON.svg next to it)
+usage: trace_icons.py POTRACE_DIR [--tones] ICON.png...
+       (writes ICON.svg next to each)
 
 POTRACE_DIR holds potrace's mkbitmap and potrace programs (bin/) and
 library (lib/), e.g. extracted from Debian's potrace and libpotrace0
-packages. Each icon is traced in three layers: where it's visible (filled
-with its typical light color, if it has light parts), where there's some
-ink (half-transparent black: thin light lines, shading, soft edges; the
-icons are mostly black with some transparency), and where it's dark
-(black). The SVG keeps the PNG's size, which Tux Paint takes as the design
-size.
+packages. The icons are mostly black with some transparency. Each one is
+traced in layers: where it's visible (filled with its typical light
+color, if it has light parts), then the ink on top:
+
+- by default, two layers: where there's some ink (half-transparent black:
+  thin light lines, shading, soft edges) and where it's dark (black);
+- with --tones, a layer for each flat tone of the icon, found in the
+  histogram of its darkness away from edges, with the opacity that gives
+  that tone once stacked. A black-only icon is one layer, cut at half
+  darkness, so its lines keep their weight; flat greys stay grey.
+  Gradients get only their flat parts: such icons look better as PNGs.
+
+The SVG keeps the PNG's size, which Tux Paint takes as the design size.
 """
 import os
 import re
@@ -24,6 +32,7 @@ SCALE = 8          # mkbitmap's enlargement before tracing
 
 tools = sys.argv[1]
 env = dict(os.environ, LD_LIBRARY_PATH=os.path.join(tools, "lib"))
+tones = "--tones" in sys.argv[2:]
 
 
 def trace(mask, tmp, name, coverage):
@@ -44,6 +53,39 @@ def trace(mask, tmp, name, coverage):
     transform = re.search(r'<g transform="([^"]*)"', text)
     paths = re.findall(r'<path d="([^"]*)"', text)
     return (transform.group(1) if transform else ""), " ".join(paths)
+
+
+def tone_levels(dark, w, h):
+    """The flat tones of darkness (1-255) in an icon: peaks of the
+    histogram of pixels whose 3x3 neighbourhood is even."""
+    px = dark.load()
+    hist = [0] * 16
+    values = []
+    for y in range(h):
+        for x in range(w):
+            v = px[x, y]
+            if v <= 20:
+                continue
+            near = [px[i, j] for i in range(max(0, x - 1), min(w, x + 2))
+                    for j in range(max(0, y - 1), min(h, y + 2))]
+            if max(near) - min(near) > 24:
+                continue
+            hist[v // 16] += 1
+            values.append(v)
+    if not values:
+        return [255]
+    levels = []
+    for b in range(16):
+        if hist[b] < 0.04 * len(values):
+            continue
+        if (b > 0 and hist[b - 1] > hist[b]) or (b < 15 and hist[b + 1] >= hist[b]):
+            continue
+        near = [v for v in values if abs(v - (b * 16 + 8)) <= 20]
+        level = sum(near) // len(near)
+        if levels and level - levels[-1] < 40:
+            continue
+        levels.append(level)
+    return levels or [255]
 
 
 def icon_to_svg(png):
@@ -70,8 +112,19 @@ def icon_to_svg(png):
             grey = greys[len(greys) // 2]
             layers.append(('fill="#%02x%02x%02x"' % (grey, grey, grey),) +
                           trace(visible, tmp, "visible", 0.5))
-        layers.append(('fill="#000000" fill-opacity="0.4"',) + trace(dark, tmp, "ink", 0.2))
-        layers.append(('fill="#000000"',) + trace(dark, tmp, "dark", 0.5))
+        if tones:
+            # Stacked layers of black: after layer i the darkness is
+            # levels[i], so its opacity is what's left to get there
+            below = 0
+            for i, level in enumerate(tone_levels(dark, w, h)):
+                opacity = (level - below) / (255.0 - below)
+                cut = (below + level) / 2.0 / 255
+                fill = 'fill="#000000"' + (' fill-opacity="%.3f"' % opacity if opacity < 0.995 else '')
+                layers.append((fill,) + trace(dark, tmp, "tone%d" % i, cut))
+                below = level
+        else:
+            layers.append(('fill="#000000" fill-opacity="0.4"',) + trace(dark, tmp, "ink", 0.2))
+            layers.append(('fill="#000000"',) + trace(dark, tmp, "dark", 0.5))
 
     body = ""
     for fill, transform, paths in layers:
@@ -90,4 +143,5 @@ def icon_to_svg(png):
 
 
 for png in sys.argv[2:]:
-    icon_to_svg(png)
+    if png != "--tones":
+        icon_to_svg(png)
