@@ -356,7 +356,7 @@ void example_drag(magic_api * api, int which, SDL_Surface * canvas,
   update_rect->x = ox - 4;
   update_rect->y = oy - 4;
   update_rect->w = (x + 4) - update_rect->x;
-  update_rect->h = (y + 4) - update_rect->h;
+  update_rect->h = (y + 4) - update_rect->y;
 
 
   // Play the appropriate sound effect

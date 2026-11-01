@@ -196,7 +196,7 @@ void distortion_drag(magic_api * api, int which, SDL_Surface * canvas,
   update_rect->x = ox - 8;
   update_rect->y = oy - 8;
   update_rect->w = (x + 8) - update_rect->x;
-  update_rect->h = (y + 8) - update_rect->h;
+  update_rect->h = (y + 8) - update_rect->y;
 
 
   api->playsound(snd_effect,

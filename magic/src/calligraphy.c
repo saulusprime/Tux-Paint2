@@ -253,7 +253,7 @@ void calligraphy_drag(magic_api * api, int which ATTRIBUTE_UNUSED, SDL_Surface *
   update_rect->x = ox - 16;
   update_rect->y = oy - 16;
   update_rect->w = (x + 16) - update_rect->x;
-  update_rect->h = (y + 16) - update_rect->h;
+  update_rect->h = (y + 16) - update_rect->y;
 
   /* FIXME */
 

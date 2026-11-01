@@ -235,10 +235,11 @@ void bricks_drag(magic_api * api, int which, SDL_Surface * canvas,
   if (ox > x) { int tmp = ox; ox = x; x = tmp; }
   if (oy > y) { int tmp = oy; oy = y; y = tmp; }
 
-  update_rect->x = x - 64;
-  update_rect->y = y - 64;
-  update_rect->w = (ox + 128) - update_rect->x;
-  update_rect->h = (oy + 128) - update_rect->h;
+  /* (Large bricks reach 72 pixels to the side) */
+  update_rect->x = ox - 80;
+  update_rect->y = oy - 80;
+  update_rect->w = (x + 80) - update_rect->x;
+  update_rect->h = (y + 80) - update_rect->y;
 
   api->playsound(brick_snd, (x * 255) / canvas->w, 255);
 }

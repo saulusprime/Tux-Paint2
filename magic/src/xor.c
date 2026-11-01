@@ -149,7 +149,7 @@ void xor_drag(magic_api * api, int which, SDL_Surface * canvas,
   update_rect->x = ox - 16;
   update_rect->y = oy - 16;
   update_rect->w = (x + 16) - update_rect->x;
-  update_rect->h = (y + 16) - update_rect->h;
+  update_rect->h = (y + 16) - update_rect->y;
 
   api->playsound(xor_snd,(x * 255) / canvas->w, 255);
 }
