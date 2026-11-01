@@ -24,9 +24,10 @@ ridimensionabile, schermo intero nitido e icone SVG di strumenti e forme
 sui branch `feature/resizable` e `feature/svg-icons`. Vedi [ASIS.md](ASIS.md)
 e `HANDOFF.md` §5bis.
 
-- [ ] [P2] Unire in `master` con avanzamento rapido a `feature/svg-icons`
-  (contiene `feature/resizable`), dopo una prova a mano di
-  ridimensionamento e Alt+Invio.
+- [ ] [P2] Unire in `master`, dopo una prova a mano di ridimensionamento e
+  Alt+Invio: `feature/svg-icons` (contiene `feature/resizable`) è ora
+  contenuto in `feature/tools`, e un solo avanzamento rapido a quest'ultimo
+  li porta tutti (vedi la sezione seguente).
 - [ ] [P3] Icone che restano PNG ingrandite: quelle delle magie
   (`magic/icons/`, 94, spesso fotografiche), altoparlante e cuffia, e le
   immagini dei dialoghi (Sì/No, frecce, cestino…). Le cornici dei
@@ -88,25 +89,28 @@ elencati qui.
 
 ## Feature e miglioramenti strumenti
 
-- [ ] [P2] Plugin Magic di prova — scriverne uno nuovo partendo da
-  `magic/docs/tp_magic_example.c` e dalla guida `magic/docs/README.txt`;
-  buon primo esercizio di sperimentazione sull'API dei plugin.
-- [ ] [P2] Magic "Blocks", "Chalk", "Cartoon", "Emboss" anche come effetto
-  sull'intera immagine (`magic/src/blocks_chalk_drip.c:338`,
-  `cartoon.c:262`, `emboss.c:219`).
-- [ ] [P3] Magic "Foam": bolle colorabili (`magic/src/foam.c:434`).
-- [ ] [P3] Magic "Puzzle": modalità a schermo intero (`magic/src/puzzle.c:37`).
-- [ ] [P3] Effetti sonori mancanti o provvisori: Fade/Darken, Glass Tile,
-  Halftone, Mosaic, Tint (`fade_darken.c:240`, `glasstile.c:282`,
-  `halftone.c:92`, `mosaic.c:94`, `tint.c:64`).
-- [ ] [P3] Tastiera a schermo: etichette AltGr e caratteri non-BMP
-  (`src/onscreen_keyboard.c:1219`, `:1074`).
-- [ ] [P3] Halftone: angolo per canale colore (`magic/src/halftone.c:277`).
-- [ ] [P3] Etichette lunghe dei pulsanti su due righe: oggi
-  `do_render_button_label()` le schiaccia in orizzontale fino alla
-  larghezza del pulsante, e oltre i 15 caratteri circa diventano
-  difficili da leggere (in italiano per esempio "Mosaico a esagoni",
-  "Tinta bagnata"; in inglese "Symmetric Left/Right").
+Le nove voci del 2026-10-29 sono chiuse (branch `feature/tools`, vedi
+[ASIS.md](ASIS.md) e `HANDOFF.md` §5quinquies).
+
+- [ ] [P2] Unire `feature/tools` in `master` dopo una prova a mano: le
+  quattro magie a tutta immagine, Punto croce, Schiuma colorata, Puzzle,
+  Mezzatinta, i suoni nuovi, la tastiera a schermo, le etichette su due
+  righe. Parte da `feature/svg-icons`, quindi lo contiene: basta un
+  avanzamento rapido fino a qui.
+- [ ] [P3] Testo ed Etichetta: i caratteri oltre U+FFFF arrivano giusti
+  nel testo, ma i font di questi strumenti passano da SDL_ttf 2.0.11, che
+  sa disegnare solo i caratteri a 16 bit (ora mette il carattere di
+  sostituzione). Si potrebbero disegnare con SDL_Pango, che li sa fare
+  (`render_text_w()`).
+- [ ] [P3] Tastiera a schermo: a 800×600 i tasti misurano 24 px e le
+  scritte di Maiuscolo e AltGr negli angoli sono minuscole; si leggono da
+  1600×1200 in su.
+- [ ] [P3] Mezzatinta anche a tutta immagine: ora ogni pixel si calcola da
+  solo, quindi è facile (va solo tenuto d'occhio il tempo su una tela
+  grande).
+- [ ] [P3] Documentazione delle magie (`magic/magic-docs/`): quattro non
+  hanno una pagina (Fretwork, Halftone, Tornado, Xor Colors); tutte sono
+  solo in inglese.
 
 ## Contenuti e localizzazione
 

@@ -44,7 +44,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-10-31)
+## 1. Stato attuale (al 2026-11-01)
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -63,7 +63,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `feature/svg-icons` | ultimo commit | **branch attivo**: icone SVG di strumenti e forme (`a34374b`, `b9e7dfb`) e file di progetto. Parte da `feature/resizable` |
+| `feature/tools` | ultimo commit | **branch attivo**: le nove voci di "Feature e miglioramenti strumenti" (`799621f`…`6f79f5d`) e file di progetto. Parte da `feature/svg-icons`. **Da unire in `master`**, dopo una prova a mano, con avanzamento rapido fino a qui: contiene i due branch sotto |
+| `feature/svg-icons` | `6810cfc` | icone SVG di strumenti e forme (`a34374b`, `b9e7dfb`) e file di progetto. Parte da `feature/resizable` |
 | `feature/resizable` | `7672e81` | finestra ridimensionabile e schermo intero nitido, con i leak e i plugin sistemati lungo la strada (`54b36d4`…`7672e81`). Parte da `master`; contenuto nel branch attivo. **Da unire in `master`** con avanzamento rapido al branch attivo, dopo una prova a mano |
 | `master` | `0787bf2` | tutto il lavoro fino a contenuti e localizzazione (avanzamento rapido del 2026-11-01 a `content/l10n`) |
 | `content/l10n`, `quality/warnings`, `quality/fixme`, `feature/fullscreen` | | già uniti in `master` |
@@ -77,7 +78,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
   `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `feature/svg-icons`, tutto
+- **Installato in `~/.local`**: la build di `feature/tools`, tutto
   funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
   timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
@@ -99,6 +100,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Contenuti e localizzazione | `0aca7bd`…`bb2b180` (su `content/l10n`) | `./dev.sh stamps` (raccolta completa dei timbri); ultima riga dei `.dat`/`.txt` dei timbri; `it.po` rivisto e modello rigenerato senza intltool; campione di punteggiatura dei font; azione "Schermo intero" nel modello del `.desktop`; sei Starter e modelli SVG per la scuola; manuale ed EXTENDING in italiano (§5quater, ASIS) |
 | Ridisegno alla nuova dimensione | `54b36d4`…`7672e81` (su `feature/resizable`) | finestra ridimensionabile; Alt+Invio a schermo intero nitido alla risoluzione dello schermo; disegno, Annulla, Starter ed etichette adattati alla nuova tela; plugin Halftone, Foam e Glass Tile con la tela che cambia; due leak (§5bis, ASIS) |
 | Icone SVG | `a34374b`, `b9e7dfb` (su `feature/svg-icons`) | con pulsanti più grandi di 48×48, le icone di strumenti e forme vengono da SVG (§5bis, ASIS) |
+| Strumenti e magie | `799621f`…`6f79f5d` (su `feature/tools`) | Blocks, Chalk, Cartoon, Emboss e Puzzle a tutta immagine; Punto croce (plugin nuovo); Schiuma colorata; Mezzatinta con un angolo per inchiostro; suoni per Halftone, Puzzle, Color & White; tastiera a schermo con i caratteri di Maiuscolo e AltGr, e i caratteri oltre U+FFFF; etichette lunghe su due righe; rettangolo da aggiornare in 10 plugin; due leak (§5quinquies, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -120,7 +122,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.500 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
 | [src/po/](src/po/) | 119 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`), più il modello `tuxpaint.pot` e gli script upstream (servono intltool) |
 | [src/tuxpaint.conf](src/tuxpaint.conf) | Configurazione di default installata in `/etc` |
-| [magic/src/](magic/src/) | 47 plugin "Magic" (`.so` caricati a runtime), API in `src/tp_magic_api.h.in` |
+| [magic/src/](magic/src/) | 48 plugin "Magic" (`.so` caricati a runtime), tra cui `crossstitch.c` del fork; API in `src/tp_magic_api.h.in` |
 | [data/](data/) | Risorse: 53 pennelli, font, immagini UI, suoni |
 | [stamps/](stamps/) | Solo pochi timbri (`cartoon/`); la collezione completa è il pacchetto separato `tuxpaint-stamps`, che si aggiunge con `./dev.sh stamps` (§4) |
 | [starters/](starters/) | 63 immagini "Starter" (contorni/cornici da colorare), tra cui `clock.svg` e `school.svg` del fork |
@@ -137,7 +139,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`, `nodlclose.c`), §5bis |
 | [devtools/print-test/](devtools/print-test/) | *Aggiunto nel fork*: `ps_check.sh`, verifica della stampa PostScript con Ghostscript (§5ter) |
 | [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh`, rigenera il modello delle traduzioni senza intltool (§5quater) |
-| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis) |
+| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis), `crossstitch_icon.py` e `magic_sounds.py` (icona di Punto croce e suoni sintetizzati, §5quinquies) |
+| [devtools/magic-test/](devtools/magic-test/) | *Aggiunto nel fork*: `magic_run.c`, fa girare un plugin Magia su un'immagine, senza interfaccia (§5quinquies) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
 ## 3. Documentazione letta
@@ -247,7 +250,7 @@ riesegue da solo sull'host con `flatpak-spawn --host`.
   le altre funzioni di bash.
 - `make clean` cancella solo file generati, gli stessi elencati in
   `.gitignore`.
-- Prodotti della build: il binario `./tuxpaint`, 47 plugin in `magic/*.so`,
+- Prodotti della build: il binario `./tuxpaint`, 48 plugin in `magic/*.so`,
   119 cataloghi in `trans/*.mo`, `src/tp_magic_api.h` e `tp-magic-config`.
 - I percorsi di installazione sono **fissati nel binario** al momento della
   compilazione (`DATA_PREFIX`, `MAGIC_PREFIX`, `CONFDIR`, … derivano da
@@ -286,8 +289,10 @@ altre analisi: anche lì 0.
 4. **Codifica dei file**: alcuni documenti (es. `docs/CHANGES.txt`) contengono
    caratteri Latin-1 mescolati a UTF-8.
 5. **Marcatori FIXME/TODO/XXX** nel sorgente (`src/` e `magic/src/`):
-   erano 167, ora 156. Le otto voci scelte per il TODO sono state chiuse il
-   2026-10-31 (§5ter, ASIS); gli altri sono minori.
+   erano 167, 155 il 2026-11-01 prima di "Feature e miglioramenti
+   strumenti" e 141 dopo (contando i soli `.c` e `.h`). Le otto voci
+   scelte per il TODO sono state chiuse il 2026-10-31 (§5ter, ASIS); gli
+   altri sono minori.
 6. **Fork vs upstream**: il codice è fermo al 2014; upstream (tuxpaint.org) è
    oggi alla serie 0.9.3x con molte funzionalità nuove. Deciso il 2026-10-29
    di restare sulla 0.9.22: l'upstream resta una fonte di idee da portare a
@@ -684,16 +689,94 @@ cartella temporanea.
   Per vederli senza Tux Paint, sull'host ci sono pycairo e librsvg via
   `gi` (`Rsvg.Handle.render_document`).
 
+## 5quinquies. Strumenti e magie: note (2026-11-01)
+
+- **Provare un plugin senza interfaccia**: `devtools/magic-test/magic_run`
+  (README accanto) carica il `.so`, prende un'immagine come tela, fa clic,
+  trascinamenti o la modalità a tutta immagine con copie delle funzioni
+  dell'API di Tux Paint, e salva un BMP. Si compila sull'host (in
+  `~/.cache/tp-magic/`); con `-fsanitize=address` sia lui sia i plugin
+  danno il controllo della memoria, senza finestre. Va collegato a
+  SDL_mixer con `--no-as-needed`: i plugin la usano attraverso il
+  programma che li carica.
+- **Modalità a tutta immagine**: un plugin la offre con `MODE_FULLSCREEN`
+  in `modes()` (per strumento: Drip resta solo a pennello) e una
+  descrizione per modalità in `get_description()`. In `click()` con
+  `mode == MODE_FULLSCREEN` lavora su tutta la tela da `last` e aggiorna
+  tutto il rettangolo; Tux Paint mostra da solo i pulsanti delle due
+  modalità.
+- **Rettangolo da aggiornare**: Tux Paint lo azzera prima di ogni
+  `drag()`; l'altezza si calcola dal suo `y`. L'esempio della guida
+  sbagliava (`- update_rect->h`) e l'errore era passato a 10 plugin.
+- **Punto croce**: quadretti di 8 px allineati alla tela, quindi i tratti
+  successivi combaciano; un quadretto è ricamato se almeno 1/16 dei suoi
+  pixel non è bianco (≥ 235 sui tre canali), col colore medio di quelli
+  (in luce lineare). Con 1/3 le linee sottili sparivano, con 1/8 si
+  interrompevano a ogni gradino. L'aspetto del quadretto (copertura e
+  ombre delle due diagonali, fori della tela) si calcola una volta in
+  `init()`.
+- **Schiuma**: tiene le bolle bianche ridimensionate (`foam_white[]`) e ne
+  fa copie tinte a ogni `set_color()`; `set_color()` arriva prima di
+  `switchin()`, quando le bolle possono ancora non esserci.
+- **Puzzle**: lato dei pezzi = 5 × MCD dei lati della tela se sta tra 1/20
+  e 1/8 del lato corto, se no 1/12 (a 608×472: 40 px come prima). A tutta
+  immagine i pezzi più stretti a destra e in basso si scambiano solo tra
+  loro (quattro gruppi: interi, colonna, riga, angolo).
+- **Mezzatinta**: per ogni pixel e inchiostro, il punto della griglia
+  ruotata in cui cade, il colore medio attorno al centro del punto (9
+  campioni) e un punto di raggio `0,58 × passo × √quantità`, con bordo
+  morbido; gli inchiostri moltiplicano la luce della carta. Il pennello
+  resta a quadrati di 16 px su griglia di 8, che ora combaciano.
+- **Suoni**: `devtools/content/magic_sounds.py` (numpy, oggenc) li sintetizza
+  con rumore filtrato a fasce e toni smorzati, normalizzati a −4 dB di
+  picco come gli altri; seme fisso e `--serial` di oggenc, quindi i file
+  escono identici. Ogni pezzo finisce con 5 ms di dissolvenza: i tagli
+  netti si sentono come clic (si vedono nello spettrogramma di ffmpeg,
+  `showspectrumpic`).
+- **Tastiera a schermo**: scritte negli angoli con un secondo font a 6/10
+  della misura (`osk_fonty_small`, aperto da `open_osk_font()`), solo
+  senza Maiuscolo né AltGr attivi; non per le lettere (`shiftcaps`), né
+  per i caratteri uguali a quello già mostrato. `--onscreen-keyboard-layout`
+  vuole il nome del file con `.layout`.
+- **Caratteri oltre U+FFFF**: la tastiera li manda come coppia surrogata
+  (due `SDL_KEYDOWN`), `im_event_c()` li ricompone se `wchar_t` è a 32
+  bit. I font di Testo ed Etichetta su questo sistema sono di tipo
+  SDL_ttf (`typ` 1), quelli dell'interfaccia SDL_Pango (`typ` 0); SDL_ttf
+  2.0.11 disegna solo caratteri a 16 bit, quindi `wcstou16()` mette
+  U+FFFD. Provato con un layout di prova con un tasto `U1D11E` (chiave di
+  violino): nel testo arriva U+1D11E (prima U+D11E, una sillaba coreana).
+- **Etichette su due righe** (`do_render_tool_label()`): solo strumenti,
+  magie e forme; una riga se larga al più 1,5 volte il pulsante, se no
+  due a 10 punti (`label_font`), spezzate allo spazio che rende più corta
+  la riga più lunga, con passo 4/5 dell'altezza della prima. L'icona
+  piccola (`make_small_icon()`, `img_tools_small[]` e simili) si fa
+  quando l'etichetta è più alta di una riga, e per gli strumenti viene
+  ricolorata come l'altra.
+- **Insidia di sdl12-compat**: per le superfici di SDL_Pango (maschere
+  R=`ff000000`… A=`000000ff`) `SDL_GetRGBA()` legge i canali come ARGB:
+  l'alfa torna 0 e finisce nel blu. `SDL_MapRGBA()` sbaglia allo stesso
+  modo, quindi chi legge e riscrive (per esempio `thumbnail2()`) non se
+  ne accorge; chi confronta valori decodificati sì. Con superfici dello
+  stesso formato conviene confrontare i bit grezzi (`p & Amask`).
+- **Prove senza finestra**: con `SDL_VIDEODRIVER=dummy` anche il testo di
+  SDL_Pango risulta senza alfa, quindi non dice nulla sul disegno.
+  `timeout` manda SIGTERM, che Tux Paint ignora: usare `timeout -s KILL`.
+
 ## 6. Prossimi passi consigliati
 
 1. Provare a mano la finestra ridimensionabile (trascinando il bordo, e
    massimizzando) e Alt+Invio, anche con un disegno, un modello e
-   un'etichetta; poi unire in `master` con avanzamento rapido a
-   `feature/svg-icons`, che contiene `feature/resizable`.
-2. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
+   un'etichetta.
+2. Provare a mano le magie cambiate e Punto croce (anche a tutta
+   immagine), la Schiuma con un colore, la tastiera a schermo
+   (`--onscreen-keyboard`), e ascoltare i suoni nuovi (Mezzatinta, Puzzle,
+   Colore e bianco, Punto croce).
+3. Poi unire in `master` con avanzamento rapido a `feature/tools`, che
+   contiene `feature/svg-icons` e `feature/resizable`.
+4. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
    (finestra Nuovo, dopo i colori).
-3. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
-4. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
+5. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
+6. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
    parte, magari partendo dall'unione dei tre dialoghi gemelli.
 
 ---
@@ -1572,3 +1655,58 @@ Verifiche (desktop fermo, con il permesso dell'utente, in più giri):
 
 Stato alla chiusura: branch attivo `feature/svg-icons`, installato; da
 provare a mano e unire in `master`.
+
+### 2026-11-01 — Feature e miglioramenti strumenti
+
+Richiesta dell'utente: la sezione "Feature e miglioramenti strumenti" del
+TODO, nove voci. Unica domanda: l'effetto del plugin di prova; scelto
+Punto croce. Branch `feature/tools`, da `feature/svg-icons` perché tre dei
+plugin da toccare erano cambiati lì.
+
+- **Magie a tutta immagine** (Blocks, Chalk, Cartoon, Emboss, poi
+  Puzzle): l'effetto per un punto in una funzione, chiamata attorno al
+  mouse o su tutta la tela. Chalk ripassa la tela 6 volte, come un
+  trascinamento.
+- **Punto croce**: prima un prototipo in Python per misure e ombre, poi il
+  C dall'esempio della guida; icona e suono da script. Provato
+  nell'interfaccia vera: un tratteggio sottile spariva, la soglia è scesa
+  da 1/3 a 1/16 del quadretto.
+- **Schiuma, Puzzle, Mezzatinta**: vedi §5quinquies. Per Mezzatinta il
+  confronto fra la versione vecchia e un prototipo ha mostrato che la
+  media dei colori sovrapposti falsava i colori (il blu diventava lilla).
+- **Suoni**: mancavano davvero quelli di Halftone e Puzzle (file mai
+  esistiti) e Color & White usava quello di Fold. Il "clic" di Tornado
+  manca ma è commentato apposta, Mosaic ha un suono suo: lasciati.
+- **Tastiera a schermo**: scritte negli angoli; caratteri oltre U+FFFF
+  seguiti con stampe di prova fino al testo (§5quinquies). Il FIXME
+  indicato nel TODO (`onscreen_keyboard.c:1074`) era in una copia
+  commentata di `wcstou16()`: il punto vero era quella di `tuxpaint.c`.
+- **Etichette su due righe**: prima prototipi con PIL, che hanno mostrato
+  che due righe senza rimpicciolire l'icona si sovrappongono a lei. Nel C
+  la prima versione non mostrava nulla: l'alfa delle superfici di
+  SDL_Pango, letta con `SDL_GetRGBA()` di sdl12-compat, torna 0
+  (§5quinquies).
+- **Trovati lungo la strada**: altezza del rettangolo da aggiornare in 10
+  plugin e nell'esempio; direzioni di Puzzle; confronto con lunghezza 0
+  per `NoSymbol`; leak del suono di Drip e del nome del layout della
+  tastiera (questo con AddressSanitizer).
+
+Verifiche (desktop fermo, con il permesso dell'utente, due giri):
+- A 800×600 schermata principale e dialoghi identici al riferimento, salvo
+  il pannello delle magie: "Arcobaleno vero", "Cambia colore", "Colore e
+  bianco" su due righe.
+- `magic_run` su un disegno e una foto, anche 1003×701 (il MCD dei lati è
+  1), e sotto AddressSanitizer per i 10 plugin toccati: puliti.
+- Nell'interfaccia: Punto croce a pennello e a tutta immagine, a
+  1600×1200; tastiera a 800×600 e 1600×1200, con Maiuscolo; il layout di
+  prova con la chiave di violino; sotto AddressSanitizer una sessione con
+  tastiera, magia con colore, ridimensionamento a 1600×1200 e ritorno,
+  uscita pulita: nessun errore, 432 byte persi nelle librerie e 15 di
+  Tux Paint (il nome del layout), corretti dopo; quella correzione non è
+  stata riprovata con AddressSanitizer.
+- I suoni sono stati controllati con spettrogrammi e misure di volume,
+  non ascoltati: da sentire a mano.
+
+Stato alla chiusura: branch attivo `feature/tools`, installato in
+`~/.local`; il layout di prova `bmptest` è stato tolto da
+`~/.local/share/tuxpaint/osk/`. Da provare a mano e unire in `master`.

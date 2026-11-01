@@ -337,3 +337,49 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   - verifiche: a 800×600 identico al riferimento; ridimensionamenti e
     Alt+Invio a schermo; AddressSanitizer senza errori (882 byte persi,
     nelle librerie).
+- [x] 2026-11-01 — Feature e miglioramenti strumenti, le nove voci della
+  sezione (branch `feature/tools`, `799621f`…`6f79f5d`):
+  - **plugin di prova**: Punto croce (`7eb3530`, scelto dall'utente tra
+    tre proposte), scritto da `tp_magic_example.c`. Ricama il disegno su
+    una tela con i fori: una "x" del colore del disegno in ogni quadretto
+    di 8×8, a pennello o a tutta immagine; il bianco resta tela, una
+    linea sottile diventa una fila di punti. Icona e suono generati da
+    script (`devtools/content/`);
+  - **Blocks, Chalk, Cartoon, Emboss a tutta immagine** (`799621f`);
+  - **Foam colorabile** (`a901766`): bolle del colore scelto, col bianco
+    identiche a prima;
+  - **Puzzle a tutta immagine** (`6b634fb`), con pezzi adatti a ogni
+    tela: col MCD dei lati, ora che la finestra cambia, venivano anche di
+    5 px. Corrette due direzioni di scambio sbagliate;
+  - **suoni** (`dcbc3c8`): nuovi per Halftone e Puzzle (muti: file
+    inesistenti) e per Color & White (usava quello di Fold), sintetizzati
+    da `devtools/content/magic_sounds.py`; Fade/Darken e Glass Tile ora
+    suonano anche a tutta immagine. Mosaic lasciato com'è: il suo
+    `mosaic.ogg` segnato FIXME è un suono vero, della stessa famiglia di
+    Picasso, e il FIXME non dice che cosa non va;
+  - **tastiera a schermo** (`b953dbb`, `e5a4fe7`): sui tasti anche i
+    caratteri di Maiuscolo e AltGr, negli angoli; i caratteri oltre
+    U+FFFF arrivano interi nel testo (coppia surrogata), ma i font del
+    Testo, di SDL_ttf 2.0.11, li disegnano come carattere di sostituzione
+    (resta nel TODO). Corretto un confronto con lunghezza 0 (`NoSymbol`);
+  - **Halftone** (`58995a0`): una griglia di punti per inchiostro, ruotata
+    al suo angolo, con gli inchiostri che si moltiplicano come sulla
+    carta; prima la media dei colori faceva diventare lilla il blu;
+  - **etichette su due righe** (`e90f53a`): i nomi che verrebbero
+    schiacciati oltre 2/3 vanno su due righe a 10 punti, con l'icona più
+    piccola sopra (in italiano per esempio "Arcobaleno vero", "Colore e
+    bianco");
+  - trovati lungo la strada: in 10 plugin, e nell'esempio della guida, il
+    rettangolo da aggiornare durante il trascinamento aveva l'altezza
+    sbagliata (`a2c6ef2`); due leak (suono di Drip, nome del layout della
+    tastiera a ogni Testo, `6f79f5d`);
+  - traduzioni (`7916a3f`): le sette stringhe nuove in it, ca, de, es, fr;
+    pagine di `magic-docs` aggiornate, nuove per Punto croce e Puzzle
+    (`b80699b`); `devtools/magic-test/magic_run.c` per provare i plugin
+    senza interfaccia (`779d631`);
+  - verifiche: a 800×600 schermata principale e dialoghi identici al
+    riferimento, salvo il pannello delle magie (etichette su due righe);
+    i plugin cambiati provati con `magic_run` su due immagini e sotto
+    AddressSanitizer; in Tux Paint, anche a 1600×1200 e con
+    ridimensionamenti, sotto AddressSanitizer: nessun errore di memoria,
+    432 byte persi nelle librerie più i 15 del layout, poi corretti.
