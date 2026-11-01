@@ -760,6 +760,10 @@ static int polling_in_mainloop = 0;
 #endif
 #define UI_FONT_MEDIUM SCALED(18 - (only_uppercase * 3))
 #define UI_FONT_LARGE SCALED(30 - (only_uppercase * 3))
+#define UI_FONT_LABEL SCALED(10 - only_uppercase)
+
+/* For button labels on two lines (see do_render_tool_label()) */
+static TuxPaint_Font *label_font;
 
 /* Rows of buttons in the tool and tool-option columns (7 at 48x48 in 640x480) */
 static int buttons_tall;
@@ -1357,6 +1361,7 @@ typedef struct magic_s {
   char * name;	/* Name of magic tool */
   char * tip[MAX_MODES];	/* Description of magic tool, in each possible mode */
   SDL_Surface * img_icon;
+  SDL_Surface * img_icon_small;	/* Smaller, for a name on two lines (or NULL) */
   SDL_Surface * img_name;
 } magic_t;
 
@@ -1455,6 +1460,7 @@ static SDL_Surface *img_title_on, *img_title_off,
   *img_title_large_on, *img_title_large_off;
 static SDL_Surface *img_title_names[NUM_TITLES];
 static SDL_Surface *img_tools[NUM_TOOLS], *img_tool_names[NUM_TOOLS];
+static SDL_Surface *img_tools_small[NUM_TOOLS];	/* (See make_small_icon()) */
 
 static SDL_Surface *img_oskdel, *img_osktab, *img_oskenter, *img_oskcapslock, *img_oskshift;
 static SDL_Surface *thumbnail(SDL_Surface * src, int max_x, int max_y,
@@ -1736,6 +1742,7 @@ static int * brushes_spacing = NULL;
 static short * brushes_directional = NULL;
 
 static SDL_Surface *img_shapes[NUM_SHAPES], *img_shape_names[NUM_SHAPES];
+static SDL_Surface *img_shapes_small[NUM_SHAPES];
 static SDL_Surface *img_openlabels_open, *img_openlabels_erase,
   *img_openlabels_slideshow, *img_openlabels_back, *img_openlabels_play,
   *img_openlabels_next;
@@ -1998,6 +2005,8 @@ static char *uppercase(const char *restrict const str);
 static wchar_t *uppercase_w(const wchar_t *restrict const str);
 static char *textdir(const char *const str);
 static SDL_Surface *do_render_button_label(const char *const label);
+static SDL_Surface *do_render_tool_label(const char *const label);
+static SDL_Surface *make_small_icon(SDL_Surface * icon, SDL_Surface * label, int room);
 static void create_button_labels(void);
 static Uint32 scrolltimer_callback(Uint32 interval, void *param);
 static Uint32 drawtext_callback(Uint32 interval, void *param);
@@ -8014,25 +8023,164 @@ static void signal_handler(int sig)
 }
 #endif
 
+/* Render (already translated) label text in a font, as buttons show it: */
+static SDL_Surface *render_label_text(TuxPaint_Font * font, const char *const str)
+{
+  SDL_Surface *surf;
+  SDL_Color black = { 0, 0, 0, 0 };
+  char *td_str = textdir(str);
+  char *upstr = uppercase(td_str);
+
+  free(td_str);
+  surf = render_text(font, upstr, black);
+  free(upstr);
+
+  return surf;
+}
+
 /* Render a button label using the appropriate string/font: */
 static SDL_Surface *do_render_button_label(const char *const label)
 {
   SDL_Surface *tmp_surf, *surf;
-  SDL_Color black = { 0, 0, 0, 0 };
   TuxPaint_Font *myfont = small_font;
-  char *td_str = textdir(gettext(label));
-  char *upstr = uppercase(td_str);
-
-  free(td_str);
 
   if (need_own_font && strcmp(gettext(label), label))
     myfont = locale_font;
-  tmp_surf = render_text(myfont, upstr, black);
-  free(upstr);
+  tmp_surf = render_label_text(myfont, gettext(label));
   surf = thumbnail(tmp_surf, min(button_w, tmp_surf->w), min(SCALED(18 + button_label_y_nudge), tmp_surf->h), 0);
   SDL_FreeSurface(tmp_surf);
 
   return surf;
+}
+
+/* Put the dark text of a label's line into the label's surface (made with
+   the same pixel format), centered, at y: where the lines overlap, the
+   more opaque pixel wins. (The alpha bits are compared as they are:
+   sdl12-compat's SDL_GetRGBA() reads SDL_Pango's RGBA surfaces as ARGB.) */
+static void merge_label_line(SDL_Surface * surf, SDL_Surface * line, int y)
+{
+  Uint32(*getpixel) (SDL_Surface *, int, int) = getpixels[surf->format->BytesPerPixel];
+  void (*putpixel) (SDL_Surface *, int, int, Uint32) = putpixels[surf->format->BytesPerPixel];
+  Uint32 amask = surf->format->Amask, p;
+  int xx, yy, x;
+
+  x = (surf->w - line->w) / 2;
+
+  SDL_LockSurface(line);
+  SDL_LockSurface(surf);
+
+  for (yy = 0; yy < line->h && y + yy < surf->h; yy++)
+  {
+    for (xx = 0; xx < line->w; xx++)
+    {
+      p = getpixel(line, xx, yy);
+      if ((p & amask) > (getpixel(surf, x + xx, y + yy) & amask))
+        putpixel(surf, x + xx, y + yy, p);
+    }
+  }
+
+  SDL_UnlockSurface(surf);
+  SDL_UnlockSurface(line);
+}
+
+/* Render the label of a button with an icon above it (tools, Magic tools,
+   shapes). A label that would be squeezed to less than 2/3 of its width
+   goes on two lines, in a smaller font, broken at the space that makes the
+   longer line the shortest; the icon is then drawn smaller (see
+   make_small_icon()). Locales with a font of their own keep one line. */
+static SDL_Surface *do_render_tool_label(const char *const label)
+{
+  SDL_Surface *one, *surf, *line[2], *tmp_surf;
+  const char *str = gettext(label);
+  char *part;
+  int i, k, w, best, best_w, pitch;
+
+  if ((need_own_font && strcmp(str, label)) || label_font == NULL || strchr(str, ' ') == NULL)
+    return do_render_button_label(label);
+
+  one = render_label_text(small_font, str);
+  if (one->w <= button_w * 3 / 2)
+  {
+    surf = thumbnail(one, min(button_w, one->w), min(SCALED(18 + button_label_y_nudge), one->h), 0);
+    SDL_FreeSurface(one);
+    return surf;
+  }
+  SDL_FreeSurface(one);
+
+  /* Where to break it */
+
+  best = -1;
+  best_w = 0;
+  for (i = 0; str[i] != '\0'; i++)
+  {
+    if (str[i] != ' ')
+      continue;
+
+    part = strdup(str);
+    part[i] = '\0';
+    line[0] = render_label_text(label_font, part);
+    line[1] = render_label_text(label_font, part + i + 1);
+    w = max(line[0]->w, line[1]->w);
+    if (best < 0 || w < best_w)
+    {
+      best = i;
+      best_w = w;
+    }
+    SDL_FreeSurface(line[0]);
+    SDL_FreeSurface(line[1]);
+    free(part);
+  }
+
+  part = strdup(str);
+  part[best] = '\0';
+  for (k = 0; k < 2; k++)
+  {
+    tmp_surf = render_label_text(label_font, k == 0 ? part : part + best + 1);
+    line[k] = thumbnail(tmp_surf, min(button_w, tmp_surf->w), tmp_surf->h, 0);
+    SDL_FreeSurface(tmp_surf);
+  }
+  free(part);
+
+  /* The lines a bit closer than the font says, as the second has no
+     accents above, nor the first many letters below */
+  pitch = line[0]->h * 4 / 5;
+
+  surf = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
+                              max(line[0]->w, line[1]->w),
+                              max(line[0]->h, pitch + line[1]->h),
+                              line[0]->format->BitsPerPixel,
+                              line[0]->format->Rmask, line[0]->format->Gmask,
+                              line[0]->format->Bmask, line[0]->format->Amask);
+  if (surf == NULL)
+  {
+    SDL_FreeSurface(line[1]);
+    return line[0];
+  }
+  SDL_FillRect(surf, NULL, SDL_MapRGBA(surf->format, 0, 0, 0, 0));
+  merge_label_line(surf, line[0], 0);
+  merge_label_line(surf, line[1], pitch);
+
+  SDL_FreeSurface(line[0]);
+  SDL_FreeSurface(line[1]);
+
+  return surf;
+}
+
+/* A smaller copy of a button's icon, that fits above its label when that
+   is on two lines (taller than one); NULL if the icon fits anyway. 'room'
+   is the height from the top of the icon to the bottom of the label */
+static SDL_Surface *make_small_icon(SDL_Surface * icon, SDL_Surface * label, int room)
+{
+  int h;
+
+  if (icon == NULL || label == NULL || label->h <= SCALED(18 + button_label_y_nudge))
+    return NULL;
+
+  h = room - label->h - SCALED(1);
+  if (h >= icon->h || h < 1)
+    return NULL;
+
+  return thumbnail2(icon, max(1, icon->w * h / icon->h), h, 0, 1);
 }
 
 static void create_button_labels(void)
@@ -8040,13 +8188,23 @@ static void create_button_labels(void)
   int i;
 
   for (i = 0; i < NUM_TOOLS; i++)
-    img_tool_names[i] = do_render_button_label(tool_names[i]);
+  {
+    img_tool_names[i] = do_render_tool_label(tool_names[i]);
+    img_tools_small[i] = make_small_icon(img_tools[i], img_tool_names[i],
+                                         SCALED(44 + button_label_y_nudge));
+  }
 
   for (i = 0; i < num_magics; i++)
-    magics[i].img_name = do_render_button_label(magics[i].name);
+  {
+    magics[i].img_name = do_render_tool_label(magics[i].name);
+    magics[i].img_icon_small = make_small_icon(magics[i].img_icon, magics[i].img_name, SCALED(44));
+  }
 
   for (i = 0; i < NUM_SHAPES; i++)
-    img_shape_names[i] = do_render_button_label(shape_names[i]);
+  {
+    img_shape_names[i] = do_render_tool_label(shape_names[i]);
+    img_shapes_small[i] = make_small_icon(img_shapes[i], img_shape_names[i], SCALED(44));
+  }
 
   /* buttons for the file open dialog */
   
@@ -8628,6 +8786,7 @@ static void draw_toolbar(void)
 {
   int i, off_y, max, most, tool;
   SDL_Rect dest;
+  SDL_Surface *icon;
 
   most = 14;
   off_y = 0;
@@ -8706,14 +8865,16 @@ static void draw_toolbar(void)
 	button_body = img_btn_off;
 	button_color = img_grey;
       }
+      icon = (img_tools_small[tool] != NULL ? img_tools_small[tool] : img_tools[tool]);
+
       SDL_BlitSurface(button_body, NULL, screen, &dest);
-      SDL_BlitSurface(button_color, NULL, img_tools[tool], NULL);
+      SDL_BlitSurface(button_color, NULL, icon, NULL);
       SDL_BlitSurface(button_color, NULL, img_tool_names[tool], NULL);
 
-      dest.x = ((i % 2) * button_w) + SCALED(4);
+      dest.x = ((i % 2) * button_w) + SCALED(4) + (img_tools[tool]->w - icon->w) / 2;
       dest.y = ((i / 2) * button_h) + r_ttools.h + SCALED(2) + off_y;
 
-      SDL_BlitSurface(img_tools[tool], NULL, screen, &dest);
+      SDL_BlitSurface(icon, NULL, screen, &dest);
 
 
       dest.x = ((i % 2) * button_w) + SCALED(4) + (SCALED(40) - img_tool_names[tool]->w) / 2;
@@ -8735,6 +8896,7 @@ static void draw_magic(void)
 {
   int magic, i, max, off_y;
   SDL_Rect dest;
+  SDL_Surface *icon;
   int most;
 
 
@@ -8800,10 +8962,13 @@ static void draw_magic(void)
 	SDL_BlitSurface(img_btn_up, NULL, screen, &dest);
       }
 
-      dest.x = WINDOW_WIDTH - button_w * 2 + ((i % 2) * button_w) + SCALED(4);
+      icon = (magics[magic].img_icon_small != NULL ? magics[magic].img_icon_small : magics[magic].img_icon);
+
+      dest.x = WINDOW_WIDTH - button_w * 2 + ((i % 2) * button_w) + SCALED(4) +
+	(magics[magic].img_icon->w - icon->w) / 2;
       dest.y = ((i / 2) * button_h) + r_ttoolopt.h + SCALED(4) + off_y;
 
-      SDL_BlitSurface(magics[magic].img_icon, NULL, screen, &dest);
+      SDL_BlitSurface(icon, NULL, screen, &dest);
 
 
       dest.x = WINDOW_WIDTH - button_w * 2 + ((i % 2) * button_w) + SCALED(4) +
@@ -9728,10 +9893,13 @@ static void draw_shapes(void)
 
     if (shape < NUM_SHAPES)
     {
-      dest.x = ((i % 2) * button_w) + SCALED(4) + WINDOW_WIDTH - button_w * 2;
+      SDL_Surface *icon = (img_shapes_small[shape] != NULL ? img_shapes_small[shape] : img_shapes[shape]);
+
+      dest.x = ((i % 2) * button_w) + SCALED(4) + WINDOW_WIDTH - button_w * 2 +
+	(img_shapes[shape]->w - icon->w) / 2;
       dest.y = ((i / 2) * button_h) + r_ttoolopt.h + SCALED(4) + off_y;
 
-      SDL_BlitSurface(img_shapes[shape], NULL, screen, &dest);
+      SDL_BlitSurface(icon, NULL, screen, &dest);
 
       dest.x = ((i % 2) * button_w) + SCALED(4) + WINDOW_WIDTH - button_w * 2 +
 	(SCALED(40) - img_shape_names[shape]->w) / 2;
@@ -23486,6 +23654,12 @@ static void free_ui_fonts(void)
     TuxPaint_Font_CloseFont(large_font);
     large_font = NULL;
   }
+
+  if (label_font != NULL)
+  {
+    TuxPaint_Font_CloseFont(label_font);
+    label_font = NULL;
+  }
 }
 
 
@@ -23806,14 +23980,17 @@ static void free_ui_images(void)
   int i;
 
   free_surface_array(img_tools, NUM_TOOLS);
+  free_surface_array(img_tools_small, NUM_TOOLS);
   free_surface_array(img_tool_names, NUM_TOOLS);
   free_surface_array(img_title_names, NUM_TITLES);
   for (i = 0; i < num_magics; i++)
   {
     free_surface(&(magics[i].img_icon));
+    free_surface(&(magics[i].img_icon_small));
     free_surface(&(magics[i].img_name));
   }
   free_surface_array(img_shapes, NUM_SHAPES);
+  free_surface_array(img_shapes_small, NUM_SHAPES);
   free_surface_array(img_shape_names, NUM_SHAPES);
   free_surface_array(img_tux, NUM_TIP_TUX);
 
@@ -24370,6 +24547,7 @@ static int change_screen(int w, int h, int full)
   medium_font = load_ui_font(UI_FONT_MEDIUM);
   large_font = load_ui_font(UI_FONT_LARGE);
   small_font = load_ui_font(UI_FONT_SMALL);
+  label_font = load_ui_font(UI_FONT_LABEL);
   set_locale_font();
 
   img_progress = loadimagerb(DATA_PREFIX "images/ui/progress.png");
@@ -24994,6 +25172,7 @@ static void setup(void)
 
   large_font = load_ui_font(UI_FONT_LARGE);
   small_font = load_ui_font(UI_FONT_SMALL);
+  label_font = load_ui_font(UI_FONT_LABEL);
   set_locale_font();
 
 
