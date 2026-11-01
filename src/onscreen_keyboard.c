@@ -71,6 +71,7 @@ struct osk_keyboard *osk_create(char *layout_name, SDL_Surface *canvas, SDL_Surf
   keyboard = malloc(sizeof(on_screen_keyboard));
 
   keyboard->osk_fonty = NULL;
+  keyboard->osk_fonty_small = NULL;
   
   keyboard->disable_change = disable_change;  
   layout = load_layout(keyboard, layout_name);
@@ -984,62 +985,71 @@ static int is_blank_or_comment(char *line)
 /* } */
 
 
-/* Fixme: Is it safe to supose that if a font is loaded at one size, it will be loaded at any size? */
-/* Fixme: sizes should be dynamically adapted to the button size */
 /* Fixme: starting a layout with one font causes all other layouts be in that font */
+
+/* Opens the layout's font (or the default one) at a size, NULL if it can't */
+static TTF_Font * open_osk_font(on_screen_keyboard *keyboard, int font_size)
+{
+  char fontname[255];
+  TTF_Font * font = NULL;
+
+  if (keyboard->layout->fontpath)
+  {
+    /* First try if it is an absolute path */
+    font = TTF_OpenFont( keyboard->layout->fontpath, font_size );
+    if (font == NULL)
+    {
+      /* Now trying if it is relative to DATA_PREFIX/fonts/ */
+      snprintf(fontname, 255, "%s/fonts/%s", DATA_PREFIX, keyboard->layout->fontpath);
+      font = TTF_OpenFont( fontname, font_size );
+    }
+    if (font == NULL)
+    {
+      /* Perhaps it is relative to DATA_PREFIX only? */
+      snprintf(fontname, 255, "%s/%s", DATA_PREFIX, keyboard->layout->fontpath);
+      font = TTF_OpenFont( fontname, font_size );
+    }
+    if (font == NULL)
+    {
+      /* Or to DATA_PREFIX/fonts/locale/ ? */
+      snprintf(fontname, 255, "%s/fonts/locale/%s", DATA_PREFIX, keyboard->layout->fontpath);
+      font = TTF_OpenFont( fontname, font_size );
+    }
+  }
+
+  if (font == NULL)
+  {
+    /* Going with the default */
+    snprintf(fontname, 255, "%s/fonts/FreeSansBold.ttf", DATA_PREFIX);
+    font = TTF_OpenFont( fontname, font_size );
+  }
+
+  return font;
+}
+
 static void keybd_prepare(on_screen_keyboard *keyboard)
 {
-  char * fontname;
   int font_size;
 
   /* 12 points on the original 24x24 keys; grows with the key size */
   font_size = 12 * keyboard->button_up->h / 24;
 
-  fontname = malloc(sizeof(char) * 255);
-  if (keyboard->osk_fonty == NULL) {
-    if (keyboard->layout->fontpath)
-    {
-    /* First try if it is an absolute path */
-      keyboard->osk_fonty = TTF_OpenFont( keyboard->layout->fontpath, font_size );
-      if (keyboard->osk_fonty == NULL)
-      {
-        /* Now trying if it is relative to DATA_PREFIX/fonts/ */
-        snprintf(fontname, 255, "%s/fonts/%s", DATA_PREFIX, keyboard->layout->fontpath);
-
-        keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
-        if (keyboard->osk_fonty == NULL)
-        {
-	 /* Perhaps it is relative to DATA_PREFIX only? */
-	 snprintf(fontname, 255, "%s/%s", DATA_PREFIX, keyboard->layout->fontpath);
-	 keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
-	 if (keyboard->osk_fonty == NULL)
-	 {
-	   /* Or to DATA_PREFIX/fonts/locale/ ? */
-	   snprintf(fontname, 255, "%s/fonts/locale/%s", DATA_PREFIX, keyboard->layout->fontpath);
-	   keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
-	 }
-        }
-      }
-    }
-
-    if (keyboard->osk_fonty == NULL)
-    {
-      /* Going with the default */
-      sprintf(fontname, "%s/fonts/FreeSansBold.ttf", DATA_PREFIX);
-      keyboard->osk_fonty = TTF_OpenFont( fontname, font_size );
-    }
+  if (keyboard->osk_fonty == NULL)
+  {
+    keyboard->osk_fonty = open_osk_font(keyboard, font_size);
 
     if (keyboard->osk_fonty == NULL)
     {
       fprintf(stderr, "\nError: Can't open the font!\n"
 	     "The Simple DirectMedia Layer error that occurred was:\n"
 	     "%s\n\n", SDL_GetError());
-      free(fontname);
       exit(1);
     }
-
-    free(fontname);
   }
+
+  /* The labels in the keys' corners: smaller, and they can do without */
+  if (keyboard->osk_fonty_small == NULL)
+    keyboard->osk_fonty_small = open_osk_font(keyboard, font_size * 6 / 10 > 6 ? font_size * 6 / 10 : 6);
 }
 
 
@@ -1216,7 +1226,37 @@ static void draw_key(osk_key key, on_screen_keyboard * keyboard, int hot)
 }
 
 
-/* FIXME: TODO draw top and bottom_right (altgr) labels */
+/* Draws one of the small labels in a key's corners: the character the key
+   gives with Shift (top right) or with AltGr (bottom right). Not when it's
+   missing or what the key shows already, nor for letters with Shift (they
+   only become capitals) */
+static void label_key_corner(osk_key key, on_screen_keyboard *keyboard,
+                             const char *label, const char *shown, int bottom)
+{
+  SDL_Surface *messager;
+  int margin, x, y;
+
+  if (keyboard->osk_fonty_small == NULL || label == NULL || label[0] == '\0' ||
+      strcmp(label, "NULL") == 0 || strcmp(label, shown) == 0 ||
+      (!bottom && key.shiftcaps) ||
+      (bottom && key.top_label != NULL && strcmp(label, key.top_label) == 0))
+    return;
+
+  messager = TTF_RenderUTF8_Blended(keyboard->osk_fonty_small, label, keyboard->layout->fgcolor);
+  if (messager == NULL)
+    return;
+
+  margin = keyboard->button_up->h / 12;
+  x = key.x + (int) (key.width * keyboard->button_up->w) - messager->w - margin;
+  if (bottom)
+    y = key.y + keyboard->button_up->h - messager->h;
+  else
+    y = key.y + margin / 2;
+
+  apply_surface(x, y, messager, keyboard->surface, NULL);
+  SDL_FreeSurface(messager);
+}
+
 static void label_key(osk_key key, on_screen_keyboard *keyboard)
 {
   SDL_Surface *messager;
@@ -1284,6 +1324,9 @@ static void label_key(osk_key key, on_screen_keyboard *keyboard)
       text = strdup(key.top_label);
   }
 
+  if (text == NULL)
+    return;
+
   if( strncmp("DELETE", text, 6) == 0)
   {
     apply_surface(key.x, key.y, keyboard->oskdel, keyboard->surface, NULL);
@@ -1315,6 +1358,13 @@ static void label_key(osk_key key, on_screen_keyboard *keyboard)
 
     apply_surface( key.x + 5 * keyboard->button_up->w / 24, key.y, messager, keyboard->surface, NULL);
     SDL_FreeSurface(messager);
+
+    /* With no Shift nor AltGr, the other characters, as on a keyboard */
+    if (!(modstate & (KMOD_SHIFT | KMOD_RALT)))
+    {
+      label_key_corner(key, keyboard, key.top_label, text, 0);
+      label_key_corner(key, keyboard, key.altgr_label, text, 1);
+    }
   }
   free(text);
 }
@@ -1899,6 +1949,8 @@ void osk_free(on_screen_keyboard *keyboard)
   set_key(NULL, &keyboard->keymodifiers.dead, 0);
   if (keyboard->osk_fonty != NULL)
     TTF_CloseFont(keyboard->osk_fonty);
+  if (keyboard->osk_fonty_small != NULL)
+    TTF_CloseFont(keyboard->osk_fonty_small);
   
   free(keyboard);
 }

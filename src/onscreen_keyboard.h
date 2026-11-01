@@ -124,6 +124,7 @@ typedef struct osk_keyboard
   osk_layout *layout;            /* The layout struct */ 
   char *layout_name[256];        /* The layout name */
   TTF_Font * osk_fonty;          /* Font */
+  TTF_Font * osk_fonty_small;    /* Font for the keys' Shift and AltGr labels, or NULL */
   int disable_change;            /* If true, stay with the first layout found */
   wchar_t * key[256];            /* The text of the key */
   int keycode;                   /* The unicode code corresponding to the key */
