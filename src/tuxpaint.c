@@ -11203,13 +11203,14 @@ static void draw_tux_text(int which_tux, const char *const str,
 }
 
 static int latest_tux;
-static const char * latest_tux_text;
+static char * latest_tux_text;	/* (a copy: callers free theirs, e.g. textdir()'s) */
 static int latest_r2l;
 static Uint8 latest_locale_text;
 
 static void redraw_tux_text(void)
 {
-  draw_tux_text_ex(latest_tux, latest_tux_text, latest_r2l, latest_locale_text);
+  if (latest_tux_text != NULL)
+    draw_tux_text_ex(latest_tux, latest_tux_text, latest_r2l, latest_locale_text);
 }
 
 static void draw_tux_text_ex(int which_tux, const char *const str,
@@ -11221,7 +11222,16 @@ static void draw_tux_text_ex(int which_tux, const char *const str,
   SDL_Surface * btn;
 
   latest_tux = which_tux;
-  latest_tux_text = str;
+  if (str != latest_tux_text)
+  {
+    char *copy = strdup(str);
+
+    if (copy != NULL)
+    {
+      free(latest_tux_text);
+      latest_tux_text = copy;
+    }
+  }
   latest_r2l = want_right_to_left;
   latest_locale_text = locale_text;
 
@@ -13312,6 +13322,9 @@ redraw:
 static void cleanup(void)
 {
   int i, j;
+
+  free(latest_tux_text);
+  latest_tux_text = NULL;
 
   for (j = 0; j < num_stamp_groups; j++)
   {
