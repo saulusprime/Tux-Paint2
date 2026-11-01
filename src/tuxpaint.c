@@ -747,7 +747,17 @@ static Uint32 resize_ticks;
 
 /* Set while mainloop() polls events, so poll_event() knows it can leave
    screen changes to it */
-static int polling_in_mainloop = 0;
+static int polling_redoes_layout = 0;	/* (see ask_fullscreen_toggle()) */
+
+/* Counted up by change_screen(), and by the dialogs each time they redraw
+   the screen after a change (see dialog_screen_change()): so the main loop,
+   or a dialog under another one, knows to redo its part */
+static int screen_layouts = 0, screen_redraws = 0;
+
+/* While Open, New or the color picker is up: their callers grey the
+   colors and empty the selector (draw_none()) under them, so a redraw
+   does the same (see redraw_main_screen()) */
+static int screen_wiped_for_dialog = 0;
 
 /* Scale a size or position from the 48x48-button design to the current size */
 #define SCALED(x) ((int) ((x) * button_scale + 0.5))
@@ -1967,6 +1977,11 @@ static void create_color_buttons(void);
 static void free_ui_images(void);
 static void reset_canvas_content(void);
 static int change_screen(int w, int h, int full);
+static void finish_typing(void);
+static void redraw_main_screen(void);
+static int dialog_screen_change(void);
+static SDL_Surface **ui_image_slot(SDL_Surface * img);
+static int poll_event_dialog(SDL_Event * event);
 static void free_surface(SDL_Surface ** surface_array);
 static void free_surface_array(SDL_Surface * surface_array[], int count);
 /*static void update_shape(int cx, int ox1, int ox2, int cy, int oy1, int oy2,
@@ -2110,10 +2125,11 @@ static void toggle_fullscreen(void)
   }
 }
 
-/* [Alt]+[Enter], in any event loop. The main loop switches redoing the
-   layout for the new size (see screen_change_wanted()); the other loops
-   (dialogs) can't, so there the window's picture is stretched to the
-   screen right away, and the main loop redoes the layout later. */
+/* [Alt]+[Enter], in any event loop. The main loop and the dialogs switch
+   redoing the layout for the new size (see screen_change_wanted() and
+   dialog_screen_change()); the other loops (e.g., the title screen's)
+   can't, so there the window's picture is stretched to the screen right
+   away, and the main loop redoes the layout later. */
 static void ask_fullscreen_toggle(void)
 {
   int was_fullscreen = fullscreen;
@@ -2125,7 +2141,7 @@ static void ask_fullscreen_toggle(void)
     return;
   }
 
-  if (polling_in_mainloop)
+  if (polling_redoes_layout)
   {
     if (fullscreen_request != 0)
       fullscreen_request = 0;	/* pressed twice before the main loop saw it */
@@ -2198,9 +2214,22 @@ static int poll_event_mainloop(SDL_Event * event)
 {
   int got;
 
-  polling_in_mainloop = 1;
+  polling_redoes_layout = 1;
   got = poll_event(event);
-  polling_in_mainloop = 0;
+  polling_redoes_layout = 0;
+
+  return got;
+}
+
+/* poll_event() for the dialogs that redo their layout when the screen
+   changes (see dialog_screen_change()) */
+static int poll_event_dialog(SDL_Event * event)
+{
+  int got;
+
+  polling_redoes_layout = 1;
+  got = poll_event(event);
+  polling_redoes_layout = 0;
 
   return got;
 }
@@ -2252,6 +2281,152 @@ static int screen_change_wanted(int *w, int *h, int *full)
 
   return 0;
 }
+
+/* Finish what's being typed, as when switching tools (before the canvas
+   changes size: the text is drawn into it where it is) */
+static void finish_typing(void)
+{
+  if (cursor_x == -1 || cursor_y == -1)
+    return;
+
+  hide_blinking_cursor();
+  if (texttool_len > 0)
+  {
+    rec_undo_buffer();
+    do_render_cur_text(1);
+    texttool_len = 0;
+    cursor_textwidth = 0;
+    label_node_to_edit = NULL;
+  }
+  else if (cur_tool == TOOL_LABEL && label_node_to_edit)
+  {
+    rec_undo_buffer();
+    have_to_rec_label_node = TRUE;
+    add_label_node(0, 0, 0, 0, NULL);
+    derender_node(&label_node_to_edit);
+    label_node_to_edit = NULL;
+  }
+  cursor_left = cursor_x = cursor_y = -1;
+}
+
+/* Draw the whole main screen again: tools, colors, the current tool's
+   selector and the canvas (not Tux's tip, nor the on-screen keyboard) */
+static void redraw_main_screen(void)
+{
+  int tool;
+
+  SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
+  draw_toolbar();
+  /* (draw_colors() leaves out what didn't change: through the other
+     state and back) */
+  if (screen_wiped_for_dialog)
+  {
+    draw_colors(COLORSEL_CLOBBER_WIPE);
+    /* (Its title, which it draws only when the state changes) */
+    SDL_BlitSurface(img_title_large_off, NULL, screen, &r_tcolors);
+  }
+  else if (colors_are_selectable)
+  {
+    draw_colors(COLORSEL_DISABLE);
+    draw_colors(COLORSEL_ENABLE);
+  }
+  else
+  {
+    draw_colors(COLORSEL_ENABLE);
+    draw_colors(COLORSEL_DISABLE);
+  }
+
+  /* (Under the prompts of Save, Print and Quit, the tool from before is
+     still shown) */
+  tool = cur_tool;
+  if (tool == TOOL_SAVE || tool == TOOL_PRINT || tool == TOOL_QUIT)
+    tool = old_tool;
+
+  if (screen_wiped_for_dialog)
+    draw_none();
+  else if (tool == TOOL_BRUSH || tool == TOOL_LINES)
+    draw_brushes();
+  else if (tool == TOOL_MAGIC)
+    draw_magic();
+  else if (tool == TOOL_STAMP)
+    draw_stamps();
+  else if (tool == TOOL_TEXT || tool == TOOL_LABEL)
+  {
+    if (font_thread_done)
+      draw_fonts();
+    else
+      draw_none();
+  }
+  else if (tool == TOOL_SHAPES)
+    draw_shapes();
+  else if (tool == TOOL_ERASER)
+    draw_erasers();
+  else
+    draw_none();
+
+  update_canvas(0, 0, canvas->w, canvas->h);
+  SDL_Flip(screen);
+}
+
+/* For the dialogs, between events: makes the screen change asked for
+   meanwhile (see screen_change_wanted()), if any, and draws the main
+   screen behind them again. Then it returns 1: the dialog has to redo its
+   layout and draw itself again; the images it got from the interface
+   (img_...) are new ones (see ui_image_slot()). What only the main loop
+   knows about, it redoes when it sees screen_redraws changed. */
+static int dialog_screen_change(void)
+{
+  int w, h, full;
+
+  if (!screen_change_wanted(&w, &h, &full))
+    return 0;
+
+  if (w != screen->w || h != screen->h || full != fullscreen)
+  {
+    finish_typing();
+
+    /* (It uses the button images; the main loop makes it again) */
+    if (kbd != NULL)
+    {
+      osk_free(kbd);
+      kbd = NULL;
+    }
+
+    change_screen(w, h, full);
+  }
+
+  screen_redraws++;
+  redraw_main_screen();
+  redraw_tux_text();
+
+  return 1;
+}
+
+/* The variable that holds an interface image that a dialog was given, so
+   that after a screen change the dialog can take the new one; NULL if it
+   isn't one of those (e.g., a thumbnail the dialog's caller owns) */
+static SDL_Surface **ui_image_slot(SDL_Surface * img)
+{
+  SDL_Surface **slots[] = {
+    &img_mouse, &img_mouse_click, &img_popup_arrow, &img_printer,
+    &img_printer_wait, &img_save_over, &img_trash, &img_yes, &img_no
+  };
+  unsigned int i;
+
+  if (img == NULL)
+    return NULL;
+
+  for (i = 0; i < sizeof(slots) / sizeof(slots[0]); i++)
+    if (*slots[i] == img)
+      return slots[i];
+
+  for (i = 0; i < NUM_TOOLS; i++)
+    if (img_tools[i] == img)
+      return &img_tools[i];
+
+  return NULL;
+}
+
 
 /* Wait for a keypress or mouse click.
    counter is in 1/10 second units */
@@ -2453,6 +2628,7 @@ static void mainloop(void)
   on_screen_keyboard  *new_kbd;
   SDL_Rect kbd_rect;
   int new_screen_w, new_screen_h, new_fullscreen;
+  int mainloop_layouts = screen_layouts, mainloop_redraws = screen_redraws;
   static char default_keyboard_layout[] = "default.layout";
 
   num_things = num_brushes;
@@ -2493,34 +2669,19 @@ static void mainloop(void)
     /* Fullscreen switched, or window resized (see poll_event()): not in
        the middle of a stroke */
 
+    new_screen_w = screen->w;
+    new_screen_h = screen->h;
+    new_fullscreen = fullscreen;
+
     if (!button_down && !(mouseaccessibility && emulate_button_pressed) &&
-	screen_change_wanted(&new_screen_w, &new_screen_h, &new_fullscreen))
+	(screen_change_wanted(&new_screen_w, &new_screen_h, &new_fullscreen) ||
+	 mainloop_redraws != screen_redraws))
     {
       int new_size = (new_screen_w != screen->w || new_screen_h != screen->h ||
 		      new_fullscreen != fullscreen);
 
-      /* Finish what's being typed, as when switching tools */
-      if (new_size && cursor_x != -1 && cursor_y != -1)
-      {
-	hide_blinking_cursor();
-	if (texttool_len > 0)
-	{
-	  rec_undo_buffer();
-	  do_render_cur_text(1);
-	  texttool_len = 0;
-	  cursor_textwidth = 0;
-	  label_node_to_edit = NULL;
-	}
-	else if (cur_tool == TOOL_LABEL && label_node_to_edit)
-	{
-	  rec_undo_buffer();
-	  have_to_rec_label_node = TRUE;
-	  add_label_node(0, 0, 0, 0, NULL);
-	  derender_node(&label_node_to_edit);
-	  label_node_to_edit = NULL;
-	}
-	cursor_left = cursor_x = cursor_y = -1;
-      }
+      if (new_size)
+	finish_typing();
 
       /* (Shapes being rotated, and the stamp's outline, are only XORed on
 	 the screen. So is the stamp's or eraser's outline under the mouse,
@@ -2539,8 +2700,14 @@ static void mainloop(void)
 	kbd = NULL;
       }
 
-      if (new_size && change_screen(new_screen_w, new_screen_h, new_fullscreen))
+      if (new_size)
+	change_screen(new_screen_w, new_screen_h, new_fullscreen);
+
+      /* (Also when a dialog changed it) */
+      if (mainloop_layouts != screen_layouts)
       {
+	mainloop_layouts = screen_layouts;
+
 	real_r_tools = r_tools;
 	if (NUM_TOOLS > 14 + TOOLOFFSET)
 	{
@@ -2561,41 +2728,7 @@ static void mainloop(void)
 	}
       }
 
-      SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
-      draw_toolbar();
-      /* (draw_colors() leaves out what didn't change: through the other
-	 state and back) */
-      if (colors_are_selectable)
-      {
-	draw_colors(COLORSEL_DISABLE);
-	draw_colors(COLORSEL_ENABLE);
-      }
-      else
-      {
-	draw_colors(COLORSEL_ENABLE);
-	draw_colors(COLORSEL_DISABLE);
-      }
-
-      if (cur_tool == TOOL_BRUSH || cur_tool == TOOL_LINES)
-	draw_brushes();
-      else if (cur_tool == TOOL_MAGIC)
-	draw_magic();
-      else if (cur_tool == TOOL_STAMP)
-	draw_stamps();
-      else if (cur_tool == TOOL_TEXT || cur_tool == TOOL_LABEL)
-      {
-	if (font_thread_done)
-	  draw_fonts();
-	else
-	  draw_none();
-      }
-      else if (cur_tool == TOOL_SHAPES)
-	draw_shapes();
-      else if (cur_tool == TOOL_ERASER)
-	draw_erasers();
-
-      update_canvas(0, 0, canvas->w, canvas->h);
-      SDL_Flip(screen);
+      redraw_main_screen();
 
       if ((cur_tool == TOOL_TEXT || cur_tool == TOOL_LABEL) && onscreen_keyboard &&
 	  kbd == NULL)
@@ -2624,12 +2757,18 @@ static void mainloop(void)
       draw_tux_text(tool_tux[cur_tool], tool_tips[cur_tool], 1);
 
       magic_switchin(canvas);
+
+      mainloop_redraws = screen_redraws;
     }
 
     pre_event_time = SDL_GetTicks();
 
 
-    while (poll_event_mainloop(&event))
+    /* (After a dialog changed the screen, the rest waits for the above,
+       when it can do it) */
+    while ((mainloop_redraws == screen_redraws || button_down ||
+	    (mouseaccessibility && emulate_button_pressed)) &&
+	   poll_event_mainloop(&event))
     {
       current_event_time = SDL_GetTicks();
 
@@ -12706,6 +12845,8 @@ static int do_prompt_image_flash_snd(const char *const text,
   int txt_left, txt_right, img_left, btn_left, txt_btn_left, txt_btn_right;
   int val_x, val_y, motioner;
   int valhat_x, valhat_y, hatmotioner;
+  SDL_Surface **img1_slot, **img2_slot, **img3_slot;
+  int redraws, redrawing;
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;
@@ -12767,6 +12908,26 @@ static int do_prompt_image_flash_snd(const char *const text,
 
 
   playsound(screen, 1, snd, 1, SNDPOS_LEFT, SNDDIST_NEAR);
+
+  /* (After a screen change, the box is drawn again from here, on the main
+     screen; the interface images it shows are new ones) */
+  img1_slot = ui_image_slot(img1);
+  img2_slot = ui_image_slot(img2);
+  img3_slot = ui_image_slot(img3);
+  redrawing = 0;
+
+redraw:
+  redraws = screen_redraws;
+
+  if (redrawing)
+  {
+    /* The frame: what the animation's last step leaves */
+    dest.x = SCALED(PROMPT_LEFT) + PROMPTOFFSETX;
+    dest.y = SCALED(94) + PROMPTOFFSETY;
+    dest.w = SCALED(PROMPT_W);
+    dest.h = SCALED(96 * 2);
+    SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 224 - 96, 224 - 96, 244 - 96));
+  }
 
 #ifndef NO_PROMPT_SHADOWS
   alpha_surf = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
@@ -12958,7 +13119,23 @@ static int do_prompt_image_flash_snd(const char *const text,
 
   do
   {
-    while (poll_event(&event))
+    if (dialog_screen_change() || redraws != screen_redraws)
+    {
+      if (img1_slot != NULL)
+	img1 = *img1_slot;
+      if (img2_slot != NULL)
+	img2 = *img2_slot;
+      if (img3_slot != NULL)
+	img3 = *img3_slot;
+      if (free_img1b)
+	SDL_FreeSurface(img1b);
+      counter = 0;
+      w = 96 + 2;	/* (where the animation ended) */
+      redrawing = 1;
+      goto redraw;
+    }
+
+    while (poll_event_dialog(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -14568,15 +14745,23 @@ static int do_open(void)
   int last_click_which, last_click_button;
   int places_to_look;
   int opened_something;
+  int resized, restoring, keep_which, keep_cur, redraws;
+  int was_wiped = screen_wiped_for_dialog;
   int val_x, val_y, motioner;
   int valhat_x, valhat_y, hatmotioner;
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;
   opened_something = 0;
+  resized = keep_which = keep_cur = 0;
+  screen_wiped_for_dialog = 1;
 
   do
   {
+    /* (Again after a screen change, below: where the user was) */
+    restoring = resized;
+    resized = 0;
+
     do_setcursor(cursor_watch);
 
     /* Allocate some space: */
@@ -14915,6 +15100,13 @@ static int do_open(void)
       /* NOTE: cur is now set above; if file_id'th file is found, it's
          set to that file's index; otherwise, we default to '0' */
 
+      if (restoring)
+      {
+        which = min(keep_which, num_files - 1);
+        cur = min(keep_cur, ((num_files - 1) / 4) * 4);
+      }
+      redraws = screen_redraws;
+
       update_list = 1;
       want_erase = 0;
 
@@ -14931,6 +15123,18 @@ static int do_open(void)
 
       do
       {
+        /* The window changed size, or fullscreen was switched (maybe in a
+           prompt over this): the thumbnails are for the old size, so
+           start again (see the end of the outer loop) */
+
+        if (dialog_screen_change() || redraws != screen_redraws)
+        {
+          keep_which = which;
+          keep_cur = cur;
+          resized = 1;
+          break;
+        }
+
         /* Update screen: */
 
         if (update_list)
@@ -15056,7 +15260,7 @@ static int do_open(void)
           update_list = 0;
         }
 
-	while (poll_event(&event))
+	while (poll_event_dialog(&event))
 	  {
         if (event.type == SDL_QUIT)
         {
@@ -15504,7 +15708,7 @@ static int do_open(void)
       while (!done);
 
 
-      if (!slideshow)
+      if (!slideshow && !resized)
       {
         /* Load the chosen picture: */
 
@@ -15648,7 +15852,9 @@ static int do_open(void)
       slideshow = do_slideshow();
     }
   }
-  while (slideshow);
+  while (slideshow || resized);
+
+  screen_wiped_for_dialog = was_wiped;
 
   return(opened_something);
 }
@@ -15684,9 +15890,18 @@ static int do_slideshow(void)
   SDL_Surface *btn, *blnk;
   int val_x, val_y, motioner;
   int valhat_x, valhat_y, hatmotioner;
+  int resized, keep_which, keep_cur, keep_speed, keep_num_selected, redraws;
+  int *keep_selected;
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;
+  resized = 0;
+  keep_selected = NULL;
+  keep_which = keep_cur = keep_num_selected = 0;
+  keep_speed = 5;
+
+  /* (Again after a screen change, from the end: where the user was) */
+start_again:
   do_setcursor(cursor_watch);
 
   /* Allocate some space: */
@@ -15957,11 +16172,43 @@ static int do_slideshow(void)
   num_selected = 0;
   speed = 5;
 
+  if (resized)
+  {
+    which = min(keep_which, num_files - 1);
+    cur = min(keep_cur, ((num_files - 1) / 4) * 4);
+    speed = keep_speed;
+    for (i = 0; i < keep_num_selected; i++)
+      if (keep_selected[i] < num_files)
+	selected[num_selected++] = keep_selected[i];
+    free(keep_selected);
+    keep_selected = NULL;
+    resized = 0;
+  }
+  redraws = screen_redraws;
+
   do_setcursor(cursor_arrow);
 
 
   do
   {
+    /* The window changed size, or fullscreen was switched (maybe while
+       playing): the thumbnails are for the old size, so start again */
+
+    if (dialog_screen_change() || redraws != screen_redraws)
+    {
+      keep_which = which;
+      keep_cur = cur;
+      keep_speed = speed;
+      keep_num_selected = num_selected;
+      keep_selected = malloc(sizeof(int) * (num_selected + 1));
+      if (keep_selected == NULL)
+	keep_num_selected = 0;
+      else
+	memcpy(keep_selected, selected, sizeof(int) * num_selected);
+      resized = 1;
+      break;
+    }
+
     /* Update screen: */
 
     if (update_list)
@@ -16103,7 +16350,7 @@ static int do_slideshow(void)
 
     /* Was a call to SDL_WaitEvent(&event); before, 
        changed to this while loop in order to get joystick working */
-    while (poll_event(&event))
+    while (poll_event_dialog(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -16438,6 +16685,8 @@ static int do_slideshow(void)
   free(selected);
   free(fs);	/* (was leaked every time) */
 
+  if (resized)
+    goto start_again;
 
   return go_back;
 }
@@ -16549,7 +16798,15 @@ static void play_slideshow(int * selected, int num_selected, char * dirname,
 
       do
       {
-	while (poll_event(&event))
+	/* The screen changed: this slide again, at the new size */
+	if (dialog_screen_change())
+	{
+	  i--;
+	  next = 1;
+	  break;
+	}
+
+	while (poll_event_dialog(&event))
 	{
 	  if (event.type == SDL_QUIT)
 	  {
@@ -19412,10 +19669,17 @@ static int do_new_dialog(void)
   int val_x, val_y, motioner;
   int valhat_x, valhat_y, hatmotioner;
   int skip, k;
+  int resized, keep_which, keep_cur, redraws;
+  int was_wiped = screen_wiped_for_dialog;
 
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;  
+  resized = keep_which = keep_cur = 0;
+  screen_wiped_for_dialog = 1;
+
+  /* (Again after a screen change, from the end: where the user was) */
+start_again:
   do_setcursor(cursor_watch);
 
   /* Allocate some space: */
@@ -19908,6 +20172,14 @@ static int do_new_dialog(void)
   /* NOTE: cur is now set above; if file_id'th file is found, it's
      set to that file's index; otherwise, we default to '0' */
 
+  if (resized)
+  {
+    which = min(keep_which, num_files - 1);
+    cur = min(keep_cur, ((num_files - 1) / 4) * 4);
+    resized = 0;
+  }
+  redraws = screen_redraws;
+
   update_list = 1;
 
   done = 0;
@@ -19922,6 +20194,18 @@ static int do_new_dialog(void)
 
   do
   {
+    /* The window changed size, or fullscreen was switched (maybe in a
+       prompt over this): the thumbnails are for the old size, so start
+       again */
+
+    if (dialog_screen_change() || redraws != screen_redraws)
+    {
+      keep_which = which;
+      keep_cur = cur;
+      resized = 1;
+      break;
+    }
+
     /* Update screen: */
 
     if (update_list)
@@ -20027,7 +20311,7 @@ static int do_new_dialog(void)
 
     /* Was a call to SDL_WaitEvent(&event); before, 
        changed to this while loop in order to get joystick working */
-    while(poll_event(&event))
+    while(poll_event_dialog(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -20328,7 +20612,7 @@ static int do_new_dialog(void)
 
   /* Load the chosen starter, or start with a blank solid color: */
 
-  if (which != -1)
+  if (which != -1 && !resized)
   {
     /* Save old one first? */
 
@@ -20573,6 +20857,11 @@ cleanup_and_return:
   free(d_places);
   free(fs);	/* (was leaked every time) */
 
+  if (resized)
+    goto start_again;
+
+  screen_wiped_for_dialog = was_wiped;
+
   return(which != -1);
 }
 
@@ -20630,10 +20919,13 @@ static int do_color_picker(void)
   SDL_Rect color_example_dest;
   SDL_Surface * backup;
   SDL_Rect r_color_picker;
+  int redraws, picker_w, picker_h;
+  int was_wiped = screen_wiped_for_dialog;
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;
   hide_blinking_cursor();
+  screen_wiped_for_dialog = 1;
 
   do_setcursor(cursor_hand);
 
@@ -20677,6 +20969,12 @@ static int do_color_picker(void)
   
   SDL_BlitSurface(backup, NULL, screen, NULL);
   SDL_FreeSurface(backup);	/* (was leaked: a whole screen at each use) */
+
+  /* (After a screen change, the box is drawn again from here) */
+redraw:
+  redraws = screen_redraws;
+  picker_w = img_color_picker->w;
+  picker_h = img_color_picker->h;
 
 #ifndef NO_PROMPT_SHADOWS
   alpha_surf = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
@@ -20828,7 +21126,16 @@ static int do_color_picker(void)
 
   do
   {
-    while (poll_event(&event))
+    if (dialog_screen_change() || redraws != screen_redraws)
+    {
+      /* (The last color's mark, on the new size of the palette) */
+      color_picker_x = color_picker_x * img_color_picker->w / picker_w;
+      color_picker_y = color_picker_y * img_color_picker->h / picker_h;
+      w = 140;	/* (where the animation ended: past 128 + 6 + 4, by 4s) */
+      goto redraw;
+    }
+
+    while (poll_event_dialog(&event))
     {
       if (event.type == SDL_QUIT)
       {
@@ -21060,6 +21367,8 @@ static int do_color_picker(void)
 
   update_canvas(0, 0, canvas->w, canvas->h);
 
+
+  screen_wiped_for_dialog = was_wiped;
 
   return(chose);
 }
@@ -24632,6 +24941,9 @@ static int change_screen(int w, int h, int full)
   for (c = 0; c < sizeof(cursors) / sizeof(cursors[0]); c++)
     if (old_cursors[c] != *cursors[c])
       free_cursor(&old_cursors[c]);
+
+  screen_layouts++;
+  screen_redraws++;
 
   return (1);
 }
