@@ -19063,7 +19063,8 @@ static void load_magic_plugins(void)
 		      fname);
                 err = 1;
 	      }
-              else if (magic_funcs[num_plugin_files].api_version() != TP_MAGIC_API_VERSION)
+              else if (magic_funcs[num_plugin_files].api_version() != TP_MAGIC_API_VERSION &&
+                       magic_funcs[num_plugin_files].api_version() != TP_MAGIC_API_VERSION_0922)
 	      {
                 fprintf(stderr, "Warning: plugin %s uses Tux Paint 'Magic' tool API version %x,\nbut Tux Paint needs version %x.\n", fname, magic_funcs[num_plugin_files].api_version(), TP_MAGIC_API_VERSION);
                 err = 1;

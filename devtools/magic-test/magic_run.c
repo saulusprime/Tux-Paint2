@@ -396,7 +396,7 @@ int main(int argc, char * argv[])
   p_release = plugin_function(handle, prefix, "release");
   p_shutdown = plugin_function(handle, prefix, "shutdown");
 
-  if (p_api_version() != TP_MAGIC_API_VERSION)
+  if (p_api_version() != TP_MAGIC_API_VERSION && p_api_version() != TP_MAGIC_API_VERSION_0922)
   {
     fprintf(stderr, "API version 0x%x, not 0x%x\n", p_api_version(), TP_MAGIC_API_VERSION);
     return(1);

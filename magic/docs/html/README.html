@@ -592,9 +592,11 @@ plugin's functions.
   scale that again.  Return what it gives.<br>
   <br>
   <b>Note:</b> Added in this fork of Tux&nbsp;Paint 0.9.22, at the end
-  of the "<code>magic_api</code>" structure, without changing the API
-  version.  Plugins that load their icon with "<code>IMG_Load()</code>"
-  keep working, but their icon is only enlarged.<br>
+  of the "<code>magic_api</code>" structure, with API version
+  0x00010003 (Tux&nbsp;Paint 0.9.22 turns such plugins down, instead of
+  crashing).  This fork also takes plugins made for 0.9.22 (0x00000003),
+  that load their icon with "<code>IMG_Load()</code>": their icon is
+  only enlarged.<br>
   <br>
 </ul>
 

@@ -471,9 +471,11 @@ Interfaces
              again. Return what it gives.
 
              Note: Added in this fork of Tux Paint 0.9.22, at the end of the
-             "magic_api" structure, without changing the API version.
-             Plugins that load their icon with "IMG_Load()" keep working,
-             but their icon is only enlarged.
+             "magic_api" structure, with API version 0x00010003 (Tux Paint
+             0.9.22 turns such plugins down, instead of crashing). This
+             fork also takes plugins made for 0.9.22 (0x00000003), that
+             load their icon with "IMG_Load()": their icon is only
+             enlarged.
 
     Informational
 

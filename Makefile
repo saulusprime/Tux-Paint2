@@ -11,7 +11,10 @@
 
 VER_VERSION:=0.9.22
 VER_DATE:=$(shell date +"%Y-%m-%d")
-MAGIC_API_VERSION:=0x00000003
+# (0.9.22's 0x00000003, plus this fork's load_icon(): Tux Paint 0.9.22
+# turns down plugins made with it, instead of crashing; this fork still
+# takes plugins made for 0x00000003, see src/tp_magic_api.h.in)
+MAGIC_API_VERSION:=0x00010003
 
 # Need to know the OS
 
@@ -1185,7 +1188,7 @@ SHARED_FLAGS:=-shared -fpic -Wl,--warn-shared-textrel
 MAGIC_C:=$(wildcard magic/src/*.c)
 MAGIC_SO:=$(patsubst magic/src/%.c,magic/%.$(SO_TYPE),$(MAGIC_C))
 
-$(MAGIC_SO): magic/%.$(SO_TYPE): magic/src/%.c  
+$(MAGIC_SO): magic/%.$(SO_TYPE): magic/src/%.c src/tp_magic_api.h
 	$(CC) $(MAGIC_CFLAGS) $(LDFLAGS) $(SHARED_FLAGS) -o $@ $< $(PLUGIN_LIBS)
 # Probably should separate the various flags like the following:
 #	$(CC) $(PLUG_CPPFLAGS) $(PLUG_CFLAGS) $(PLUG_LDFLAGS) -o $@ $< $(PLUG_LIBS)

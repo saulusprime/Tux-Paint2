@@ -159,9 +159,9 @@ typedef struct magic_api_t {
      48x48, it instead draws an SVG file with the same name ("icon.svg"
      next to "icon.png"), if there's one, already at the buttons' size;
      Tux Paint knows not to scale that again. Return what it gives.
-     (Added in this fork of Tux Paint 0.9.22, at the end of the structure,
-     without changing the API version: plugins that use IMG_Load() for
-     their icon keep working.) */
+     (Added in this fork of Tux Paint 0.9.22, at the end of the structure;
+     plugins that use IMG_Load() for their icon keep working. Plugins
+     made with it have their own API version, see below.) */
   SDL_Surface * (*load_icon)(const char *);
 } magic_api;
 
@@ -172,6 +172,12 @@ typedef struct magic_api_t {
    and you will be active. */
 
 #define TP_MAGIC_API_VERSION __APIVERSION__
+
+/* The version of Tux Paint 0.9.22, whose structure is the same up to
+   'touched': this fork of it takes those plugins too (they don't use
+   'load_icon') */
+
+#define TP_MAGIC_API_VERSION_0922 0x00000003
 
 #ifndef ATTRIBUTE_UNUSED
 #define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
