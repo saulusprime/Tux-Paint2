@@ -19,22 +19,22 @@ Nessuna aperta. Le decisioni prese sono in [ASIS.md](ASIS.md) e in
 
 ## UI scalabile con la finestra
 
-Completa. In `master` fino all'unione del 2026-11-01; finestra
-ridimensionabile, schermo intero nitido e icone SVG di strumenti e forme
-sui branch `feature/resizable` e `feature/svg-icons`. Vedi [ASIS.md](ASIS.md)
-e `HANDOFF.md` §5bis.
+Completa: le voci del 2026-11-01 sono chiuse (vedi [ASIS.md](ASIS.md) e
+`HANDOFF.md` §5bis). `master` arriva fino a "Feature e miglioramenti
+strumenti"; le icone SVG nuove e i dialoghi sono sui branch
+`feature/more-svg-icons` e `feature/dialog-resize`.
 
-- [ ] [P2] Unire in `master`, dopo una prova a mano di ridimensionamento e
-  Alt+Invio: `feature/svg-icons` (contiene `feature/resizable`) è ora
-  contenuto in `feature/tools`, e un solo avanzamento rapido a quest'ultimo
-  li porta tutti (vedi la sezione seguente).
-- [ ] [P3] Icone che restano PNG ingrandite: quelle delle magie
-  (`magic/icons/`, 94, spesso fotografiche), altoparlante e cuffia, e le
-  immagini dei dialoghi (Sì/No, frecce, cestino…). Le cornici dei
-  pulsanti no: sono sfumature, già rese bene.
-- [ ] [P3] Durante un dialogo il ridimensionamento mostra l'immagine
-  tagliata o con bande nere fino al ritorno al disegno: i dialoghi non
-  sanno rifare la loro disposizione.
+- [ ] [P2] Unire in `master` con avanzamento rapido a
+  `feature/dialog-resize` (contiene `feature/more-svg-icons`), dopo una
+  prova a mano: ridimensionamenti e Alt+Invio anche con un dialogo
+  aperto, icone delle magie a 1600×1200.
+- [ ] [P3] Ogni cambio di misura perde da pochi byte a circa 3 KB dentro
+  Pango/fontconfig: SDL_Pango crea una fontmap per ogni font, e
+  `change_screen()` ricrea quelli dell'interfaccia. Rimedio possibile:
+  tenere i font dell'interfaccia per misura invece di ricrearli.
+- [ ] [P3] Una richiesta dentro Apri ("Cancella"), se la finestra cambia
+  mentre è aperta, ha dietro lo schermo principale invece della griglia
+  di Apri, finché non si chiude.
 
 ## Bug
 

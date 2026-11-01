@@ -48,7 +48,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
-  `MAGIC_API_VERSION 0x00000003` (vedi [Makefile](Makefile) riga 12-14).
+  `MAGIC_API_VERSION 0x00010003` dal 2026-11-01: la 0x00000003 della
+  0.9.22 più `load_icon()` del fork, che accetta anche i plugin 0x00000003
+  (vedi [Makefile](Makefile) e §5bis).
 - **Origine del repository**: fork di LliureX, `origin` =
   `https://github.com/lliurex/tuxpaint.git`. Il commit iniziale
   (`5550718 Ported from Ubuntu`, jrpelegrina, 2018-10-16) importa il
@@ -63,11 +65,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `feature/tools` | ultimo commit | **branch attivo**: le nove voci di "Feature e miglioramenti strumenti" (`799621f`…`6f79f5d`) e file di progetto. Parte da `feature/svg-icons`. **Da unire in `master`**, dopo una prova a mano, con avanzamento rapido fino a qui: contiene i due branch sotto |
-| `feature/svg-icons` | `6810cfc` | icone SVG di strumenti e forme (`a34374b`, `b9e7dfb`) e file di progetto. Parte da `feature/resizable` |
-| `feature/resizable` | `7672e81` | finestra ridimensionabile e schermo intero nitido, con i leak e i plugin sistemati lungo la strada (`54b36d4`…`7672e81`). Parte da `master`; contenuto nel branch attivo. **Da unire in `master`** con avanzamento rapido al branch attivo, dopo una prova a mano |
-| `master` | `0787bf2` | tutto il lavoro fino a contenuti e localizzazione (avanzamento rapido del 2026-11-01 a `content/l10n`) |
-| `content/l10n`, `quality/warnings`, `quality/fixme`, `feature/fullscreen` | | già uniti in `master` |
+| `feature/dialog-resize` | ultimo commit | **branch attivo**: i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto. Parte da `feature/more-svg-icons`. **Da unire in `master`**, dopo una prova a mano, con avanzamento rapido fino a qui |
+| `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`). Parte da `master`; contenuto nel branch attivo |
+| `master` | `baead7c` | tutto fino a "Feature e miglioramenti strumenti" (avanzamento rapido del 2026-11-01 a `feature/tools`, che conteneva `feature/svg-icons` e `feature/resizable`) |
+| `feature/tools`, `feature/svg-icons`, `feature/resizable`, `content/l10n`, `quality/warnings`, `quality/fixme`, `feature/fullscreen` | | già uniti in `master` |
 | `fix/erase-prompt-thumbnail` | come `master` | già unito in `master` |
 | `feature/sharper-icons` | `a3e6464` | già unito in `master` |
 | `feature/ui-scaling` | `f0f9036` | già unito in `master` |
@@ -78,7 +79,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
   `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `feature/tools`, tutto
+- **Installato in `~/.local`**: la build di `feature/dialog-resize`, tutto
   funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
   timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
@@ -100,6 +101,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Contenuti e localizzazione | `0aca7bd`…`bb2b180` (su `content/l10n`) | `./dev.sh stamps` (raccolta completa dei timbri); ultima riga dei `.dat`/`.txt` dei timbri; `it.po` rivisto e modello rigenerato senza intltool; campione di punteggiatura dei font; azione "Schermo intero" nel modello del `.desktop`; sei Starter e modelli SVG per la scuola; manuale ed EXTENDING in italiano (§5quater, ASIS) |
 | Ridisegno alla nuova dimensione | `54b36d4`…`7672e81` (su `feature/resizable`) | finestra ridimensionabile; Alt+Invio a schermo intero nitido alla risoluzione dello schermo; disegno, Annulla, Starter ed etichette adattati alla nuova tela; plugin Halftone, Foam e Glass Tile con la tela che cambia; due leak (§5bis, ASIS) |
 | Icone SVG | `a34374b`, `b9e7dfb` (su `feature/svg-icons`) | con pulsanti più grandi di 48×48, le icone di strumenti e forme vengono da SVG (§5bis, ASIS) |
+| Icone SVG, seconda parte | `c7414af`…`922b762` (su `feature/more-svg-icons`) | `load_icon()` nell'API dei plugin e sua versione 0x00010003; SVG per 39 icone delle magie e 10 dell'interfaccia (§5bis, ASIS) |
+| Dialoghi alla nuova dimensione | `6bfe48f`, `41af788` (su `feature/dialog-resize`) | ogni dialogo si rifà quando la finestra cambia o con Alt+Invio; copia del testo di Tux (§5bis, ASIS) |
 | Strumenti e magie | `799621f`…`6f79f5d` (su `feature/tools`) | Blocks, Chalk, Cartoon, Emboss e Puzzle a tutta immagine; Punto croce (plugin nuovo); Schiuma colorata; Mezzatinta con un angolo per inchiostro; suoni per Halftone, Puzzle, Color & White; tastiera a schermo con i caratteri di Maiuscolo e AltGr, e i caratteri oltre U+FFFF; etichette lunghe su due righe; rettangolo da aggiornare in 10 plugin; due leak (§5quinquies, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
@@ -139,7 +142,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`, `nodlclose.c`), §5bis |
 | [devtools/print-test/](devtools/print-test/) | *Aggiunto nel fork*: `ps_check.sh`, verifica della stampa PostScript con Ghostscript (§5ter) |
 | [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh`, rigenera il modello delle traduzioni senza intltool (§5quater) |
-| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis), `crossstitch_icon.py` e `magic_sounds.py` (icona di Punto croce e suoni sintetizzati, §5quinquies) |
+| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis), `crossstitch_icon.py` e `magic_sounds.py` (icona di Punto croce e suoni sintetizzati, §5quinquies), `svg_icons.py` (rifà tutte le icone tracciate, §5bis) |
 | [devtools/magic-test/](devtools/magic-test/) | *Aggiunto nel fork*: `magic_run.c`, fa girare un plugin Magia su un'immagine, senza interfaccia (§5quinquies) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
@@ -506,7 +509,72 @@ button_h`.
   leggero (nero al 40%: le icone sono nere con trasparenza, non grigie),
   nero. Non convertiti: altoparlante e cuffia (sfumati come foto), le
   cornici dei pulsanti (sfumature a gel, già rese bene dal Lanczos: a
-  2,67× non si vede differenza), le icone delle magie.
+  2,67× non si vede differenza).
+- **Icone SVG, seconda parte (2026-11-01)**: tutte le icone tracciate le
+  rifà `devtools/content/svg_icons.py POTRACE_DIR` (le 16 degli strumenti
+  escono identiche), con l'elenco di quelle che tracciano bene. Le icone
+  al tratto con i due livelli di prima; quelle a grigi piatti con
+  `trace_icons.py --tones`, che trova i toni nell'istogramma lontano dai
+  bordi e fa uno strato per tono con l'opacità che, sovrapposta, lo
+  ridà. Scelta guardando ogni icona a 2,67×, PNG ingrandito accanto alle
+  due tracciature: una misura numerica alla misura originale non ha
+  funzionato (potrace sposta di mezzo pixel). Restano PNG le icone con
+  sfumature, luci dentro zone scure o foto: 31 magie, i pulsanti a gel,
+  i tasti della tastiera a schermo, `magic_paint` con
+  `magic_fullscreen` (il secondo traccia male, e sono affiancati).
+- **Icone delle magie**: le carica il plugin, quindi serve l'API:
+  `load_icon(percorso del PNG)` (in fondo a `magic_api`) dà il PNG o,
+  con pulsanti più grandi, l'SVG già alla scala; `get_magic_icon()` lo
+  riconosce (`magic_icon_at_scale`) e non lo scala di nuovo. Tutti i 48
+  plugin la usano. I plugin così fatti dicono versione 0x00010003: un
+  Tux Paint 0.9.22 li rifiuta con un avviso, invece di andare in crash
+  chiamando un puntatore che non ha (è successo con il binario di
+  riferimento); il fork accetta anche quelli 0x00000003
+  (`TP_MAGIC_API_VERSION_0922`). Nel Makefile i plugin ora dipendono da
+  `src/tp_magic_api.h`, altrimenti un cambio dell'API non li ricompilava.
+
+### Dialoghi alla nuova dimensione (2026-11-01)
+
+- **Cosa**: ridimensionando o con Alt+Invio mentre un dialogo è aperto,
+  il dialogo si rifà alla nuova dimensione. Prima restava tagliato o
+  ingrandito fino alla chiusura.
+- **Come**: i sei cicli dei dialoghi (richieste sì/no, selettore colore,
+  Apri, Nuovo, scelta delle diapositive, presentazione) usano
+  `poll_event_dialog()` (Alt+Invio rimandato come nel ciclo principale,
+  quindi nitido) e, tra un giro di eventi e l'altro,
+  `dialog_screen_change()`: fa il cambio (`change_screen()`, prima
+  `finish_typing()` e liberata la tastiera a schermo), ridisegna lo
+  schermo principale (`redraw_main_screen()`) e il testo di Tux.
+- **Poi il dialogo**: richieste e selettore ripartono da dove finisce la
+  loro animazione (`goto redraw`), con la cornice che l'animazione
+  lasciava; le immagini dell'interfaccia ricevute dal chiamante si
+  riprendono dalle variabili che le tengono (`ui_image_slot()`), perché
+  `change_screen()` le rifà. Apri, Nuovo e scelta delle diapositive
+  ricominciano (le miniature sono della misura vecchia): Apri col suo
+  ciclo esterno, gli altri con `goto start_again`, conservando
+  selezione, scorrimento, disegni scelti e velocità. La presentazione
+  rifà la diapositiva corrente.
+- **Contatori**: `screen_layouts` (nuova misura: il ciclo principale
+  rifà ciò che sa solo lui, `real_r_tools`, scorrimenti, timbro) e
+  `screen_redraws` (qualcuno ha ridisegnato: il ciclo principale, o un
+  dialogo sotto una richiesta, si ridisegna). Finché il ciclo principale
+  non ha fatto la sua parte, non legge altri eventi.
+- **Sotto i dialoghi**: Apri, Nuovo e il selettore colore spengono
+  colori e selettore (`screen_wiped_for_dialog`, che anche
+  `redraw_main_screen()` rispetta, con il titolo grigio che
+  `draw_colors()` disegna solo cambiando stato); sotto Salva, Stampa ed
+  Esci resta lo strumento di prima (`old_tool`).
+- **Limite**: una richiesta dentro Apri ("Cancella"), ridimensionata, ha
+  dietro lo schermo principale invece della griglia, finché non si
+  chiude; poi Apri si rifà.
+- **Testo di Tux**: `draw_tux_text()` ora ne tiene una copia; teneva il
+  puntatore del chiamante, che Apri libera subito (trovato con
+  AddressSanitizer al primo ridisegno).
+- **Leak nelle librerie a ogni cambio di misura**: SDL_Pango crea una
+  fontmap per contesto, e `change_screen()` ricrea i font
+  dell'interfaccia; i risultati del thread con cui Pango abbina i font
+  (FcFontSetMatch) si perdono quando la fontmap muore. Da pochi byte a
+  circa 3 KB a ridimensionamento, secondo i tempi (TODO).
 
 ### Prove automatiche (`devtools/ui-test/`)
 
@@ -549,7 +617,15 @@ Si lanciano dalla shell di VS Code e pilotano Tux Paint sull'host
 **Binario di riferimento**: worktree git in `~/.cache/tuxpaint-baseline`,
 a `ec9ebe3` (prima della UI scalabile) più la sola correzione `_exit(0)` in
 `src/fonts.c`, non committata nel worktree, così l'ordine dei font coincide.
-Si ricompila con `./dev.sh build` lì dentro e si rimuove con
+Dal 2026-11-01 usa i **suoi plugin**, in
+`~/.cache/tuxpaint-baseline/plugins-0922`: quelli installati hanno la
+versione 0x00010003 e lui li rifiuterebbe, restando senza magie. Si
+ricompila così (non con `./dev.sh build`, che rimetterebbe i plugin di
+`~/.local`):
+`make PREFIX=$HOME/.local MAGIC_PREFIX=$HOME/.cache/tuxpaint-baseline/plugins-0922 tuxpaint magic-plugins`
+e poi `cp magic/*.so plugins-0922/`. Dati, timbri e traduzioni restano
+quelli di `~/.local`. Il pannello delle magie a 800×600 differisce
+comunque (etichette su due righe del fork). Si rimuove con
 `git worktree remove --force ~/.cache/tuxpaint-baseline`. Le serie di
 riferimento vanno rigenerate a ogni sessione: le catture stanno in una
 cartella temporanea.
@@ -764,15 +840,15 @@ cartella temporanea.
 
 ## 6. Prossimi passi consigliati
 
-1. Provare a mano la finestra ridimensionabile (trascinando il bordo, e
-   massimizzando) e Alt+Invio, anche con un disegno, un modello e
-   un'etichetta.
+1. Provare a mano la finestra ridimensionabile e Alt+Invio, anche con un
+   dialogo aperto (Apri, Nuovo, il selettore colore, la richiesta
+   d'uscita, una presentazione), e le icone delle magie a 1600×1200.
 2. Provare a mano le magie cambiate e Punto croce (anche a tutta
    immagine), la Schiuma con un colore, la tastiera a schermo
    (`--onscreen-keyboard`), e ascoltare i suoni nuovi (Mezzatinta, Puzzle,
    Colore e bianco, Punto croce).
-3. Poi unire in `master` con avanzamento rapido a `feature/tools`, che
-   contiene `feature/svg-icons` e `feature/resizable`.
+3. Poi unire in `master` con avanzamento rapido a `feature/dialog-resize`,
+   che contiene `feature/more-svg-icons`.
 4. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
    (finestra Nuovo, dopo i colori).
 5. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
@@ -1710,3 +1786,48 @@ Verifiche (desktop fermo, con il permesso dell'utente, due giri):
 Stato alla chiusura: branch attivo `feature/tools`, installato in
 `~/.local`; il layout di prova `bmptest` è stato tolto da
 `~/.local/share/tuxpaint/osk/`. Da provare a mano e unire in `master`.
+
+### 2026-11-01 — UI scalabile: unione, altre icone SVG, dialoghi alla nuova dimensione
+
+Richiesta dell'utente: di nuovo la sezione "UI scalabile con la finestra",
+con le tre voci rimaste. Risposte alle tre domande: unire tutto; icone
+delle magie e dei dialoghi; tutti i dialoghi.
+
+- **Unione**: `master` portato con avanzamento rapido a `feature/tools`
+  (`baead7c`), nessun push.
+- **Icone** (branch `feature/more-svg-icons`): `load_icon()` nell'API e
+  i 48 plugin aggiornati in modo meccanico; 70 icone delle magie e 20
+  dell'interfaccia tracciate e guardate una per una. La stima iniziale
+  ("circa 60 al tratto") era ottimista: la tracciatura a due livelli
+  perdeva i grigi piatti e ingrossava le linee sottili, quindi è nato
+  `--tones`; ne sono uscite 39 magie e 10 immagini dell'interfaccia
+  migliori del PNG ingrandito. Le altre restano PNG (§5bis).
+- **Versione dell'API**: il binario di riferimento delle prove andava in
+  crash all'avvio, perché caricava i plugin nuovi; è il caso di qualunque
+  0.9.22. Da qui la versione 0x00010003, e il riferimento con i plugin
+  suoi.
+- **Dialoghi** (branch `feature/dialog-resize`): §5bis. Lungo la strada:
+  il pannello di destra sotto i dialoghi (spento sotto Apri, Nuovo e il
+  selettore, lo strumento di prima sotto le richieste), la cornice delle
+  richieste, il titolo grigio dei colori; il testo di Tux letto dopo
+  essere stato liberato (AddressSanitizer).
+
+Verifiche (desktop fermo, con il permesso dell'utente, in più giri):
+- A 800×600 schermata principale e dialoghi identici al riferimento,
+  salvo il pannello delle magie (etichette su due righe), anche sul
+  binario finale.
+- Ogni dialogo (Apri, richiesta d'uscita, selettore colore) portato a
+  1600×1200 e di nuovo a 800×600 è identico al pixel a com'era prima. A
+  1600×1200: Apri con il secondo disegno ancora scelto, Nuovo con lo
+  scorrimento, la scelta delle diapositive con i disegni segnati, una
+  diapositiva in corso, la richiesta "Cancella" dentro Apri (risposta No:
+  disegni e Cestino di prova intatti); Alt+Invio dentro Nuovo dà lo
+  schermo intero nitido a 2560×1600 e torna.
+- Icone delle magie nell'interfaccia a 1600×1200, quattro pagine.
+- AddressSanitizer, sessione con tutti i dialoghi ridimensionati e uscita
+  pulita: nessun errore dopo la correzione del testo di Tux; persi circa
+  19 KB dentro Pango/fontconfig, legati alla ricreazione dei font a ogni
+  cambio di misura (§5bis, TODO), più i 112 byte di SDL2 di sempre.
+
+Stato alla chiusura: branch attivo `feature/dialog-resize`, installato in
+`~/.local`; da provare a mano e unire in `master`.

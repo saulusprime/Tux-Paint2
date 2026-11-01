@@ -37,6 +37,16 @@ B=$HOME/.cache/tuxpaint-baseline/tuxpaint   # binario di riferimento
 N=$HOME/.local/bin/tuxpaint                 # binario installato
 ```
 
+Il binario di riferimento usa i suoi plugin, in
+`~/.cache/tuxpaint-baseline/plugins-0922`: quelli installati hanno
+l'API del fork (0x00010003), che lui rifiuta. Per ricompilarlo:
+
+```sh
+flatpak-spawn --host bash -c 'cd ~/.cache/tuxpaint-baseline &&
+  make PREFIX=$HOME/.local MAGIC_PREFIX=$HOME/.cache/tuxpaint-baseline/plugins-0922 \
+    tuxpaint magic-plugins && cp magic/*.so plugins-0922/'
+```
+
 Invariante a 800×600, schermata principale e dialoghi:
 
 ```sh

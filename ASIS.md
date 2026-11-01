@@ -383,3 +383,27 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
     AddressSanitizer; in Tux Paint, anche a 1600×1200 e con
     ridimensionamenti, sotto AddressSanitizer: nessun errore di memoria,
     432 byte persi nelle librerie più i 15 del layout, poi corretti.
+- [x] 2026-11-01 — UI scalabile con la finestra, le tre voci rimaste:
+  - **unione in `master`**: avanzamento rapido a `feature/tools`
+    (`baead7c`), che conteneva anche `feature/svg-icons` e
+    `feature/resizable` (scelta dell'utente: unire tutto);
+  - **icone ancora PNG** (branch `feature/more-svg-icons`, `c7414af`…
+    `922b762`): `load_icon()` nell'API dei plugin, perché le icone delle
+    magie le carica il plugin; SVG tracciati per 39 icone delle magie e
+    10 dell'interfaccia (frecce, grassetto/corsivo, capovolgi,
+    diapositive…), scelte una per una. Restano PNG quelle con sfumature,
+    luci dentro zone scure o foto (31 magie, pulsanti a gel, tasti della
+    tastiera a schermo, cestino, stampante, mouse, altoparlante, cuffia);
+    i plugin hanno ora la versione 0x00010003, che Tux Paint 0.9.22
+    rifiuta invece di andare in crash;
+  - **dialoghi durante il ridimensionamento** (branch
+    `feature/dialog-resize`, `6bfe48f`, `41af788`): richieste, selettore
+    colore, Apri, Nuovo, scelta delle diapositive e presentazione si
+    rifanno alla nuova dimensione, anche con Alt+Invio, conservando
+    selezione e scorrimento;
+  - verifiche: a 800×600 identico al riferimento (salvo il pannello delle
+    magie, come prima); ogni dialogo portato a 1600×1200 e ritorno è
+    identico al pixel a prima; AddressSanitizer: un uso dopo `free` del
+    testo di Tux trovato e corretto, poi nessun errore; circa 19 KB persi
+    in Pango/fontconfig, ricreando i font a ogni cambio di misura (resta
+    nel TODO).
