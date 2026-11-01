@@ -7544,6 +7544,7 @@ static void loadstamp_callback(SDL_Surface * screen,
         debug("\n");
 
         fclose(fi);
+        free(files[i].str);
         continue;  /* ugh, i hate continues */
       }
     }
@@ -13247,6 +13248,7 @@ static int do_save(int tool, int dont_show_success_results)
     /* No old thumbnail!  Save this image's thumbnail in the new place,
        under ".thumbs" */
 
+    free(fname);
     snprintf(tmp, sizeof(tmp), "saved/.thumbs/%s-t%s", file_id,
 	     FNAME_EXTENSION);
     fname = get_fname(tmp, DIR_SAVE);
