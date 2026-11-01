@@ -17,6 +17,7 @@ tuxpaint.desktop.in
 ../magic/src/calligraphy.c
 ../magic/src/cartoon.c
 ../magic/src/confetti.c
+../magic/src/crossstitch.c
 ../magic/src/distortion.c
 ../magic/src/emboss.c
 ../magic/src/fade_darken.c
