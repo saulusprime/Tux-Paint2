@@ -732,8 +732,34 @@ static int window_size_given = 0;
 /* The desktop's size, from before the window was opened (0 if unknown) */
 static int desktop_w = 0, desktop_h = 0;
 
+/* The window's size, to go back to when leaving fullscreen, and whether
+   there was a window yet (see change_screen()) */
+static int window_w, window_h;
+static int been_windowed = 0;
+
+/* Screen changes asked for while polling events, done by the main loop
+   (see screen_change_wanted()): [Alt]+[Enter] makes fullscreen_request 1
+   (go fullscreen at the desktop's size) or -1 (go back to the window);
+   resizing the window sets resize_w x resize_h, at resize_ticks */
+static int fullscreen_request = 0;
+static int resize_w = 0, resize_h = 0;
+static Uint32 resize_ticks;
+
+/* Set while mainloop() polls events, so poll_event() knows it can leave
+   screen changes to it */
+static int polling_in_mainloop = 0;
+
 /* Scale a size or position from the 48x48-button design to the current size */
 #define SCALED(x) ((int) ((x) * button_scale + 0.5))
+
+/* Sizes of the interface fonts */
+#ifdef __APPLE__
+#define UI_FONT_SMALL SCALED(12 - (only_uppercase * 2))
+#else
+#define UI_FONT_SMALL SCALED(13 - (only_uppercase * 2))
+#endif
+#define UI_FONT_MEDIUM SCALED(18 - (only_uppercase * 3))
+#define UI_FONT_LARGE SCALED(30 - (only_uppercase * 3))
 
 /* Rows of buttons in the tool and tool-option columns (7 at 48x48 in 640x480) */
 static int buttons_tall;
@@ -923,6 +949,11 @@ static SDL_Surface *label = NULL;
 static SDL_Surface *save_canvas = NULL;
 static SDL_Surface *canvas_back = NULL;
 static SDL_Surface *img_starter = NULL, *img_starter_bkgd = NULL;
+
+/* The part of the canvas holding the picture: all of it, unless
+   change_screen() fitted the picture into a canvas of other proportions,
+   with the background around it (see reset_canvas_content()) */
+static SDL_Rect canvas_content;
 
 /* Update a rect. based on two x/y coords (not necessarly in order): */
 static void update_screen(int x1, int y1, int x2, int y2)
@@ -1857,6 +1888,7 @@ static void update_stamp_xor(void);
 #endif
 
 static void set_active_stamp(void);
+static void get_stamp_thumb(stamp_type * sd);
 
 static void do_eraser(int x, int y);
 static void disable_avail_tools(void);
@@ -1909,6 +1941,17 @@ static int do_prompt(const char *const text, const char *const btn_yes,
 static int do_prompt_snd(const char *const text, const char *const btn_yes,
 			 const char *const btn_no, int snd, int ox, int oy);
 static void cleanup(void);
+static void create_cursors(void);
+static void free_cursors(void);
+static TuxPaint_Font *load_ui_font(int size);
+static void set_locale_font(void);
+static void free_ui_fonts(void);
+static void load_ui_images(void);
+static void render_ui_titles(void);
+static void create_color_buttons(void);
+static void free_ui_images(void);
+static void reset_canvas_content(void);
+static int change_screen(int w, int h, int full);
 static void free_surface(SDL_Surface ** surface_array);
 static void free_surface_array(SDL_Surface * surface_array[], int count);
 /*static void update_shape(int cx, int ox1, int ox2, int cy, int oy1, int oy2,
@@ -2047,9 +2090,42 @@ static void toggle_fullscreen(void)
   }
 }
 
-/* SDL_PollEvent(), but [Alt]+[Enter] toggles fullscreen here, in every
-   event loop, and never reaches the caller (nor does its key repeat, nor
-   the matching key release) */
+/* [Alt]+[Enter], in any event loop. The main loop switches redoing the
+   layout for the new size (see screen_change_wanted()); the other loops
+   (dialogs) can't, so there the window's picture is stretched to the
+   screen right away, and the main loop redoes the layout later. */
+static void ask_fullscreen_toggle(void)
+{
+  int was_fullscreen = fullscreen;
+
+  if (desktop_w <= 0)
+  {
+    /* (Unknown desktop size: can only stretch) */
+    toggle_fullscreen();
+    return;
+  }
+
+  if (polling_in_mainloop)
+  {
+    if (fullscreen_request != 0)
+      fullscreen_request = 0;	/* pressed twice before the main loop saw it */
+    else
+      fullscreen_request = (fullscreen ? -1 : 1);
+    return;
+  }
+
+  toggle_fullscreen();
+
+  if (fullscreen == was_fullscreen)
+    fullscreen_request = (fullscreen ? -1 : 1);	/* couldn't: do it later */
+  else
+    fullscreen_request = (fullscreen ? 1 : 0);	/* the sharp layout later */
+}
+
+/* SDL_PollEvent(), but [Alt]+[Enter] (see ask_fullscreen_toggle()) and
+   window resizing (see screen_change_wanted()) are handled here, in every
+   event loop, and never reach the caller (nor does the key's repeat, nor
+   its release) */
 static int poll_event(SDL_Event * event)
 {
   static int fullscreen_key_down = 0;
@@ -2057,6 +2133,18 @@ static int poll_event(SDL_Event * event)
 
   while (SDL_PollEvent(event))
   {
+    if (event->type == SDL_VIDEORESIZE)
+    {
+      /* (Switching to fullscreen, the window manager may send sizes) */
+      if (!fullscreen)
+      {
+	resize_w = event->resize.w;
+	resize_h = event->resize.h;
+	resize_ticks = SDL_GetTicks();
+      }
+      continue;
+    }
+
     if (event->type == SDL_KEYDOWN || event->type == SDL_KEYUP)
     {
       key = event->key.keysym.sym;
@@ -2066,7 +2154,7 @@ static int poll_event(SDL_Event * event)
 	if (event->type == SDL_KEYDOWN && (event->key.keysym.mod & KMOD_ALT))
 	{
 	  if (!fullscreen_key_down)
-	    toggle_fullscreen();
+	    ask_fullscreen_toggle();
 
 	  fullscreen_key_down = 1;
 	  continue;
@@ -2079,6 +2167,66 @@ static int poll_event(SDL_Event * event)
       }
     }
 
+    return 1;
+  }
+
+  return 0;
+}
+
+/* poll_event() for the main loop: there, screen changes are left to it */
+static int poll_event_mainloop(SDL_Event * event)
+{
+  int got;
+
+  polling_in_mainloop = 1;
+  got = poll_event(event);
+  polling_in_mainloop = 0;
+
+  return got;
+}
+
+/* The screen change asked for while polling events that the main loop
+   should make now, if any: then returns 1, the size and the mode (maybe
+   the current ones: then it only needs redrawing).
+   Resizing waits until the window has kept the same size for a moment
+   (the window manager may send many sizes while the border is dragged). */
+static int screen_change_wanted(int *w, int *h, int *full)
+{
+  int request = fullscreen_request;
+
+  fullscreen_request = 0;
+
+  if (request == 1 &&
+      !(fullscreen && screen->w == desktop_w && screen->h == desktop_h))
+  {
+    /* (Still the window's surface, even if already stretched) */
+    window_w = WINDOW_WIDTH;
+    window_h = WINDOW_HEIGHT;
+
+    *w = desktop_w;
+    *h = desktop_h;
+    *full = 1;
+    return 1;
+  }
+
+  if (request == -1 && fullscreen)
+  {
+    *w = window_w;
+    *h = window_h;
+    *full = 0;
+    resize_w = 0;
+    return 1;
+  }
+
+  if (resize_w > 0 && !fullscreen && SDL_GetTicks() - resize_ticks >= 250)
+  {
+    /* (The layout needs some room. The same size as now still needs a
+       redraw: e.g. resized back while a dialog was open, which couldn't
+       redraw what the smaller window had lost.) */
+    *w = max(resize_w, 640);
+    *h = max(resize_h, 480);
+    *full = 0;
+    resize_w = resize_h = 0;
     return 1;
   }
 
@@ -2284,6 +2432,8 @@ static void mainloop(void)
 #endif
   on_screen_keyboard  *new_kbd;
   SDL_Rect kbd_rect;
+  int new_screen_w, new_screen_h, new_fullscreen;
+  static char default_keyboard_layout[] = "default.layout";
 
   num_things = num_brushes;
   thing_scroll = &brush_scroll;
@@ -2320,10 +2470,146 @@ static void mainloop(void)
   {
     ignoring_motion = 0;
 
+    /* Fullscreen switched, or window resized (see poll_event()): not in
+       the middle of a stroke */
+
+    if (!button_down && !(mouseaccessibility && emulate_button_pressed) &&
+	screen_change_wanted(&new_screen_w, &new_screen_h, &new_fullscreen))
+    {
+      int new_size = (new_screen_w != screen->w || new_screen_h != screen->h ||
+		      new_fullscreen != fullscreen);
+
+      /* Finish what's being typed, as when switching tools */
+      if (new_size && cursor_x != -1 && cursor_y != -1)
+      {
+	hide_blinking_cursor();
+	if (texttool_len > 0)
+	{
+	  rec_undo_buffer();
+	  do_render_cur_text(1);
+	  texttool_len = 0;
+	  cursor_textwidth = 0;
+	  label_node_to_edit = NULL;
+	}
+	else if (cur_tool == TOOL_LABEL && label_node_to_edit)
+	{
+	  rec_undo_buffer();
+	  have_to_rec_label_node = TRUE;
+	  add_label_node(0, 0, 0, 0, NULL);
+	  derender_node(&label_node_to_edit);
+	  label_node_to_edit = NULL;
+	}
+	cursor_left = cursor_x = cursor_y = -1;
+      }
+
+      /* (Shapes being rotated, and the stamp's outline, are only XORed on
+	 the screen. So is the stamp's or eraser's outline under the mouse,
+	 which the next motion would erase at old_x, old_y: off the canvas,
+	 it only draws the new one.) */
+      shape_tool_mode = SHAPE_TOOL_MODE_DONE;
+      stamp_xored = 0;
+      old_x = old_y = -1;
+
+      magic_switchout(canvas);
+
+      /* (It uses the button images) */
+      if (new_size && kbd != NULL)
+      {
+	osk_free(kbd);
+	kbd = NULL;
+      }
+
+      if (new_size && change_screen(new_screen_w, new_screen_h, new_fullscreen))
+      {
+	real_r_tools = r_tools;
+	if (NUM_TOOLS > 14 + TOOLOFFSET)
+	{
+	  real_r_tools.h = r_tools.h - button_h;
+	  real_r_tools.y = r_tools.y + button_h / 2;
+	}
+
+	/* (The selectors may show more or fewer rows now) */
+	brush_scroll = font_scroll = magic_scroll = tool_scroll = 0;
+	for (i = 0; i < MAX_STAMP_GROUPS; i++)
+	  stamp_scroll[i] = 0;
+
+	if (cur_tool == TOOL_STAMP && num_stamps[stamp_group] > 0)
+	{
+	  get_stamp_thumb(stamp_data[stamp_group][cur_stamp[stamp_group]]);
+	  set_active_stamp();
+	  update_stamp_xor();
+	}
+      }
+
+      SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
+      draw_toolbar();
+      /* (draw_colors() leaves out what didn't change: through the other
+	 state and back) */
+      if (colors_are_selectable)
+      {
+	draw_colors(COLORSEL_DISABLE);
+	draw_colors(COLORSEL_ENABLE);
+      }
+      else
+      {
+	draw_colors(COLORSEL_ENABLE);
+	draw_colors(COLORSEL_DISABLE);
+      }
+
+      if (cur_tool == TOOL_BRUSH || cur_tool == TOOL_LINES)
+	draw_brushes();
+      else if (cur_tool == TOOL_MAGIC)
+	draw_magic();
+      else if (cur_tool == TOOL_STAMP)
+	draw_stamps();
+      else if (cur_tool == TOOL_TEXT || cur_tool == TOOL_LABEL)
+      {
+	if (font_thread_done)
+	  draw_fonts();
+	else
+	  draw_none();
+      }
+      else if (cur_tool == TOOL_SHAPES)
+	draw_shapes();
+      else if (cur_tool == TOOL_ERASER)
+	draw_erasers();
+
+      update_canvas(0, 0, canvas->w, canvas->h);
+      SDL_Flip(screen);
+
+      if ((cur_tool == TOOL_TEXT || cur_tool == TOOL_LABEL) && onscreen_keyboard &&
+	  kbd == NULL)
+      {
+	kbd = osk_create(onscreen_keyboard_layout ? onscreen_keyboard_layout : default_keyboard_layout,
+			 screen, img_btnsm_up, img_btnsm_down, img_btnsm_off, img_btnsm_nav, img_btnsm_hold,
+			 img_oskdel, img_osktab, img_oskenter, img_oskcapslock, img_oskshift,
+			 onscreen_keyboard_disable_change);
+	if (kbd != NULL)
+	{
+	  kbd_rect.x = button_w * 2 + (canvas->w - kbd->surface->w) / 2;
+	  if (old_y > canvas->h / 2)
+	    kbd_rect.y = 0;
+	  else
+	    kbd_rect.y = canvas->h - kbd->surface->h;
+	  kbd_rect.w = kbd->surface->w;
+	  kbd_rect.h = kbd->surface->h;
+	}
+      }
+      if (kbd != NULL)
+      {
+	SDL_BlitSurface(kbd->surface, &kbd->rect, screen, &kbd_rect);
+	update_screen_rect(&kbd_rect);
+      }
+
+      draw_tux_text(tool_tux[cur_tool], tool_tips[cur_tool], 1);
+
+      magic_switchin(canvas);
+    }
+
     pre_event_time = SDL_GetTicks();
 
 
-    while (poll_event(&event))
+    while (poll_event_mainloop(&event))
     {
       current_event_time = SDL_GetTicks();
 
@@ -8039,6 +8325,173 @@ static SDL_Surface *enlarge_lanczos(SDL_Surface * src, int new_w, int new_h)
 }
 
 
+/* Filter taps for one output pixel of resample_rect(): */
+
+typedef struct
+{
+  int first, count;
+  float *weight;
+} resample_taps;
+
+
+/* Triangle filter weights to resample len_in pixels into len_out: a
+   bilinear filter when enlarging, one as wide as an input pixel's
+   footprint when shrinking (so thin lines don't break up). NULL on
+   failure; free with free_resample_taps(). */
+
+static resample_taps *get_resample_taps(int len_in, int len_out)
+{
+  resample_taps *taps;
+  float scale = (float) len_in / len_out;
+  float radius = max(scale, 1.0f);
+  float center, sum;
+  int max_count = 2 * ceil(radius) + 1;
+  int o, i;
+
+  taps = malloc(sizeof(resample_taps) * len_out);
+  if (taps == NULL)
+    return (NULL);
+  taps[0].weight = malloc(sizeof(float) * max_count * len_out);
+  if (taps[0].weight == NULL)
+  {
+    free(taps);
+    return (NULL);
+  }
+
+  for (o = 0; o < len_out; o++)
+  {
+    center = (o + 0.5) * scale - 0.5;
+    taps[o].weight = taps[0].weight + o * max_count;
+    taps[o].first = floor(center - radius) + 1;
+    taps[o].count = floor(center + radius) - taps[o].first + 1;
+    if (taps[o].count > max_count)
+      taps[o].count = max_count;
+
+    sum = 0;
+    for (i = 0; i < taps[o].count; i++)
+    {
+      taps[o].weight[i] = max(1 - fabs(taps[o].first + i - center) / radius, 0.0);
+      sum += taps[o].weight[i];
+    }
+    for (i = 0; i < taps[o].count; i++)
+      taps[o].weight[i] /= sum;
+  }
+
+  return (taps);
+}
+
+
+static void free_resample_taps(resample_taps * taps)
+{
+  if (taps != NULL)
+    free(taps[0].weight);
+  free(taps);
+}
+
+
+/* Resample the src_r part of src into the dst_r part of dst (see
+   get_resample_taps()). Both must be 32-bit surfaces of the same format;
+   with an alpha channel, colors are premultiplied while filtering.
+   Returns 0 on failure (dst unchanged). */
+
+static int resample_rect(SDL_Surface * src, SDL_Rect * src_r,
+                         SDL_Surface * dst, SDL_Rect * dst_r)
+{
+  SDL_PixelFormat *fmt = src->format;
+  resample_taps *tx, *ty;
+  float *rows, *acc, *p, a;
+  Uint32 pixel, *line;
+  int x, y, i, c, yy;
+
+  if (fmt->BytesPerPixel != 4 || dst->format->BytesPerPixel != 4 ||
+      src_r->w <= 0 || src_r->h <= 0 || dst_r->w <= 0 || dst_r->h <= 0)
+    return (0);
+
+  tx = get_resample_taps(src_r->w, dst_r->w);
+  ty = get_resample_taps(src_r->h, dst_r->h);
+  rows = malloc(sizeof(float) * 4 * dst_r->w * src_r->h);
+  acc = malloc(sizeof(float) * 4 * dst_r->w);
+  if (tx == NULL || ty == NULL || rows == NULL || acc == NULL)
+  {
+    free_resample_taps(tx);
+    free_resample_taps(ty);
+    free(rows);
+    free(acc);
+    return (0);
+  }
+
+  SDL_LockSurface(src);
+  SDL_LockSurface(dst);
+
+  /* Across: every source line, to the new width */
+  for (y = 0; y < src_r->h; y++)
+  {
+    line = (Uint32 *) ((Uint8 *) src->pixels + (src_r->y + y) * src->pitch) + src_r->x;
+
+    for (x = 0; x < dst_r->w; x++)
+    {
+      p = rows + (y * dst_r->w + x) * 4;
+      p[0] = p[1] = p[2] = p[3] = 0;
+
+      for (i = 0; i < tx[x].count; i++)
+      {
+        pixel = line[min(max(tx[x].first + i, 0), src_r->w - 1)];
+        a = fmt->Amask ? (float) ((pixel & fmt->Amask) >> fmt->Ashift) : 255;
+        p[0] += ((pixel & fmt->Rmask) >> fmt->Rshift) * a * tx[x].weight[i];
+        p[1] += ((pixel & fmt->Gmask) >> fmt->Gshift) * a * tx[x].weight[i];
+        p[2] += ((pixel & fmt->Bmask) >> fmt->Bshift) * a * tx[x].weight[i];
+        p[3] += a * tx[x].weight[i];
+      }
+    }
+  }
+
+  /* Down: those lines, to the new height */
+  for (y = 0; y < dst_r->h; y++)
+  {
+    for (x = 0; x < dst_r->w * 4; x++)
+      acc[x] = 0;
+
+    for (i = 0; i < ty[y].count; i++)
+    {
+      yy = min(max(ty[y].first + i, 0), src_r->h - 1);
+      p = rows + yy * dst_r->w * 4;
+      for (x = 0; x < dst_r->w * 4; x++)
+        acc[x] += p[x] * ty[y].weight[i];
+    }
+
+    line = (Uint32 *) ((Uint8 *) dst->pixels + (dst_r->y + y) * dst->pitch) + dst_r->x;
+
+    for (x = 0; x < dst_r->w; x++)
+    {
+      p = acc + x * 4;
+      a = p[3];
+      pixel = 0;
+      if (a >= 0.5)
+      {
+        for (c = 0; c < 3; c++)
+          p[c] = min(max(p[c] / a + 0.5, 0.0), 255.0);
+        pixel = ((Uint32) p[0] << dst->format->Rshift) |
+          ((Uint32) p[1] << dst->format->Gshift) |
+          ((Uint32) p[2] << dst->format->Bshift);
+      }
+      if (dst->format->Amask)
+        pixel |= (Uint32) min(a + 0.5, 255.0) << dst->format->Ashift;
+      line[x] = pixel;
+    }
+  }
+
+  SDL_UnlockSurface(dst);
+  SDL_UnlockSurface(src);
+
+  free_resample_taps(tx);
+  free_resample_taps(ty);
+  free(rows);
+  free(acc);
+
+  return (1);
+}
+
+
 /* Resize a UI image, drawn for 48x48 buttons, to the current button size
    (frees the original): */
 
@@ -11844,6 +12297,7 @@ static void load_current(void)
     {
       org_surf = SDL_DisplayFormat(tmp);
       autoscale_copy_smear_free(tmp, canvas, SDL_BlitSurface);
+      reset_canvas_content();
 
       /* First we run this for compatibility, then we will chek if
 	 there are data embedded in the png file */
@@ -12470,108 +12924,11 @@ static void cleanup(void)
   free(brushes_frames);
   free(brushes_directional);
   free(brushes_spacing);
-  free_surface_array(img_tools, NUM_TOOLS);
-  free_surface_array(img_tool_names, NUM_TOOLS);
-  free_surface_array(img_title_names, NUM_TITLES);
-  for (i = 0; i < num_magics; i++)
-  {
-    free_surface(&(magics[i].img_icon));
-    free_surface(&(magics[i].img_name));
-  }
-  free_surface_array(img_shapes, NUM_SHAPES);
-  free_surface_array(img_shape_names, NUM_SHAPES);
-  free_surface_array(img_tux, NUM_TIP_TUX);
-
-  free_surface(&img_openlabels_open);
-  free_surface(&img_openlabels_slideshow);
-  free_surface(&img_openlabels_erase);
-  free_surface(&img_openlabels_back);
-  free_surface(&img_openlabels_next);
-  free_surface(&img_openlabels_play);
+  free_ui_images();
 
   free_surface(&img_progress);
 
-  free_surface(&img_yes);
-  free_surface(&img_no);
-
-  free_surface(&img_prev);
-  free_surface(&img_next);
-
-  free_surface(&img_mirror);
-  free_surface(&img_flip);
-
-  free_surface(&img_title_on);
-  free_surface(&img_title_off);
-  free_surface(&img_title_large_on);
-  free_surface(&img_title_large_off);
-
-  free_surface(&img_open);
-  free_surface(&img_erase);
-  free_surface(&img_back);
-  free_surface(&img_trash);
-
-  free_surface(&img_slideshow);
-  free_surface(&img_play);
-  free_surface(&img_select_digits);
-
-  free_surface(&img_dead40x40);
-
-  free_surface(&img_printer);
-  free_surface(&img_printer_wait);
-  free_surface(&img_save_over);
-
-  free_surface(&img_btn_up);
-  free_surface(&img_btn_down);
-  free_surface(&img_btn_off);
-
-  free_surface(&img_btnsm_up);
-  free_surface(&img_btnsm_off);
-  free_surface(&img_btnsm_down);
-  free_surface(&img_btnsm_hold);
-
-  free_surface(&img_btn_nav);
-  free_surface(&img_btnsm_nav);
-
-  free_surface(&img_sfx);
-  free_surface(&img_speak);
-
-  free_surface(&img_cursor_up);
-  free_surface(&img_cursor_down);
-
-  free_surface(&img_cursor_starter_up);
-  free_surface(&img_cursor_starter_down);
-
-  free_surface(&img_scroll_up);
-  free_surface(&img_scroll_down);
-  free_surface(&img_scroll_up_off);
-  free_surface(&img_scroll_down_off);
-
-  free_surface(&img_grow);
-  free_surface(&img_shrink);
-
-  free_surface(&img_magic_paint);
-  free_surface(&img_magic_fullscreen);
-
-  free_surface(&img_bold);
-  free_surface(&img_italic);
-
   free_surface_array(undo_bufs, NUM_UNDO_BUFS);
-
-#ifdef LOW_QUALITY_COLOR_SELECTOR
-  free_surface(&img_paintcan);
-#else
-  free_surface_array(img_color_btns, NUM_COLORS * 2);
-  free(img_color_btns);
-#endif
-
-  if (onscreen_keyboard)
-  {
-    free_surface(&img_oskdel);
-    free_surface(&img_osktab);
-    free_surface(&img_oskenter);
-    free_surface(&img_oskcapslock);
-    free_surface(&img_oskshift);
-  }
 
   free_surface(&screen);
   free_surface(&img_starter);
@@ -12586,32 +12943,7 @@ static void cleanup(void)
     touched = NULL;
   }
 
-  if (medium_font != NULL)
-  {
-#ifdef DEBUG
-    printf("cleanup: medium font\n");       //EP
-#endif
-    TuxPaint_Font_CloseFont(medium_font);
-    medium_font = NULL;
-  }
-
-  if (small_font != NULL)
-  {
-#ifdef DEBUG
-    printf("cleanup: small font\n");        //EP
-#endif
-    TuxPaint_Font_CloseFont(small_font);
-    small_font = NULL;
-  }
-
-  if (large_font != NULL)
-  {
-#ifdef DEBUG
-    printf("cleanup: large font\n");        //EP
-#endif
-    TuxPaint_Font_CloseFont(large_font);
-    large_font = NULL;
-  }
+  free_ui_fonts();
 
 #ifdef FORKED_FONTS
   free_received_font_info();
@@ -12669,17 +13001,7 @@ static void cleanup(void)
     magic_api_struct = NULL;
   }
 
-  free_cursor(&cursor_hand);
-  free_cursor(&cursor_arrow);
-  free_cursor(&cursor_watch);
-  free_cursor(&cursor_up);
-  free_cursor(&cursor_down);
-  free_cursor(&cursor_tiny);
-  free_cursor(&cursor_crosshair);
-  free_cursor(&cursor_brush);
-  free_cursor(&cursor_wand);
-  free_cursor(&cursor_insertion);
-  free_cursor(&cursor_rotate);
+  free_cursors();
 
   for (i = 0; i < NUM_COLORS; i++)
   {
@@ -15002,6 +15324,7 @@ static int do_open(void)
 	    org_surf = SDL_DisplayFormat(img);	/* Keep a copy of the original image
 						   unscaled to send to load_embedded_data */
             autoscale_copy_smear_free(img, canvas, SDL_BlitSurface);
+            reset_canvas_content();
 
             cur_undo = 0;
             oldest_undo = 0;
@@ -19799,6 +20122,7 @@ static int do_new_dialog(void)
         starter_modified = 0;
 
         autoscale_copy_smear_free(img, canvas, SDL_BlitSurface);
+        reset_canvas_content();
 
         cur_undo = 0;
         oldest_undo = 0;
@@ -19826,6 +20150,7 @@ static int do_new_dialog(void)
 
         SDL_FillRect(canvas, NULL,
                      SDL_MapRGB(canvas->format, 255, 255, 255));
+        reset_canvas_content();
         SDL_BlitSurface(img_starter_bkgd, NULL, canvas, NULL);
         SDL_BlitSurface(img_starter, NULL, canvas, NULL);
       }
@@ -19858,6 +20183,7 @@ static int do_new_dialog(void)
         template_personal = 0;
 
         autoscale_copy_smear_free(img, canvas, SDL_BlitSurface);
+        reset_canvas_content();
 
         cur_undo = 0;
         oldest_undo = 0;
@@ -19885,6 +20211,7 @@ static int do_new_dialog(void)
 
         SDL_FillRect(canvas, NULL,
                      SDL_MapRGB(canvas->format, 255, 255, 255));
+        reset_canvas_content();
         SDL_BlitSurface(img_starter_bkgd, NULL, canvas, NULL);
       }
     }
@@ -19935,6 +20262,7 @@ static int do_new_dialog(void)
     		                canvas_color_r,
     				canvas_color_g,
     				canvas_color_b));
+      reset_canvas_content();
 
       cur_undo = 0;
       oldest_undo = 0;
@@ -22336,7 +22664,7 @@ static void setup_config(char *argv[])
     // should conflict with other fullscreen/native_screensize setting?
     if (!strcmp(tmpcfg.parsertmp_fullscreen_native, "native"))
       native_screensize = 1;
-    fullscreen = strcmp(tmpcfg.parsertmp_fullscreen_native, "no");
+    fullscreen = (strcmp(tmpcfg.parsertmp_fullscreen_native, "no") != 0);
   }
   if(tmpcfg.stamp_size_override)
   {
@@ -22957,35 +23285,1092 @@ static int TP_EventFilter(const SDL_Event * event)
       event->type == SDL_MOUSEBUTTONUP ||
       event->type == SDL_MOUSEMOTION ||
       event->type == SDL_QUIT ||
-      event->type == SDL_USEREVENT)
+      event->type == SDL_USEREVENT ||
+      event->type == SDL_VIDEORESIZE)
     return 1;
 
   return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-static void setup(void)
+/* Create the mouse pointers, grown to the current button size: */
+
+static void create_cursors(void)
+{
+  int scale = 1;
+
+#ifdef SMALL_CURSOR_SHAPES
+  scale = 2;
+#endif
+
+#ifdef __APPLE__
+  if (cursor_arrow == NULL)
+    cursor_arrow = SDL_GetCursor();	/* use standard system cursor */
+#endif
+
+  cursor_watch = get_cursor(watch_bits, watch_mask_bits,
+			    watch_width, watch_height,
+			    14 / scale, 14 / scale);
+
+
+#ifndef __APPLE__
+  cursor_arrow = get_cursor(arrow_bits, arrow_mask_bits,
+							arrow_width, arrow_height, 0, 0);
+#endif
+  
+  cursor_hand = get_cursor(hand_bits, hand_mask_bits,
+			   hand_width, hand_height, 12 / scale, 1 / scale);
+
+  cursor_wand = get_cursor(wand_bits, wand_mask_bits,
+			   wand_width, wand_height, 4 / scale, 4 / scale);
+
+  cursor_insertion = get_cursor(insertion_bits, insertion_mask_bits,
+				insertion_width, insertion_height,
+				7 / scale, 4 / scale);
+
+  cursor_brush = get_cursor(brush_bits, brush_mask_bits,
+			    brush_width, brush_height, 4 / scale, 28 / scale);
+
+  cursor_crosshair = get_cursor(crosshair_bits, crosshair_mask_bits,
+				crosshair_width, crosshair_height,
+				15 / scale, 15 / scale);
+
+  cursor_rotate = get_cursor(rotate_bits, rotate_mask_bits,
+			     rotate_width, rotate_height,
+			     15 / scale, 15 / scale);
+  
+  cursor_up = get_cursor(up_bits, up_mask_bits,
+			 up_width, up_height, 15 / scale, 1 / scale);
+
+  cursor_down = get_cursor(down_bits, down_mask_bits,
+			   down_width, down_height, 15 / scale, 30 / scale);
+
+  cursor_tiny = get_cursor(tiny_bits, tiny_mask_bits, tiny_width, tiny_height, 3, 3);	/* Exactly the same in SMALL (16x16) size! */
+}
+
+
+/* Free the mouse pointers created by create_cursors() */
+
+static void free_cursors(void)
+{
+  free_cursor(&cursor_hand);
+#ifndef __APPLE__
+  free_cursor(&cursor_arrow);
+#endif
+  free_cursor(&cursor_watch);
+  free_cursor(&cursor_up);
+  free_cursor(&cursor_down);
+  free_cursor(&cursor_tiny);
+  free_cursor(&cursor_crosshair);
+  free_cursor(&cursor_brush);
+  free_cursor(&cursor_wand);
+  free_cursor(&cursor_insertion);
+  free_cursor(&cursor_rotate);
+}
+
+
+/* Open a font for the interface (exits on failure): */
+
+static TuxPaint_Font *load_ui_font(int size)
+{
+  TuxPaint_Font *font;
+
+  font = TuxPaint_Font_OpenFont(PANGO_DEFAULT_FONT,
+				DATA_PREFIX "fonts/default_font.ttf", size);
+
+  if (font == NULL)
+  {
+    fprintf(stderr,
+	    "\nError: Can't load font file: "
+	    DATA_PREFIX "fonts/default_font.ttf\n"
+	    "The Simple DirectMedia Layer error that occurred was:\n"
+	    "%s\n\n", SDL_GetError());
+
+    cleanup();
+    exit(1);
+  }
+
+  return (font);
+}
+
+
+static void set_locale_font(void)
+{
+#ifdef NO_SDLPANGO
+  locale_font = load_locale_font(medium_font, SCALED(18));
+#else
+  locale_font = medium_font;
+#endif
+}
+
+
+/* Close the interface fonts (load_ui_font(), set_locale_font()) */
+
+static void free_ui_fonts(void)
+{
+  if (locale_font != NULL && locale_font != medium_font)
+    TuxPaint_Font_CloseFont(locale_font);
+  locale_font = NULL;
+
+  if (medium_font != NULL)
+  {
+#ifdef DEBUG
+    printf("cleanup: medium font\n");       //EP
+#endif
+    TuxPaint_Font_CloseFont(medium_font);
+    medium_font = NULL;
+  }
+
+  if (small_font != NULL)
+  {
+#ifdef DEBUG
+    printf("cleanup: small font\n");        //EP
+#endif
+    TuxPaint_Font_CloseFont(small_font);
+    small_font = NULL;
+  }
+
+  if (large_font != NULL)
+  {
+#ifdef DEBUG
+    printf("cleanup: large font\n");        //EP
+#endif
+    TuxPaint_Font_CloseFont(large_font);
+    large_font = NULL;
+  }
+}
+
+
+/* Load the interface images, at the current button size (the title screen
+   ones are loaded, and freed, by setup() and claim_to_be_ready()): */
+
+static void load_ui_images(void)
+{
+  int i;
+  SDL_Surface *tmp_imgcurup, *tmp_imgcurdown;
+
+  for (i = 0; i < NUM_TOOLS; i++)
+    img_tools[i] = loadimagerb(tool_img_fnames[i]);
+
+  img_title_on = loadimagerb(DATA_PREFIX "images/ui/title.png");
+  img_title_large_on = loadimagerb(DATA_PREFIX "images/ui/title_large.png");
+  img_title_off = loadimagerb(DATA_PREFIX "images/ui/no_title.png");
+  img_title_large_off = loadimagerb(DATA_PREFIX "images/ui/no_title_large.png");
+
+  img_btn_up = loadimagerb(DATA_PREFIX "images/ui/btn_up.png");
+  img_btn_down = loadimagerb(DATA_PREFIX "images/ui/btn_down.png");
+  img_btn_off = loadimagerb(DATA_PREFIX "images/ui/btn_off.png");
+
+  img_btnsm_up = loadimagerb(DATA_PREFIX "images/ui/btnsm_up.png");
+  img_btnsm_off = loadimagerb(DATA_PREFIX "images/ui/btnsm_off.png");
+  img_btnsm_down = loadimagerb(DATA_PREFIX "images/ui/btnsm_down.png");
+  img_btnsm_hold = loadimagerb(DATA_PREFIX "images/ui/btnsm_hold.png");
+
+  img_btn_nav = loadimagerb(DATA_PREFIX "images/ui/btn_nav.png");
+  img_btnsm_nav = loadimagerb(DATA_PREFIX "images/ui/btnsm_nav.png");
+
+  img_sfx = loadimagerb(DATA_PREFIX "images/tools/sfx.png");
+  img_speak = loadimagerb(DATA_PREFIX "images/tools/speak.png");
+
+  img_black = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
+				   img_btn_off->w, img_btn_off->h,
+				   img_btn_off->format->BitsPerPixel,
+				   img_btn_off->format->Rmask,
+				   img_btn_off->format->Gmask,
+				   img_btn_off->format->Bmask,
+				   img_btn_off->format->Amask);
+  SDL_FillRect(img_black, NULL, SDL_MapRGBA(screen->format, 0, 0, 0, 255));
+
+  img_grey = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
+				  img_btn_off->w, img_btn_off->h,
+				  img_btn_off->format->BitsPerPixel,
+				  img_btn_off->format->Rmask,
+				  img_btn_off->format->Gmask,
+				  img_btn_off->format->Bmask,
+				  img_btn_off->format->Amask);
+  SDL_FillRect(img_grey, NULL,
+	       SDL_MapRGBA(screen->format, 0x88, 0x88, 0x88, 255));
+
+  img_yes = loadimagerb(DATA_PREFIX "images/ui/yes.png");
+  img_no = loadimagerb(DATA_PREFIX "images/ui/no.png");
+
+  img_prev = loadimagerb(DATA_PREFIX "images/ui/prev.png");
+  img_next = loadimagerb(DATA_PREFIX "images/ui/next.png");
+
+  img_mirror = loadimagerb(DATA_PREFIX "images/ui/mirror.png");
+  img_flip = loadimagerb(DATA_PREFIX "images/ui/flip.png");
+
+  img_open = loadimagerb(DATA_PREFIX "images/ui/open.png");
+  img_erase = loadimagerb(DATA_PREFIX "images/ui/erase.png");
+  img_back = loadimagerb(DATA_PREFIX "images/ui/back.png");
+  img_trash = loadimagerb(DATA_PREFIX "images/ui/trash.png");
+
+  img_slideshow = loadimagerb(DATA_PREFIX "images/ui/slideshow.png");
+  img_play = loadimagerb(DATA_PREFIX "images/ui/play.png");
+  img_select_digits = loadimagerb(DATA_PREFIX "images/ui/select_digits.png");
+
+  img_popup_arrow = loadimagerb(DATA_PREFIX "images/ui/popup_arrow.png");
+
+  img_dead40x40 = loadimagerb(DATA_PREFIX "images/ui/dead40x40.png");
+
+  img_printer = loadimagerb(DATA_PREFIX "images/ui/printer.png");
+  img_printer_wait = loadimagerb(DATA_PREFIX "images/ui/printer_wait.png");
+
+  img_save_over = loadimagerb(DATA_PREFIX "images/ui/save_over.png");
+
+  img_grow = loadimagerb(DATA_PREFIX "images/ui/grow.png");
+  img_shrink = loadimagerb(DATA_PREFIX "images/ui/shrink.png");
+
+  img_magic_paint = loadimagerb(DATA_PREFIX "images/ui/magic_paint.png");
+  img_magic_fullscreen = loadimagerb(DATA_PREFIX "images/ui/magic_fullscreen.png");
+
+  img_bold = loadimagerb(DATA_PREFIX "images/ui/bold.png");
+  img_italic = loadimagerb(DATA_PREFIX "images/ui/italic.png");
+
+  img_label = loadimagerb(DATA_PREFIX "images/tools/label.png");
+  img_label_select = loadimagerb(DATA_PREFIX "images/tools/label_select.png");
+
+  tmp_imgcurup = loadimage(DATA_PREFIX "images/ui/cursor_up_large.png");
+  tmp_imgcurdown = loadimage(DATA_PREFIX "images/ui/cursor_down_large.png");
+  img_cursor_up = thumbnail(tmp_imgcurup, THUMB_W, THUMB_H, 0);
+  img_cursor_down = thumbnail(tmp_imgcurdown, THUMB_W, THUMB_H, 0);
+  SDL_FreeSurface(tmp_imgcurup);	/* (these two were leaked) */
+  SDL_FreeSurface(tmp_imgcurdown);
+
+  tmp_imgcurup = loadimage(DATA_PREFIX "images/ui/cursor_starter_up.png");
+  tmp_imgcurdown = loadimage(DATA_PREFIX "images/ui/cursor_starter_down.png");
+  img_cursor_starter_up = thumbnail(tmp_imgcurup, THUMB_W, THUMB_H, 0);
+  img_cursor_starter_down = thumbnail(tmp_imgcurdown, THUMB_W, THUMB_H, 0);
+  SDL_FreeSurface(tmp_imgcurup);
+  SDL_FreeSurface(tmp_imgcurdown);
+
+  img_scroll_up = loadimagerb(DATA_PREFIX "images/ui/scroll_up.png");
+  img_scroll_down = loadimagerb(DATA_PREFIX "images/ui/scroll_down.png");
+
+  img_scroll_up_off = loadimagerb(DATA_PREFIX "images/ui/scroll_up_off.png");
+  img_scroll_down_off =
+    loadimagerb(DATA_PREFIX "images/ui/scroll_down_off.png");
+
+#ifdef LOW_QUALITY_COLOR_SELECTOR
+  img_paintcan = loadimagerb(DATA_PREFIX "images/ui/paintcan.png");
+#endif
+
+  if (onscreen_keyboard)
+  {
+    img_oskdel = loadimagerb(DATA_PREFIX "images/ui/osk_delete.png");
+    img_osktab = loadimagerb(DATA_PREFIX "images/ui/osk_tab.png");
+    img_oskenter = loadimagerb(DATA_PREFIX "images/ui/osk_enter.png");
+    img_oskcapslock = loadimagerb(DATA_PREFIX "images/ui/osk_capslock.png");
+    img_oskshift = loadimagerb(DATA_PREFIX "images/ui/osk_shift.png");
+
+  }
+
+  /* Load shape icons: */
+  for (i = 0; i < NUM_SHAPES; i++)
+    img_shapes[i] = loadimagerb(shape_img_fnames[i]);
+
+  /* Load tip tux images: */
+  for (i = 0; i < NUM_TIP_TUX; i++)
+    img_tux[i] = loadimagerb(tux_img_fnames[i]);
+
+  img_mouse = loadimagerb(DATA_PREFIX "images/ui/mouse.png");
+  img_mouse_click = loadimagerb(DATA_PREFIX "images/ui/mouse_click.png");
+
+  img_color_picker = loadimagerb(DATA_PREFIX "images/ui/color_picker.png");
+}
+
+
+/* Render the titles above the toolbox and the selectors: */
+
+static void render_ui_titles(void)
 {
   int i;
   char *upstr;
+  SDL_Surface *tmp_surf;
+  SDL_Color black = { 0, 0, 0, 0 };
+
+  for (i = 0; i < NUM_TITLES; i++)
+  {
+    if (strlen(title_names[i]) > 0)
+    {
+      TuxPaint_Font *myfont = large_font;
+      char *td_str = textdir(gettext(title_names[i]));
+
+      if (need_own_font && strcmp(gettext(title_names[i]), title_names[i]))
+	myfont = locale_font;
+      upstr = uppercase(td_str);
+      free(td_str);
+      tmp_surf = render_text(myfont, upstr, black);
+      free(upstr);
+      img_title_names[i] =
+	thumbnail(tmp_surf, min(SCALED(84), tmp_surf->w), tmp_surf->h, 0);
+      SDL_FreeSurface(tmp_surf);
+    }
+    else
+    {
+      img_title_names[i] = NULL;
+    }
+  }
+}
+
+
+/* Generate the color selection buttons: */
+
+static void create_color_buttons(void)
+{
+#ifndef LOW_QUALITY_COLOR_SELECTOR
+  int i, x, y;
+  SDL_Surface *tmp_btn_up, *tmp_btn_down, *img1;
+  Uint8 r, g, b;
+  Uint32(*getpixel_tmp_btn_up) (SDL_Surface *, int, int);
+  Uint32(*getpixel_tmp_btn_down) (SDL_Surface *, int, int);
+  Uint32(*getpixel_img_paintwell) (SDL_Surface *, int, int);
+#endif
+
+#ifndef LOW_QUALITY_COLOR_SELECTOR
+
+  /* Create appropriately-shaped buttons: */
+  img1 = loadimage(DATA_PREFIX "images/ui/paintwell.png");
+  img_paintwell = thumbnail(img1, color_button_w, color_button_h, 0);
+  tmp_btn_up = thumbnail(img_btn_up, color_button_w, color_button_h, 0);
+  tmp_btn_down = thumbnail(img_btn_down, color_button_w, color_button_h, 0);
+  img_color_btn_off =
+    thumbnail(img_btn_off, color_button_w, color_button_h, 0);
+  SDL_FreeSurface(img1);
+
+  img_color_picker_thumb = thumbnail(img_color_picker,
+				     color_button_w, color_button_h, 0);
+
+  /* Create surfaces to draw them into: */
+
+  img_color_btns = malloc(sizeof(SDL_Surface *) * NUM_COLORS * 2);
+
+  for (i = 0; i < NUM_COLORS * 2; i++)
+  {
+    img_color_btns[i] = SDL_CreateRGBSurface(screen->flags,
+					     /* (WINDOW_WIDTH - 96) / NUM_COLORS, 48, */
+					     tmp_btn_up->w, tmp_btn_up->h,
+					     screen->format->BitsPerPixel,
+					     screen->format->Rmask,
+					     screen->format->Gmask,
+					     screen->format->Bmask, 0);
+
+    if (img_color_btns[i] == NULL)
+    {
+      fprintf(stderr, "\nError: Can't build color button!\n"
+	      "The Simple DirectMedia Layer error that occurred was:\n"
+	      "%s\n\n", SDL_GetError());
+
+      cleanup();
+      exit(1);
+    }
+
+    SDL_LockSurface(img_color_btns[i]);
+  }
+
+
+  /* Generate the buttons based on the thumbnails: */
+
+  SDL_LockSurface(tmp_btn_down);
+  SDL_LockSurface(tmp_btn_up);
+
+  getpixel_tmp_btn_up = getpixels[tmp_btn_up->format->BytesPerPixel];
+  getpixel_tmp_btn_down = getpixels[tmp_btn_down->format->BytesPerPixel];
+  getpixel_img_paintwell = getpixels[img_paintwell->format->BytesPerPixel];
+
+
+  for (y = 0; y < tmp_btn_up->h /* 48 */ ; y++)
+  {
+    for (x = 0; x < tmp_btn_up->w /* (WINDOW_WIDTH - 96) / NUM_COLORS */ ;
+	 x++)
+    {
+      double ru, gu, bu, rd, gd, bd, aa;
+      Uint8 a;
+
+      SDL_GetRGB(getpixel_tmp_btn_up(tmp_btn_up, x, y), tmp_btn_up->format,
+		 &r, &g, &b);
+
+      ru = sRGB_to_linear_table[r];
+      gu = sRGB_to_linear_table[g];
+      bu = sRGB_to_linear_table[b];
+      SDL_GetRGB(getpixel_tmp_btn_down(tmp_btn_down, x, y),
+		 tmp_btn_down->format, &r, &g, &b);
+      rd = sRGB_to_linear_table[r];
+      gd = sRGB_to_linear_table[g];
+      bd = sRGB_to_linear_table[b];
+      SDL_GetRGBA(getpixel_img_paintwell(img_paintwell, x, y), img_paintwell->format, &r, &g, &b, &a);
+      aa = a / 255.0;
+
+      for (i = 0; i < NUM_COLORS; i++)
+      {
+	double rh = sRGB_to_linear_table[color_hexes[i][0]];
+	double gh = sRGB_to_linear_table[color_hexes[i][1]];
+	double bh = sRGB_to_linear_table[color_hexes[i][2]];
+
+	if (i == NUM_COLORS - 1)
+	{
+          putpixels[img_color_btns[i]->format->BytesPerPixel]
+            (img_color_btns[i], x, y,
+             getpixels[img_color_picker_thumb->format->BytesPerPixel]
+               (img_color_picker_thumb, x, y));
+          putpixels[img_color_btns[i + NUM_COLORS]->format->BytesPerPixel]
+            (img_color_btns[i + NUM_COLORS], x, y,
+             getpixels[img_color_picker_thumb->format->BytesPerPixel]
+               (img_color_picker_thumb, x, y));
+        }
+
+        if (i < NUM_COLORS - 1 || a == 255)
+        {
+	  putpixels[img_color_btns[i]->format->BytesPerPixel]
+	      (img_color_btns[i], x, y,
+	       SDL_MapRGB(img_color_btns[i]->format,
+		        linear_to_sRGB(rh * aa + ru * (1.0 - aa)),
+		        linear_to_sRGB(gh * aa + gu * (1.0 - aa)),
+		        linear_to_sRGB(bh * aa + bu * (1.0 - aa))));
+	  putpixels[img_color_btns[i + NUM_COLORS]->format->BytesPerPixel]
+	      (img_color_btns[i + NUM_COLORS], x, y,
+	       SDL_MapRGB(img_color_btns[i + NUM_COLORS]->format,
+		        linear_to_sRGB(rh * aa + rd * (1.0 - aa)),
+		        linear_to_sRGB(gh * aa + gd * (1.0 - aa)),
+		        linear_to_sRGB(bh * aa + bd * (1.0 - aa))));
+	}
+      }
+    }
+  }
+
+  for (i = 0; i < NUM_COLORS * 2; i++)
+    SDL_UnlockSurface(img_color_btns[i]);
+
+  SDL_UnlockSurface(tmp_btn_up);
+  SDL_UnlockSurface(tmp_btn_down);
+  SDL_FreeSurface(tmp_btn_up);
+  SDL_FreeSurface(tmp_btn_down);
+
+#endif
+}
+
+
+/* Free what load_ui_images(), render_ui_titles(), create_color_buttons()
+   and create_button_labels() made, and the Magic tool icons: */
+
+static void free_ui_images(void)
+{
+  int i;
+
+  free_surface_array(img_tools, NUM_TOOLS);
+  free_surface_array(img_tool_names, NUM_TOOLS);
+  free_surface_array(img_title_names, NUM_TITLES);
+  for (i = 0; i < num_magics; i++)
+  {
+    free_surface(&(magics[i].img_icon));
+    free_surface(&(magics[i].img_name));
+  }
+  free_surface_array(img_shapes, NUM_SHAPES);
+  free_surface_array(img_shape_names, NUM_SHAPES);
+  free_surface_array(img_tux, NUM_TIP_TUX);
+
+  free_surface(&img_openlabels_open);
+  free_surface(&img_openlabels_slideshow);
+  free_surface(&img_openlabels_erase);
+  free_surface(&img_openlabels_back);
+  free_surface(&img_openlabels_next);
+  free_surface(&img_openlabels_play);
+
+  free_surface(&img_yes);
+  free_surface(&img_no);
+
+  free_surface(&img_prev);
+  free_surface(&img_next);
+
+  free_surface(&img_mirror);
+  free_surface(&img_flip);
+
+  free_surface(&img_title_on);
+  free_surface(&img_title_off);
+  free_surface(&img_title_large_on);
+  free_surface(&img_title_large_off);
+
+  free_surface(&img_open);
+  free_surface(&img_erase);
+  free_surface(&img_back);
+  free_surface(&img_trash);
+
+  free_surface(&img_slideshow);
+  free_surface(&img_play);
+  free_surface(&img_select_digits);
+
+  free_surface(&img_popup_arrow);
+  free_surface(&img_dead40x40);
+
+  free_surface(&img_printer);
+  free_surface(&img_printer_wait);
+  free_surface(&img_save_over);
+
+  free_surface(&img_btn_up);
+  free_surface(&img_btn_down);
+  free_surface(&img_btn_off);
+
+  free_surface(&img_btnsm_up);
+  free_surface(&img_btnsm_off);
+  free_surface(&img_btnsm_down);
+  free_surface(&img_btnsm_hold);
+
+  free_surface(&img_btn_nav);
+  free_surface(&img_btnsm_nav);
+
+  free_surface(&img_sfx);
+  free_surface(&img_speak);
+
+  free_surface(&img_black);
+  free_surface(&img_grey);
+
+  free_surface(&img_cursor_up);
+  free_surface(&img_cursor_down);
+
+  free_surface(&img_cursor_starter_up);
+  free_surface(&img_cursor_starter_down);
+
+  free_surface(&img_scroll_up);
+  free_surface(&img_scroll_down);
+  free_surface(&img_scroll_up_off);
+  free_surface(&img_scroll_down_off);
+
+  free_surface(&img_grow);
+  free_surface(&img_shrink);
+
+  free_surface(&img_magic_paint);
+  free_surface(&img_magic_fullscreen);
+
+  free_surface(&img_bold);
+  free_surface(&img_italic);
+
+  free_surface(&img_label);
+  free_surface(&img_label_select);
+
+  free_surface(&img_mouse);
+  free_surface(&img_mouse_click);
+
+  free_surface(&img_color_picker);
+
+#ifdef LOW_QUALITY_COLOR_SELECTOR
+  free_surface(&img_paintcan);
+#else
+  if (img_color_btns != NULL)
+  {
+    free_surface_array(img_color_btns, NUM_COLORS * 2);
+    free(img_color_btns);
+    img_color_btns = NULL;
+  }
+  free_surface(&img_color_btn_off);
+  free_surface(&img_color_picker_thumb);
+  free_surface(&img_paintwell);
+#endif
+
+  if (onscreen_keyboard)
+  {
+    free_surface(&img_oskdel);
+    free_surface(&img_osktab);
+    free_surface(&img_oskenter);
+    free_surface(&img_oskcapslock);
+    free_surface(&img_oskshift);
+  }
+}
+
+
+/* A new picture fills the whole canvas: */
+
+static void reset_canvas_content(void)
+{
+  canvas_content.x = 0;
+  canvas_content.y = 0;
+  canvas_content.w = canvas->w;
+  canvas_content.h = canvas->h;
+}
+
+
+/* The part of the canvas with the picture: canvas_content, grown to take
+   in anything drawn, or labelled, outside it (where the canvas still shows
+   the background otherwise) */
+
+static void get_picture_rect(SDL_Rect * pic)
+{
+  Uint32(*getpixel_canvas) (SDL_Surface *, int, int) =
+    getpixels[canvas->format->BytesPerPixel];
+  Uint32(*getpixel_bkgd) (SDL_Surface *, int, int) = NULL;
+  struct label_node *node;
+  Uint8 r, g, b, br, bg, bb;
+  int x, y, x1, y1, x2, y2, cx1, cy1, cx2, cy2;
+
+  cx1 = min(max((int) canvas_content.x, 0), canvas->w - 1);
+  cy1 = min(max((int) canvas_content.y, 0), canvas->h - 1);
+  cx2 = min(max(canvas_content.x + canvas_content.w, cx1 + 1), canvas->w);
+  cy2 = min(max(canvas_content.y + canvas_content.h, cy1 + 1), canvas->h);
+  x1 = cx1;
+  y1 = cy1;
+  x2 = cx2;
+  y2 = cy2;
+
+  if (img_starter_bkgd != NULL)
+    getpixel_bkgd = getpixels[img_starter_bkgd->format->BytesPerPixel];
+  br = canvas_color_r;
+  bg = canvas_color_g;
+  bb = canvas_color_b;
+
+  SDL_LockSurface(canvas);
+  if (img_starter_bkgd != NULL)
+    SDL_LockSurface(img_starter_bkgd);
+
+  for (y = 0; y < canvas->h; y++)
+  {
+    for (x = 0; x < canvas->w; x++)
+    {
+      if (y >= cy1 && y < cy2 && x == cx1)
+      {
+        x = cx2 - 1;		/* skip the picture */
+        continue;
+      }
+
+      SDL_GetRGB(getpixel_canvas(canvas, x, y), canvas->format, &r, &g, &b);
+      if (img_starter_bkgd != NULL)
+        SDL_GetRGB(getpixel_bkgd(img_starter_bkgd, x, y),
+                   img_starter_bkgd->format, &br, &bg, &bb);
+
+      if (r != br || g != bg || b != bb)
+      {
+        x1 = min(x1, x);
+        y1 = min(y1, y);
+        x2 = max(x2, x + 1);
+        y2 = max(y2, y + 1);
+      }
+    }
+  }
+
+  if (img_starter_bkgd != NULL)
+    SDL_UnlockSurface(img_starter_bkgd);
+  SDL_UnlockSurface(canvas);
+
+  for (node = start_label_node; node != NULL; node = node->next_to_up_label_node)
+  {
+    if (node->is_enabled)
+    {
+      x1 = min(x1, (int) node->save_x);
+      y1 = min(y1, (int) node->save_y);
+      x2 = max(x2, min(node->save_x + node->save_width, canvas->w));
+      y2 = max(y2, min(node->save_y + node->save_height, canvas->h));
+    }
+  }
+
+  pic->x = x1;
+  pic->y = y1;
+  pic->w = x2 - x1;
+  pic->h = y2 - y1;
+}
+
+
+/* Fill the parts of s around r with pixel (a value in s's format): */
+
+static void fill_around(SDL_Surface * s, SDL_Rect * r, Uint32 pixel)
+{
+  SDL_Rect band[4];
+  int i;
+
+  band[0].x = 0;
+  band[0].y = 0;
+  band[0].w = s->w;
+  band[0].h = r->y;
+  band[1].x = 0;
+  band[1].y = r->y + r->h;
+  band[1].w = s->w;
+  band[1].h = s->h - (r->y + r->h);
+  band[2].x = 0;
+  band[2].y = r->y;
+  band[2].w = r->x;
+  band[2].h = r->h;
+  band[3].x = r->x + r->w;
+  band[3].y = r->y;
+  band[3].w = s->w - (r->x + r->w);
+  band[3].h = r->h;
+
+  for (i = 0; i < 4; i++)
+    if (band[i].w > 0 && band[i].h > 0)
+      SDL_FillRect(s, &band[i], pixel);
+}
+
+
+/* Copy the parts of src around r into dst (same size, no alpha): */
+
+static void copy_around(SDL_Surface * src, SDL_Surface * dst, SDL_Rect * r)
+{
+  SDL_Rect band[4];
+  int i;
+
+  band[0].x = 0;
+  band[0].y = 0;
+  band[0].w = src->w;
+  band[0].h = r->y;
+  band[1].x = 0;
+  band[1].y = r->y + r->h;
+  band[1].w = src->w;
+  band[1].h = src->h - (r->y + r->h);
+  band[2].x = 0;
+  band[2].y = r->y;
+  band[2].w = r->x;
+  band[2].h = r->h;
+  band[3].x = r->x + r->w;
+  band[3].y = r->y;
+  band[3].w = src->w - (r->x + r->w);
+  band[3].h = r->h;
+
+  for (i = 0; i < 4; i++)
+  {
+    if (band[i].w > 0 && band[i].h > 0)
+    {
+      SDL_Rect dest = band[i];
+
+      SDL_BlitSurface(src, &band[i], dst, &dest);
+    }
+  }
+}
+
+
+/* Smear the edges of the r part of s over the rest of s, as
+   autoscale_copy_smear_free() does for pictures of other proportions: */
+
+static void smear_around(SDL_Surface * s, SDL_Rect * r)
+{
+  Uint32(*getpixel) (SDL_Surface *, int, int) = getpixels[s->format->BytesPerPixel];
+  void (*putpixel) (SDL_Surface *, int, int, Uint32) = putpixels[s->format->BytesPerPixel];
+  int x, y;
+
+  SDL_LockSurface(s);
+  for (y = 0; y < s->h; y++)
+  {
+    for (x = 0; x < s->w; x++)
+    {
+      if (y >= r->y && y < r->y + r->h && x == r->x)
+      {
+        x = r->x + r->w - 1;	/* skip the picture */
+        continue;
+      }
+      putpixel(s, x, y,
+               getpixel(s, min(max(x, (int) r->x), r->x + r->w - 1),
+                        min(max(y, (int) r->y), r->y + r->h - 1)));
+    }
+  }
+  SDL_UnlockSurface(s);
+}
+
+
+/* A new w x h surface in s's format (exits if there's no memory): */
+
+static SDL_Surface *new_layer_like(SDL_Surface * s, int w, int h)
+{
+  SDL_Surface *new_s;
+
+  new_s = SDL_CreateRGBSurface(s->flags, w, h, s->format->BitsPerPixel,
+                               s->format->Rmask, s->format->Gmask,
+                               s->format->Bmask, s->format->Amask);
+  if (new_s == NULL)
+  {
+    fprintf(stderr, "\nError: Can't resize the drawing canvas!\n"
+            "The Simple DirectMedia Layer error that occurred was:\n"
+            "%s\n\n", SDL_GetError());
+    cleanup();
+    exit(1);
+  }
+
+  return (new_s);
+}
+
+
+/* A new w x h surface like s, with the pic part of s scaled into its
+   dest part (frees s): */
+
+static SDL_Surface *resize_layer(SDL_Surface * s, SDL_Rect * pic,
+                                 SDL_Rect * dest, int w, int h)
+{
+  SDL_Surface *new_s = new_layer_like(s, w, h);
+
+  if (!resample_rect(s, pic, new_s, dest))
+  {
+    SDL_Surface *part = thumbnail2(s, dest->w, dest->h, 0, 1);
+
+    /* (Not a 32-bit surface: only the whole surface, roughly) */
+    if (part != NULL)
+    {
+      SDL_SetAlpha(part, 0, 0);
+      SDL_BlitSurface(part, NULL, new_s, dest);
+      SDL_FreeSurface(part);
+    }
+  }
+
+  SDL_FreeSurface(s);
+  return (new_s);
+}
+
+
+/* Whether undo_bufs[i] holds a picture (from oldest_undo to newest_undo,
+   which may have wrapped around): */
+
+static int undo_buf_in_use(int i)
+{
+  if (oldest_undo <= newest_undo)
+    return (i >= oldest_undo && i <= newest_undo);
+  return (i >= oldest_undo || i <= newest_undo);
+}
+
+
+/* Resize the canvas and everything drawn for it (starter or template,
+   Undo history, labels) to w x h. The picture is scaled to fit, keeping
+   its proportions; around it, the canvas shows the background. */
+
+static void resize_canvas(int w, int h)
+{
+  SDL_Rect pic, dest;
+  struct label_node *node;
+  float f;
+  Uint32 bkgd_color;
+  int i, size;
+
+  get_picture_rect(&pic);
+
+  f = min((float) w / pic.w, (float) h / pic.h);
+  dest.w = min((int) (pic.w * f + 0.5), w);
+  dest.h = min((int) (pic.h * f + 0.5), h);
+  dest.x = (w - dest.w) / 2;
+  dest.y = (h - dest.h) / 2;
+
+  /* The background first: the canvas and the Undo history use it around
+     the picture */
+  if (img_starter_bkgd != NULL)
+  {
+    img_starter_bkgd = resize_layer(img_starter_bkgd, &pic, &dest, w, h);
+    smear_around(img_starter_bkgd, &dest);
+  }
+
+  if (img_starter != NULL)
+  {
+    img_starter = resize_layer(img_starter, &pic, &dest, w, h);
+    fill_around(img_starter, &dest, SDL_MapRGBA(img_starter->format, 0, 0, 0, 0));
+  }
+
+  bkgd_color = SDL_MapRGB(canvas->format, canvas_color_r, canvas_color_g, canvas_color_b);
+
+  canvas = resize_layer(canvas, &pic, &dest, w, h);
+  if (img_starter_bkgd != NULL)
+    copy_around(img_starter_bkgd, canvas, &dest);
+  else
+    fill_around(canvas, &dest, bkgd_color);
+
+  for (i = 0; i < NUM_UNDO_BUFS; i++)
+  {
+    if (undo_buf_in_use(i))
+    {
+      undo_bufs[i] = resize_layer(undo_bufs[i], &pic, &dest, w, h);
+      if (img_starter_bkgd != NULL)
+        copy_around(img_starter_bkgd, undo_bufs[i], &dest);
+      else
+        fill_around(undo_bufs[i], &dest, bkgd_color);
+    }
+    else
+    {
+      SDL_Surface *unused = new_layer_like(undo_bufs[i], w, h);
+
+      SDL_FreeSurface(undo_bufs[i]);
+      undo_bufs[i] = unused;
+    }
+  }
+
+  /* Labels: at the new place, and the size closest to the scaled one if
+     edited again */
+  for (node = start_label_node; node != NULL; node = node->next_to_up_label_node)
+  {
+    node->save_x = max(dest.x + (node->save_x - pic.x) * f + 0.5, 0.0);
+    node->save_y = max(dest.y + (node->save_y - pic.y) * f + 0.5, 0.0);
+
+    if (node->label_node_surface != NULL)
+    {
+      SDL_Rect all = { 0, 0, node->label_node_surface->w, node->label_node_surface->h };
+      SDL_Rect scaled = { 0, 0, max(all.w * f + 0.5, 1.0), max(all.h * f + 0.5, 1.0) };
+
+      node->label_node_surface = resize_layer(node->label_node_surface, &all, &scaled,
+                                              scaled.w, scaled.h);
+      node->save_width = scaled.w;
+      node->save_height = scaled.h;
+    }
+
+    size = text_sizes[node->save_text_size] * f;
+    while (node->save_text_size < MAX_TEXT_SIZE &&
+           text_sizes[node->save_text_size + 1] - size < size - text_sizes[node->save_text_size])
+      node->save_text_size++;
+    while (node->save_text_size > MIN_TEXT_SIZE &&
+           size - text_sizes[node->save_text_size - 1] < text_sizes[node->save_text_size] - size)
+      node->save_text_size--;
+  }
+
+  SDL_FreeSurface(label);
+  label = SDL_CreateRGBSurface(screen->flags, w, h,
+                               screen->format->BitsPerPixel,
+                               screen->format->Rmask,
+                               screen->format->Gmask,
+                               screen->format->Bmask, TPAINT_AMASK);
+  {
+    SDL_Surface *new_save_canvas = new_layer_like(save_canvas, w, h);
+
+    SDL_FreeSurface(save_canvas);
+    save_canvas = new_save_canvas;
+  }
+  free(touched);
+  touched = calloc(w * h, sizeof(Uint8));
+  if (label == NULL || touched == NULL)
+  {
+    fprintf(stderr, "\nError: Can't resize the drawing canvas!\n");
+    cleanup();
+    exit(1);
+  }
+  SDL_FillRect(label, NULL, SDL_MapRGBA(label->format, 0, 0, 0, 0));
+  render_all_nodes_starting_at(&start_label_node);
+
+  canvas_content = dest;
+}
+
+
+/* SDL_SetVideoMode() for a window (that can be resized), or for
+   fullscreen: */
+
+static SDL_Surface *set_video_mode(int w, int h, int full)
+{
+  Uint32 flags = (full ? SDL_FULLSCREEN : SDL_RESIZABLE);
+
+#ifdef USE_HWSURFACE
+  flags |= SDL_HWSURFACE;
+#else
+  flags |= SDL_SWSURFACE;
+#endif
+
+  return (SDL_SetVideoMode(w, h, VIDEO_BPP, flags));
+}
+
+
+/* Switch to a w x h window, or to fullscreen at w x h (full), and redo the
+   layout, and everything made for the old size, for the new one. The
+   picture is scaled to fit the new canvas (see resize_canvas()). The
+   caller redraws the screen. Returns 0 if SDL can't switch (then nothing
+   changes). */
+
+static int change_screen(int w, int h, int full)
+{
+  SDL_Cursor **cursors[] = {
+    &cursor_hand, &cursor_arrow, &cursor_watch, &cursor_up, &cursor_down,
+    &cursor_tiny, &cursor_crosshair, &cursor_brush, &cursor_wand,
+    &cursor_insertion, &cursor_rotate
+  };
+  SDL_Cursor *old_cursors[sizeof(cursors) / sizeof(cursors[0])], *current;
+  SDL_Surface *new_screen;
+  unsigned c;
+  int i, j;
+
+  /* (Before SDL might reset it) */
+  current = SDL_GetCursor();
+
+  /* Between fullscreen and a window: through SDL_WM_ToggleFullScreen()
+     first, so the window manager puts the window back where, and as big
+     as, it was (with sdl12-compat, SDL_SetVideoMode() alone leaves it
+     elsewhere, and a bit smaller). Not when there never was a window:
+     then that gives a window as big as the desktop, which the window
+     manager (mutter, at least) keeps covering the screen. */
+  if (full != fullscreen && been_windowed && SDL_WM_ToggleFullScreen(screen))
+    fullscreen = full;
+
+  new_screen = set_video_mode(w, h, full);
+  if (new_screen == NULL)
+  {
+    fprintf(stderr, "\nWarning: Can't switch to a %dx%d %s\n"
+            "The Simple DirectMedia Layer error that occurred was:\n"
+            "%s\n\n", w, h, full ? "fullscreen" : "window", SDL_GetError());
+
+    /* (SDL may have dropped the old mode) */
+    screen = set_video_mode(WINDOW_WIDTH, WINDOW_HEIGHT, fullscreen);
+    if (screen == NULL)
+    {
+      fprintf(stderr, "\nError: I could not open the display.\n");
+      cleanup();
+      exit(1);
+    }
+    return (0);
+  }
+
+  screen = new_screen;
+  fullscreen = full;
+  if (grab_input)
+    SDL_WM_GrabInput(SDL_GRAB_ON);
+  WINDOW_WIDTH = screen->w;
+  WINDOW_HEIGHT = screen->h;
+  if (!fullscreen)
+  {
+    window_w = WINDOW_WIDTH;
+    window_h = WINDOW_HEIGHT;
+    been_windowed = 1;
+  }
+
+  free_ui_images();
+  free_surface(&img_progress);
+  free_ui_fonts();
+
+  setup_screen_layout();
+
+  medium_font = load_ui_font(UI_FONT_MEDIUM);
+  large_font = load_ui_font(UI_FONT_LARGE);
+  small_font = load_ui_font(UI_FONT_SMALL);
+  set_locale_font();
+
+  img_progress = loadimagerb(DATA_PREFIX "images/ui/progress.png");
+  load_ui_images();
+  render_ui_titles();
+  create_color_buttons();
+  for (i = 0; i < num_magics; i++)
+    magics[i].img_icon = scale_ui_image(magic_funcs[magics[i].handle_idx].get_icon(magic_api_struct, magics[i].idx));
+  create_button_labels();
+
+  resize_canvas(r_canvas.w, r_canvas.h);
+  magic_api_struct->canvas_w = canvas->w;
+  magic_api_struct->canvas_h = canvas->h;
+
+  /* Stamp thumbnails, and the sizes stamps can take, depend on the canvas:
+     get_stamp_thumb() makes them again */
+  for (i = 0; i < num_stamp_groups; i++)
+  {
+    for (j = 0; j < num_stamps[i]; j++)
+    {
+      free_surface(&stamp_data[i][j]->thumbnail);
+      stamp_data[i][j]->processed = 0;
+    }
+  }
+
+  /* New pointers, the current one switched to its new version first */
+  for (c = 0; c < sizeof(cursors) / sizeof(cursors[0]); c++)
+    old_cursors[c] = *cursors[c];
+  create_cursors();
+  for (c = 0; c < sizeof(cursors) / sizeof(cursors[0]); c++)
+    if (old_cursors[c] == current)
+      do_setcursor(*cursors[c]);
+  for (c = 0; c < sizeof(cursors) / sizeof(cursors[0]); c++)
+    if (old_cursors[c] != *cursors[c])
+      free_cursor(&old_cursors[c]);
+
+  return (1);
+}
+
+
+static void setup(void)
+{
+  int i;
   SDL_Color black = { 0, 0, 0, 0 };
   char *homedirdir;
   SDL_Surface *tmp_surf;
   SDL_Rect dest;
-  int scale;
-#ifndef LOW_QUALITY_COLOR_SELECTOR
-  int x, y;
-  SDL_Surface *tmp_btn_up;
-  SDL_Surface *tmp_btn_down;
-  Uint8 r, g, b;
-#endif
-  SDL_Surface *tmp_imgcurup, *tmp_imgcurdown;
   Uint32 init_flags;
   char tmp_str[128];
-  SDL_Surface *img1;
-  Uint32(*getpixel_tmp_btn_up) (SDL_Surface *, int, int);
-  Uint32(*getpixel_tmp_btn_down) (SDL_Surface *, int, int);
-  Uint32(*getpixel_img_paintwell) (SDL_Surface *, int, int);
   int big_title;
 #ifndef NO_SDLPANGO
   SDL_Thread * fontconfig_thread;
@@ -23189,6 +24574,32 @@ static void setup(void)
     }
   }
 
+  /* The window's size (to go back to, too, when leaving fullscreen). No
+     size asked for: on big (e.g. high resolution) screens, use a whole
+     multiple of the default size that fits comfortably, so the buttons
+     don't end up tiny */
+
+  window_w = WINDOW_WIDTH;
+  window_h = WINDOW_HEIGHT;
+
+  if (!window_size_given && desktop_w > 0)
+  {
+    int k = min((desktop_w * 9 / 10) / window_w,
+                (desktop_h * 85 / 100) / window_h);
+
+    if (k > 1)
+    {
+      window_w *= k;
+      window_h *= k;
+    }
+  }
+
+  if (!fullscreen)
+  {
+    WINDOW_WIDTH = window_w;
+    WINDOW_HEIGHT = window_h;
+  }
+
   /* Deal with 'native' screen size option */
 
   if (native_screensize)
@@ -23208,34 +24619,11 @@ static void setup(void)
   }
 
 
-  /* No window size asked for: on big (e.g. high resolution) screens, use a
-     whole multiple of the default size that fits comfortably, so the buttons
-     don't end up tiny */
-
-  if (!fullscreen && !window_size_given && desktop_w > 0)
-  {
-    int k = min((desktop_w * 9 / 10) / WINDOW_WIDTH,
-                (desktop_h * 85 / 100) / WINDOW_HEIGHT);
-
-    if (k > 1)
-    {
-      WINDOW_WIDTH *= k;
-      WINDOW_HEIGHT *= k;
-    }
-  }
-
-
   /* Open Window: */
 
   if (fullscreen)
   {
-#ifdef USE_HWSURFACE
-    screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT,
-			      VIDEO_BPP, SDL_FULLSCREEN | SDL_HWSURFACE);
-#else
-    screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT,
-			      VIDEO_BPP, SDL_FULLSCREEN | SDL_SWSURFACE);
-#endif
+    screen = set_video_mode(WINDOW_WIDTH, WINDOW_HEIGHT, 1);
 
     if (screen == NULL)
     {
@@ -23268,13 +24656,11 @@ static void setup(void)
       putenv((char *) "SDL_VIDEO_WINDOW_POS=center");
     }
 
-#ifdef USE_HWSURFACE
-    screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT,
-			      VIDEO_BPP, SDL_HWSURFACE);
-#else
-    screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT,
-			      VIDEO_BPP, SDL_SWSURFACE);
-#endif
+    /* (Also if fullscreen failed) */
+    WINDOW_WIDTH = window_w;
+    WINDOW_HEIGHT = window_h;
+    screen = set_video_mode(WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    been_windowed = 1;
 
     if (set_window_pos)
       putenv((char *) "SDL_VIDEO_WINDOW_POS=nopref");
@@ -23356,20 +24742,7 @@ static void setup(void)
 
   /* Create cursors: */
 
-  scale = 1;
-
-#ifdef SMALL_CURSOR_SHAPES
-  scale = 2;
-#endif
-  
-#ifdef __APPLE__
-  cursor_arrow = SDL_GetCursor();		/* use standard system cursor */
-#endif
-
-  /* this one first, because we need it yesterday */
-  cursor_watch = get_cursor(watch_bits, watch_mask_bits,
-			    watch_width, watch_height,
-			    14 / scale, 14 / scale);
+  create_cursors();
 
   do_setcursor(cursor_watch);
   show_progress_bar(screen);
@@ -23417,21 +24790,7 @@ static void setup(void)
 
 #endif
 
-  medium_font = TuxPaint_Font_OpenFont(PANGO_DEFAULT_FONT,
-					DATA_PREFIX "fonts/default_font.ttf",
-			    		SCALED(18 - (only_uppercase * 3)));
-
-  if (medium_font == NULL)
-  {
-    fprintf(stderr,
-	    "\nError: Can't load font file: "
-	    DATA_PREFIX "fonts/default_font.ttf\n"
-	    "The Simple DirectMedia Layer error that occurred was:\n"
-	    "%s\n\n", SDL_GetError());
-
-    cleanup();
-    exit(1);
-  }
+  medium_font = load_ui_font(UI_FONT_MEDIUM);
 
   snprintf(tmp_str, sizeof(tmp_str), "Version: %s – %s", VER_VERSION,
 	   VER_DATE);
@@ -23461,45 +24820,6 @@ static void setup(void)
 #else
   font_thread = SDL_CreateThread(load_user_fonts_stub, NULL);
 #endif
-
-  /* continuing on with the rest of the cursors... */
-
-
-#ifndef __APPLE__
-  cursor_arrow = get_cursor(arrow_bits, arrow_mask_bits,
-							arrow_width, arrow_height, 0, 0);
-#endif
-  
-  cursor_hand = get_cursor(hand_bits, hand_mask_bits,
-			   hand_width, hand_height, 12 / scale, 1 / scale);
-
-  cursor_wand = get_cursor(wand_bits, wand_mask_bits,
-			   wand_width, wand_height, 4 / scale, 4 / scale);
-
-  cursor_insertion = get_cursor(insertion_bits, insertion_mask_bits,
-				insertion_width, insertion_height,
-				7 / scale, 4 / scale);
-
-  cursor_brush = get_cursor(brush_bits, brush_mask_bits,
-			    brush_width, brush_height, 4 / scale, 28 / scale);
-
-  cursor_crosshair = get_cursor(crosshair_bits, crosshair_mask_bits,
-				crosshair_width, crosshair_height,
-				15 / scale, 15 / scale);
-
-  cursor_rotate = get_cursor(rotate_bits, rotate_mask_bits,
-			     rotate_width, rotate_height,
-			     15 / scale, 15 / scale);
-  
-  cursor_up = get_cursor(up_bits, up_mask_bits,
-			 up_width, up_height, 15 / scale, 1 / scale);
-
-  cursor_down = get_cursor(down_bits, down_mask_bits,
-			   down_width, down_height, 15 / scale, 30 / scale);
-
-  cursor_tiny = get_cursor(tiny_bits, tiny_mask_bits, tiny_width, tiny_height, 3, 3);	/* Exactly the same in SMALL (16x16) size! */
-
-
 
   /* Create drawing canvas: */
 
@@ -23551,6 +24871,7 @@ static void setup(void)
   canvas_color_b = 255;
 
   SDL_FillRect(canvas, NULL, SDL_MapRGB(canvas->format, 255, 255, 255));
+  reset_canvas_content();
 
   /* Creating the label surface: */
 
@@ -23595,127 +24916,7 @@ static void setup(void)
 
   /* Load other images: */
 
-  for (i = 0; i < NUM_TOOLS; i++)
-    img_tools[i] = loadimagerb(tool_img_fnames[i]);
-
-  img_title_on = loadimagerb(DATA_PREFIX "images/ui/title.png");
-  img_title_large_on = loadimagerb(DATA_PREFIX "images/ui/title_large.png");
-  img_title_off = loadimagerb(DATA_PREFIX "images/ui/no_title.png");
-  img_title_large_off = loadimagerb(DATA_PREFIX "images/ui/no_title_large.png");
-
-  img_btn_up = loadimagerb(DATA_PREFIX "images/ui/btn_up.png");
-  img_btn_down = loadimagerb(DATA_PREFIX "images/ui/btn_down.png");
-  img_btn_off = loadimagerb(DATA_PREFIX "images/ui/btn_off.png");
-
-  img_btnsm_up = loadimagerb(DATA_PREFIX "images/ui/btnsm_up.png");
-  img_btnsm_off = loadimagerb(DATA_PREFIX "images/ui/btnsm_off.png");
-  img_btnsm_down = loadimagerb(DATA_PREFIX "images/ui/btnsm_down.png");
-  img_btnsm_hold = loadimagerb(DATA_PREFIX "images/ui/btnsm_hold.png");
-
-  img_btn_nav = loadimagerb(DATA_PREFIX "images/ui/btn_nav.png");
-  img_btnsm_nav = loadimagerb(DATA_PREFIX "images/ui/btnsm_nav.png");
-
-  img_sfx = loadimagerb(DATA_PREFIX "images/tools/sfx.png");
-  img_speak = loadimagerb(DATA_PREFIX "images/tools/speak.png");
-
-  img_black = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
-				   img_btn_off->w, img_btn_off->h,
-				   img_btn_off->format->BitsPerPixel,
-				   img_btn_off->format->Rmask,
-				   img_btn_off->format->Gmask,
-				   img_btn_off->format->Bmask,
-				   img_btn_off->format->Amask);
-  SDL_FillRect(img_black, NULL, SDL_MapRGBA(screen->format, 0, 0, 0, 255));
-
-  img_grey = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
-				  img_btn_off->w, img_btn_off->h,
-				  img_btn_off->format->BitsPerPixel,
-				  img_btn_off->format->Rmask,
-				  img_btn_off->format->Gmask,
-				  img_btn_off->format->Bmask,
-				  img_btn_off->format->Amask);
-  SDL_FillRect(img_grey, NULL,
-	       SDL_MapRGBA(screen->format, 0x88, 0x88, 0x88, 255));
-
-  show_progress_bar(screen);
-
-  img_yes = loadimagerb(DATA_PREFIX "images/ui/yes.png");
-  img_no = loadimagerb(DATA_PREFIX "images/ui/no.png");
-
-  img_prev = loadimagerb(DATA_PREFIX "images/ui/prev.png");
-  img_next = loadimagerb(DATA_PREFIX "images/ui/next.png");
-
-  img_mirror = loadimagerb(DATA_PREFIX "images/ui/mirror.png");
-  img_flip = loadimagerb(DATA_PREFIX "images/ui/flip.png");
-
-  img_open = loadimagerb(DATA_PREFIX "images/ui/open.png");
-  img_erase = loadimagerb(DATA_PREFIX "images/ui/erase.png");
-  img_back = loadimagerb(DATA_PREFIX "images/ui/back.png");
-  img_trash = loadimagerb(DATA_PREFIX "images/ui/trash.png");
-
-  img_slideshow = loadimagerb(DATA_PREFIX "images/ui/slideshow.png");
-  img_play = loadimagerb(DATA_PREFIX "images/ui/play.png");
-  img_select_digits = loadimagerb(DATA_PREFIX "images/ui/select_digits.png");
-
-  img_popup_arrow = loadimagerb(DATA_PREFIX "images/ui/popup_arrow.png");
-
-  img_dead40x40 = loadimagerb(DATA_PREFIX "images/ui/dead40x40.png");
-
-  img_printer = loadimagerb(DATA_PREFIX "images/ui/printer.png");
-  img_printer_wait = loadimagerb(DATA_PREFIX "images/ui/printer_wait.png");
-
-  img_save_over = loadimagerb(DATA_PREFIX "images/ui/save_over.png");
-
-  img_grow = loadimagerb(DATA_PREFIX "images/ui/grow.png");
-  img_shrink = loadimagerb(DATA_PREFIX "images/ui/shrink.png");
-
-  img_magic_paint = loadimagerb(DATA_PREFIX "images/ui/magic_paint.png");
-  img_magic_fullscreen = loadimagerb(DATA_PREFIX "images/ui/magic_fullscreen.png");
-
-  img_bold = loadimagerb(DATA_PREFIX "images/ui/bold.png");
-  img_italic = loadimagerb(DATA_PREFIX "images/ui/italic.png");
-
-  img_label = loadimagerb(DATA_PREFIX "images/tools/label.png");
-  img_label_select = loadimagerb(DATA_PREFIX "images/tools/label_select.png");
-
-  show_progress_bar(screen);
-
-  tmp_imgcurup = loadimage(DATA_PREFIX "images/ui/cursor_up_large.png");
-  tmp_imgcurdown = loadimage(DATA_PREFIX "images/ui/cursor_down_large.png");
-  img_cursor_up = thumbnail(tmp_imgcurup, THUMB_W, THUMB_H, 0);
-  img_cursor_down = thumbnail(tmp_imgcurdown, THUMB_W, THUMB_H, 0);
-  SDL_FreeSurface(tmp_imgcurup);	/* (these two were leaked) */
-  SDL_FreeSurface(tmp_imgcurdown);
-
-  tmp_imgcurup = loadimage(DATA_PREFIX "images/ui/cursor_starter_up.png");
-  tmp_imgcurdown = loadimage(DATA_PREFIX "images/ui/cursor_starter_down.png");
-  img_cursor_starter_up = thumbnail(tmp_imgcurup, THUMB_W, THUMB_H, 0);
-  img_cursor_starter_down = thumbnail(tmp_imgcurdown, THUMB_W, THUMB_H, 0);
-  SDL_FreeSurface(tmp_imgcurup);
-  SDL_FreeSurface(tmp_imgcurdown);
-
-  show_progress_bar(screen);
-
-  img_scroll_up = loadimagerb(DATA_PREFIX "images/ui/scroll_up.png");
-  img_scroll_down = loadimagerb(DATA_PREFIX "images/ui/scroll_down.png");
-
-  img_scroll_up_off = loadimagerb(DATA_PREFIX "images/ui/scroll_up_off.png");
-  img_scroll_down_off =
-    loadimagerb(DATA_PREFIX "images/ui/scroll_down_off.png");
-
-#ifdef LOW_QUALITY_COLOR_SELECTOR
-  img_paintcan = loadimagerb(DATA_PREFIX "images/ui/paintcan.png");
-#endif
-
-  if (onscreen_keyboard)
-  {
-    img_oskdel = loadimagerb(DATA_PREFIX "images/ui/osk_delete.png");
-    img_osktab = loadimagerb(DATA_PREFIX "images/ui/osk_tab.png");
-    img_oskenter = loadimagerb(DATA_PREFIX "images/ui/osk_enter.png");
-    img_oskcapslock = loadimagerb(DATA_PREFIX "images/ui/osk_capslock.png");
-    img_oskshift = loadimagerb(DATA_PREFIX "images/ui/osk_shift.png");
-
-  }
+  load_ui_images();
   show_progress_bar(screen);
 
 
@@ -23743,49 +24944,9 @@ static void setup(void)
 
   /* Load system fonts: */
 
-  large_font = TuxPaint_Font_OpenFont(PANGO_DEFAULT_FONT,
-				      DATA_PREFIX "fonts/default_font.ttf",
-			               SCALED(30 - (only_uppercase * 3)));
-
-  if (large_font == NULL)
-  {
-    fprintf(stderr,
-	    "\nError: Can't load font file: "
-	    DATA_PREFIX "fonts/default_font.ttf\n"
-	    "The Simple DirectMedia Layer error that occurred was:\n"
-	    "%s\n\n", SDL_GetError());
-
-    cleanup();
-    exit(1);
-  }
-
-
-  small_font = TuxPaint_Font_OpenFont(PANGO_DEFAULT_FONT,
-			    DATA_PREFIX "fonts/default_font.ttf",
-#ifdef __APPLE__
-			    SCALED(12 - (only_uppercase * 2)));
-#else
-			    SCALED(13 - (only_uppercase * 2)));
-#endif
-
-  if (small_font == NULL)
-  {
-    fprintf(stderr,
-	    "\nError: Can't load font file: "
-	    DATA_PREFIX "fonts/default_font.ttf\n"
-	    "The Simple DirectMedia Layer error that occurred was:\n"
-	    "%s\n\n", SDL_GetError());
-
-    cleanup();
-    exit(1);
-  }
-
-
-#ifdef NO_SDLPANGO
-  locale_font = load_locale_font(medium_font, SCALED(18));
-#else
-  locale_font = medium_font;
-#endif
+  large_font = load_ui_font(UI_FONT_LARGE);
+  small_font = load_ui_font(UI_FONT_SMALL);
+  set_locale_font();
 
 
 #if 0
@@ -23804,174 +24965,14 @@ static void setup(void)
 
   show_progress_bar(screen);
 
-  /* Load shape icons: */
-  for (i = 0; i < NUM_SHAPES; i++)
-    img_shapes[i] = loadimagerb(shape_img_fnames[i]);
-
-  show_progress_bar(screen);
-
-  /* Load tip tux images: */
-  for (i = 0; i < NUM_TIP_TUX; i++)
-    img_tux[i] = loadimagerb(tux_img_fnames[i]);
-
-  show_progress_bar(screen);
-
-  img_mouse = loadimagerb(DATA_PREFIX "images/ui/mouse.png");
-  img_mouse_click = loadimagerb(DATA_PREFIX "images/ui/mouse_click.png");
-
-  show_progress_bar(screen);
-
-  img_color_picker = loadimagerb(DATA_PREFIX "images/ui/color_picker.png");
-
   /* Create toolbox and selector labels: */
 
-  for (i = 0; i < NUM_TITLES; i++)
-  {
-    if (strlen(title_names[i]) > 0)
-    {
-      TuxPaint_Font *myfont = large_font;
-      char *td_str = textdir(gettext(title_names[i]));
-
-      if (need_own_font && strcmp(gettext(title_names[i]), title_names[i]))
-	myfont = locale_font;
-      upstr = uppercase(td_str);
-      free(td_str);
-      tmp_surf = render_text(myfont, upstr, black);
-      free(upstr);
-      img_title_names[i] =
-	thumbnail(tmp_surf, min(SCALED(84), tmp_surf->w), tmp_surf->h, 0);
-      SDL_FreeSurface(tmp_surf);
-    }
-    else
-    {
-      img_title_names[i] = NULL;
-    }
-  }
-
+  render_ui_titles();
 
 
   /* Generate color selection buttons: */
 
-#ifndef LOW_QUALITY_COLOR_SELECTOR
-
-  /* Create appropriately-shaped buttons: */
-  img1 = loadimage(DATA_PREFIX "images/ui/paintwell.png");
-  img_paintwell = thumbnail(img1, color_button_w, color_button_h, 0);
-  tmp_btn_up = thumbnail(img_btn_up, color_button_w, color_button_h, 0);
-  tmp_btn_down = thumbnail(img_btn_down, color_button_w, color_button_h, 0);
-  img_color_btn_off =
-    thumbnail(img_btn_off, color_button_w, color_button_h, 0);
-  SDL_FreeSurface(img1);
-
-  img_color_picker_thumb = thumbnail(img_color_picker,
-				     color_button_w, color_button_h, 0);
-
-  /* Create surfaces to draw them into: */
-
-  img_color_btns = malloc(sizeof(SDL_Surface *) * NUM_COLORS * 2);
-
-  for (i = 0; i < NUM_COLORS * 2; i++)
-  {
-    img_color_btns[i] = SDL_CreateRGBSurface(screen->flags,
-					     /* (WINDOW_WIDTH - 96) / NUM_COLORS, 48, */
-					     tmp_btn_up->w, tmp_btn_up->h,
-					     screen->format->BitsPerPixel,
-					     screen->format->Rmask,
-					     screen->format->Gmask,
-					     screen->format->Bmask, 0);
-
-    if (img_color_btns[i] == NULL)
-    {
-      fprintf(stderr, "\nError: Can't build color button!\n"
-	      "The Simple DirectMedia Layer error that occurred was:\n"
-	      "%s\n\n", SDL_GetError());
-
-      cleanup();
-      exit(1);
-    }
-
-    SDL_LockSurface(img_color_btns[i]);
-  }
-
-
-  /* Generate the buttons based on the thumbnails: */
-
-  SDL_LockSurface(tmp_btn_down);
-  SDL_LockSurface(tmp_btn_up);
-
-  getpixel_tmp_btn_up = getpixels[tmp_btn_up->format->BytesPerPixel];
-  getpixel_tmp_btn_down = getpixels[tmp_btn_down->format->BytesPerPixel];
-  getpixel_img_paintwell = getpixels[img_paintwell->format->BytesPerPixel];
-
-
-  for (y = 0; y < tmp_btn_up->h /* 48 */ ; y++)
-  {
-    for (x = 0; x < tmp_btn_up->w /* (WINDOW_WIDTH - 96) / NUM_COLORS */ ;
-	 x++)
-    {
-      double ru, gu, bu, rd, gd, bd, aa;
-      Uint8 a;
-
-      SDL_GetRGB(getpixel_tmp_btn_up(tmp_btn_up, x, y), tmp_btn_up->format,
-		 &r, &g, &b);
-
-      ru = sRGB_to_linear_table[r];
-      gu = sRGB_to_linear_table[g];
-      bu = sRGB_to_linear_table[b];
-      SDL_GetRGB(getpixel_tmp_btn_down(tmp_btn_down, x, y),
-		 tmp_btn_down->format, &r, &g, &b);
-      rd = sRGB_to_linear_table[r];
-      gd = sRGB_to_linear_table[g];
-      bd = sRGB_to_linear_table[b];
-      SDL_GetRGBA(getpixel_img_paintwell(img_paintwell, x, y), img_paintwell->format, &r, &g, &b, &a);
-      aa = a / 255.0;
-
-      for (i = 0; i < NUM_COLORS; i++)
-      {
-	double rh = sRGB_to_linear_table[color_hexes[i][0]];
-	double gh = sRGB_to_linear_table[color_hexes[i][1]];
-	double bh = sRGB_to_linear_table[color_hexes[i][2]];
-
-	if (i == NUM_COLORS - 1)
-	{
-          putpixels[img_color_btns[i]->format->BytesPerPixel]
-            (img_color_btns[i], x, y,
-             getpixels[img_color_picker_thumb->format->BytesPerPixel]
-               (img_color_picker_thumb, x, y));
-          putpixels[img_color_btns[i + NUM_COLORS]->format->BytesPerPixel]
-            (img_color_btns[i + NUM_COLORS], x, y,
-             getpixels[img_color_picker_thumb->format->BytesPerPixel]
-               (img_color_picker_thumb, x, y));
-        }
-
-        if (i < NUM_COLORS - 1 || a == 255)
-        {
-	  putpixels[img_color_btns[i]->format->BytesPerPixel]
-	      (img_color_btns[i], x, y,
-	       SDL_MapRGB(img_color_btns[i]->format,
-		        linear_to_sRGB(rh * aa + ru * (1.0 - aa)),
-		        linear_to_sRGB(gh * aa + gu * (1.0 - aa)),
-		        linear_to_sRGB(bh * aa + bu * (1.0 - aa))));
-	  putpixels[img_color_btns[i + NUM_COLORS]->format->BytesPerPixel]
-	      (img_color_btns[i + NUM_COLORS], x, y,
-	       SDL_MapRGB(img_color_btns[i + NUM_COLORS]->format,
-		        linear_to_sRGB(rh * aa + rd * (1.0 - aa)),
-		        linear_to_sRGB(gh * aa + gd * (1.0 - aa)),
-		        linear_to_sRGB(bh * aa + bd * (1.0 - aa))));
-	}
-      }
-    }
-  }
-
-  for (i = 0; i < NUM_COLORS * 2; i++)
-    SDL_UnlockSurface(img_color_btns[i]);
-
-  SDL_UnlockSurface(tmp_btn_up);
-  SDL_UnlockSurface(tmp_btn_down);
-  SDL_FreeSurface(tmp_btn_up);
-  SDL_FreeSurface(tmp_btn_down);
-
-#endif
+  create_color_buttons();
 
   create_button_labels();
 
