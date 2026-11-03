@@ -107,9 +107,9 @@ Obiettivi
        tutti con la descrizione in italiano) si installa con il comando
        ./dev.sh stamps dalla cartella del sorgente: vedi EXTENDING.
      * Starter e modelli per la scuola. Nella finestra "Nuovo" ci sono
-       anche un orologio e una scuola da colorare, una lavagna, un
-       quaderno a righe, un quaderno a quadretti e un quaderno
-       pentagrammato.
+       anche un orologio e una scuola da colorare, la cartina dell'Italia
+       con le regioni, una lavagna, un quaderno a righe, un quaderno a
+       quadretti e un quaderno pentagrammato.
      * Correzioni. Molti difetti della 0.9.22 sono stati corretti: tra gli
        altri, il Cestino che poteva perdere i disegni cancellati, i
        disegni fatti da uno Starter che perdevano lo sfondo se lo Starter
@@ -197,10 +197,10 @@ Schermata principale
           Nota: la dimensione della tela dipende dalla dimensione di
           Tux Paint. La si può cambiare con il programma di configurazione
           Tux Paint Config. o in altri modi: vedi la documentazione delle
-          opzioni (in inglese) per i dettagli. In questa versione la
-          finestra si apre già più grande sugli schermi grandi, si può
-          ridimensionare trascinandone il bordo, e [Alt] + [Invio] passa
-          allo schermo intero.
+          opzioni per i dettagli. In questa versione la finestra si apre
+          già più grande sugli schermi grandi, si può ridimensionare
+          trascinandone il bordo, e [Alt] + [Invio] passa allo schermo
+          intero.
 
    A destra: il selettore
           Il selettore mostra cose diverse a seconda dello strumento
@@ -842,6 +842,8 @@ A mano
      * EXTENDING.html
        Come creare pennelli, timbri, Starter e modelli, e aggiungere tipi
        di carattere, per espandere Tux Paint (in italiano).
+     * FAQ.html
+       Le domande frequenti, con le risposte (in italiano).
      * Documentazione delle magie ("magic-docs")
        La descrizione di ogni magia installata (in inglese).
      * AUTHORS.txt
@@ -856,7 +858,7 @@ A mano
        Istruzioni per compilare e installare (in inglese).
      * OPTIONS.html
        Le opzioni della riga di comando e del file di configurazione, per
-       chi non vuole usare Tux Paint Config. (in inglese).
+       chi non vuole usare Tux Paint Config. (in italiano).
      * PNG.txt
        Note sulla creazione di immagini PNG da usare in Tux Paint.
      * SVG.txt

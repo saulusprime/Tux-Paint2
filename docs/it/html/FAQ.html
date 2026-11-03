@@ -1,0 +1,726 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="it"><head><title>Tux Paint - Domande frequenti</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#FF0000"
+alink="#FF00FF">
+
+<center>
+<h1><img src="../../html/images/tuxpaint-title.png" width=220 height=219
+alt="Tux&nbsp;Paint"><br>
+versione
+
+0.9.22
+
+<br>
+Domande frequenti</h1>
+
+<p>Copyright 2002-2009 Bill Kendrick e altri<br>
+New Breed Software</p>
+
+<p><a href="mailto:bill@newbreedsoftware.com">bill@newbreedsoftware.com</a><br>
+<a href="http://www.tuxpaint.org/">http://www.tuxpaint.org/</a></p>
+
+<p>14 settembre 2002 - 1 luglio 2009</p>
+
+<p><small>Traduzione italiana delle domande frequenti della versione 0.9.22,
+fatta nel 2026 per questo fork.</small></p>
+</center>
+
+<h2>Disegno</h2>
+
+<ul>
+<li><em>I tipi di carattere che ho aggiunto a Tux&nbsp;Paint mostrano solo quadratini</em>
+  <p>Il carattere TrueType che stai usando potrebbe avere la codifica
+  sbagliata. Se per esempio ha una codifica 'custom' (personalizzata), puoi
+  provare a convertirlo in un formato ISO-8859 con
+  FontForge
+  (<a href="http://fontforge.sourceforge.net/"
+  >http://fontforge.sourceforge.net/</a>).
+  (Scrivici se hai bisogno di aiuto con caratteri particolari.)</p>
+
+<li><em>Lo strumento Timbro è in grigio!</em>
+  <p>Vuol dire che Tux&nbsp;Paint non ha trovato nessuna immagine di timbro,
+  oppure che gli è stato chiesto di non caricarle.</p>
+
+  <p>Se hai installato Tux&nbsp;Paint ma non la raccolta di timbri
+  ("Stamps"), che è separata e facoltativa, esci da Tux&nbsp;Paint e
+  installala adesso. Dovresti trovarla nello stesso posto da cui hai preso
+  il programma Tux&nbsp;Paint. <i>(Nota: dalla versione 0.9.14,
+  Tux&nbsp;Paint comprende una piccola raccolta di timbri di esempio.)</i>
+  (In questa versione: la raccolta completa dei timbri si installa con il
+  comando <code>./dev.sh stamps</code> dalla cartella del sorgente; vedi
+  "<a href="README.html#fork">Differenze di questa versione</a>".)</p>
+
+  <p>Se non vuoi installare la raccolta predefinita di timbri, puoi
+  semplicemente crearne di tuoi. Vedi la <a href="EXTENDING.html">documentazione
+  "Espandere Tux&nbsp;Paint"</a> per sapere come creare i file che compongono
+  i timbri: immagini PNG e SVG, descrizioni di testo TXT, suoni
+  Ogg&nbsp;Vorbis, MP3 o WAV e file di dati di testo DAT.</p>
+
+  <p>Infine, se hai installato i timbri e pensi che dovrebbero essere
+  caricati, controlla che non sia impostata l'opzione "nostamps".
+  (Cioè con l'opzione "<code>--nostamps</code>" sulla riga di comando di
+  Tux&nbsp;Paint, oppure con "<code>nostamps=yes</code>" nel file di
+  configurazione.)</p>
+
+  <p>Se è così, cambia o togli l'opzione "nostamps", oppure annullane
+  l'effetto con "<code>--stamps</code>" sulla riga di comando o con
+  "<code>nostamps=no</code>" o "<code>stamps=yes</code>" in un
+  file di configurazione.</p>
+</li>
+
+
+<ul>
+<li><em>La magia "Riempi" ha un brutto aspetto</em>
+  <p>Probabilmente, quando riempie, Tux&nbsp;Paint confronta i colori esatti
+  dei pixel. È più veloce, ma il risultato è peggiore. Dai il comando
+  "<code>tuxpaint&nbsp;--version</code>" dalla riga di comando: tra le
+  altre cose dovresti vedere
+  "Low Quality Flood Fill enabled".</p>
+
+  <p>Per cambiare questo comportamento devi ricompilare Tux&nbsp;Paint dal
+  sorgente. Assicurati di togliere o commentare ogni riga che dice:</p>
+
+  <blockquote><p><code>
+        #define LOW_QUALITY_FLOOD_FILL
+  </code></p></blockquote>
+
+  <p>nel file "tuxpaint.c" della cartella "src".</p>
+</li>
+
+<li><em>I contorni dei timbri sono sempre rettangoli</em>
+  <p>Tux&nbsp;Paint è stato compilato con i contorni dei timbri di bassa
+  qualità (ma più veloci).</p>
+
+  <p>Ricompila Tux&nbsp;Paint dal sorgente. Assicurati di togliere o
+  commentare ogni riga che dice:</p>
+
+  <blockquote><p><code>
+        #define LOW_QUALITY_STAMP_OUTLINE
+  </code></p></blockquote>
+
+  <p>nel file "tuxpaint.c" della cartella "src".</p>
+</li>
+</ul>
+
+</ul>
+
+<h2>Problemi dell'interfaccia</h2>
+
+<ul>
+<li><em>Le miniature dei timbri nel selettore dei timbri hanno un brutto aspetto</em>
+  <p>Probabilmente Tux&nbsp;Paint è stato compilato con il codice per le
+  miniature più veloce, ma di qualità più bassa. Dai il comando
+  "<code>tuxpaint&nbsp;--version</code>" dalla
+  riga di comando. Se tra le altre cose vedi il testo
+  "Low Quality Thumbnails enabled", il problema è questo.</p>
+
+  <p>Ricompila Tux&nbsp;Paint dal sorgente. Assicurati di togliere o
+  commentare ogni riga che dice:</p>
+
+  <blockquote><p><code>
+        #define LOW_QUALITY_THUMBNAILS
+  </code></p></blockquote>
+
+  <p>nel file "tuxpaint.c" della cartella "src".</p>
+</li>
+
+<li><em>I disegni nella finestra 'Apri' hanno un brutto aspetto</em>
+  <p>Probabilmente è attivo "Low Quality Thumbnails".
+  Vedi "Le miniature dei timbri nel selettore dei timbri hanno un brutto
+  aspetto", sopra.</p>
+</li>
+
+<li><em>I pulsanti dei colori sono brutti quadrati, non bei pulsanti!</em>
+  <p>Probabilmente Tux&nbsp;Paint è stato compilato senza i pulsanti dei
+  colori più belli. Dai il comando
+  "<code>tuxpaint&nbsp;--version</code>" dalla
+  riga di comando. Se tra le altre cose vedi il testo
+  "Low Quality Color Selector enabled", il problema è questo.</p>
+
+  <p>Ricompila Tux&nbsp;Paint dal sorgente. Assicurati di togliere o
+  commentare ogni riga che dice:</p>
+
+  <blockquote><p><code>
+        #define LOW_QUALITY_COLOR_SELECTOR
+  </code></p></blockquote>
+
+  <p>nel file "tuxpaint.c" della cartella "src".</p>
+</li>
+
+<li><em>Tutto il testo è in maiuscolo!</em>
+  <p>È attiva l'opzione "uppercase".</p>
+
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--uppercase</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--uppercase</code>" compare tra gli
+  argomenti della riga di comando.</p>
+
+  <p>Se "<code>--uppercase</code>" non viene passato sulla riga di comando,
+  cerca nel file di configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su
+  Linux e Unix, "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>uppercase=yes</code>".</p>
+
+  <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+  l'argomento "<code>--mixedcase</code>" sulla riga di comando, che ha la
+  precedenza sull'impostazione "uppercase".</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Show Uppercase Text Only" (nella scheda "Languages") non sia spuntato.</p>
+</li>
+
+<li><em>Tux&nbsp;Paint è in un'altra lingua!</em>
+  <p>Controlla che le impostazioni locali (il "locale") siano corrette.
+  Vedi "Tux&nbsp;Paint non passa alla mia lingua", più avanti.</p>
+
+<li><em>Tux&nbsp;Paint non passa alla mia lingua</em>
+  <ul>
+  <li><i>Per chi usa Linux e Unix: controlla che il locale sia disponibile</i></li>
+    <p>Controlla che il locale che vuoi sia disponibile. Guarda il file
+    "/etc/locale.gen". Vedi la
+    <a href="OPTIONS.html">documentazione delle opzioni</a> per i locale
+    usati da Tux&nbsp;Paint (soprattutto se usi l'opzione
+    "<code>--lang</code>").</p>
+
+    <p>Nota: chi usa Debian può semplicemente dare il comando
+    "<code>dpkg-reconfigure locales</code>", se i locale sono gestiti da
+    "dpkg".</p>
+
+    <ul>
+    <li>Se usi l'opzione "<code>--lang</code>" della riga di comando
+      <p>Prova a usare l'opzione "<code>--locale</code>" della riga di
+      comando, oppure le impostazioni locali del sistema operativo (per
+      esempio la variabile d'ambiente "<code>$LANG</code>"), e per favore
+      scrivici per segnalarci il problema.</p>
+    </li>
+
+    <li>Se usi l'opzione "<code>--locale</code>" della riga di comando
+      <p>Se non funziona, per favore scrivici per segnalarci il problema.</p>
+    </li>
+
+    <li>Se stai cercando di usare il locale del sistema operativo
+      <p>Se non funziona, per favore scrivici per segnalarci il problema.</p>
+    </li>
+
+    <li>Controlla di avere il tipo di carattere necessario
+      <p>Alcune traduzioni richiedono un loro tipo di carattere. Per esempio,
+      il cinese e il coreano hanno bisogno, rispettivamente, di un carattere
+      TrueType cinese e di uno coreano, installati nella posizione giusta.</p>
+
+      <p>I caratteri adatti a queste lingue si possono scaricare dal sito di
+      Tux&nbsp;Paint:</p>
+
+      <blockquote><p>
+        <a href="http://www.tuxpaint.org/download/fonts/"
+        >http://www.tuxpaint.org/download/fonts/</a>
+      </p></blockquote>
+    </li>
+    </ul>
+  </li>
+  </ul>
+</li>
+</ul>
+
+<h2>Stampa</h2>
+<ul>
+<li><em>Tux&nbsp;Paint non stampa, dà un errore o stampa cose senza senso
+        (Unix/Linux)</em>
+  <p>Tux&nbsp;Paint stampa creando una versione PostScript del disegno e
+  mandandola a un comando esterno. Il comando predefinito è
+  il programma di stampa "lpr".</p>
+
+  <p>Se quel programma non è disponibile (per esempio se usi CUPS, il
+  Common Unix Printing System, e non hai installato "cups-lpr"),
+  devi indicare un comando adatto con l'opzione
+  "printcommand" nel file di configurazione di Tux&nbsp;Paint.
+  (Vedi la <a href="OPTIONS.html">documentazione delle opzioni</a>.)</p>
+
+  <p><i>Nota:</i> le versioni di Tux&nbsp;Paint precedenti alla 0.9.15
+  usavano un altro comando di stampa predefinito,
+  "pngtopnm&nbsp;|&nbsp;pnmtops&nbsp;|&nbsp;lpr",
+  perché Tux&nbsp;Paint produceva un'immagine PNG invece che PostScript.</p>
+
+  <p>Se avevi cambiato l'opzione "printcommand" prima di Tux&nbsp;Paint
+  0.9.15, devi modificarla di nuovo perché accetti il PostScript.</p>
+</li>
+
+<li><em>Quando provo a stampare compare il messaggio "Non puoi ancora stampare!"</em>
+  <p>È attiva l'opzione "printdelay". Puoi stampare solo una volta ogni
+  <i>X</i>&nbsp;secondi.</p>
+
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--printdelay=...</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--printdelay=...</code>" compare tra gli
+  argomenti della riga di comando.</p>
+
+  <p>Se l'opzione "<code>--printdelay=...</code>" non viene passata sulla
+  riga di comando,
+  cerca nel file di configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su
+  Linux e Unix, "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>printdelay=...</code>".</p>
+
+  <p>Togli quella riga, oppure metti l'attesa a 0 (nessuna attesa), oppure
+  riducila al valore che preferisci. (Vedi la
+  <a href="OPTIONS.html">documentazione delle opzioni</a>.)</p>
+
+  <p>Oppure puoi semplicemente avviare Tux&nbsp;Paint con l'argomento
+  "<code>--printdelay=0</code>" sulla riga di comando, che ha la precedenza
+  sull'impostazione del file di configurazione e permette di stampare senza
+  limiti. (Non dovrai aspettare tra una stampa e l'altra.)</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Print Delay" (nella scheda "Printing") sia a "0&nbsp;seconds".</p>
+</li>
+
+<li><em>Non riesco proprio a stampare! Il pulsante è in grigio!</em>
+  <p>È attiva l'opzione "noprint".</p>
+
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--noprint</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--noprint</code>" compare tra gli
+  argomenti.</p>
+
+  <p>Se "<code>--noprint</code>" non è sulla riga di comando, cerca nel
+  file di configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su Linux e
+  Unix, "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>noprint=yes</code>".</p>
+
+  <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+  l'argomento "<code>--print</code>" sulla riga di comando, che ha la
+  precedenza sull'impostazione del file di configurazione.</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Allow Printing" (nella scheda "Printing") sia spuntato.</p>
+</li>
+</ul>
+
+<h2>Salvataggio</h2>
+<ul>
+<li><em>Dove sono i miei disegni?</em>
+  <p>Se non gli hai chiesto di salvare in una cartella precisa
+  (con l'opzione 'savedir'), Tux&nbsp;Paint salva in una posizione
+  standard sul disco del computer:</p>
+
+  <dl>
+  <dt>Windows Vista</dt>
+    <dd>Nella cartella "AppData" dell'utente:<br>
+    per esempio <code>C:\Users\<i>(nome&nbsp;utente)</i>\AppData\Roaming\TuxPaint\saved</code><br></dd>
+
+  <dt>Windows 95, 98, ME, 2000, XP</dt>
+    <dd>Nella cartella "Application&nbsp;Data" dell'utente:<br>
+    per esempio <code>C:\Documents and Settings\<i>(nome&nbsp;utente)</i>\Application Data\TuxPaint\saved</code><br></dd>
+
+  <dt>Mac OS X</dt>
+    <dd>Nella cartella "Application&nbsp;Support" dell'utente:<br>
+    per esempio <code>/Users/<i>(nome&nbsp;utente)</i>/Library/Application Support/TuxPaint/saved/</code><br></dd>
+
+  <dt>Linux / Unix</dt>
+    <dd>Nella cartella <code>$HOME</code> dell'utente, nella sottocartella
+    ".tuxpaint":<br>
+    per esempio <code>/home/<i>(nome&nbsp;utente)</i>/.tuxpaint/saved/</code><br>
+    </dd>
+  </dl>
+
+  <p>Le immagini sono salvate come bitmap PNG, che la maggior parte dei
+  programmi moderni dovrebbe saper aprire (programmi di grafica, programmi
+  di videoscrittura, browser web, ecc.).</p>
+
+</li>
+
+<li><em>Tux&nbsp;Paint sostituisce sempre il mio vecchio disegno!</em>
+  <p>È attiva l'opzione "saveover". (Questa opzione toglie la domanda
+  che compare quando fai clic su 'Salva'.)</p>
+
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--saveover</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--saveover</code>" compare tra gli
+  argomenti.</p>
+
+  <p>Se "<code>--saveover</code>" non è sulla riga di comando, cerca nel
+  file di configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su Linux e
+  Unix, "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>saveover=yes</code>".</p>
+
+  <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+  l'argomento "<code>--saveoverask</code>" sulla riga di comando, che ha la
+  precedenza sull'impostazione del file di configurazione.</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Ask Before Overwriting" (nella scheda "Saving") sia spuntato.</p>
+
+  <p>Vedi anche "Tux&nbsp;Paint salva sempre un nuovo disegno!", più avanti.</p>
+</li>
+
+<li><em>Tux&nbsp;Paint salva sempre un nuovo disegno!</em>
+  <p>È attiva l'opzione "saveovernew". (Questa opzione toglie la domanda
+  che compare quando fai clic su 'Salva'.)</p>
+
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--saveovernew</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--saveovernew</code>" compare tra gli
+  argomenti.</p>
+
+  <p>Se "<code>--saveovernew</code>" non è sulla riga di comando, cerca nel
+  file di configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su Linux e
+  Unix, "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>saveover=new</code>".</p>
+
+  <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+  l'argomento "<code>--saveoverask</code>" sulla riga di comando, che ha la
+  precedenza sull'impostazione del file di configurazione.</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Ask Before Overwriting" (nella scheda "Saving") sia spuntato.</p>
+
+  <p>Vedi anche "Tux&nbsp;Paint sostituisce sempre il mio vecchio disegno!",
+  sopra.</p>
+</li>
+</ul>
+
+<h2>Problemi con l'audio</h2>
+<ul>
+<li><em>Non si sente nessun suono!</em>
+  <ul>
+  <li><em>Prima di tutto, controlla le cose ovvie:</em>
+    <ul>
+    <li>Gli altoparlanti sono collegati e accesi?
+    <li>Il volume degli altoparlanti è alzato?
+    <li>Il volume è alzato nel "mixer" del sistema operativo?
+    <li>Sei sicuro che il computer abbia una scheda audio?
+    <li>Ci sono altri programmi aperti che usano l'audio? (Potrebbero
+        'bloccare' l'accesso di Tux&nbsp;Paint alla scheda audio.)
+    <li>(Unix/Linux) Usi un sistema audio come aRts, ESD o GStreamer? In
+      questo caso prova a impostare la variabile d'ambiente "SDL_AUDIODRIVER"
+      prima di avviare Tux&nbsp;Paint (per esempio
+      "<code>export&nbsp;SDL_AUDIODRIVER=arts</code>").
+      Oppure avvia Tux&nbsp;Paint attraverso il programma di reindirizzamento
+      del sistema audio (per esempio con "<code>artsdsp&nbsp;tuxpaint</code>"
+      o "<code>esddsp&nbsp;tuxpaint</code>", invece del semplice
+      "<code>tuxpaint</code>").
+    </ul>
+
+  <li><em>L'audio è disattivato in Tux Paint?</em>
+    <p>Se per il resto l'audio sembra funzionare (e sei sicuro che nessun
+    altro programma stia "bloccando" la scheda audio), forse Tux&nbsp;Paint
+    è stato avviato con l'opzione "nosound".</p>
+
+    <p>Controlla di non avviare Tux&nbsp;Paint con l'opzione
+    "<code>--nosound</code>" sulla riga di comando.
+    (Vedi la documentazione delle <a href="OPTIONS.html">opzioni</a> per i
+    dettagli.)</p>
+
+    <p>Se non è così, cerca nel file di configurazione
+    ("/etc/tuxpaint/tuxpaint.conf" e "~/.tuxpaintrc" su Linux e Unix,
+    "tuxpaint.cfg" su Windows) una riga che dice
+    "<code>nosound=yes</code>".</p>
+
+    <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+    l'argomento "<code>--sound</code>" sulla riga di comando, che ha la
+    precedenza sull'impostazione del file di configurazione.</p>
+
+    <p>In alternativa puoi usare Tux&nbsp;Paint&nbsp;Config. per cambiare
+    il file di configurazione. Controlla che "Enable Sound Effects" (nella
+    scheda "Video &amp; Sound") sia spuntato, poi fai clic su "Apply".</p>
+
+  <li><em>L'audio è stato disattivato temporaneamente?</em>
+    <p>Anche se in Tux&nbsp;Paint l'audio è attivo, si può disattivarlo e
+    riattivarlo temporaneamente con la combinazione di tasti
+    <b>[Alt]</b>&nbsp;+&nbsp;<b>[S]</b>. Prova a premere quei tasti per
+    vedere se i suoni tornano.</p>
+
+  <li><em>Tux Paint è stato compilato senza il supporto per l'audio?</em>
+    <p>Tux Paint potrebbe essere stato compilato con il supporto per l'audio
+    disattivato. Per controllare se il supporto per l'audio era attivo quando
+    Tux&nbsp;Paint è stato compilato, avvia Tux&nbsp;Paint dalla riga di
+    comando, così:</p>
+
+    <blockquote><p><code>
+          tuxpaint --version
+    </code></p></blockquote>
+
+    <p>Se tra le altre informazioni vedi "Sound disabled", la versione di
+    Tux&nbsp;Paint che stai usando ha l'audio disattivato. Ricompila
+    Tux&nbsp;Paint, e assicurati di NON compilare il target "nosound".
+    (Cioè non usare "<code>make&nbsp;nosound</code>".) Controlla che la
+    libreria SDL_mixer e i suoi file header di sviluppo siano disponibili!</p>
+  </ul>
+
+<li><em>Tux Paint fa troppo rumore! Posso togliere i suoni?</em>
+  <p>Sì, ci sono diversi modi per disattivare i suoni di Tux Paint:</p>
+
+  <ul>
+  <li>Premi <b>[Alt]</b>&nbsp;+&nbsp;<b>[S]</b> mentre usi Tux&nbsp;Paint
+    per disattivare temporaneamente i suoni. (Premi di nuovo la stessa
+    combinazione per riattivarli.)
+
+  <li>Avvia Tux&nbsp;Paint con l'opzione "nosound":
+    <ul>
+    <li>Con Tux&nbsp;Paint&nbsp;Config togli la spunta a "Enable Sound
+      Effects" (nella scheda "Video &amp; Sound").
+    <li>Modifica il file di configurazione di Tux&nbsp;Paint (vedi la
+      documentazione delle <a href="OPTIONS.html">opzioni</a> per i
+      dettagli) e aggiungi una riga con "<code>nosound=yes</code>".
+    <li>Avvia "<code>tuxpaint&nbsp;--nosound</code>" dalla riga di comando,
+      da un collegamento o da un'icona del desktop.
+    <li>Ricompila Tux&nbsp;Paint con il supporto per l'audio disattivato.
+      (Vedi sopra e <a href="../../INSTALL.txt">INSTALL.txt</a>.)
+    </ul>
+  </ul>
+
+<li><em>Gli effetti sonori hanno un suono strano</em>
+  <p>Potrebbe dipendere da come sono stati inizializzati SDL e SDL_mixer.
+  (Dalla dimensione del buffer scelta.)</p>
+
+  <p>Per favore scrivici con i dettagli del tuo computer.
+  (Sistema operativo e versione, scheda audio, versione di Tux&nbsp;Paint
+  che usi (per saperla, dai il comando "<code>tuxpaint&nbsp;--version</code>"),
+  e così via.)</p>
+</li>
+</ul>
+
+<h2>Problemi con lo schermo intero</h2>
+<ul>
+<li><em>Quando uso Tux&nbsp;Paint a schermo intero ed esco con ALT-TAB, la
+  finestra diventa nera!</em>
+
+  <p>Sembra che sia un difetto della libreria SDL. Ci dispiace.</p>
+
+<li><em>Quando uso Tux&nbsp;Paint a schermo intero, ci sono grandi bordi
+  intorno</em>
+
+  <p>Per chi usa Linux: probabilmente il tuo server X-Window non è
+  configurato per poter passare alla risoluzione voluta: 800&times;600
+  (o quella con cui hai impostato Tux&nbsp;Paint).
+  (Di solito, con il server X-Window, il cambio di risoluzione si fa a mano
+  premendo [Ctrl]-[Alt]-[+ del tastierino numerico] e -[- del tastierino
+  numerico].)
+  (In questa versione: con l'opzione <code>--fullscreen</code> senza
+  indicare una dimensione, Tux&nbsp;Paint si apre direttamente alla
+  risoluzione dello schermo; vedi
+  "<a href="README.html#fork">Differenze di questa versione</a>".)</p>
+
+  <p>Perché funzioni, il monitor deve supportare quella risoluzione, e
+  questa deve essere elencata nella configurazione del server X.</p>
+
+  <p>Controlla la sottosezione "Display" della sezione "Screen" del file di
+  configurazione di XFree86 o di X.org (di solito "/etc/X11/XF86Config-4" o
+  "/etc/X11/XF86Config", a seconda della versione di XFree86 che usi,
+  rispettivamente 3.x o 4.x, oppure "/etc/X11/xorg.conf" per X.org).</p>
+
+  <p>Aggiungi "800x600" (o la risoluzione o le risoluzioni che vuoi) alla
+  riga "Modes" giusta. (Per esempio nella sottosezione "Display" con la
+  profondità di colore a 24 bit ("Depth&nbsp;24"), che è quella che
+  Tux&nbsp;Paint cerca di usare.) Per esempio:</p>
+
+  <blockquote><p><code>
+        Modes "1280x1024" "1024x768" "800x600" "640x480"
+  </code></p></blockquote>
+
+  <p>Nota che alcune distribuzioni Linux hanno strumenti che fanno queste
+  modifiche al posto tuo. Per esempio, chi usa Debian può dare il comando
+  "dpkg-reconfigure xserver-xfree86" come root.</p>
+</li>
+
+<li><em>Tux&nbsp;Paint si avvia sempre a schermo intero: lo voglio in una
+    finestra!</em>
+  <p>È impostata l'opzione "fullscreen".</p>
+
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--fullscreen</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--fullscreen</code>" compare tra gli
+  argomenti.</p>
+
+  <p>Se "--fullscreen" non è sulla riga di comando, cerca nel file di
+  configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su Linux e Unix,
+  "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>fullscreen=yes</code>".</p>
+
+  <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+  l'argomento "<code>--windowed</code>" sulla riga di comando, che ha la
+  precedenza sull'impostazione del file di configurazione.</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Fullscreen" (nella scheda "Video &amp; Sound") non sia spuntato.</p>
+</li>
+</ul>
+
+<h2>Altri problemi</h2>
+<ul>
+<li><em>Tux&nbsp;Paint non parte</em>
+  <p>Se Tux&nbsp;Paint si chiude subito con il messaggio
+  "You're already running a copy of Tux&nbsp;Paint!",
+  vuol dire che è stato avviato negli ultimi 30 secondi.
+  (Su Unix/Linux il messaggio compare nel terminale, se hai avviato
+  Tux&nbsp;Paint dalla riga di comando. Su Windows compare in un file
+  chiamato "<code>stdout.txt</code>", nella stessa cartella in cui si trova
+  <code>TuxPaint.exe</code> (per esempio in
+  <code>C:\Program&nbsp;Files\TuxPaint</code>).)</p>
+
+  <p>Un file di blocco ("~/.tuxpaint/lockfile.dat" su Linux e Unix,
+  "userdata\lockfile.dat" su Windows) serve a evitare che Tux&nbsp;Paint
+  venga avviato troppe volte insieme (per esempio da un bambino impaziente
+  che fa clic sulla sua icona più di una volta).</p>
+
+  <p>Anche se il file di blocco esiste, contiene l'ora dell'ultimo avvio di
+  Tux&nbsp;Paint. Se sono passati più di 30 secondi, Tux&nbsp;Paint dovrebbe
+  partire senza problemi, e aggiornare semplicemente il file di blocco con
+  l'ora attuale.</p>
+
+  <p>Se più utenti condividono la cartella in cui si trova questo file
+  (per esempio su un disco di rete condiviso), devi disattivare questa
+  funzione.</p>
+
+  <p>Per disattivare il file di blocco, aggiungi l'argomento
+  "<code>--nolockfile</code>" alla riga di comando di Tux&nbsp;Paint.</p>
+</li>
+
+<li><em>Non riesco a uscire da Tux&nbsp;Paint</em>
+  <p>È impostata l'opzione "noquit". Questa opzione disattiva il pulsante
+  "Esci" nella barra degli strumenti di Tux&nbsp;Paint (che diventa grigio)
+  e impedisce di uscire da Tux&nbsp;Paint con il tasto <b>[Esc]</b>.</p>
+
+  <p>Se Tux&nbsp;Paint non è a schermo intero, fai semplicemente clic sul
+  pulsante di chiusura nella barra del titolo della finestra di
+  Tux&nbsp;Paint. (Cioè la "(x)" in alto a destra.)</p>
+
+  <p>Se Tux&nbsp;Paint è a schermo intero, per uscire da Tux&nbsp;Paint
+  devi usare la combinazione <b>[Maiusc] + [Ctrl] + [Esc]</b> sulla
+  tastiera.</p>
+
+  <p>(Nota: con o senza "noquit", puoi sempre uscire da Tux&nbsp;Paint con
+  la combinazione <b>[Alt] + [F4]</b> sulla tastiera.)</p>
+</li>
+
+<li><em>Non voglio la modalità "noquit"!</em>
+  <p>Se avvii Tux&nbsp;Paint dalla riga di comando, controlla di non usare
+  l'opzione "<code>--noquit</code>".</p>
+
+  <p>Se avvii Tux&nbsp;Paint con un doppio clic su un'icona, controlla nelle
+  proprietà dell'icona se "<code>--noquit</code>" compare tra gli
+  argomenti.</p>
+
+  <p>Se "<code>--noquit</code>" non è sulla riga di comando, cerca nel
+  file di configurazione di Tux&nbsp;Paint ("~/.tuxpaintrc" su Linux e
+  Unix, "tuxpaint.cfg" su Windows) una riga che dice
+  "<code>noquit=yes</code>".</p>
+
+  <p>Togli quella riga, oppure avvia semplicemente Tux&nbsp;Paint con
+  l'argomento "<code>--quit</code>" sulla riga di comando, che ha la
+  precedenza sull'impostazione del file di configurazione.</p>
+
+  <p>Oppure usa Tux&nbsp;Paint&nbsp;Config. e controlla che
+  "Disable Quit Button and [Escape] Key" (nella scheda "Simplification")
+  non sia spuntato.</p>
+</li>
+
+<li><em>Tux&nbsp;Paint continua a scrivere strani messaggi sullo schermo / in
+    un file di testo</em>
+  <p>Qualche messaggio è normale, ma se Tux&nbsp;Paint scrive tantissimo
+  (per esempio il nome di ogni immagine di timbro che trova mentre le
+  carica), probabilmente è stato compilato con i messaggi di debug
+  attivi.</p>
+
+  <p>Ricompila Tux&nbsp;Paint dal sorgente. Assicurati di togliere o
+  commentare ogni riga che dice:</p>
+
+  <blockquote><p><code>
+        #define DEBUG
+  </code></p></blockquote>
+
+  <p>nel file "tuxpaint.c" della cartella "src".</p>
+</li>
+
+<li><em>Tux&nbsp;Paint usa opzioni che non ho indicato!</em>
+  <p>Normalmente Tux&nbsp;Paint cerca prima le opzioni nei file di
+  configurazione.</p>
+
+  <ul>
+  <li><i>Unix e Linux</i>
+    <p>Su Unix e Linux, legge prima il file di configurazione generale del
+    sistema, che si trova qui:</p>
+
+    <blockquote><p><code>
+          /etc/tuxpaint/tuxpaint.conf
+    </code></p></blockquote>
+
+    <p>Poi legge il file di configurazione personale dell'utente:</p>
+
+    <blockquote><p><code>
+          ~/.tuxpaintrc
+    </code></p></blockquote>
+
+    <p>Infine usa le opzioni passate come argomenti sulla riga di comando.</p>
+  </li>
+
+  <li><i>Windows</i>
+    <p>Su Windows, Tux&nbsp;Paint legge prima il file di configurazione:</p>
+
+    <blockquote><p><code>
+          tuxpaint.cfg
+    </code></p></blockquote>
+
+    <p>Poi usa le opzioni passate come argomenti sulla riga di comando.</p>
+  </li>
+  </ul>
+
+  <p>Quindi, se in un file di configurazione c'è un'impostazione che non
+  vuoi, devi cambiare il file di configurazione (se puoi), oppure annullare
+  l'opzione dalla riga di comando.</p>
+
+  <p>Per esempio, se "/etc/tuxpaint/tuxpaint.conf" contiene un'opzione
+  che disattiva l'audio:</p>
+
+  <blockquote><p><code>
+        nosound=yes
+  </code></p></blockquote>
+
+  <p>Puoi riattivare l'audio aggiungendo questa opzione al tuo file
+  ".tuxpaintrc":</p>
+
+  <blockquote><p><code>
+        sound=yes
+  </code></p></blockquote>
+
+  <p>Oppure usando questo argomento sulla riga di comando:</p>
+
+  <blockquote><p><code>
+        --sound
+  </code></p></blockquote>
+
+  <p>Su Linux e Unix si può anche disattivare il file di configurazione
+  generale del sistema, con questo argomento sulla riga di comando:</p>
+
+  <blockquote><p><code>
+        --nosysconfig
+  </code></p></blockquote>
+
+  <p>Tux&nbsp;Paint userà allora solo "~/.tuxpaintrc" e gli argomenti della
+  riga di comando per decidere quali opzioni impostare.</p>
+</li>
+</ul>
+
+<h2>Aiuto / Contatti</h2>
+<p>Hai domande che qui non trovano risposta? Fammelo sapere!</p>
+
+<blockquote><p><a href="mailto:bill@newbreedsoftware.com"
+>bill@newbreedsoftware.com</a></p></blockquote>
+
+<p>Oppure scrivi alla nostra mailing list 'tuxpaint-users':</p>
+
+<blockquote><p><a href="http://www.tuxpaint.org/lists/">http://www.tuxpaint.org/lists/</a></p></blockquote>
+
+</body></html>

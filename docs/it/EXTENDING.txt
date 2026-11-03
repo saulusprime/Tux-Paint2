@@ -649,8 +649,8 @@ Modelli
 Traduzioni
 
      Tux Paint funziona in molte lingue, grazie alla libreria di
-     localizzazione "gettext". (Vedi OPTIONS, in inglese, per cambiare la
-     lingua di Tux Paint.)
+     localizzazione "gettext". (Vedi OPTIONS per cambiare la lingua di
+     Tux Paint.)
 
      Per tradurre Tux Paint in una nuova lingua, copia il file modello
      delle traduzioni, "tuxpaint.pot" (nel codice sorgente di Tux Paint,
