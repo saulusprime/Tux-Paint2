@@ -110,22 +110,29 @@ Le nove voci del 2026-10-29 sono chiuse e unite in `master` (branch
 
 ## Contenuti e localizzazione
 
-Le quattro voci del 2026-10-29 sono chiuse (branch `content/l10n`, vedi
-[ASIS.md](ASIS.md)): raccolta completa dei timbri con `./dev.sh stamps`,
-`it.po` rivisto, manuale ed EXTENDING in italiano, sei Starter e modelli
-per la scuola.
+Le voci del 2026-10-29 sono chiuse (branch `content/l10n`), e così le tre
+rimaste, il 2026-11-03 (branch `content/l10n-more`): vedi
+[ASIS.md](ASIS.md) e `HANDOFF.md` §5quater.
 
-- [ ] [P3] Tradurre il resto della documentazione italiana (OPTIONS, FAQ,
-  ADVANCED-STAMPS-HOWTO, INSTALL): scelto di non farlo il 2026-10-31. I
-  vecchi file italiani hanno in testa un avviso che rimanda all'inglese.
-- [ ] [P3] Allineare le altre traduzioni al modello attuale
-  (`devtools/po/update-po.sh LINGUA…`): oggi solo `it.po` è allineato.
-  Dei 119 cataloghi, oltre a `it` hanno tutte le stringhe `ca`, `de`, `es`
-  e `fr`; a cento manca solo "Full screen" (l'azione del lanciatore),
-  quattordici più vecchi hanno da 2 a 16 stringhe in meno (per esempio
-  `si.po`, `bm.po`, `zu.po`).
-- [ ] [P3] Cartina dell'Italia con le regioni come Starter: servono dati
-  geografici con una licenza adatta (per esempio ISTAT, CC BY).
+- [ ] [P2] Unire `content/l10n-more` in `master` con avanzamento rapido,
+  dopo una prova a mano: la cartina dell'Italia (finestra Nuovo e magia
+  Riempi), OPTIONS e FAQ in italiano, Punto croce in un'altra lingua.
+- [ ] [P3] Le frasi del fork ("Schermo intero", Punto croce, le modalità a
+  tutta immagine) sono in inglese in una sessantina di lingue poco
+  diffuse, e Punto croce anche in bs, mk e sq: servirebbe chi le parla.
+- [ ] [P3] Errori nelle traduzioni esistenti, visti di passaggio: in
+  `hr.po` la magia Gesso si chiama "Izmješaj" ("mescola"); in `zh_CN.po`
+  la descrizione a pennello di Fumetto parla di gesso; in `ko.po` la frase
+  di Blocchi a tutta immagine è approssimativa.
+- [ ] [P3] La FAQ (del 2009, inglese e italiana) cita
+  `LOW_QUALITY_FLOOD_FILL`, che nel sorgente non c'è più, e un messaggio
+  del lockfile diverso da quello vero ("You have already started tuxpaint
+  less than 30 seconds ago…").
+- [ ] [P3] Il Tux Paint di oggi ha dieci lingue in più (bn, brx, doi, kab,
+  ks, ks@devanagari, sc, sd, sd@devanagari, ur), tra cui il sardo:
+  servirebbero anche nella tabella delle lingue di `src/i18n.c`.
+- [ ] [P3] ADVANCED-STAMPS-HOWTO e INSTALL restano in inglese (scelta
+  dell'utente del 2026-11-02); i vecchi file italiani hanno l'avviso.
 
 ## Distribuzione (fuori obiettivo per ora)
 

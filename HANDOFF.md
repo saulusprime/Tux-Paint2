@@ -44,7 +44,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-11-01)
+## 1. Stato attuale (al 2026-11-03)
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -71,7 +71,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino a "UI scalabile con la finestra": avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`. Il lavoro nuovo parte da qui, su un branch nuovo |
+| `content/l10n-more` | ultimo commit | **branch attivo**: le tre voci rimaste di "Contenuti e localizzazione" (`79764ea`…`8783ffa`) e file di progetto. Parte da `master`. **Da unire in `master`**, dopo una prova a mano, con avanzamento rapido fino a qui |
+| `master` | `ab1c9b8` | tutto fino a "UI scalabile con la finestra" e l'utente tra i contributori: avanzamento rapido del 2026-11-01 a `feature/tools`, a `feature/dialog-resize`, poi a `docs/authors` |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
 | `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`); già unito in `master` |
@@ -86,7 +87,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
   `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `master`, tutto
+- **Installato in `~/.local`**: la build di `content/l10n-more`, tutto
   funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
   timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
   voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
@@ -110,6 +111,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Icone SVG | `a34374b`, `b9e7dfb` (su `feature/svg-icons`) | con pulsanti più grandi di 48×48, le icone di strumenti e forme vengono da SVG (§5bis, ASIS) |
 | Icone SVG, seconda parte | `c7414af`…`922b762` (su `feature/more-svg-icons`) | `load_icon()` nell'API dei plugin e sua versione 0x00010003; SVG per 39 icone delle magie e 10 dell'interfaccia (§5bis, ASIS) |
 | Dialoghi alla nuova dimensione | `6bfe48f`, `41af788` (su `feature/dialog-resize`) | ogni dialogo si rifà quando la finestra cambia o con Alt+Invio; copia del testo di Tux (§5bis, ASIS) |
+| Traduzioni, cartina, documentazione | `79764ea`…`8783ffa` (su `content/l10n-more`) | tutti i cataloghi allineati al modello, con i buchi riempiti dalle traduzioni del Tux Paint di oggi; frasi del fork in 52 lingue in più; lanciatore rigenerato dai cataloghi; Starter con la cartina dell'Italia e le regioni; OPTIONS e FAQ in italiano (§5quater, ASIS) |
 | Strumenti e magie | `799621f`…`6f79f5d` (su `feature/tools`) | Blocks, Chalk, Cartoon, Emboss e Puzzle a tutta immagine; Punto croce (plugin nuovo); Schiuma colorata; Mezzatinta con un angolo per inchiostro; suoni per Halftone, Puzzle, Color & White; tastiera a schermo con i caratteri di Maiuscolo e AltGr, e i caratteri oltre U+FFFF; etichette lunghe su due righe; rettangolo da aggiornare in 10 plugin; due leak (§5quinquies, ASIS) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
@@ -130,12 +132,12 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Percorso | Contenuto |
 |----------|-----------|
 | [src/](src/) | Sorgente C. Cuore in [src/tuxpaint.c](src/tuxpaint.c) (~24.500 righe, monolitico) più moduli: `fonts.c`, `i18n.c`, `onscreen_keyboard.c`, `postscript_print.c`, `dirwalk.c`, `pixels.c`, `playsound.c`, … |
-| [src/po/](src/po/) | 119 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`), più il modello `tuxpaint.pot` e gli script upstream (servono intltool) |
+| [src/po/](src/po/) | 119 traduzioni gettext (inclusi `it.po`, `ca.po`, `ca@valencia.po`), tutte allineate al modello `tuxpaint.pot`, più gli script upstream (servono intltool) |
 | [src/tuxpaint.conf](src/tuxpaint.conf) | Configurazione di default installata in `/etc` |
 | [magic/src/](magic/src/) | 48 plugin "Magic" (`.so` caricati a runtime), tra cui `crossstitch.c` del fork; API in `src/tp_magic_api.h.in` |
 | [data/](data/) | Risorse: 53 pennelli, font, immagini UI, suoni |
 | [stamps/](stamps/) | Solo pochi timbri (`cartoon/`); la collezione completa è il pacchetto separato `tuxpaint-stamps`, che si aggiunge con `./dev.sh stamps` (§4) |
-| [starters/](starters/) | 63 immagini "Starter" (contorni/cornici da colorare), tra cui `clock.svg` e `school.svg` del fork |
+| [starters/](starters/) | 64 immagini "Starter" (contorni/cornici da colorare), tra cui `clock.svg`, `school.svg` e la cartina `worldmap_italy.svg` del fork |
 | [templates/](templates/) | 23 immagini "Template" (sfondi fotografici), tra cui lavagna e quaderni SVG del fork |
 | [osk/](osk/) | Layout della tastiera a schermo (`--onscreen-keyboard`) |
 | [im/](im/) | Metodi di input per giapponese, coreano, thai, cinese tradizionale |
@@ -148,8 +150,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [dev.sh](dev.sh) | *Aggiunto nel fork*: build, installazione in `~/.local` e avvio sull'host (§4) |
 | [devtools/ui-test/](devtools/ui-test/) | *Aggiunto nel fork*: prove automatiche dell'interfaccia (`regress.sh`, `dialogs.sh`, `erase.sh`, `compare.py`, `tp_session.py`, `segv_backtrace.c`, `nodlclose.c`), §5bis |
 | [devtools/print-test/](devtools/print-test/) | *Aggiunto nel fork*: `ps_check.sh`, verifica della stampa PostScript con Ghostscript (§5ter) |
-| [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh`, rigenera il modello delle traduzioni senza intltool (§5quater) |
-| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis), `crossstitch_icon.py` e `magic_sounds.py` (icona di Punto croce e suoni sintetizzati, §5quinquies), `svg_icons.py` (rifà tutte le icone tracciate, §5bis) |
+| [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh` (rigenera il modello delle traduzioni senza intltool), `fill-from-upstream.sh` (allinea i cataloghi e li completa con quelli del Tux Paint di oggi), `update-desktop.py` (rifà `src/tuxpaint.desktop` dai cataloghi) (§5quater) |
+| [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `italy_map.py` (la cartina dell'Italia, dai confini Istat, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis), `crossstitch_icon.py` e `magic_sounds.py` (icona di Punto croce e suoni sintetizzati, §5quinquies), `svg_icons.py` (rifà tutte le icone tracciate, §5bis) |
 | [devtools/magic-test/](devtools/magic-test/) | *Aggiunto nel fork*: `magic_run.c`, fa girare un plugin Magia su un'immagine, senza interfaccia (§5quinquies) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
@@ -771,6 +773,48 @@ cartella temporanea.
   disegna alla dimensione della tela, quindi restano nitidi a ogni scala.
   Per vederli senza Tux Paint, sull'host ci sono pycairo e librsvg via
   `gi` (`Rsvg.Handle.render_document`).
+- **Cataloghi allineati** (2026-11-02): `devtools/po/update-po.sh`, poi
+  `devtools/po/fill-from-upstream.sh ~/.cache/tp-upstream/po`, cioè la
+  cartella `src/po` del Tux Paint di oggi (git.code.sf.net, commit
+  `8ec0dc4` del 2026-09-21, scritto in `~/.cache/tp-upstream/COMMIT`).
+  Lo script usa i loro messaggi tradotti come compendio di `msgmerge`:
+  riempie un messaggio che qui non ha traduzione, ma **non sostituisce
+  una voce "fuzzy" con lo stesso msgid**, né una traduzione già fatta. Per
+  cambiarle si toglie prima la voce, o la si modifica a mano. Quattro
+  frasi del fork ("your entire picture") vengono dalla stessa frase
+  dell'originale con "the entire picture". Per contare le traduzioni,
+  dopo l'allineamento, serve `msgfmt --statistics`: `msgcmp` non conta più
+  le voci vuote, che ora ci sono tutte.
+- **Frasi del fork nelle altre lingue**: tradotte in 52 lingue, quelle
+  che si potevano fare con sicurezza, con le parole che ogni catalogo usa
+  già per gli stessi strumenti. Restano in inglese nelle altre (lingue
+  poco diffuse) e Punto croce in bs, mk, sq. Nelle etichette, i nomi più
+  lunghi di Punto croce vanno su due righe (lituano, russo, ucraino,
+  slovacco, rumeno).
+- **Lanciatore**: `devtools/po/update-desktop.py` rifà
+  `src/tuxpaint.desktop` dai cataloghi, come `intltool-merge -d`; dai
+  cataloghi di prima dà lo stesso file. Va rilanciato dopo ogni modifica
+  ai `.po` di nome, commento o azione.
+- **Cartina dell'Italia** (`starters/worldmap_italy.svg` e `-back.svg`):
+  `devtools/content/italy_map.py REG.shp PAESI.shp`, con i confini Istat
+  generalizzati delle regioni al 1° gennaio 2026 (`Limiti01012026_g.zip`,
+  UTM 32N, CC BY 4.0) e i paesi di Natural Earth 1:10m (pubblico dominio),
+  entrambi in `~/.cache/tp-map/`. I confini tra regioni sono spezzati in
+  archi tra i punti dove si incontrano tre confini, e ogni arco si
+  semplifica una volta sola (Douglas-Peucker, 0,25 px): le due regioni
+  restano attaccate e il secchiello non esce. San Marino è un buco tra due
+  regioni, con la riga sottile. Il secchiello (magia "Riempi") separa mare
+  azzurro, paesi vicini grigi e regioni bianche anche dove le righe non ci
+  sono; i paesi vicini, senza confini tra loro, si riempiono tutti insieme.
+- **Prove della cartina a 800×600**: nella finestra Nuovo, dopo 16 clic
+  sulla freccia giù, la cartina è a (628, 174). Nell'elenco delle magie in
+  italiano, dopo 17 clic sulla freccia giù (752, 410), "Riempi" è a
+  (727, 328); la Toscana a (340, 160), l'Umbria a (382, 177). In
+  Tux Paint, la tela comincia a x = 96.
+- **Errori nelle traduzioni di altri, visti di passaggio** e lasciati
+  (TODO): in `hr.po` la magia Gesso si chiama "Izmješaj" ("mescola"); in
+  `zh_CN.po` la descrizione a pennello di Fumetto parla di gesso; in
+  `ko.po` la frase di Blocchi a tutta immagine è approssimativa.
 
 ## 5quinquies. Strumenti e magie: note (2026-11-01)
 
@@ -847,21 +891,26 @@ cartella temporanea.
 
 ## 6. Prossimi passi consigliati
 
-Le prove a mano 1 e 2 riguardano lavoro già in `master`, unito su
+Le prove a mano 2 e 3 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
 un branch nuovo.
 
-1. Provare a mano la finestra ridimensionabile e Alt+Invio, anche con un
+1. Provare a mano `content/l10n-more`: la cartina dell'Italia (finestra
+   Nuovo, poi la magia Riempi), OPTIONS e FAQ in italiano
+   (`docs/it/html/`), e magari Tux Paint in un'altra lingua
+   (`--lang=dutch`, …) per Punto croce. Poi unire in `master` con
+   avanzamento rapido.
+2. Provare a mano la finestra ridimensionabile e Alt+Invio, anche con un
    dialogo aperto (Apri, Nuovo, il selettore colore, la richiesta
    d'uscita, una presentazione), e le icone delle magie a 1600×1200.
-2. Provare a mano le magie cambiate e Punto croce (anche a tutta
+3. Provare a mano le magie cambiate e Punto croce (anche a tutta
    immagine), la Schiuma con un colore, la tastiera a schermo
    (`--onscreen-keyboard`), e ascoltare i suoni nuovi (Mezzatinta, Puzzle,
    Colore e bianco, Punto croce).
-3. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
+4. Provare a mano i timbri nuovi e gli Starter e i modelli per la scuola
    (finestra Nuovo, dopo i colori).
-4. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
-5. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
+5. Usare Tux Paint con `./dev.sh run` e annotare cosa non convince.
+6. Suddividere `src/tuxpaint.c` (`TODO.md`, P3): solo con un piano a
    parte, magari partendo dall'unione dei tre dialoghi gemelli.
 
 ---
@@ -1876,3 +1925,49 @@ contributore.
   rimanda già a quello inglese.
 - Branch `docs/authors`, unito in `master` con avanzamento rapido e
   caricato su `github`. L'identità git resta `Paolo`.
+
+### 2026-11-02 → 2026-11-03 — Contenuti e localizzazione: le voci rimaste
+
+Richiesta dell'utente: la sezione "Contenuti e localizzazione", con le tre
+voci P3 rimaste. Risposte alle domande: tradurre OPTIONS e FAQ (non
+ADVANCED-STAMPS-HOWTO e INSTALL); per le altre lingue, traduzioni del
+Tux Paint di oggi più le mie, solo dove sicure; cartina senza nomi. Branch
+`content/l10n-more`, da `master`.
+
+- **Cataloghi** (`79764ea`): tutti allineati al modello. Il Tux Paint di
+  oggi non ha documentazione italiana, ma ha cataloghi più completi: 571
+  messaggi in 28 lingue presi da lì (§5quater).
+- **Frasi del fork** (`146bf3e`): 350 traduzioni in 52 lingue, scritte da
+  due agenti con il confronto delle traduzioni di ogni catalogo, più 8
+  correzioni a traduzioni dell'originale che dicevano altro (per esempio
+  "fai clic e trascina" per le modalità a un clic). Lasciati fuori i casi
+  dubbi (Punto croce in bs, mk, sq; in hr il Gesso a tutta immagine ha la
+  traduzione fedele, anche se il pulsante si chiama "Izmješaj").
+  Lanciatore rigenerato: "Schermo intero" in 57 lingue,
+  `desktop-file-validate` senza errori.
+- **Cartina** (`f888862`): la proposta diceva solo regioni e mare; ho
+  aggiunto i paesi vicini in grigio (Natural Earth), perché senza quelli
+  il mare arrivava fino alle Alpi. Isole sotto i 2 pixel quadrati tolte.
+- **Documentazione** (`8783ffa`): OPTIONS e FAQ tradotti da due agenti,
+  con le regole del manuale già tradotto; letti e controllati (ancore,
+  link, tag, frasi inglesi rimaste). Nella FAQ due note "In questa
+  versione" (timbri con `./dev.sh stamps`, `--fullscreen` senza
+  dimensione). La FAQ del 2009 ha due punti che il codice non rispecchia
+  più (`LOW_QUALITY_FLOOD_FILL`, il messaggio del lockfile): tradotti così
+  come sono, nel TODO.
+
+Verifiche (desktop fermo, con il permesso dell'utente, in due giri):
+- `regress.sh` e `dialogs.sh` a 800×600: identici al riferimento, salvo il
+  pannello delle magie (etichette su due righe), come prima. Il
+  riferimento legge gli stessi dati installati, quindi anche la finestra
+  Nuovo con la cartina è uguale.
+- Cartina aperta dalla finestra Nuovo; Toscana, Umbria, Sardegna, Sicilia,
+  mare e paesi vicini riempiti con la magia Riempi, ognuno entro i suoi
+  confini; a 1600×1200 la cartina resta proporzionata.
+- Punto croce in olandese, russo, giapponese e lituano: etichetta (su due
+  righe in russo e lituano) e le due descrizioni, con i caratteri giusti.
+- Tutti i cataloghi passano `msgfmt --check`.
+
+Stato alla chiusura: branch attivo `content/l10n-more`, installato in
+`~/.local`; da provare a mano e unire in `master`. Nulla caricato su
+`github`.

@@ -418,3 +418,24 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
 - [x] 2026-11-01 — Paolo Pierno tra i contributori — voce per il fork in
   `docs/AUTHORS.txt` e autore di `crossstitch.c`; branch `docs/authors`,
   unito in `master` e caricato su `github`.
+- [x] 2026-11-03 — Contenuti e localizzazione, le tre voci rimaste
+  (branch `content/l10n-more`):
+  - **cataloghi** (`79764ea`): tutti i 119 allineati al modello; 571
+    messaggi in 28 lingue presi dal Tux Paint di oggi, dove qui mancavano
+    (`devtools/po/fill-from-upstream.sh`);
+  - **frasi del fork** (`146bf3e`): "Schermo intero", Punto croce e le
+    modalità a tutta immagine in 52 lingue in più, solo dove la
+    traduzione era sicura (scelta dell'utente); 8 traduzioni
+    dell'originale corrette; lanciatore rifatto dai cataloghi
+    (`devtools/po/update-desktop.py`), "Schermo intero" in 57 lingue;
+  - **cartina dell'Italia** (`f888862`): Starter con le 20 regioni senza
+    nomi (scelta dell'utente), mare azzurro e paesi vicini in grigio,
+    dai confini Istat (CC BY 4.0, citati in AUTHORS) e da Natural Earth;
+  - **documentazione** (`8783ffa`): OPTIONS e FAQ in italiano (scelta
+    dell'utente: non ADVANCED-STAMPS-HOWTO e INSTALL), con i link del
+    manuale e di EXTENDING;
+  - verifiche: a 800×600 identico al riferimento (salvo il pannello delle
+    magie, come prima); la cartina riempita regione per regione col
+    secchiello, anche dopo un ridimensionamento; Punto croce a schermo in
+    olandese, russo, giapponese e lituano; `msgfmt --check` su tutti i
+    cataloghi.
