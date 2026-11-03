@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tux Paint\n"
-"Report-Msgid-Bugs-To: tuxpaint-i18n@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-06-03 21:03+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2010-10-27 10:16-0000\n"
 "Last-Translator: none\n"
 "Language-Team: none\n"
@@ -399,7 +399,7 @@ msgstr "Foforo"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7631
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "Bue"
 
@@ -529,179 +529,179 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr "Afei deɛ...Yɛn nkoso dorɔɔ baako yi!"
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2053
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "Nti wo pɛsɛ wo pɔn?"
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2056
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "Aane, mawee!"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2059 ../tuxpaint.c:2086
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "Daabi, famekɔ mahyi!"
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2063
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "Sɛ wo pɔn a, wo bɛ hwere wo nfonyin no! Korano?"
 
-#: ../tuxpaint.c:2064 ../tuxpaint.c:2069
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "Aane, sie!"
 
-#: ../tuxpaint.c:2065 ../tuxpaint.c:2070
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "Daabi, nhawoho nsie!"
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2068
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "Sie wo nfonyin no kane!"
 
 #. Error opening picture
-#: ../tuxpaint.c:2073
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "Nfonyin no ntome mmue!"
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2076 ../tuxpaint.c:2081 ../tuxpaint.c:2090 ../tuxpaint.c:2097
-#: ../tuxpaint.c:2106
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "Yoo"
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "Biribiara nnihɔ a woasie!"
 
 #. Verification of print action
-#: ../tuxpaint.c:2084
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "Prente wo nfonyin no seseaa?"
 
-#: ../tuxpaint.c:2085
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "Aane, prente!"
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "Wo nfonyin no a prente!"
 
 #. We got an error printing
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "Kafra! Wo nfonyin no antumi amprente!"
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2096
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "Wo ntomi mprente sesei!"
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2100
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "Pepa nfonyin wei?"
 
-#: ../tuxpaint.c:2101
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "Aane, pepa!"
 
-#: ../tuxpaint.c:2102
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "Daabi npepa!"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2105
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "Kae sɛ wo bɛ pagya mouso no nsa benkum no!"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2313
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "Dede no adum."
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2318
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "Dede no asan aba."
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3065
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "Mesrɛwo twɛn..."
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7634
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "Pepa"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7637
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "Slides"
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7640
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "Kane"
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7643
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "Dea ɛdi so"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7646
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "Agoro"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8355
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "Aa"
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11664
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "Aane"
 
-#: ../tuxpaint.c:11668
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "Daabi"
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12710
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "Sesa nfonyin no ne wodiɛ no?"
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12714
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "Aane, sesa dada no!"
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12718
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "Daabi, sie foforɔ no!"
 
-#: ../tuxpaint.c:13963
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "Yi mfonyin a wopɛ, na cleeke \"Bue\"."
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14994 ../tuxpaint.c:15322
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "Yi mfonyin a wopɛ, na cleeke \"Bɔ\"."
 
-#: ../tuxpaint.c:22344
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "Fa Ahosu."
 
@@ -716,6 +716,10 @@ msgstr "Drɔyɛ nhyehyɛyɛ"
 #: ../tuxpaint.desktop.in.h:3
 msgid "A drawing program for children."
 msgstr "Mmɔfra drɔɔye nhyehyɛye."
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -739,28 +743,41 @@ msgid ""
 "perpendicularly to open or close the blinds."
 msgstr "kleeke nfonyin no ano na twe mpoma no kata so. Pea bue ana tom."
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "Blɔɔko"
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "Akado"
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "Sosɔ"
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to make your entire picture blocky."
+msgstr "Kleeke na ma wo nfonyin no nyɛ sum."
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Kleeke na twe mauso no ma nfonyin no ɛnyɛ blɔɔke."
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+#, fuzzy
+#| msgid ""
+#| "Click and move the mouse around to turn the picture into a chalk drawing."
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr "Kleeke na twe mauso no dane  nfonyin no ɛnyɛ sɛ kyɔɔkɔ drɔɔe."
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr "Kleeke na twe mauso no dane  nfonyin no ɛnyɛ sɛ kyɔɔkɔ drɔɔe."
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "Kleeke na twe mauso no ma nfonyin no dreepe."
 
@@ -801,7 +818,13 @@ msgstr "Kleeke na twe mauso no drɔɔ wɔ kalligrafe mu."
 msgid "Cartoon"
 msgstr "Cartoon"
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+#, fuzzy
+#| msgid "Click to turn your entire picture into white and a color you choose."
+msgid "Click to turn your entire picture into a cartoon."
+msgstr "Kleeke na sesa wo nfonyin no nyinaa fitaa ne  ahosu a wopɛ."
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr "Kleeke na twe mauso no dane nfonyin nyɛ kaatun."
 
@@ -812,6 +835,22 @@ msgstr "Confetti"
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "Cleeke na to confitti!"
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "Kleeke na twe mauso no ma nfonyin no mmpue."
+
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr "Kleeke fa ahwehwɛ kata wo nfonyin no so nyinaa."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -825,7 +864,13 @@ msgstr "Kleeke na twe mauso no ma destɔhyen mmra nfonyin no fa so."
 msgid "Emboss"
 msgstr "Empi"
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to emboss your entire picture."
+msgstr "Kleeke na ma wo nfonyin no nyɛ sum."
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "Kleeke na twe mauso no ma nfonyin no mmpue."
 
@@ -870,19 +915,19 @@ msgstr "Fisheye"
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr "Kleeke nfonyin no fa so na yɛ fisheye efɛɛte."
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "Nhwiren"
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr "Kleeke na twe drɔ nhweren dua. Gyae mu na wie nhweren no."
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr "Ahuro"
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr "Kleeke na twe mauso no ahuro nkata ɔfa no."
 
@@ -911,15 +956,15 @@ msgstr "Cleeke na twe na ɛndrɔɔ agyan ano a wɔ de nhoma ayɛ."
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "Kleeke na fa asuo nsosɔ no kata wo mfonyin no so."
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr "Ahwehwɛ Taes"
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr "Kleeke na twe mauso no na fa ahwehwɛ taes nto nfonyin no so."
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr "Kleeke fa ahwehwɛ kata wo nfonyin no so nyinaa."
 
@@ -1047,42 +1092,42 @@ msgstr "Kleeke na twe mauso fa moseek ka nfonyin no fa so."
 msgid "Click to add a mosaic effect to your entire picture."
 msgstr "Kleeke fa moseek ka nfonyin no so nyinaa."
 
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 msgid "Square Mosaic"
 msgstr "Ahinanan Mosaic"
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
 msgstr "Ahinansea Mosaic"
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr "Mosaic Akyeakyea"
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr "Kleeke na twe mauso fa ahinanan moseek ka nfonyin no fa so."
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "Kleeke fa ahinanan moseek ka nfonyin no so nyinaa."
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr "Kleeke na twe mauso fa ahinasea moseek ka nfonyin no fa so."
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "Kleeke fa ahinasea moseek ka nfonyin no so nyinaa."
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr "Kleeke na twe mauso fa moseek ka nfonyin no fa so."
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 msgid "Click to add an irregular mosaic to your entire picture."
 msgstr "Kleeke fa moseek a ɛntene  ka nfonyin no so nyinaa."
 
@@ -1110,31 +1155,31 @@ msgstr "Kleeke na twe mauso no na fa dede ka wo nfonyin no fa."
 msgid "Click to add noise to your entire picture."
 msgstr "Kleeke na fa dede ka wo nfonyin no so nyinaa."
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr "Woa sepi"
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr "Buemu"
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "Kleeke kɔna no na twe kɔ baabea wo pɛsɛ wo trɛɛ nfonyin no mu."
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr "Kleeke na twe suumo bram ana twe bra fam ma ɛnsuumo nfonyin no mpue."
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr "Pɔsoo"
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "Kleeke nfonyin no fa a wo pɛ nnadaa."
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr "Kleeke na ma nnadaa fullscreen mu."
 

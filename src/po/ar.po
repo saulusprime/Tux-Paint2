@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint\n"
-"Report-Msgid-Bugs-To: tuxpaint-i18n@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-06-03 21:03+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2008-10-07 14:54+0200\n"
 "Last-Translator: none\n"
 "Language-Team: none\n"
@@ -413,7 +413,7 @@ msgstr "جديد"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7631
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "افتح"
 
@@ -545,187 +545,187 @@ msgstr "إذن …  دعنا نَستمرُّ برسَم هذا الشكل"
 
 # FIXME: تحرّكُ الي مكان آخر! ! !
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2053
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "أتُريدُ حقاً الخروج؟"
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2056
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "نعم، لقد انتهيت"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2059 ../tuxpaint.c:2086
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "لا، عُد بي ثانية"
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2063
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "إذا خرجت الآن، ستفقد صورتك أتريد حفظها؟"
 
-#: ../tuxpaint.c:2064 ../tuxpaint.c:2069
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "نعم، احفظها الآن"
 
-#: ../tuxpaint.c:2065 ../tuxpaint.c:2070
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 #, fuzzy
 #| msgid "No, don't bother saving!"
 msgid "No, don’t bother saving!"
 msgstr "لا، لا تهتم بحفظها"
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2068
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "أأحفظ صورتك أولاً؟"
 
 #. Error opening picture
-#: ../tuxpaint.c:2073
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "لايمكن فتح هذه الصورة"
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2076 ../tuxpaint.c:2081 ../tuxpaint.c:2090 ../tuxpaint.c:2097
-#: ../tuxpaint.c:2106
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "موافق"
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "لايوجد أي ملف محفوظ"
 
 #. Verification of print action
-#: ../tuxpaint.c:2084
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "أأطبع صورتك الآن؟"
 
-#: ../tuxpaint.c:2085
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "نعم، اطبع الصورة"
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "لقد طُبِعت صورتك"
 
 #. We got an error printing
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2566
 #, fuzzy
 #| msgid "Your picture has been printed!"
 msgid "Sorry! Your picture could not be printed!"
 msgstr "لقد طُبِعت صورتك"
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2096
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "لا يمكنك الطبع الآن"
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2100
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "أتريد مسح هذه الصورة؟"
 
-#: ../tuxpaint.c:2101
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "نعم، امسحه"
 
-#: ../tuxpaint.c:2102
+#: ../tuxpaint.c:2575
 #, fuzzy
 #| msgid "No, don't erase it!"
 msgid "No, don’t erase it!"
 msgstr "لا، لاتمسحه"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2105
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "تذكر استخدام زر الفأرة الأيسر"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2313
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "بلا صوت"
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2318
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "شغل الصوت"
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3065
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "من فضلك انتظر..."
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7634
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "امسح"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7637
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "شرائح"
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7640
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "الخلف"
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7643
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "التالي"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7646
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "شغّل"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8355
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "انتبه"
 
 # FIXME: Move elsewhere! Or not?!
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11664
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "نعم"
 
-#: ../tuxpaint.c:11668
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "لا"
 
 # #define PROMPT_SAVE_OVER_TXT gettext_noop("Save over the older version of this picture?")
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12710
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "أأستبدل الصورة بتعديلاتك؟"
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12714
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "نعم، استبدل الملف القديم"
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12718
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "لا، احفظ باسم جديد"
 
-#: ../tuxpaint.c:13963
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "اختر الصورة التي تريد، ثم انقر على ”فتح“."
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14994 ../tuxpaint.c:15322
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "اختر الصورة التي تريد، ثم انقر ”شغّل“."
 
-#: ../tuxpaint.c:22344
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "اختر لون"
 
@@ -740,6 +740,10 @@ msgstr "برنامج رسم"
 #: ../tuxpaint.desktop.in.h:3
 msgid "A drawing program for children."
 msgstr "برنامج رسومات للأطفال."
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 #, fuzzy
@@ -773,28 +777,41 @@ msgid ""
 "perpendicularly to open or close the blinds."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "مكعبات"
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "طباشير"
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "قطرة"
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to make your entire picture blocky."
+msgstr "انقر وحرك الماوس لتقليل الاضاءه على صورتك."
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "انقر وحرّكُ الفأرة على الصورة لتقسيمها إلى قطع."
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+#, fuzzy
+#| msgid ""
+#| "Click and move the mouse around to turn the picture into a chalk drawing."
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr "انقر وحرّكُ الفأرة على الصورة لتحويلها إلى رسمة طبشورية."
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr "انقر وحرّكُ الفأرة على الصورة لتحويلها إلى رسمة طبشورية."
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "انقر وحرّكُ الفأرة على الصورة لتحويلها إلى قطرات."
 
@@ -835,7 +852,13 @@ msgstr "انقر وحرّكُ الفأرة على الصورة لتحويلها 
 msgid "Cartoon"
 msgstr "كرتون , كاريكاتور"
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+#, fuzzy
+#| msgid "Click to turn your entire picture into white and a color you choose."
+msgid "Click to turn your entire picture into a cartoon."
+msgstr "انقر وحرك الفأره نحو لتحويل صورتك إلى اللون الأبيض و لون تختاره ."
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr "انقر وحرّكُ الفأرة على الصورة لتحويلها إلى رسمة كرتونية."
 
@@ -846,6 +869,22 @@ msgstr "قصاصات ورق ملون"
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "اضغط الفأره لتلقي بقصاصات من الورق الملون"
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "انقر واسحب الماوس لزخرفه الصورة بطريقه بارزه "
+
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr "انقر الماوس لوضع  بلاط من الزجاج على كل صورتك"
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -859,7 +898,13 @@ msgstr "انقر واسحب الفأره لتتسبب في تشويه صورتك
 msgid "Emboss"
 msgstr "زين بنقوش بارزة"
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to emboss your entire picture."
+msgstr "انقر وحرك الماوس لتقليل الاضاءه على صورتك."
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "انقر واسحب الماوس لزخرفه الصورة بطريقه بارزه "
 
@@ -904,21 +949,21 @@ msgstr "عين السمكه"
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr "انقر على جزء من الصورة الخاصة بك لخلق تأثير منظور عين السمكه"
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "زهر"
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr ""
 "انقر واسحب الفأره  لرسم ساق زهرة  و توقف عن السحب و النقر ليتم اكمال شكل "
 "الزهره. ."
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr " رغوة"
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr "انقر واسحب الماوس لتغطية المنطقه برغاوي و فقاعات."
 
@@ -947,15 +992,15 @@ msgstr "انقر واسحب لوضع مسار من قضبان القطار عل�
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "انقر تغطى قطرات من المطر كل الصوره"
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr "بلاط زجاجي"
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr "انقر واسحب الماوس لوضع  بلاط من الزجاج على اجزاء من صورتك"
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr "انقر الماوس لوضع  بلاط من الزجاج على كل صورتك"
 
@@ -1082,23 +1127,23 @@ msgstr "انقر وحرك الفأره لإضافة تأثير الفسيفسا�
 msgid "Click to add a mosaic effect to your entire picture."
 msgstr "انقر الفأره لإضافة تأثير الفسيفساء لأجزاء من صورتك."
 
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 #, fuzzy
 #| msgid "Square"
 msgid "Square Mosaic"
 msgstr "مربع"
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 #, fuzzy
 #| msgid "Mosaic"
 msgid "Hexagon Mosaic"
 msgstr "صورة مرسومة بالفسيسفاء, فسيفساء"
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 #, fuzzy
 #| msgid ""
 #| "Click and move the mouse to add a mosaic effect to parts of your picture."
@@ -1106,13 +1151,13 @@ msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr "انقر وحرك الفأره لإضافة تأثير الفسيفساء لأجزاء من صورتك."
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 #, fuzzy
 #| msgid "Click to add a mosaic effect to your entire picture."
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "انقر الفأره لإضافة تأثير الفسيفساء لأجزاء من صورتك."
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 #, fuzzy
 #| msgid ""
 #| "Click and move the mouse to add a mosaic effect to parts of your picture."
@@ -1120,13 +1165,13 @@ msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr "انقر وحرك الفأره لإضافة تأثير الفسيفساء لأجزاء من صورتك."
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 #, fuzzy
 #| msgid "Click to add a mosaic effect to your entire picture."
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "انقر الفأره لإضافة تأثير الفسيفساء لأجزاء من صورتك."
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 #, fuzzy
 #| msgid ""
 #| "Click and move the mouse to add a mosaic effect to parts of your picture."
@@ -1134,7 +1179,7 @@ msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr "انقر وحرك الفأره لإضافة تأثير الفسيفساء لأجزاء من صورتك."
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 #, fuzzy
 #| msgid "Click to add a mosaic effect to your entire picture."
 msgid "Click to add an irregular mosaic to your entire picture."
@@ -1168,35 +1213,35 @@ msgstr "انقر الفأره لإضافة تأثير التشويش لأجزا�
 msgid "Click to add noise to your entire picture."
 msgstr "انقر الفأره لإضافة تأثير التشويش على صورتك."
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr ""
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr ""
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 #, fuzzy
 #| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "انقر واسحب الماوس لزخرفه الصورة بطريقه بارزه "
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 #, fuzzy
 #| msgid "Click and drag to squirt toothpaste onto your picture."
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr "انقر واسحب انشر معجون الاسنان على الصوره"
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr "لغز, أحجية, شىء مربك"
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "انقر فوق جزء من صورتك حيث تريد لغزا محيرا."
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr "انقر فوق صورتك لتكون لغزا محيرا من كل الصوره ملء الشاشه ."
 

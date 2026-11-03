@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-26 17:43+0900\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2007-09-30 15:27+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Launchpad-Export-Date: 2008-02-06 14:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
@@ -56,17 +56,17 @@ msgstr "Jaune !"
 #. Response to Light green (160, 228, 128) color selected
 #: ../colors.h:107
 msgid "Light green!"
-msgstr ""
+msgstr "Verd clar !"
 
 #. Response to Dark green (33, 148, 70) color selected
 #: ../colors.h:110
 msgid "Dark green!"
-msgstr ""
+msgstr "Verd escur !"
 
 #. Response to "Sky" blue (138, 168, 205) color selected
 #: ../colors.h:113
 msgid "Sky blue!"
-msgstr ""
+msgstr "Blau cèl !"
 
 #. Response to Blue (50, 100, 255) color selected
 #: ../colors.h:116
@@ -96,7 +96,7 @@ msgstr "Marron !"
 #. Response to Tan (226, 189, 166) color selected
 #: ../colors.h:131
 msgid "Tan!"
-msgstr ""
+msgstr "Tanat !"
 
 #. Response to Beige (247, 228, 219) color selected
 #: ../colors.h:134
@@ -122,11 +122,11 @@ msgstr "Burèl !"
 #. impossible for a user to type ASCII letters.
 #.
 #. Most translators should use scoring instead.
-#: ../dirwalk.c:164
+#: ../dirwalk.c:168
 msgid "qx"
 msgstr ""
 
-#: ../dirwalk.c:164
+#: ../dirwalk.c:168
 msgid "QX"
 msgstr ""
 
@@ -136,72 +136,72 @@ msgstr ""
 #. especially important for users who have scroll buttons disabled.
 #. Translators should do whatever is needed to put crummy fonts last.
 #. distinct uppercase and lowercase (e.g., 'o' vs. 'O')
-#: ../dirwalk.c:191
+#: ../dirwalk.c:195
 msgid "oO"
 msgstr "oO"
 
 #. common punctuation (e.g., '?', '!', '.', ',', etc.)
-#: ../dirwalk.c:194
+#: ../dirwalk.c:198
 msgid ",.?!"
 msgstr ",.?!"
 
 #. uncommon punctuation (e.g., '@', '#', '*', etc.)
-#: ../dirwalk.c:197
+#: ../dirwalk.c:201
 #, fuzzy
 #| msgid "`\\%_@$~#{}<>^&*"
 msgid "`\\%_@$~#{<(^&*"
 msgstr "`\\%_@$~#{}<>^&*"
 
 #. digits (e.g., '0', '1' and '7')
-#: ../dirwalk.c:200
+#: ../dirwalk.c:204
 msgid "017"
 msgstr "017"
 
 #. distinct circle-like characters (e.g., 'O' (capital oh) vs. '0' (zero))
-#: ../dirwalk.c:203
+#: ../dirwalk.c:207
 msgid "O0"
 msgstr "O0"
 
 #. distinct line-like characters (e.g., 'l' (lowercase elle) vs. '1' (one) vs. 'I' (capital aye))
-#: ../dirwalk.c:206
+#: ../dirwalk.c:210
 msgid "1Il|"
 msgstr "1Il|"
 
-#: ../dirwalk.c:210
+#: ../dirwalk.c:214
 msgid "<1>spare-1a"
 msgstr ""
 
-#: ../dirwalk.c:211
+#: ../dirwalk.c:215
 msgid "<1>spare-1b"
 msgstr ""
 
-#: ../dirwalk.c:212
+#: ../dirwalk.c:216
 msgid "<9>spare-9a"
 msgstr ""
 
-#: ../dirwalk.c:213
+#: ../dirwalk.c:217
 msgid "<9>spare-9b"
 msgstr ""
 
 #. Congratulations #1
 #: ../great.h:37
 msgid "Great!"
-msgstr ""
+msgstr "Crane !"
 
 #. Congratulations #2
 #: ../great.h:40
 msgid "Cool!"
-msgstr ""
+msgstr "Simpatic !"
 
 #. Congratulations #3
 #: ../great.h:43
 msgid "Keep it up!"
-msgstr ""
+msgstr "Contunha aital !"
 
 #. Congratulations #4
 #: ../great.h:46
 msgid "Good job!"
-msgstr ""
+msgstr "Bon trabalh !"
 
 #. Input Method: English mode
 #: ../im.c:75
@@ -211,12 +211,12 @@ msgstr "Anglès"
 #. Input Method: Japanese Romanized Hiragana mode
 #: ../im.c:78
 msgid "Hiragana"
-msgstr ""
+msgstr "Iragana"
 
 #. Input Method: Japanese Romanized Katakana mode
 #: ../im.c:81
 msgid "Katakana"
-msgstr ""
+msgstr "Katakana"
 
 #. Input Method: Korean Hangul 2-Bul mode
 #: ../im.c:84
@@ -226,7 +226,7 @@ msgstr ""
 #. Input Method: Thai mode
 #: ../im.c:87
 msgid "Thai"
-msgstr ""
+msgstr "Tailandés"
 
 #. Input Method: Traditional Chinese mode
 #: ../im.c:90
@@ -246,12 +246,12 @@ msgstr "Rectangle"
 #. Circle shape tool (X radius and Y radius are the same)
 #: ../shapes.h:179 ../shapes.h:180
 msgid "Circle"
-msgstr ""
+msgstr "Cercle"
 
 #. Ellipse shape tool (X radius and Y radius may differ)
 #: ../shapes.h:183 ../shapes.h:184
 msgid "Ellipse"
-msgstr ""
+msgstr "Ellipsa"
 
 #. Triangle shape tool (3 sides)
 #: ../shapes.h:187 ../shapes.h:188
@@ -326,34 +326,34 @@ msgstr "Colors"
 #. Title of brush selector (buttons down the right for paint and line tools)
 #: ../titles.h:62
 msgid "Brushes"
-msgstr ""
+msgstr "Bròssas"
 
 #. Title of eraser selector (buttons down the right for eraser tool)
 #: ../titles.h:65
 msgid "Erasers"
-msgstr ""
+msgstr "Gomas"
 
 #. Title of stamp selector (buttons down the right for stamps tool)
 #: ../titles.h:68
 msgid "Stamps"
-msgstr ""
+msgstr "Tampons"
 
 #. Title of shape selector (buttons down the right for shapes tool)
 #. Shape creation tool (square, circle, etc.)
 #: ../titles.h:71 ../tools.h:71
 msgid "Shapes"
-msgstr ""
+msgstr "Fòrmas"
 
 #. Title of font selector (buttons down the right for text and label tools)
 #: ../titles.h:74
 msgid "Letters"
-msgstr ""
+msgstr "Letras"
 
 #. Title of magic tool selector (buttons down the right for magic (effect plugin) tool)
 #. "Magic" effects tools (blur, flip image, etc.)
 #: ../titles.h:77 ../tools.h:83
 msgid "Magic"
-msgstr ""
+msgstr "Magic"
 
 #. Freehand painting tool
 #: ../tools.h:62
@@ -363,7 +363,7 @@ msgstr ""
 #. Stamp tool (aka Rubber Stamps)
 #: ../tools.h:65
 msgid "Stamp"
-msgstr ""
+msgstr "Tampon"
 
 #. Line drawing tool
 #: ../tools.h:68
@@ -378,7 +378,7 @@ msgstr "Tèxt"
 #. Label tool
 #: ../tools.h:77
 msgid "Label"
-msgstr ""
+msgstr "Etiqueta"
 
 #. Undo last action
 #: ../tools.h:86
@@ -393,7 +393,7 @@ msgstr "Tornar far"
 #. Eraser tool
 #: ../tools.h:92
 msgid "Eraser"
-msgstr ""
+msgstr "Goma"
 
 #. Start a new picture
 #: ../tools.h:95
@@ -403,7 +403,7 @@ msgstr "Nòu"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7605
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "Dubrir"
 
@@ -478,7 +478,7 @@ msgstr "Tornar far !"
 #. Eraser tool
 #: ../tools.h:145
 msgid "Eraser!"
-msgstr ""
+msgstr "Goma !"
 
 #. Response to 'start a new image' action
 #: ../tools.h:148
@@ -503,7 +503,7 @@ msgstr "Estampatge..."
 #. Response to 'quit' (exit) action
 #: ../tools.h:160
 msgid "Bye bye!"
-msgstr ""
+msgstr "Al còp que ven !"
 
 #. Instruction while using Line tool (after click, before release)
 #: ../tools.h:164
@@ -526,193 +526,197 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr ""
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2040
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr ""
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2043
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
-msgstr ""
+msgstr "Òc, ai acabat !"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2046 ../tuxpaint.c:2073
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
-msgstr ""
+msgstr "Non, fai pas tornar !"
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2050
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr ""
 
-#: ../tuxpaint.c:2051 ../tuxpaint.c:2056
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
-msgstr ""
+msgstr "Òc, enregistra-la !"
 
-#: ../tuxpaint.c:2052 ../tuxpaint.c:2057
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
-msgstr ""
+msgstr "Non, te copes pas lo cap per enregistrar !"
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2055
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr ""
 
 #. Error opening picture
-#: ../tuxpaint.c:2060
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr ""
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2063 ../tuxpaint.c:2068 ../tuxpaint.c:2077 ../tuxpaint.c:2084
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "Validar"
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2067
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "I a pas de fichièr enregistrat !"
 
 #. Verification of print action
-#: ../tuxpaint.c:2071
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
-msgstr ""
+msgstr "Imprimir aqueste imatge ara ?"
 
-#: ../tuxpaint.c:2072
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
-msgstr ""
+msgstr "Òc, imprimís-lo !"
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2076
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
-msgstr ""
+msgstr "Ton imatge es estat imprimit !"
 
 #. We got an error printing
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr ""
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2083
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
-msgstr ""
+msgstr "Lo podètz pas encara imprimir !"
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2087
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "Suprimir l'imatge ?"
 
-#: ../tuxpaint.c:2088
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
-msgstr ""
+msgstr "Òc, goma-lo !"
 
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
-msgstr ""
+msgstr "Non, lo gomes pas !"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2092
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr ""
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2300
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr ""
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2305
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr ""
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3052
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
-msgstr ""
+msgstr "Esperatz…"
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7608
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr ""
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7611
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr ""
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7614
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "Tornar"
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7617
+#: ../tuxpaint.c:8366
 msgid "Next"
-msgstr ""
+msgstr "Seguent"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7620
+#: ../tuxpaint.c:8369
 msgid "Play"
-msgstr ""
+msgstr "Lectura"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8328
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr ""
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11586
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "Òc"
 
-#: ../tuxpaint.c:11590
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "Non"
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12608
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr ""
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12612
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr ""
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12616
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr ""
 
-#: ../tuxpaint.c:13861
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr ""
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14892 ../tuxpaint.c:15220
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr ""
 
-#: ../tuxpaint.c:22159
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr ""
 
 #: ../tuxpaint.desktop.in.h:1
-msgid "A drawing program for children."
-msgstr ""
+msgid "Tux Paint"
+msgstr "Tux Paint"
 
 #: ../tuxpaint.desktop.in.h:2
 msgid "Drawing program"
 msgstr "Logicial de dessenh"
 
 #: ../tuxpaint.desktop.in.h:3
-msgid "Tux Paint"
-msgstr "Tux Paint"
+msgid "A drawing program for children."
+msgstr ""
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -736,28 +740,36 @@ msgid ""
 "perpendicularly to open or close the blinds."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "Greda"
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+msgid "Click to make your entire picture blocky."
+msgstr ""
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr ""
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr ""
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr ""
 
@@ -798,7 +810,11 @@ msgstr ""
 msgid "Cartoon"
 msgstr ""
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+msgid "Click to turn your entire picture into a cartoon."
+msgstr ""
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr ""
 
@@ -808,6 +824,18 @@ msgstr ""
 
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:65
+msgid "Click to embroider your entire picture with cross stitches."
 msgstr ""
 
 #: ../../magic/src/distortion.c:142
@@ -822,17 +850,21 @@ msgstr ""
 msgid "Emboss"
 msgstr ""
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+msgid "Click to emboss your entire picture."
+msgstr ""
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr ""
 
 #: ../../magic/src/fade_darken.c:121
 msgid "Lighten"
-msgstr ""
+msgstr "Esclarzir"
 
 #: ../../magic/src/fade_darken.c:123
 msgid "Darken"
-msgstr ""
+msgstr "Escurzir"
 
 #: ../../magic/src/fade_darken.c:134
 msgid "Click and move the mouse to lighten parts of your picture."
@@ -867,19 +899,19 @@ msgstr ""
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr ""
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
-msgstr ""
+msgstr "Flor"
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr ""
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr ""
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr ""
 
@@ -894,7 +926,7 @@ msgstr ""
 
 #: ../../magic/src/fretwork.c:176
 msgid "Fretwork"
-msgstr ""
+msgstr "Fòc artificial"
 
 #: ../../magic/src/fretwork.c:180
 msgid "Click and drag to draw repetitive patterns. "
@@ -904,15 +936,15 @@ msgstr ""
 msgid "Click to surround your picture with repetitive patterns."
 msgstr ""
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr ""
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr ""
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr ""
 
@@ -951,7 +983,7 @@ msgstr ""
 #. KAL_BOTH
 #: ../../magic/src/kalidescope.c:128
 msgid "Kaleidoscope"
-msgstr ""
+msgstr "Caleïdoscòpi"
 
 #: ../../magic/src/kalidescope.c:136
 msgid ""
@@ -983,7 +1015,7 @@ msgstr ""
 
 #: ../../magic/src/light.c:107
 msgid "Light"
-msgstr ""
+msgstr "Lum"
 
 #: ../../magic/src/light.c:113
 msgid "Click and drag to draw a beam of light on your picture."
@@ -1027,44 +1059,44 @@ msgstr ""
 msgid "Click to add a mosaic effect to your entire picture."
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 #, fuzzy
 #| msgid "Square"
 msgid "Square Mosaic"
 msgstr "Carrat"
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 msgid "Click to add a square mosaic to your entire picture."
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr ""
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 msgid "Click to add an irregular mosaic to your entire picture."
 msgstr ""
 
@@ -1082,7 +1114,7 @@ msgstr ""
 
 #: ../../magic/src/noise.c:63
 msgid "Noise"
-msgstr ""
+msgstr "Bruch"
 
 #: ../../magic/src/noise.c:66
 msgid "Click and move the mouse to add noise to parts of your picture."
@@ -1092,32 +1124,32 @@ msgstr ""
 msgid "Click to add noise to your entire picture."
 msgstr ""
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr ""
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr ""
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr ""
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr ""
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 #, fuzzy
 msgid "Puzzle"
 msgstr "Violet !"
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr ""
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr ""
 
@@ -1129,9 +1161,17 @@ msgstr ""
 msgid "Click and drag to draw train track rails on your picture."
 msgstr ""
 
+#: ../../magic/src/rainbow.c:139
+msgid "Rainbow"
+msgstr "Arcolan"
+
+#: ../../magic/src/rainbow.c:146
+msgid "You can draw in rainbow colors!"
+msgstr ""
+
 #: ../../magic/src/rain.c:65
 msgid "Rain"
-msgstr ""
+msgstr "Pluèja"
 
 #: ../../magic/src/rain.c:68
 msgid "Click to place a rain drop onto your picture."
@@ -1139,14 +1179,6 @@ msgstr ""
 
 #: ../../magic/src/rain.c:69
 msgid "Click to cover your picture with rain drops."
-msgstr ""
-
-#: ../../magic/src/rainbow.c:139
-msgid "Rainbow"
-msgstr ""
-
-#: ../../magic/src/rainbow.c:146
-msgid "You can draw in rainbow colors!"
 msgstr ""
 
 #: ../../magic/src/realrainbow.c:110
@@ -1179,7 +1211,7 @@ msgstr ""
 
 #: ../../magic/src/rosette.c:116
 msgid "Picasso"
-msgstr ""
+msgstr "Picasso"
 
 #: ../../magic/src/rosette.c:121
 msgid "Click and start drawing your rosette."
@@ -1191,7 +1223,7 @@ msgstr ""
 
 #: ../../magic/src/sharpen.c:73
 msgid "Edges"
-msgstr ""
+msgstr "Bordaduras"
 
 #: ../../magic/src/sharpen.c:74
 #, fuzzy
@@ -1255,11 +1287,11 @@ msgstr ""
 
 #: ../../magic/src/snow.c:68
 msgid "Snow Ball"
-msgstr ""
+msgstr "Bala de nèu"
 
 #: ../../magic/src/snow.c:69
 msgid "Snow Flake"
-msgstr ""
+msgstr "Borrilh"
 
 #: ../../magic/src/snow.c:72
 msgid "Click to add snow balls to your picture."
@@ -1324,7 +1356,7 @@ msgstr ""
 
 #: ../../magic/src/toothpaste.c:65
 msgid "Toothpaste"
-msgstr ""
+msgstr "Dentifrici"
 
 #: ../../magic/src/toothpaste.c:68
 msgid "Click and drag to squirt toothpaste onto your picture."

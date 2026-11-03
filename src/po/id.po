@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 21:03+0200\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2014-06-08 23:13+0700\n"
 "Last-Translator: T. Surya Fajri <kilelme@gmail.com>\n"
 "Language-Team: Indonesia <translation-team-id@lists.sourceforge.net>\n"
@@ -402,7 +402,7 @@ msgstr "Baru"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7631
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "Buka"
 
@@ -538,180 +538,180 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr "OK...Mari terus menggambar yang ini!"
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2053
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "Kamu benar-benar ingin keluar?"
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2056
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "Ya, Saya Selesai"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2059 ../tuxpaint.c:2086
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "Tidak, Kembali Ke Sebelumnya!"
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2063
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "Jika kamu keluar, kamu akan kehilangan gambar! Simpan?"
 
-#: ../tuxpaint.c:2064 ../tuxpaint.c:2069
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "Ya, Simpan!"
 
-#: ../tuxpaint.c:2065 ../tuxpaint.c:2070
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "Tidak, Tidak perlu menyimpan!"
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2068
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "Simpan gambarmu dulu?"
 
 #. Error opening picture
-#: ../tuxpaint.c:2073
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "Tidak dapat membuka gambar itu!"
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2076 ../tuxpaint.c:2081 ../tuxpaint.c:2090 ../tuxpaint.c:2097
-#: ../tuxpaint.c:2106
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "OK"
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "Tidak ada file tersimpan!"
 
 #. Verification of print action
-#: ../tuxpaint.c:2084
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "Cetak gambarmu sekarang?"
 
-#: ../tuxpaint.c:2085
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "Ya, Cetak itu!"
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "Gambarmu telah dicetak!"
 
 # | msgid "Your picture has been printed!"
 #. We got an error printing
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "Maaf! Gambar anda tidak dapat dicetak."
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2096
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "Kamu belum dapat mencetak!"
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2100
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "Hapus gambar ini?"
 
-#: ../tuxpaint.c:2101
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "Ya, hapus itu!"
 
-#: ../tuxpaint.c:2102
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "Tidak, jangan hapus itu!"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2105
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "Ingat untuk menggunakan tombol mouse kiri!"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2313
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "Suara diredam"
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2318
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "Suara tidak diredam"
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3065
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "Tunggu Sesaat..."
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7634
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "Hapus"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7637
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "Slide"
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7640
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "Kembali"
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7643
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "Selanjutnya"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7646
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "Play"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8355
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "Aa"
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11664
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "Ya"
 
-#: ../tuxpaint.c:11668
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "Tidak"
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12710
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "Ganti gambar dengan perubahan yang dilakukan?"
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12714
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "Ya, gantikan yang lama!"
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12718
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "Tidak, Simpan sebuah berkas baru!"
 
-#: ../tuxpaint.c:13963
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "Pilih gambar yang kamu inginkan, lalu klik \"Open\"."
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14994 ../tuxpaint.c:15322
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "Pilih gambar yang kamu inginkan, lalu klik “Play”."
 
-#: ../tuxpaint.c:22344
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "Pilih warna."
 
@@ -726,6 +726,10 @@ msgstr "Program gambar"
 #: ../tuxpaint.desktop.in.h:3
 msgid "A drawing program for children."
 msgstr "Adalah sebuah program gambar untuk anak-anak."
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -751,30 +755,45 @@ msgstr ""
 "Klik pada pinggir gambar anda untuk menarik window blind diatasnya.  "
 "Gerakkan secara tegak lurus untuk membuka atau menutup blind"
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "Blok"
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "Kapur"
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "Drip"
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to make your entire picture blocky."
+msgstr "Klik untuk menggelapkan seluruh gambar."
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Klik dan pindah mouse ke sekitar untuk membuat gambar berblok."
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+#, fuzzy
+#| msgid ""
+#| "Click and move the mouse around to turn the picture into a chalk drawing."
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr ""
+"Klik dan pindahkan mouse ke sekitar untuk merubah gambar ke gambar dengan "
+"kapur."
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr ""
 "Klik dan pindahkan mouse ke sekitar untuk merubah gambar ke gambar dengan "
 "kapur."
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "Klik dan pindahkan mouse ke sekitar untuk membuat gambar drip."
 
@@ -815,7 +834,15 @@ msgstr "Klik dan gerakkan mouse di sekitar gambar untuk mengambar kaligrafi."
 msgid "Cartoon"
 msgstr "Kartun"
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+#, fuzzy
+#| msgid "Click to turn your entire picture into white and a color you choose."
+msgid "Click to turn your entire picture into a cartoon."
+msgstr ""
+"Klik untuk merubah seluruh gambar menjadi putih dan sebuah warna yang anda "
+"pilih."
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr ""
 "Klik dan pindahkan mouse ke sekitar untuk mengubah gambar ke sebuah kartun."
@@ -827,6 +854,22 @@ msgstr "Konfeti"
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "Klik untuk melempar konfeti!"
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "Klik dan tarik mouse untuk meng-emboss gambar."
+
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr "Klik untuk menutupi seluruh gambar anda dengan glass tile."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -840,7 +883,13 @@ msgstr "Klik dan tarik mouse untuk menimbulkan distorsi pada gambar anda."
 msgid "Emboss"
 msgstr "Emboss"
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to emboss your entire picture."
+msgstr "Klik untuk menggelapkan seluruh gambar."
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "Klik dan tarik mouse untuk meng-emboss gambar."
 
@@ -887,21 +936,21 @@ msgstr "Fisheye"
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr "Klik pada bagian gambar anda untuk membuat efek fisheye."
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "Bunga"
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr ""
 "Klik dan tarik untuk menggambar tangkai bunga. Lepaskan untuk menyelesaikan "
 "bunga."
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr "Busa"
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr ""
 "Klik dan tarik mouse untuk meng-cover sebuah area dengan gelembung busa."
@@ -927,15 +976,15 @@ msgstr "Klik dan tarik untuk menggambar pola yang berulang."
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "Klik untuk mengelilingi gambar anda dengan pola yang berulang."
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr "Glass Tile"
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr "Klik dan tarik mouse untuk menempatkan glass tile diatas gambar anda."
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr "Klik untuk menutupi seluruh gambar anda dengan glass tile."
 
@@ -1059,48 +1108,48 @@ msgid "Click to add a mosaic effect to your entire picture."
 msgstr "Klik untuk menambahkan efek mozaik pada seluruh gambar anda."
 
 # | msgid "Square"
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 msgid "Square Mosaic"
 msgstr "Mozaik persegi"
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
 msgstr "Mozaik Segi Lima"
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr "Mozaik Tidak Teratur"
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr ""
 "Klik dan gerakkan mouse untuk menambahkan sebuah mozaik persegi pada bagian "
 "gambar anda."
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "Klik untuk menambahkan mozaik persegi pada seluruh gambar anda."
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr ""
 "klik dan gerakkan mouse untuk menambahkan mozaik segi lima pada bagian "
 "gambar anda."
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "Klik untuk menambahkan mozaik segi lima pada seluruh gambar anda."
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr ""
 "Klik dan gerakkan mouse untuk menambahkan mozaik tidak teratur pada bagian "
 "gambar anda."
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 msgid "Click to add an irregular mosaic to your entire picture."
 msgstr "Klik untuk menambahkan mozaik tidak teratur pada seluruh gambar anda."
 
@@ -1132,33 +1181,33 @@ msgstr ""
 msgid "Click to add noise to your entire picture."
 msgstr "Klik untuk menambahkan noise pada seluruh gambar anda."
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr "Perspektif"
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "Klik pada sudut gambar dan tarik kemana saja untuk melebarkan gambar."
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr ""
 "Klik dan tarik ke atas untuk memperbesar gambar atau kebawah untuk "
 "memperkecil gambar."
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr "Puzzle"
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "Klik pada bagian gambar anda untuk merubahnya seperti puzzle."
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr "Klik untuk membuat puzzle pada mode layar penuh."
 

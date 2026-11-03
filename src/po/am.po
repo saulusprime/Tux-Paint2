@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 21:03+0200\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2014-06-10 11:45+0100\n"
 "Last-Translator: Solomon Gizaw <solohavi@yahoo.com>\n"
 "Language-Team: none\n"
@@ -399,7 +399,7 @@ msgstr "አዲስ "
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7631
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "ክፈት "
 
@@ -529,179 +529,179 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr "እሺ አሁን... ይህንን መሳል እንቀጥል! "
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2053
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "ጨርሶ ለማቆም በርግጠኝነት ፈልገሃል? "
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2056
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "አዎ ጨርሻለሁ!"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2059 ../tuxpaint.c:2086
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "አይ እንደገና መልሰኝ! "
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2063
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "ጨርስህ ከወጣህ ስዕልህን ታጣለህ! ይቀመጥ? "
 
-#: ../tuxpaint.c:2064 ../tuxpaint.c:2069
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "አዎ አስቀምጠው! "
 
-#: ../tuxpaint.c:2065 ../tuxpaint.c:2070
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "አይ ለማስቀመጥ አትጨነቅ! "
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2068
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "መጀመሪያ ስዕልህን አሰቀምጥ? "
 
 #. Error opening picture
-#: ../tuxpaint.c:2073
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "ያንን ስዕል መክፈት አይቻልም!  "
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2076 ../tuxpaint.c:2081 ../tuxpaint.c:2090 ../tuxpaint.c:2097
-#: ../tuxpaint.c:2106
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "እሺ "
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "የተቀመጡ ስዕሎች የሉም! "
 
 #. Verification of print action
-#: ../tuxpaint.c:2084
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "ስዕልህ አሁን ይታተም? "
 
-#: ../tuxpaint.c:2085
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "አዎ ይታተም! "
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "ስዕልህ ታትሞዋል! "
 
 #. We got an error printing
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "እናዝናለን ስዕልህ ሊታተም አልቻለም! "
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2096
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "አሁንም ማተም አትችልም! "
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2100
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "ይህ ስዕል ይጥፋ? "
 
-#: ../tuxpaint.c:2101
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "አዎ አጥፋው! "
 
-#: ../tuxpaint.c:2102
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "አይ አታጥፋው! "
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2105
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "የግራ መዳፊት አዝራር መጠቀም አስታውስ!"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2313
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "ድምጹ የጠፋ። "
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2318
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "ድምጹ የሚሰማ። "
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3065
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "እባክዎ ይጠብቁ... "
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7634
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "ማጥፉት "
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7637
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "ስላይዶች "
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7640
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "ወደኋላ "
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7643
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "ቀጥል  "
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7646
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "ማጫወት "
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8355
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "Aa"
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11664
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "አዎ "
 
-#: ../tuxpaint.c:11668
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "አይደለም "
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12710
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "ከለውጥህ  ጋር ስዕሉ ይተካ? "
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12714
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "አዎ የድሮውን ተካ!"
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12718
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "አይ አዲስ ፋይል አስቀምጥ! "
 
-#: ../tuxpaint.c:13963
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "የምትፈልገውን ስዕል ምረጥና “መክፈት” የሚለውን  ጠቅ አድርግ። "
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14994 ../tuxpaint.c:15322
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "የምትፈልገውን ስዕል ምረጥና “ማጫወት” የሚለውን  ጠቅ አድርግ። "
 
-#: ../tuxpaint.c:22344
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "ቀለም ምረጥ "
 
@@ -716,6 +716,10 @@ msgstr "የመሳያ ፍርግም። "
 #: ../tuxpaint.desktop.in.h:3
 msgid "A drawing program for children."
 msgstr "የልጆች የመሳያ ፍርግም። "
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -740,28 +744,41 @@ msgid ""
 msgstr ""
 "መስኮት ስዕልህ ላይ ለመሸፈን  የስዕልህን ጫፍ ጠቅ አድርግ። ሽፋኑን ለመክፈት ወይም ለመዝጋት ቀጥ ባለ ሁኔታ አንቀሳቅስ"
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "ካሬዎች "
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "ጠመኔ "
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "ጠብታ "
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to make your entire picture blocky."
+msgstr "የስዕሎችህን ሁሉንም ክፍል ለማጥቆር ጠቅ አድርግ።"
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr " ስአሉን ካሬ ላማድረግ አዝራሩን ጠቅ አድርገውና  በዙሪያው አንቀሳቅስ። "
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+#, fuzzy
+#| msgid ""
+#| "Click and move the mouse around to turn the picture into a chalk drawing."
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr " ስአሉን ወደ ጠመኔ አሳሳልነት ለመቀየር  አዝራሩን ጠቅ አድርገውና  በዙሪያው አንቀሳቅስ። "
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr " ስአሉን ወደ ጠመኔ አሳሳልነት ለመቀየር  አዝራሩን ጠቅ አድርገውና  በዙሪያው አንቀሳቅስ። "
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "የነጠብጣብ ስአል ለማድረግ አዝራሩን ጠቅ አድርገውና  በዙሪያው አንቀሳቅስ። "
 
@@ -802,7 +819,13 @@ msgstr "የአጅ ጽሁፍ  ለመሳል  አዝራሩን ጠቅ አድርገ�
 msgid "Cartoon"
 msgstr "ካርቱን "
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+#, fuzzy
+#| msgid "Click to turn your entire picture into white and a color you choose."
+msgid "Click to turn your entire picture into a cartoon."
+msgstr "ሙሉ ስዕልህን ወደ ነጭና የመረጥከው ቀለም ለመለወጥ ጠቅ አድርግ። "
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr "ስዕሉን ወደ ካርቱን ለመቀየር አዝራሩን ጠቅ አድርገውና በዙሪያው አንቀሳቅስ። "
 
@@ -813,6 +836,22 @@ msgstr "የሚበተን አበባ "
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "አበባ ለመበተን ጠቅ አድርግ! "
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "ስአሉን ለማስጌጥ  አዝራሩን ጠቅ አድርገህ ጎትት። "
+
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr "አጠቃላይ ስዕልህን በመስታወት ንጣፎች ለመሸፈን ጠቅ አድርግ። "
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -826,7 +865,13 @@ msgstr "ስዕልህን ለማጣመም አዝራሩን ጠቅ አድርገህ �
 msgid "Emboss"
 msgstr "ማስጌጥ "
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to emboss your entire picture."
+msgstr "የስዕሎችህን ሁሉንም ክፍል ለማጥቆር ጠቅ አድርግ።"
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "ስአሉን ለማስጌጥ  አዝራሩን ጠቅ አድርገህ ጎትት። "
 
@@ -871,19 +916,19 @@ msgstr "የጎንዮሽ እይታ "
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr " የጎንዮሽ እይታ ለመፍጠር የስእሉን ክፍል  ጠቅ አድርግና ጎትት።"
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "አበባ "
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr "የአበባ አገዳ ለመሳል ጠቅ አድርግና ጎትት። አበባውን ለመጨረስ ልቀቀው። "
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr "አረፋ "
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr "አንድን ቦታ በአረፋ ለመሸፈን አዝራሩን ጠቅ አድርገውና ጎትት። "
 
@@ -908,15 +953,15 @@ msgstr "ተደጋጋሚ ስርአተ ጥለት ለመሳል አዝራሩን ጠ�
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "ተደጋጋሚ ስርአተ ጥለት ምስልህን ለመክበብ አዝራሩን ጠቅ አድርግ።"
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr "የመስታወት ንጣፍ "
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr "በስዕሎት ላይ የመስታወት ንጣፍ ለመጨመር አዝራሩን ጠቅ አድርግና ጎትት። "
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr "አጠቃላይ ስዕልህን በመስታወት ንጣፎች ለመሸፈን ጠቅ አድርግ። "
 
@@ -1030,42 +1075,42 @@ msgstr "የስዕሎት የተለያየ ክፍሎች ላይ ውሁድ ስዕል 
 msgid "Click to add a mosaic effect to your entire picture."
 msgstr "የስዕሎትሁሉም ክፍል ላይ  ውሁድ ስዕል ለመጨመር ጠቅ ያድርግ።  "
 
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 msgid "Square Mosaic"
 msgstr "ካሬ ውሁድ ስዕል "
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
 msgstr "ባለ ስድስት ጎን ውሁድ ስዕል "
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr "ያልተስተካከለ ውሁድ ስዕል "
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr "የስዕልህን  የተለያየ ክፍሎች ላይ ከሬ ውሁድ ስዕል ለመጨመር አዝራሩን ጠቅ አድርገውና አንቀሳቅስ። "
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "የስዕልህ ሁሉም ክፍል ላይ  ካሬ ውሁድ ስዕል ለመጨመር ጠቅ አድርግ። "
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr "የስዕልህን የተለያየ ክፍሎች ላይ ባለ ስድስት ጎን ውሁድ ስዕል ለመጨመር አዝራሩን ጠቅ አድርገውና አንቀሳቅስ። "
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "የስዕልህ ሁሉም ክፍል ላይ ባለ ስድስት ጎናዊ ውሁድ ስዕል ለመጨመር ጠቅ አድርግ። "
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr "የስዕልህን  የተለያየ ክፍሎች ላይ ያልተስተካከለ ውሁድ ስዕል ለመጨመር አዝራሩን ጠቅ አድርገውና አንቀሳቅስ። "
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 msgid "Click to add an irregular mosaic to your entire picture."
 msgstr "የስዕልህ ሁሉም ክፍል ላይ  ያልተስተካከለ ውሁድ ስዕል ለመጨመር ጠቅ አድርግ። "
 
@@ -1093,31 +1138,31 @@ msgstr "የስዕልህን  የተለያየ ክፍሎች ላይ የተረባበ�
 msgid "Click to add noise to your entire picture."
 msgstr "የስዕልህን  ሁሉም ክፍል ላይ  የተረባብርሸ ነገረ ለመጨመር ጠቅ አድርግ። "
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr "የንድፍ ስራ "
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr "አጉላ "
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "ወደምትፈልገው ስዕሉን ለመዘርጋት በየጥጎቹ ጠቅ አድርግና ጎትት። "
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr "ስእሉን ለማጉላት አዝራሩን ጠቅ አድርገውና  ወደ ላይና ወደ ታች አንቀሳቅስ። "
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr "እንቆቅልሽ "
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "እንቆቅልሹን ለማግኘት የስእሉን የፈለግህበት ስፍራ አዝራሩን ጠቅ አድርገው። "
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr "እንቆቅልሹን  ሙሉ ማያ ለማድረግ አዝራሩን ጠቅ አድርገው"
 

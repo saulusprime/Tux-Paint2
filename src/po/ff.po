@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-26 17:43+0900\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2014-04-09 22:17+0200\n"
 "Last-Translator: Ibrahima SARR <ibrahima.sarr@pulaagu.com>\n"
 "Language-Team: FULAH LOCALIZATION\n"
@@ -122,11 +122,11 @@ msgstr "olɓuɗo"
 #. impossible for a user to type ASCII letters.
 #.
 #. Most translators should use scoring instead.
-#: ../dirwalk.c:164
+#: ../dirwalk.c:168
 msgid "qx"
 msgstr "qx"
 
-#: ../dirwalk.c:164
+#: ../dirwalk.c:168
 msgid "QX"
 msgstr "QX"
 
@@ -136,48 +136,48 @@ msgstr "QX"
 #. especially important for users who have scroll buttons disabled.
 #. Translators should do whatever is needed to put crummy fonts last.
 #. distinct uppercase and lowercase (e.g., 'o' vs. 'O')
-#: ../dirwalk.c:191
+#: ../dirwalk.c:195
 msgid "oO"
 msgstr "oO"
 
 #. common punctuation (e.g., '?', '!', '.', ',', etc.)
-#: ../dirwalk.c:194
+#: ../dirwalk.c:198
 msgid ",.?!"
 msgstr ",.?!"
 
 #. uncommon punctuation (e.g., '@', '#', '*', etc.)
-#: ../dirwalk.c:197
+#: ../dirwalk.c:201
 msgid "`\\%_@$~#{<(^&*"
 msgstr "`\\%_@$~#{<(^&*"
 
 #. digits (e.g., '0', '1' and '7')
-#: ../dirwalk.c:200
+#: ../dirwalk.c:204
 msgid "017"
 msgstr "017"
 
 #. distinct circle-like characters (e.g., 'O' (capital oh) vs. '0' (zero))
-#: ../dirwalk.c:203
+#: ../dirwalk.c:207
 msgid "O0"
 msgstr "O0"
 
 #. distinct line-like characters (e.g., 'l' (lowercase elle) vs. '1' (one) vs. 'I' (capital aye))
-#: ../dirwalk.c:206
+#: ../dirwalk.c:210
 msgid "1Il|"
 msgstr "1Il|"
 
-#: ../dirwalk.c:210
+#: ../dirwalk.c:214
 msgid "<1>spare-1a"
 msgstr "<1>spare-1a"
 
-#: ../dirwalk.c:211
+#: ../dirwalk.c:215
 msgid "<1>spare-1b"
 msgstr "<1>spare-1b"
 
-#: ../dirwalk.c:212
+#: ../dirwalk.c:216
 msgid "<9>spare-9a"
 msgstr "<9>spare-9a"
 
-#: ../dirwalk.c:213
+#: ../dirwalk.c:217
 msgid "<9>spare-9b"
 msgstr "<9>spare-9b"
 
@@ -399,7 +399,7 @@ msgstr "Fuɗɗo"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7605
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "Uddit"
 
@@ -530,193 +530,197 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr "Eey wadde… Njokken e natde ngoo-ɗoo!"
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2040
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "Aɗa teeŋtini yiɗde yaltude?"
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2043
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "Eey, mi gaynii!"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2046 ../tuxpaint.c:2073
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "Alaa, ndutto-ɗen!"
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2050
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "So a yaltii jooni, ko nat-ɗaa fof mototo! Aɗa yiɗi danndude?"
 
-#: ../tuxpaint.c:2051 ../tuxpaint.c:2056
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "Eey ndannden tawo!"
 
-#: ../tuxpaint.c:2052 ../tuxpaint.c:2057
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "Alaa, soklaani danndude!"
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2055
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "Ndannden natngo maa tawo?"
 
 #. Error opening picture
-#: ../tuxpaint.c:2060
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "Ngal natal jaɓaani udditaade!"
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2063 ../tuxpaint.c:2068 ../tuxpaint.c:2077 ../tuxpaint.c:2084
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "AWA"
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2067
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "Hay piilol gootol danndaaka!"
 
 #. Verification of print action
-#: ../tuxpaint.c:2071
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "Aɗa winnditoo natal maa jooni?"
 
-#: ../tuxpaint.c:2072
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "Eey, winndito!"
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2076
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "Natal maa winnditaama!"
 
 #. We got an error printing
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "Njaafo-ɗaa, natal maa horiima winnditeede."
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2083
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "A waawaa winnditaade tawo!"
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2087
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "Aɗa momta natal ngal??"
 
-#: ../tuxpaint.c:2088
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "Eey, momtu ngal!"
 
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "Alaa, hoto momtu!"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2092
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "Hoto yejjit huutoraade uure nanre doombel ngel!"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2300
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "Hito muumɗinaama."
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2305
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "Hito muuɗitii."
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3052
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "Tiiɗno abbo seeɗa…"
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7608
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "Momtu"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7611
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "Japooje"
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7614
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "Rutto"
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7617
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "Dewwo"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7620
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "Dognu"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8328
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "Aa"
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11586
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "Eey"
 
-#: ../tuxpaint.c:11590
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "Alaa"
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12608
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "Lomtin natal ngal ko mbayluɗaa koo?"
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12612
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "Eey, lomtin natal ɓooyngal ngal!"
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12616
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "Alaa, danndu natal kesal!"
 
-#: ../tuxpaint.c:13861
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "Suɓo natal njiɗ-ɗaa, ndobo-ɗaa \"Uddit\""
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14892 ../tuxpaint.c:15220
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "Suɓo nate njiɗ-ɗaa, ndobo-ɗaa \"Dognu\""
 
-#: ../tuxpaint.c:22159
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "Suɓo noorol."
 
 #: ../tuxpaint.desktop.in.h:1
-msgid "A drawing program for children."
-msgstr "Topirde natgol nde sukaaɓe mbaɗanaa."
+msgid "Tux Paint"
+msgstr "Tux Paint"
 
 #: ../tuxpaint.desktop.in.h:2
 msgid "Drawing program"
 msgstr "Topirde natgol"
 
 #: ../tuxpaint.desktop.in.h:3
-msgid "Tux Paint"
-msgstr "Tux Paint"
+msgid "A drawing program for children."
+msgstr "Topirde natgol nde sukaaɓe mbaɗanaa."
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -742,28 +746,41 @@ msgstr ""
 "Dobo e saraaji natal maa ngam fooɗde ridooji e dow maggal. Dirtin fayde les "
 "walla dow ngam udditde walla uddude."
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "Urtule"
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "Kere"
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "Waadere"
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to make your entire picture blocky."
+msgstr "Dobo ngam niɓɓiɗinde natal ngal fof."
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Dobo, njiilaa doombel ngam waɗtude natal ngal natngo tuufeewo."
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+#, fuzzy
+#| msgid ""
+#| "Click and move the mouse around to turn the picture into a chalk drawing."
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr "Dobo, njiilaa doombel ngam waɗtude natal ngal natgno kereewo."
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr "Dobo, njiilaa doombel ngam waɗtude natal ngal natgno kereewo."
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "Dobo, njiilaa doombel ngam waɗtude natal ngal natgno baade."
 
@@ -804,7 +821,15 @@ msgstr "Dobo, njiilaa doombel ngam narde ŋeñi binndi."
 msgid "Cartoon"
 msgstr "Daarnatol"
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+#, fuzzy
+#| msgid "Click to turn your entire picture into white and a color you choose."
+msgid "Click to turn your entire picture into a cartoon."
+msgstr ""
+"Dobo, njirlaa doombel ngam waɗtude natal ngal fof  ko ranwi e goobu ngu "
+"mbela-ɗaa."
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr "Dobo, njiilaa doombel ngam waɗtude natal ngal daarnatol."
 
@@ -815,6 +840,22 @@ msgstr "Konfetti"
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "Dobo ngam weddaade konfetti."
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "Dobo, ndaasaa doombel ngam ƴuugnude natal ngal."
+
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr "dobo ngam huurde natal ngal fof keeɗe weer."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -828,7 +869,13 @@ msgstr "Dobo, ndaasaa doombel ngel ngam waɗde ooñol e natal maa."
 msgid "Emboss"
 msgstr "Ƴuugnugol"
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to emboss your entire picture."
+msgstr "Dobo ngam niɓɓiɗinde natal ngal fof."
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "Dobo, ndaasaa doombel ngam ƴuugnude natal ngal."
 
@@ -873,19 +920,19 @@ msgstr "Yiytere Liingu"
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr "Dobo e hakkunde natal maa ngam siñcude piltol yitere liingu."
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "Piindi"
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr "dobo, ndaasaa doombel ngam natde piindol, ñoƴƴit ngam wortaade."
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr "Ngufa"
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr "Dobo, ndaasaa doombel ngam huurde ɗoon paali ngufa."
 
@@ -903,24 +950,22 @@ msgid "Fretwork"
 msgstr "Gillere"
 
 #: ../../magic/src/fretwork.c:180
-#| msgid "Click and drag to draw arrows made of string art."
 msgid "Click and drag to draw repetitive patterns. "
 msgstr "Dobo, ndaasaa ngam natde laañe baɗiraaɗe geese. "
 
 #: ../../magic/src/fretwork.c:182
-#| msgid "Click to cover your picture with rain drops."
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "Dobo ngam taarnude natal maa ŋeñ-ŋeñi."
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr "Keeɗe Weer"
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr "Dobo, ndaasaa doombel ngam huurde ɗoon keeɗe weer."
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr "dobo ngam huurde natal ngal fof keeɗe weer."
 
@@ -937,7 +982,6 @@ msgid "Halftone"
 msgstr "Mbeelunnde"
 
 #: ../../magic/src/halftone.c:38
-#| msgid "Click to turn your painting into its negative."
 msgid "Click and drag to turn your drawing into a newspaper."
 msgstr "Dobo ndaasaa ngam waɗtude natannde maa jaaynde."
 
@@ -979,14 +1023,10 @@ msgstr ""
 "dow haa les e nder natal maa."
 
 #: ../../magic/src/kalidescope.c:140
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to draw a pattern across the picture."
 msgstr "Dobo, ndaasaa doombel ngam natde ŋeñ-ŋenol tacco natal ngal."
 
 #: ../../magic/src/kalidescope.c:142
-#| msgid ""
-#| "Click and drag the mouse to draw with two brushes that are symmetric "
-#| "across the left and right of your picture."
 msgid ""
 "Click and drag the mouse to draw a pattern plus its symmetric across the "
 "picture."
@@ -1045,47 +1085,47 @@ msgstr "Dobo, ndaasaa ngam ɓeydude patiwal e bannge e natal maa."
 msgid "Click to add a mosaic effect to your entire picture."
 msgstr "Dobo ngam ɓeydude."
 
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 msgid "Square Mosaic"
 msgstr "Patiwal cawpotngal"
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
 msgstr "Patiwal Jeegoɓiiwal"
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr "Patiwal pottoral"
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr ""
 "Dobo, ndaasaa doombel ngel ngam ɓeydude patiwal cawpotngal bannge e natal "
 "maa."
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "Dobo ngam ɓeydude patiwal e natal ngal fof."
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr ""
 "Dobo, ndaasaa doombel ngel ngam ɓeydude patiwal jeegoɓiiwal bannge e natal "
 "maa."
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "Dobo ngam ɓeydude patiwal jeegoɓiiwal e natal ngal fof."
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr ""
 "Dobo, ndaasaa doombel ngel ngam ɓeydude patiwal pottoral bannge e natal maa."
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 msgid "Click to add an irregular mosaic to your entire picture."
 msgstr "Dobo  ngam ɓeydude patiwal pottoral e natal ngal fof."
 
@@ -1113,33 +1153,33 @@ msgstr "Dobo, ndaasaa doombel ngel ngam ɓeydude iirɗol e bannge e natal maa."
 msgid "Click to add noise to your entire picture."
 msgstr "Dobo ngam ɓeydude iirɗol e natal ngal fof."
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr "Tiimtorol"
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "Dobo e lobbuli hee, ndaasaa fayde to njiɗ-ɗaa ɗiirtude nataal ngal."
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr ""
 "Dobo, ndaasaa fayde dow ngam mawninde walla fayde les ngam famɗinde natal "
 "maa."
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr "Jiiɓorol"
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "Dobo bannge e natal maa ɗo njiɗ-ɗaa waɗde jiiɓorol."
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr "Dobo ngam waɗde jiiɓorol e njaajeendi yaynirde."
 
@@ -1150,6 +1190,14 @@ msgstr "Lappi njoorndi"
 #: ../../magic/src/rails.c:133
 msgid "Click and drag to draw train track rails on your picture."
 msgstr "Dobo, ndaasaa ngam natde lappi laana njoorndi e natal maa."
+
+#: ../../magic/src/rainbow.c:139
+msgid "Rainbow"
+msgstr "Timtimol"
+
+#: ../../magic/src/rainbow.c:146
+msgid "You can draw in rainbow colors!"
+msgstr "Aɗa waawi natde ɗoon noori timtimol."
 
 #: ../../magic/src/rain.c:65
 msgid "Rain"
@@ -1162,14 +1210,6 @@ msgstr "Dobo ngam naatnude waadere toɓo e natal maa."
 #: ../../magic/src/rain.c:69
 msgid "Click to cover your picture with rain drops."
 msgstr "Dobo ngam huurde natal maa baade toɓo."
-
-#: ../../magic/src/rainbow.c:139
-msgid "Rainbow"
-msgstr "Timtimol"
-
-#: ../../magic/src/rainbow.c:146
-msgid "You can draw in rainbow colors!"
-msgstr "Aɗa waawi natde ɗoon noori timtimol."
 
 #: ../../magic/src/realrainbow.c:110
 msgid "Real Rainbow"
@@ -1408,16 +1448,13 @@ msgstr ""
 "daɓɓe, fayde les ngam toowɗe, nano ngam tokoose, ñaamo ngam juutɗe."
 
 #: ../../magic/src/xor.c:95
-#| msgid "Colors"
 msgid "Xor Colors"
 msgstr "Goobuuji Xor"
 
 #: ../../magic/src/xor.c:101
-#| msgid "Click and drag to draw arrows made of string art."
 msgid "Click and drag to draw a XOR effect"
 msgstr "Dobo ndaasaa ngam natde filtere XOR."
 
 #: ../../magic/src/xor.c:103
-#| msgid "Click to add a mosaic effect to your entire picture."
 msgid "Click to draw a XOR effect on the whole picture"
 msgstr "Dobo ngam natde filtere XOR e natal ngal fofof."

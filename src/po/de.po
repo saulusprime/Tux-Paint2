@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-01 08:58+0100\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2014-06-28 21:41+0100\n"
 "Last-Translator: Holger Wansing <hwansing@mailbox.org>\n"
 "Language-Team: Deutsch <debian-l10n-german@lists.debian.org>\n"
@@ -406,7 +406,7 @@ msgstr "Neu"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:8212
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "Öffnen"
 
@@ -539,181 +539,181 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr "OK, dann lass uns dieses Bild weitermalen!"
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2348
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "Möchtest du wirklich aufhören?"
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2351
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "Ja, ich bin fertig!"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2354 ../tuxpaint.c:2381
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "Nein, ich möchte weitermachen!"
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2358
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr ""
 "Wenn du aufhörst, geht dein Bild verloren! Willst du es vorher noch "
 "speichern?"
 
-#: ../tuxpaint.c:2359 ../tuxpaint.c:2364
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "Ja, speichern!"
 
-#: ../tuxpaint.c:2360 ../tuxpaint.c:2365
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "Nein, nicht speichern!"
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2363
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "Willst du dein Bild zuerst noch speichern?"
 
 #. Error opening picture
-#: ../tuxpaint.c:2368
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "Dieses Bild kann nicht geöffnet werden!"
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2371 ../tuxpaint.c:2376 ../tuxpaint.c:2385 ../tuxpaint.c:2392
-#: ../tuxpaint.c:2401
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "OK"
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2375
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "Es gibt noch keine gespeicherten Bilder!"
 
 #. Verification of print action
-#: ../tuxpaint.c:2379
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "Willst du dein Bild jetzt ausdrucken?"
 
-#: ../tuxpaint.c:2380
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "Ja, drucke das Bild!"
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2384
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "Dein Bild wurde gedruckt!"
 
 #. We got an error printing
-#: ../tuxpaint.c:2388
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "Es tut mir Leid! Dein Bild konnte nicht gedruckt werden!"
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2391
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "Du kannst noch nicht drucken!"
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2395
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "Möchtest du dieses Bild löschen?"
 
-#: ../tuxpaint.c:2396
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "Ja, lösche das Bild!"
 
-#: ../tuxpaint.c:2397
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "Nein, nicht löschen!"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2400
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "Denke daran, die linke Maustaste zu benutzen!"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2746
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "Sound ausgeschaltet."
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2751
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "Sound eingeschaltet."
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3498
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "Bitte warten …"
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:8215
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "Löschen"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:8218
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "Diashow"
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:8221
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "Zurück"
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:8224
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "Weiter"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:8227
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "Öffnen"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:9325
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "Aa"
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:12671
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "Ja"
 
-#: ../tuxpaint.c:12675
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "Nein"
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:13606
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "Möchtest du das Bild mit deinen Änderungen überschreiben?"
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:13610
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "Ja, überschreibe das alte Bild!"
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:13614
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "Nein, speichere in eine neue Datei!"
 
-#: ../tuxpaint.c:14863
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "Wähle ein Bild, dass du öffnen willst und klicke auf »Öffnen«."
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:15896 ../tuxpaint.c:16224
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "Wähle ein Bild und klicke auf »Öffnen«."
 
-#: ../tuxpaint.c:23395
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "Wähle eine Farbe."
 
@@ -847,15 +847,15 @@ msgstr "Konfetti "
 msgid "Click to throw confetti!"
 msgstr "Klicke, um Konfetti zu werfen!"
 
-#: ../../magic/src/crossstitch.c:56
+#: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
 msgstr "Kreuzstich"
 
-#: ../../magic/src/crossstitch.c:62
+#: ../../magic/src/crossstitch.c:64
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
 msgstr "Klicke und ziehe die Maus, um das Bild im Kreuzstich zu sticken."
 
-#: ../../magic/src/crossstitch.c:63
+#: ../../magic/src/crossstitch.c:65
 msgid "Click to embroider your entire picture with cross stitches."
 msgstr "Klicke, um dein ganzes Bild im Kreuzstich zu sticken."
 

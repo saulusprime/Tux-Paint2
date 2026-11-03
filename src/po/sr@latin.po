@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint 0.9.15rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-26 17:43+0900\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2010-12-12 00:00+0100\n"
 "Last-Translator: Ivana <reci.ne.silvesteru@gmail.com>\n"
 "Language-Team: Serbian <gnu@prevod.org>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sr\n"
 
 #
 #. Response to Black (0, 0, 0) color selected
@@ -129,11 +129,11 @@ msgstr "Bež"
 #. impossible for a user to type ASCII letters.
 #.
 #. Most translators should use scoring instead.
-#: ../dirwalk.c:164
+#: ../dirwalk.c:168
 msgid "qx"
 msgstr "qx"
 
-#: ../dirwalk.c:164
+#: ../dirwalk.c:168
 msgid "QX"
 msgstr "QX"
 
@@ -143,48 +143,48 @@ msgstr "QX"
 #. especially important for users who have scroll buttons disabled.
 #. Translators should do whatever is needed to put crummy fonts last.
 #. distinct uppercase and lowercase (e.g., 'o' vs. 'O')
-#: ../dirwalk.c:191
+#: ../dirwalk.c:195
 msgid "oO"
 msgstr "oO"
 
 #. common punctuation (e.g., '?', '!', '.', ',', etc.)
-#: ../dirwalk.c:194
+#: ../dirwalk.c:198
 msgid ",.?!"
 msgstr ",.?!"
 
 #. uncommon punctuation (e.g., '@', '#', '*', etc.)
-#: ../dirwalk.c:197
+#: ../dirwalk.c:201
 msgid "`\\%_@$~#{<(^&*"
 msgstr "`\\%_@$~#{}<>^&*"
 
 #. digits (e.g., '0', '1' and '7')
-#: ../dirwalk.c:200
+#: ../dirwalk.c:204
 msgid "017"
 msgstr "017"
 
 #. distinct circle-like characters (e.g., 'O' (capital oh) vs. '0' (zero))
-#: ../dirwalk.c:203
+#: ../dirwalk.c:207
 msgid "O0"
 msgstr "O0"
 
 #. distinct line-like characters (e.g., 'l' (lowercase elle) vs. '1' (one) vs. 'I' (capital aye))
-#: ../dirwalk.c:206
+#: ../dirwalk.c:210
 msgid "1Il|"
 msgstr "1Il|"
 
-#: ../dirwalk.c:210
+#: ../dirwalk.c:214
 msgid "<1>spare-1a"
 msgstr "<1>spare-1a"
 
-#: ../dirwalk.c:211
+#: ../dirwalk.c:215
 msgid "<1>spare-1b"
 msgstr "<1>spare-1b"
 
-#: ../dirwalk.c:212
+#: ../dirwalk.c:216
 msgid "<9>spare-9a"
 msgstr "<9>spare-9a"
 
-#: ../dirwalk.c:213
+#: ../dirwalk.c:217
 msgid "<9>spare-9b"
 msgstr "<9>spare-9b"
 
@@ -438,7 +438,7 @@ msgstr "Novi"
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7605
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "Otvori"
 
@@ -591,212 +591,216 @@ msgstr "Dobro onda… Hajde da nastavimo sa crtanjem!"
 
 #
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2040
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "Stvarno želiš da završiš?"
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2043
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "Da, završeno je!"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2046 ../tuxpaint.c:2073
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "Ne, vrati me!"
 
 #
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2050
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "Izgubićeš sliku ako završiš! Da se sačuva?"
 
-#: ../tuxpaint.c:2051 ../tuxpaint.c:2056
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "Da, sačuvaj je!"
 
-#: ../tuxpaint.c:2052 ../tuxpaint.c:2057
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "Ne, ne želim da sačuvam!"
 
 #
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2055
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "Prvo da sačuvaš svoju sliku?"
 
 #
 #. Error opening picture
-#: ../tuxpaint.c:2060
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "Ne mogu da otvorim tu sliku!"
 
 #
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2063 ../tuxpaint.c:2068 ../tuxpaint.c:2077 ../tuxpaint.c:2084
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "U redu"
 
 #
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2067
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "Nema sačuvanih datoteka!"
 
 #
 #. Verification of print action
-#: ../tuxpaint.c:2071
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "Sada štampaš svoju sliku?"
 
-#: ../tuxpaint.c:2072
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "Da, odštampaj!"
 
 #
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2076
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "Tvoje slika je odštampana!"
 
 #
 #. We got an error printing
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "Izvini! Tvoja slika ne može da se odštampa!"
 
 #
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2083
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "Ne možeš još da štampaš!"
 
 #
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2087
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "Obrisati ovu sliku?"
 
-#: ../tuxpaint.c:2088
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "Da, obriši je!"
 
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "Ne, ne briši je!"
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2092
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "Zapamti da koristiš levo dugme miša!"
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2300
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "Utišan zvuk"
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2305
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "Uključen zvuk."
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3052
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "Molim te, sačekaj..."
 
 #
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7608
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "Briši"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7611
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "Niz"
 
 #
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7614
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "Nazad"
 
 #
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7617
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "Sledeće"
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7620
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "Igraj"
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8328
+#: ../tuxpaint.c:9511
 msgid "Aa"
 msgstr "Aa"
 
 #
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11586
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "Da"
 
 #
-#: ../tuxpaint.c:11590
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "Ne"
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12608
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "Zameni prethodnu sliku izmenjenom?"
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12612
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "Da, zameni prethodnu!"
 
 #
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12616
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "Ne, sačuvaj u novu datoteku!"
 
 #
-#: ../tuxpaint.c:13861
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr "Izaberi sliku koju želiš, zatim klikni „Otvori“."
 
 #
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14892 ../tuxpaint.c:15220
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "Izaberi sliku koju želiš, zatim klikni „Igraj“."
 
-#: ../tuxpaint.c:22159
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "Izaberi boju."
 
+#
 #: ../tuxpaint.desktop.in.h:1
-msgid "A drawing program for children."
-msgstr "Dečji program za crtanje"
+msgid "Tux Paint"
+msgstr "Taks Crtanje"
 
 #: ../tuxpaint.desktop.in.h:2
 msgid "Drawing program"
 msgstr "Program za crtanje"
 
-#
 #: ../tuxpaint.desktop.in.h:3
-msgid "Tux Paint"
-msgstr "Taks Crtanje"
+msgid "A drawing program for children."
+msgstr "Dečji program za crtanje"
+
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -825,33 +829,48 @@ msgstr ""
 "pravac da digneš ili spustiš zavese."
 
 #
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "Grubo"
 
 #
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "Kreda"
 
 #
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "Curi"
 
 #
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to make your entire picture blocky."
+msgstr "Klikni i pomeraj miša da bi se potamnila cela tvoja slika."
+
+#
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Klikni i pomeraj miša da bi ogrubeo sliku."
 
 #
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+#, fuzzy
+#| msgid ""
+#| "Click and move the mouse around to turn the picture into a chalk drawing."
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr "Klikni i šetaj miša da bi pretvorio sliku u crtež kredom."
+
+#
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr "Klikni i šetaj miša da bi pretvorio sliku u crtež kredom."
 
 #
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "Klikni i šetaj miša da bi boje na slici procurile."
 
@@ -900,7 +919,14 @@ msgid "Cartoon"
 msgstr "Crtež"
 
 #
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+#, fuzzy
+#| msgid "Click to turn your entire picture into white and a color you choose."
+msgid "Click to turn your entire picture into a cartoon."
+msgstr "Klikni da tvoja cela slika iz bele pređe u izabranu boju."
+
+#
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr "Klikni i šetaj miša da bi pretvorio sliku u crtež."
 
@@ -911,6 +937,25 @@ msgstr "Konfete"
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "Klikni da baciš konfete!"
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "Klikni i mrdaj mišem da bi slika postala reljefna."
+
+#
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr ""
+"Klikni i pomeraj miša da cela slika bila prekrivena staklenim pločicama."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -926,7 +971,14 @@ msgid "Emboss"
 msgstr "Reljefno"
 
 #
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+#, fuzzy
+#| msgid "Click to darken your entire picture."
+msgid "Click to emboss your entire picture."
+msgstr "Klikni i pomeraj miša da bi se potamnila cela tvoja slika."
+
+#
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "Klikni i mrdaj mišem da bi slika postala reljefna."
 
@@ -978,20 +1030,20 @@ msgstr "Riblje oko"
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr "Klikni na deo tvoje slike da bi nastao efekat ribljeg oka."
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "Cvet"
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr "Kliknii prevuci da nacrtaš stabljiku cveta. Pusti da završiš cvet."
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr "Mehurići"
 
 #
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr "Klikni u sliku da bi popunio tu oblast balončićima sacapunice."
 
@@ -1021,18 +1073,18 @@ msgstr "Klikni i mrdaj mišem da bi zamaglio sliku."
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "Klikni da bi slika bila prekrivena kapljicama kiše."
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr "Staklene pločice"
 
 #
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr ""
 "Klikni i pomeraj mišem da bi slika bila prekrivena staklenim pločicama."
 
 #
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr ""
 "Klikni i pomeraj miša da cela slika bila prekrivena staklenim pločicama."
@@ -1177,49 +1229,49 @@ msgid "Click to add a mosaic effect to your entire picture."
 msgstr "Klikni da dodaš mozaik efekt na celu sliku."
 
 #
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 msgid "Square Mosaic"
 msgstr "Kvadratni mozaik"
 
 #
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
 msgstr "Šestougaoni mozaik"
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
 msgstr "Nepravilam mozaik"
 
 #
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr "Klikni  i pomeraj mišem za kvadratni mozaik na delu slike."
 
 #
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "Klikni i dodaj kvadratni mozaik na celoj slici."
 
 #
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr "Klikni  i pomeraj mišem za šestougaoni mozaik na delu slike."
 
 #
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "Klikni i dodaj šestougaoni mozaik na celoj slici."
 
 #
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr "Klikni  i pomeraj mišem za nepravilni mozaik na delu slike."
 
 #
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 msgid "Click to add an irregular mosaic to your entire picture."
 msgstr "Klikni i dodaj nepravilni mozaik na celoj slici."
 
@@ -1252,37 +1304,37 @@ msgstr "Klikni  i pomeraj mišem za dodavanje šuma na delu slike."
 msgid "Click to add noise to your entire picture."
 msgstr "Klikni i dodaj šum na celu sliku."
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
 msgstr "Perspektiva"
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
 msgstr "Zumiraj"
 
 #
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "Klikni na ugao i povuci miša tamo gde želiš da zategneš sliku."
 
 #
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr ""
 "Klikni  i povuci na gore da uvećaš ili povuci na dole da umanjiš sliku."
 
 #
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 msgid "Puzzle"
 msgstr "Slagalica"
 
 #
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "Klikni na deo slike na kome želiš slagalicu."
 
 #
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 msgid "Click to make a puzzle in fullscreen mode."
 msgstr "Klikni da napraviš slagalicu na celom ekranu."
 
@@ -1294,6 +1346,16 @@ msgstr "Šine"
 #: ../../magic/src/rails.c:133
 msgid "Click and drag to draw train track rails on your picture."
 msgstr "Klikni i mrdaj mišem da nacrtaš železničku prugu na slici."
+
+#
+#: ../../magic/src/rainbow.c:139
+msgid "Rainbow"
+msgstr "Duga"
+
+#
+#: ../../magic/src/rainbow.c:146
+msgid "You can draw in rainbow colors!"
+msgstr "Možeš crtati u duginim bojama!"
 
 #
 #: ../../magic/src/rain.c:65
@@ -1309,16 +1371,6 @@ msgstr "Klikni da postaviš kišne kapi na tvoju sliku."
 #: ../../magic/src/rain.c:69
 msgid "Click to cover your picture with rain drops."
 msgstr "Klikni da bi slika bila prekrivena kapljicama kiše."
-
-#
-#: ../../magic/src/rainbow.c:139
-msgid "Rainbow"
-msgstr "Duga"
-
-#
-#: ../../magic/src/rainbow.c:146
-msgid "You can draw in rainbow colors!"
-msgstr "Možeš crtati u duginim bojama!"
 
 #
 #: ../../magic/src/realrainbow.c:110

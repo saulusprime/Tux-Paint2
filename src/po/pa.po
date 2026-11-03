@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tuxpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 21:03+0200\n"
+"POT-Creation-Date: 2026-11-02 19:27+0100\n"
 "PO-Revision-Date: 2013-02-04 21:03+0200\n"
 "Last-Translator: Arshpreet singh <EMAIL@ADDRESS>\n"
 "Language-Team: none>\n"
@@ -122,11 +122,11 @@ msgstr "ਫਿੱਕਾ ਸੰਤਰੀ "
 #. Most translators should use scoring instead.
 #: ../dirwalk.c:168
 msgid "qx"
-msgstr ""
+msgstr "qx"
 
 #: ../dirwalk.c:168
 msgid "QX"
-msgstr ""
+msgstr "QX"
 
 #. TODO: weight specification
 #. Now we score fonts to ensure that the best ones will be placed at
@@ -136,12 +136,12 @@ msgstr ""
 #. distinct uppercase and lowercase (e.g., 'o' vs. 'O')
 #: ../dirwalk.c:195
 msgid "oO"
-msgstr ""
+msgstr "oO"
 
 #. common punctuation (e.g., '?', '!', '.', ',', etc.)
 #: ../dirwalk.c:198
 msgid ",.?!"
-msgstr ""
+msgstr ",.?!"
 
 #. uncommon punctuation (e.g., '@', '#', '*', etc.)
 #: ../dirwalk.c:201
@@ -151,17 +151,17 @@ msgstr ""
 #. digits (e.g., '0', '1' and '7')
 #: ../dirwalk.c:204
 msgid "017"
-msgstr ""
+msgstr "017"
 
 #. distinct circle-like characters (e.g., 'O' (capital oh) vs. '0' (zero))
 #: ../dirwalk.c:207
 msgid "O0"
-msgstr ""
+msgstr "O0"
 
 #. distinct line-like characters (e.g., 'l' (lowercase elle) vs. '1' (one) vs. 'I' (capital aye))
 #: ../dirwalk.c:210
 msgid "1Il|"
-msgstr ""
+msgstr "1Il|"
 
 #: ../dirwalk.c:214
 msgid "<1>spare-1a"
@@ -207,27 +207,27 @@ msgstr "ਅੰਗਰੇਜ਼ੀ "
 #. Input Method: Japanese Romanized Hiragana mode
 #: ../im.c:78
 msgid "Hiragana"
-msgstr ""
+msgstr "ਹੀਰਾਗਾਨਾ"
 
 #. Input Method: Japanese Romanized Katakana mode
 #: ../im.c:81
 msgid "Katakana"
-msgstr ""
+msgstr "ਕਾਟਾਕਾਨਾ"
 
 #. Input Method: Korean Hangul 2-Bul mode
 #: ../im.c:84
 msgid "Hangul"
-msgstr ""
+msgstr "ਹੁੰਗਲ"
 
 #. Input Method: Thai mode
 #: ../im.c:87
 msgid "Thai"
-msgstr ""
+msgstr "ਥਾਈ"
 
 #. Input Method: Traditional Chinese mode
 #: ../im.c:90
 msgid "ZH_TW"
-msgstr ""
+msgstr "ZH_TW"
 
 #. Square shape tool (4 equally-lengthed sides at right angles)
 #: ../shapes.h:171 ../shapes.h:172
@@ -372,7 +372,7 @@ msgstr "ਅਖਰ "
 #. Label tool
 #: ../tools.h:77
 msgid "Label"
-msgstr ""
+msgstr "ਚਿੱਟ"
 
 #. Undo last action
 #: ../tools.h:86
@@ -397,7 +397,7 @@ msgstr "ਨਵਾਂ "
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:7631
+#: ../tools.h:98 ../tuxpaint.c:8354
 msgid "Open"
 msgstr "ਖੋਲੋ "
 
@@ -525,179 +525,179 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr "ਚਲੋ ਠੀਕ ਹੈ ਇਸਨੂੰ ਬਨਾਓ "
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2053
+#: ../tuxpaint.c:2526
 msgid "Do you really want to quit?"
 msgstr "ਕੀ ਤੁਸੀਂ ਸਚੀਂਂ ਬੰਦ ਕਰਨਾ ਚਾਉਂਦੇ ਹੋ "
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2056
+#: ../tuxpaint.c:2529
 msgid "Yes, I’m done!"
 msgstr "ਹਾਂ ਜੀ"
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2059 ../tuxpaint.c:2086
+#: ../tuxpaint.c:2532 ../tuxpaint.c:2559
 msgid "No, take me back!"
 msgstr "ਨਹੀ ਜੀ ਵਾਪਸ ਜਾਓ "
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2063
+#: ../tuxpaint.c:2536
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr "ਜੇ ਤੁਸੀਂ ਬੰਦ ਕੀਤਾ ਤਾਂ ਤੁਹਾਡੀ ਪੈਂਟਿੰਗ ਸੇਵ  ਨਹੀ ਹੋਵੇਗੀ "
 
-#: ../tuxpaint.c:2064 ../tuxpaint.c:2069
+#: ../tuxpaint.c:2537 ../tuxpaint.c:2542
 msgid "Yes, save it!"
 msgstr "ਹਾਂ ਸੇਵ ਕਰੋ "
 
-#: ../tuxpaint.c:2065 ../tuxpaint.c:2070
+#: ../tuxpaint.c:2538 ../tuxpaint.c:2543
 msgid "No, don’t bother saving!"
 msgstr "ਨਹੀਂ ਸੇਵ ਨਾਂ ਕਰੋ "
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2068
+#: ../tuxpaint.c:2541
 msgid "Save your picture first?"
 msgstr "ਪਹਿਲਾਂ ਆਪਣੀ ਪੇਂਟਿੰਗ ਸੇਵ ਕਰਨਾ ਚਾਹੋਗੇ ?"
 
 #. Error opening picture
-#: ../tuxpaint.c:2073
+#: ../tuxpaint.c:2546
 msgid "Can’t open that picture!"
 msgstr "ਤਸਵੀਰ ਖੋਲ ਨਹੀ ਸਕਦੇ ?"
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2076 ../tuxpaint.c:2081 ../tuxpaint.c:2090 ../tuxpaint.c:2097
-#: ../tuxpaint.c:2106
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554 ../tuxpaint.c:2563 ../tuxpaint.c:2570
+#: ../tuxpaint.c:2579
 msgid "OK"
 msgstr "ਠੀਕ ਹੈ "
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2080
+#: ../tuxpaint.c:2553
 msgid "There are no saved files!"
 msgstr "ਆਪਣੀ ਬਣਾਈ ਫੋਟੋ ਦਾ ਪ੍ਰਿੰਟ ਕਢੋ "
 
 #. Verification of print action
-#: ../tuxpaint.c:2084
+#: ../tuxpaint.c:2557
 msgid "Print your picture now?"
 msgstr "ਆਪਣੀ ਬਣਾਈ ਫੋਟੋ ਦਾ ਪ੍ਰਿੰਟ ਕਢੋ "
 
-#: ../tuxpaint.c:2085
+#: ../tuxpaint.c:2558
 msgid "Yes, print it!"
 msgstr "ਹਾਂ , ਪ੍ਰਿੰਟ ਕਢੋ "
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2089
+#: ../tuxpaint.c:2562
 msgid "Your picture has been printed!"
 msgstr "ਤੁਹਾਡੀ ਤਸਵੀਰ ਦਾ ਪ੍ਰਿੰਟ ਬਣ ਗਿਆ ਹੈ "
 
 #. We got an error printing
-#: ../tuxpaint.c:2093
+#: ../tuxpaint.c:2566
 msgid "Sorry! Your picture could not be printed!"
 msgstr "ਮਾਫ਼ ਕਰਨਾ ਤੁਹਾਡੀ ਤਸਵੀਰ ਦਾ ਪ੍ਰਿੰਟ ਨਹੀ ਹੋ ਸਕਦਾ "
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2096
+#: ../tuxpaint.c:2569
 msgid "You can’t print yet!"
 msgstr "ਤੁਸੀਂ ਹਾਲੇ ਪ੍ਰਿੰਟ ਨਹੀ ਕਢ ਸਕਦੇ "
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2100
+#: ../tuxpaint.c:2573
 msgid "Erase this picture?"
 msgstr "ਇਸ ਤਸਵੀਰ ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਉਂਦੇ  ਹੋ ?"
 
-#: ../tuxpaint.c:2101
+#: ../tuxpaint.c:2574
 msgid "Yes, erase it!"
 msgstr "ਹਾਂ ਮਿਟਾਓ "
 
-#: ../tuxpaint.c:2102
+#: ../tuxpaint.c:2575
 msgid "No, don’t erase it!"
 msgstr "ਨਹੀ ਇਸਨੂੰ ਨਾਂ ਮਿਟਾਓ "
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2105
+#: ../tuxpaint.c:2578
 msgid "Remember to use the left mouse button!"
 msgstr "ਮਾਓਸ ਦਾ ਖੱਬਾ ਕਲਿਕ ਬਟਨ ਦੱਬੋ "
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2313
+#: ../tuxpaint.c:2888
 msgid "Sound muted."
 msgstr "ਸੰਗੀਤ ਬੰਦ "
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2318
+#: ../tuxpaint.c:2893
 msgid "Sound unmuted."
 msgstr "ਸੰਗੀਤ ਸ਼ੁਰੂ "
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3065
+#: ../tuxpaint.c:3640
 msgid "Please wait…"
 msgstr "ਕਿਰਪਾ ਕਰਕੇ ਰੁਕੋ ..."
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:7634
+#: ../tuxpaint.c:8357
 msgid "Erase"
 msgstr "ਮਿਟਾਓ"
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:7637
+#: ../tuxpaint.c:8360
 msgid "Slides"
 msgstr "ਫੋਟੋਆਂ "
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:7640
+#: ../tuxpaint.c:8363
 msgid "Back"
 msgstr "ਪਿਛੇ "
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:7643
+#: ../tuxpaint.c:8366
 msgid "Next"
 msgstr "ਅੱਗੇ "
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:7646
+#: ../tuxpaint.c:8369
 msgid "Play"
 msgstr "ਚਲਾਓ "
 
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:8355
+#: ../tuxpaint.c:9511
 msgid "Aa"
-msgstr ""
+msgstr "Aa"
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:11664
+#: ../tuxpaint.c:12869
 msgid "Yes"
 msgstr "ਹਾਂ "
 
-#: ../tuxpaint.c:11668
+#: ../tuxpaint.c:12873
 msgid "No"
 msgstr "ਨਹੀ "
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:12710
+#: ../tuxpaint.c:13843
 msgid "Replace the picture with your changes?"
 msgstr "ਨਵੀ ਬਣਾਈ ਫੋਟੋ ਸੇਵ ਕਰੋ ਪੁਰਾਨੀ ਨਹੀ "
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:12714
+#: ../tuxpaint.c:13847
 msgid "Yes, replace the old one!"
 msgstr "ਹਾਂ, ਪੁਰਾਨੀ ਦੀ ਥਾਂ ਨਵੀ ਕਰੋ  "
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:12718
+#: ../tuxpaint.c:13851
 msgid "No, save a new file!"
 msgstr "ਨਹੀ, ਨਵੀ ਫਾਇਲ ਸੇਵ ਕਰੋ "
 
-#: ../tuxpaint.c:13963
+#: ../tuxpaint.c:15108
 msgid "Choose the picture you want, then click “Open”."
 msgstr " ਜਿਹੜੀ ਤਸਵੀਰ ਤੁਸੀਂ  ਖੋਲਨਾ ਚੁਣਦੇ ਓ ਉਸ ਤੇ ਕਲਿਕ ਕਰੋ "
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:14994 ../tuxpaint.c:15322
+#: ../tuxpaint.c:16171 ../tuxpaint.c:16531
 msgid "Choose the pictures you want, then click “Play”."
 msgstr "ਜਿਹੜੀ ਤਸਵੀਰ ਤੁਸੀਂ  ਖੋਲਨਾ ਚੁਣਦੇ ਓ ਉਸ ਤੇ ਕਲਿਕ ਕਰੋ "
 
-#: ../tuxpaint.c:22344
+#: ../tuxpaint.c:23766
 msgid "Pick a color."
 msgstr "ਇੱਕ ਰੰਗ ਚੁਕੋ "
 
@@ -713,6 +713,10 @@ msgstr "ਪੇਂਟਿੰਗ ਕਰਨ ਵਾਲਾ ਸੋਫਟਵੇਰ  "
 msgid "A drawing program for children."
 msgstr "ਬਚਿਆਂ ਵਾਸਤੇ ਪੇਂਟਿੰਗ ਕਰਨ ਵਾਲਾ ਸੋਫਟਵੇਰ  "
 
+#: ../tuxpaint.desktop.in.h:4
+msgid "Full screen"
+msgstr ""
+
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
 msgstr "ਰੰਗ ਬਦਲੋ  "
@@ -727,37 +731,47 @@ msgstr "  ਮਾਉਸ ਕਲਿਕ  ਦੀ  ਮਦਦ ਨਾਲ ਪੂਰੀ �
 
 #: ../../magic/src/blind.c:117
 msgid "Blind"
-msgstr ""
+msgstr "ਪੜਦੇ"
 
 #: ../../magic/src/blind.c:122
 msgid ""
 "Click towards the edge of your picture to pull window blinds over it. Move "
 "perpendicularly to open or close the blinds."
 msgstr ""
+"ਆਪਣੀ ਤਸਵੀਰ ਉੱਤੇ ਖਿੜਕੀ ਦੇ ਪੜਦਿਆਂ ਦਾ ਪ੍ਰਭਾਵ ਪਾਉਣ ਲਈ ਕੋਨਿਆਂ ਵਿੱਚ ਕਲਿੱਕ ਕਰੋ। ਪੜਦੇ ਖੋਲ੍ਹਣ ਜਾਂ "
+"ਬੰਦ ਕਰਨ ਲਈ ਲੰਬਕਾਰੀ ਰੂਪ ਵਿੱਚ ਹਿਲਾਓ।"
 
-#: ../../magic/src/blocks_chalk_drip.c:136
+#: ../../magic/src/blocks_chalk_drip.c:139
 msgid "Blocks"
 msgstr "ਬਲਾਕ "
 
-#: ../../magic/src/blocks_chalk_drip.c:138
+#: ../../magic/src/blocks_chalk_drip.c:141
 msgid "Chalk"
 msgstr "ਚਾਕ "
 
-#: ../../magic/src/blocks_chalk_drip.c:140
+#: ../../magic/src/blocks_chalk_drip.c:143
 msgid "Drip"
 msgstr "ਬੂੰਦ "
 
-#: ../../magic/src/blocks_chalk_drip.c:150
+#: ../../magic/src/blocks_chalk_drip.c:153
+msgid "Click to make your entire picture blocky."
+msgstr "ਪੂਰੀ ਤਸਵੀਰ ਨੂੰ ਗੂੜ੍ਹਾ ਬਣਾਉਣ ਲਈ ਕਲਿੱਕ ਕਰੋ।"
+
+#: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "ਕਲਿਕ ਕਰੋ ਅਤੇ ਮਾਓਸ ਦੀ ਮਦਦ ਨਾਲ ਆਪਣੀ ਤਸਵੀਰ ਨੂ ਬਲਾਕ ਵਿਚ ਲੈ ਕੇ ਆਓ "
 
-#: ../../magic/src/blocks_chalk_drip.c:153
+#: ../../magic/src/blocks_chalk_drip.c:159
+msgid "Click to turn your entire picture into a chalk drawing."
+msgstr "ਸਾਰੀ ਤਸਵੀਰ ਨੂੰ ਚਾਕ ਡਰਾਇੰਗ ਵਿੱਚ ਬਦਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ।"
+
+#: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
 "Click and move the mouse around to turn the picture into a chalk drawing."
 msgstr ""
 "  ਕਲਿਕ ਕਰੋ ਅਤੇ ਮਾਓਸ ਦੀ ਮਦਦ ਨਾਲ ਆਪਣੀ ਤਸਵੀਰ ਨੂੰ ਸਲੇਟੀ ਨਾਲ ਬਣਾਈ ਹੋਈ ਪੇਂਟਿੰਗ ਵਿਚ ਬਦਲੋ "
 
-#: ../../magic/src/blocks_chalk_drip.c:156
+#: ../../magic/src/blocks_chalk_drip.c:165
 msgid "Click and move the mouse around to make the picture drip."
 msgstr "ਕਲਿਕ ਕਰੋ ਅਤੇ ਮਾਓਸ ਦੀ ਮਦਦ ਨਾਲ ਆਪਣੀ ਤਸਵੀਰ ਨੂੰ ਬੂੰਦਾਂ ਵਿਚ ਬਦਲੋ "
 
@@ -798,7 +812,11 @@ msgstr " ਮਾਓਸ ਦੀ ਮਦਦ ਨਾਲ ਕੈਲੀਗ੍ਰਾਫੀ 
 msgid "Cartoon"
 msgstr "ਕਾਰਟੂਨ "
 
-#: ../../magic/src/cartoon.c:113
+#: ../../magic/src/cartoon.c:114
+msgid "Click to turn your entire picture into a cartoon."
+msgstr "ਪੂਰੀ ਤਸਵੀਰ ਨੂੰ ਕਾਰਟੂਨ ਵਿੱਚ ਬਦਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ।"
+
+#: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਕਾਰਟੂਨ  ਬਨਾਓ "
 
@@ -809,6 +827,22 @@ msgstr "ਕਨਫ਼ੈਟੀ "
 #: ../../magic/src/confetti.c:87
 msgid "Click to throw confetti!"
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਕਨਫ਼ੈਟੀ ਬਨਾਓ"
+
+#: ../../magic/src/crossstitch.c:58
+msgid "Cross Stitch"
+msgstr ""
+
+#: ../../magic/src/crossstitch.c:64
+#, fuzzy
+#| msgid "Click and drag the mouse to emboss the picture."
+msgid "Click and drag the mouse to embroider the picture with cross stitches."
+msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਏਮਬੋਸ ਕਰੋ "
+
+#: ../../magic/src/crossstitch.c:65
+#, fuzzy
+#| msgid "Click to cover your entire picture in glass tiles."
+msgid "Click to embroider your entire picture with cross stitches."
+msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ ਤਸਵੀਰ ਵਿਚ  ਗਲਾਸ ਟਾਈਟਲ ਬਨਾਓ"
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -822,7 +856,11 @@ msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਬਦਲੋ"
 msgid "Emboss"
 msgstr "ਏਮਬੋਸ"
 
-#: ../../magic/src/emboss.c:109
+#: ../../magic/src/emboss.c:110
+msgid "Click to emboss your entire picture."
+msgstr "ਪੂਰੀ ਤਸਵੀਰ ਲਈ ਨੱਕਾਸ਼ੀ ਵਾਸਤੇ ਕਲਿੱਕ ਕਰੋ।"
+
+#: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਏਮਬੋਸ ਕਰੋ "
 
@@ -867,19 +905,19 @@ msgstr "ਮਛੀ ਅੱਖ"
 msgid "Click on part of your picture to create a fisheye effect."
 msgstr "ਕਲਿਕ ਕਰੋ ਅਤੇ ਮਾਓਸ ਦੀ ਮਦਦ ਨਾਲ ਮਛੀ ਅੱਖ ਬਨਾਓ"
 
-#: ../../magic/src/flower.c:150
+#: ../../magic/src/flower.c:151
 msgid "Flower"
 msgstr "ਫੁੱਲ "
 
-#: ../../magic/src/flower.c:156
+#: ../../magic/src/flower.c:157
 msgid "Click and drag to draw a flower stalk. Let go to finish the flower."
 msgstr " ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਫੁੱਲ ਚੁਕੋ ਅਤੇ ਆਪਣੀ ਤਸਵੀਰ ਵਿਚ ਰਖੋ"
 
-#: ../../magic/src/foam.c:121
+#: ../../magic/src/foam.c:220
 msgid "Foam"
 msgstr "ਬੁਲਬੁਲੇ"
 
-#: ../../magic/src/foam.c:127
+#: ../../magic/src/foam.c:226
 msgid "Click and drag the mouse to cover an area with foamy bubbles."
 msgstr " ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਤਸਵੀਰ ਵਿਚ ਬੁਲਬੁਲੇ ਬਨਾਓ "
 
@@ -894,7 +932,7 @@ msgstr "ਤਸਵੀਰ ਦਾ ਬੈਕਗਰਾਊਂਡ ਰੰਗ ਬਦਲ�
 
 #: ../../magic/src/fretwork.c:176
 msgid "Fretwork"
-msgstr ""
+msgstr "ਫਰੇਟਵਰਕ"
 
 #: ../../magic/src/fretwork.c:180
 #, fuzzy
@@ -908,15 +946,15 @@ msgstr "ਸਿਧੇ ਤੀਰ ਬਨਾਓ"
 msgid "Click to surround your picture with repetitive patterns."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ ਤਸਵੀਰ ਵਿਚ ਮੀਹ ਦੀਆਂ ਬੂੰਦਾਂ ਭਰੋ "
 
-#: ../../magic/src/glasstile.c:107
+#: ../../magic/src/glasstile.c:123
 msgid "Glass Tile"
 msgstr " ਗਲਾਸ ਟਾਈਟਲ"
 
-#: ../../magic/src/glasstile.c:114
+#: ../../magic/src/glasstile.c:130
 msgid "Click and drag the mouse to put glass tile over your picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਗਲਾਸ ਟਾਈਟਲ ਬਨਾਓ "
 
-#: ../../magic/src/glasstile.c:116
+#: ../../magic/src/glasstile.c:132
 msgid "Click to cover your entire picture in glass tiles."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ ਤਸਵੀਰ ਵਿਚ  ਗਲਾਸ ਟਾਈਟਲ ਬਨਾਓ"
 
@@ -930,7 +968,7 @@ msgstr "  ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਤਸਵੀਰ 
 
 #: ../../magic/src/halftone.c:34
 msgid "Halftone"
-msgstr ""
+msgstr "ਅਰਧ-ਟੋਨ"
 
 #: ../../magic/src/halftone.c:38
 #, fuzzy
@@ -940,15 +978,15 @@ msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤ�
 
 #: ../../magic/src/kalidescope.c:120
 msgid "Symmetric Left/Right"
-msgstr ""
+msgstr "ਇਕਸਾਰ ਖੱਬੇ/ਸੱਜੇ"
 
 #: ../../magic/src/kalidescope.c:122
 msgid "Symmetric Up/Down"
-msgstr ""
+msgstr "ਇਕਸਾਰ ਉੱਤੇ/ਹੇਠਾਂ"
 
 #: ../../magic/src/kalidescope.c:124
 msgid "Pattern"
-msgstr ""
+msgstr "ਪੈਟਰਨ"
 
 #: ../../magic/src/kalidescope.c:126
 #, fuzzy
@@ -1033,7 +1071,7 @@ msgstr "   ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਤਸਵੀਰ
 
 #: ../../magic/src/mosaic.c:100
 msgid "Mosaic"
-msgstr ""
+msgstr "ਰੰਗੀਲਾ ਚਿੱਤਰ"
 
 #: ../../magic/src/mosaic.c:103
 msgid ""
@@ -1042,56 +1080,56 @@ msgstr ""
 
 #: ../../magic/src/mosaic.c:104
 msgid "Click to add a mosaic effect to your entire picture."
-msgstr ""
+msgstr "ਆਪਣੀ ਪੂਰੀ ਤਸਵੀਰ ਲਈ ਰੰਗੀਲਾ ਪ੍ਰਭਾਵ ਜੋੜਨ ਲਈ ਕਲਿੱਕ ਕਰੋ।"
 
-#: ../../magic/src/mosaic_shaped.c:142
+#: ../../magic/src/mosaic_shaped.c:144
 #, fuzzy
 #| msgid "Square"
 msgid "Square Mosaic"
 msgstr "ਵਰਗ "
 
-#: ../../magic/src/mosaic_shaped.c:143
+#: ../../magic/src/mosaic_shaped.c:145
 msgid "Hexagon Mosaic"
-msgstr ""
+msgstr "ਛੇ-ਭੁਜੀ ਰੰਗੀਲਾ ਚਿੱਤਰ"
 
-#: ../../magic/src/mosaic_shaped.c:144
+#: ../../magic/src/mosaic_shaped.c:146
 msgid "Irregular Mosaic"
-msgstr ""
+msgstr "ਅਨਿਯਮਤ ਰੰਗੀਲਾ ਚਿੱਤਰ"
 
-#: ../../magic/src/mosaic_shaped.c:149
+#: ../../magic/src/mosaic_shaped.c:153
 #, fuzzy
 #| msgid "Click and move the mouse to add noise to parts of your picture."
 msgid ""
 "Click and move the mouse to add a square mosaic to parts of your picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤਸਵੀਰ ਵਿਚ ਆਵਾਜ਼ ਭਰੋ "
 
-#: ../../magic/src/mosaic_shaped.c:150
+#: ../../magic/src/mosaic_shaped.c:154
 #, fuzzy
 #| msgid "Click to add noise to your entire picture."
 msgid "Click to add a square mosaic to your entire picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤਸਵੀਰ ਵਿਚ ਆਵਾਜ਼ ਭਰੋ "
 
-#: ../../magic/src/mosaic_shaped.c:152
+#: ../../magic/src/mosaic_shaped.c:158
 #, fuzzy
 #| msgid "Click and move the mouse to add noise to parts of your picture."
 msgid ""
 "Click and move the mouse to add a hexagonal mosaic to parts of your picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤਸਵੀਰ ਵਿਚ ਆਵਾਜ਼ ਭਰੋ "
 
-#: ../../magic/src/mosaic_shaped.c:153
+#: ../../magic/src/mosaic_shaped.c:159
 #, fuzzy
 #| msgid "Click to add noise to your entire picture."
 msgid "Click to add a hexagonal mosaic to your entire picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤਸਵੀਰ ਵਿਚ ਆਵਾਜ਼ ਭਰੋ "
 
-#: ../../magic/src/mosaic_shaped.c:155
+#: ../../magic/src/mosaic_shaped.c:163
 #, fuzzy
 #| msgid "Click and move the mouse to add noise to parts of your picture."
 msgid ""
 "Click and move the mouse to add an irregular mosaic to parts of your picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤਸਵੀਰ ਵਿਚ ਆਵਾਜ਼ ਭਰੋ "
 
-#: ../../magic/src/mosaic_shaped.c:156
+#: ../../magic/src/mosaic_shaped.c:164
 #, fuzzy
 #| msgid "Click to add noise to your entire picture."
 msgid "Click to add an irregular mosaic to your entire picture."
@@ -1121,39 +1159,39 @@ msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤ�
 msgid "Click to add noise to your entire picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਪੂਰੀ  ਤਸਵੀਰ ਵਿਚ ਆਵਾਜ਼ ਭਰੋ "
 
-#: ../../magic/src/perspective.c:145
+#: ../../magic/src/perspective.c:142
 msgid "Perspective"
-msgstr ""
+msgstr "ਪਰਿਪੇਖ"
 
-#: ../../magic/src/perspective.c:146
+#: ../../magic/src/perspective.c:143
 msgid "Zoom"
-msgstr ""
+msgstr "ਜ਼ੂਮ"
 
-#: ../../magic/src/perspective.c:151
+#: ../../magic/src/perspective.c:148
 #, fuzzy
 #| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click on the corners and drag where you want to stretch the picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਏਮਬੋਸ ਕਰੋ "
 
-#: ../../magic/src/perspective.c:154
+#: ../../magic/src/perspective.c:151
 #, fuzzy
 #| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag up to zoom in or drag down to zoom out the picture."
 msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ ਏਮਬੋਸ ਕਰੋ "
 
-#: ../../magic/src/puzzle.c:105
+#: ../../magic/src/puzzle.c:99
 #, fuzzy
 #| msgid "Purple!"
 msgid "Puzzle"
 msgstr "ਫਿੱਕਾ ਜਾਮਨੀ"
 
-#: ../../magic/src/puzzle.c:112
+#: ../../magic/src/puzzle.c:106
 #, fuzzy
 #| msgid "Click on part of your picture to create a fisheye effect."
 msgid "Click the part of your picture where would you like a puzzle."
 msgstr "ਕਲਿਕ ਕਰੋ ਅਤੇ ਮਾਓਸ ਦੀ ਮਦਦ ਨਾਲ ਮਛੀ ਅੱਖ ਬਨਾਓ"
 
-#: ../../magic/src/puzzle.c:113
+#: ../../magic/src/puzzle.c:107
 #, fuzzy
 #| msgid "Click to make a mirror image."
 msgid "Click to make a puzzle in fullscreen mode."
@@ -1205,11 +1243,11 @@ msgstr "ਜਿਥੋ ਸਤਰੰਗੀ ਪੀਂਘ ਸ਼ੁਰੂ ਕਰਨੀ �
 
 #: ../../magic/src/ripples.c:106
 msgid "Ripples"
-msgstr ""
+msgstr "ਲਹਿਰ"
 
 #: ../../magic/src/ripples.c:112
 msgid "Click to make ripples appear over your picture."
-msgstr ""
+msgstr "ਆਪਣੀ ਤਸਵੀਰ ਉੱਤੇ ਤਰੰਗਾਂ ਬਣਾਉਣ ਲਈ ਕਲਿੱਕ ਕਰੋ।"
 
 #: ../../magic/src/rosette.c:116
 msgid "Rosette"
@@ -1217,7 +1255,7 @@ msgstr ""
 
 #: ../../magic/src/rosette.c:116
 msgid "Picasso"
-msgstr ""
+msgstr "ਪਿਕਾਸੋ"
 
 #: ../../magic/src/rosette.c:121
 msgid "Click and start drawing your rosette."
@@ -1273,7 +1311,7 @@ msgstr "ਮਾਓਸ ਕਲਿਕ  ਦੀ ਮਦਦ ਨਾਲ  ਤਸਵੀਰ �
 
 #: ../../magic/src/smudge.c:106
 msgid "Smudge"
-msgstr ""
+msgstr "ਧੱਬਾ"
 
 #. if (which == 1)
 #: ../../magic/src/smudge.c:108
@@ -1295,7 +1333,7 @@ msgstr " ਜਿਸ ਹਿੱਸੇ ਨੂੰ  ਧੁੰਦਲਾ  ਬਨਾਓ�
 
 #: ../../magic/src/snow.c:68
 msgid "Snow Ball"
-msgstr ""
+msgstr "ਬਰਫ਼ ਦਾ ਗੋਲਾ"
 
 #: ../../magic/src/snow.c:69
 msgid "Snow Flake"
@@ -1303,7 +1341,7 @@ msgstr ""
 
 #: ../../magic/src/snow.c:72
 msgid "Click to add snow balls to your picture."
-msgstr ""
+msgstr "ਆਪਣੀ ਤਸਵੀਰ ਉੱਤੇ ਬਰਫ਼ ਦੀਆਂ ਗੇਂਦਾਂ ਜੋੜਨ ਲਈ ਕਲਿੱਕ ਕਰੋ।"
 
 #: ../../magic/src/snow.c:73
 msgid "Click to add snow flakes to your picture."
@@ -1311,15 +1349,15 @@ msgstr ""
 
 #: ../../magic/src/string.c:123
 msgid "String edges"
-msgstr ""
+msgstr "ਸਤਰ ਕੋਨੇ"
 
 #: ../../magic/src/string.c:126
 msgid "String corner"
-msgstr ""
+msgstr "ਸਤਰ ਕੋਨੇ"
 
 #: ../../magic/src/string.c:129
 msgid "String 'V'"
-msgstr ""
+msgstr "ਸਤਰ 'V'"
 
 #: ../../magic/src/string.c:137
 msgid ""
