@@ -308,6 +308,17 @@ $Id: AUTHORS.txt,v 1.291 2014/08/16 14:28:00 perepujal Exp $
   * Frame-neon
     Caroline Ford <caroline.ford.work@googlemail.com>
 
+  * Clock, School (and the school templates)
+    Paolo Pierno
+
+  * Italy, regions (worldmap_italy)
+    Paolo Pierno
+    Region boundaries: Istat, "Confini delle unità amministrative a fini
+    statistici al 1° gennaio 2026" (generalized version),
+    https://www.istat.it/, licence CC BY 4.0; simplified and redrawn
+    (devtools/content/italy_map.py).
+    Neighbouring countries: Natural Earth, public domain.
+
 * Fonts
 
   * DejaVu Sans
