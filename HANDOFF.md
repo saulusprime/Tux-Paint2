@@ -114,18 +114,33 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Traduzioni, cartina, documentazione | `79764ea`…`8783ffa` (su `content/l10n-more`) | tutti i cataloghi allineati al modello, con i buchi riempiti dalle traduzioni del Tux Paint di oggi; frasi del fork in 52 lingue in più; lanciatore rigenerato dai cataloghi; Starter con la cartina dell'Italia e le regioni; OPTIONS e FAQ in italiano (§5quater, ASIS) |
 | Strumenti e magie | `799621f`…`6f79f5d` (su `feature/tools`) | Blocks, Chalk, Cartoon, Emboss e Puzzle a tutta immagine; Punto croce (plugin nuovo); Schiuma colorata; Mezzatinta con un angolo per inchiostro; suoni per Halftone, Puzzle, Color & White; tastiera a schermo con i caratteri di Maiuscolo e AltGr, e i caratteri oltre U+FFFF; etichette lunghe su due righe; rettangolo da aggiornare in 10 plugin; due leak (§5quinquies, ASIS) |
 
-- **Cartelle di supporto in `~/.cache`** (sull'host):
+- **Cartelle di supporto in `~/.cache`** (sull'host; al 2026-11-03):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
+    (`ec9ebe3`, la 0.9.22 che compila) e i suoi plugin in `plugins-0922/`
     (§5bis);
-  - `tuxpaint-test-canon/`: cartella di salvataggio con due disegni, da
-    copiare in `tuxpaint-test/` prima delle prove dei dialoghi;
+  - `tuxpaint-test/`: cartella di salvataggio delle prove;
+    `tuxpaint-test-canon/`, con due disegni, si copia lì prima delle prove
+    dei dialoghi;
   - `tuxpaint-test-xdg/`: Cestino di prova;
   - `tuxpaint-test-data/` (con `plugins/README` senza punto e un modello
     magenta) e `tuxpaint-test-data2/` (solo il modello): cartelle dati di
     prova per `--datadir`. Il riferimento va in crash con la prima;
-  - `tuxpaint-asan/` (`quality/fixme`) e `tuxpaint-asan-base/` (`master`):
-    worktree con build AddressSanitizer (§5ter); `nodlclose.so`, compilata
-    da `devtools/ui-test/nodlclose.c`.
+  - `tuxpaint-asan/` (staccato a `41af788`, i dialoghi alla nuova
+    dimensione) e `tuxpaint-asan-base/` (`e5a0cdc`, un `master` del
+    2026-10-30): worktree con build AddressSanitizer (§5ter), da portare
+    al commit da provare; `tp-asan/`, i loro rapporti; `nodlclose.so`,
+    compilata da `devtools/ui-test/nodlclose.c`;
+  - `tp-magic/`: `magic_run` e le immagini di prova dei plugin
+    (§5quinquies);
+  - `tp-tools/`: potrace (`bin/`, `lib/`) e gli script di confronto delle
+    icone tracciate (§5bis);
+  - `tp-map/`: confini Istat (`istat-2026/`) e paesi di Natural Earth
+    (`naturalearth/`) per la cartina (§5quater);
+  - `tp-upstream/`: i cataloghi `po/` del Tux Paint di oggi e il commit da
+    cui vengono (§5quater);
+  - `tp-snd/` (spettrogrammi dei suoni sintetizzati) e `tp-idx/` (una
+    copia di `onscreen_keyboard.c`): avanzi di lavori chiusi, si possono
+    cancellare.
 
 ## 2. Mappa del repository
 
@@ -1969,5 +1984,6 @@ Verifiche (desktop fermo, con il permesso dell'utente, in due giri):
 - Tutti i cataloghi passano `msgfmt --check`.
 
 Stato alla chiusura: branch attivo `content/l10n-more`, installato in
-`~/.local`; da provare a mano e unire in `master`. Nulla caricato su
-`github`.
+`~/.local`; da provare a mano e unire in `master`. Su richiesta
+dell'utente, il 2026-11-03 il branch è caricato su `github`, dove `master`
+resta a `ab1c9b8`.
