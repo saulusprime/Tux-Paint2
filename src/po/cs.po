@@ -725,7 +725,7 @@ msgstr "Kreslicí program pro děti."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Celá obrazovka"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -764,10 +764,8 @@ msgid "Drip"
 msgstr "Kapání"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Klikni pro ztmavení celého obrázku."
+msgstr "Kliknutím rozkostičkuješ celý obrázek."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
@@ -775,11 +773,8 @@ msgstr ""
 "Pohybem myši vytvoříš mozaiku z kostiček. Klepnutím rozkostičkuješ část."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Pohybem myši po čáře získáš vzhled čáry od křídy."
+msgstr "Klikni pro přeměnu celého obrázku na kresbu křídou."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -830,10 +825,8 @@ msgid "Cartoon"
 msgstr "Komiks"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Klikni pro převedení celého obrázku do bílé, nebo tebou vybrané barvy."
+msgstr "Kliknutím získáš komiksový vzhled celého obrázku."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -849,19 +842,15 @@ msgstr "Klikni pro házení konfet!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Křížkový steh"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Kliknutím, nebo tažením myši protlačíš vybrané části obrázku."
+msgstr "Kliknutím a tažením myši vyšiješ obrázek křížkovým stehem."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Klikni pro pokrytí celého obrazu skleněnými dlaždicemi."
+msgstr "Klikni pro vyšití celého obrázku křížkovým stehem."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -876,10 +865,8 @@ msgid "Emboss"
 msgstr "Protlačení"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Klikni pro ztmavení celého obrázku."
+msgstr "Klikni pro protlačení celého obrázku."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

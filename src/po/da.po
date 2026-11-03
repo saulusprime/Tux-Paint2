@@ -728,7 +728,7 @@ msgstr "Et tegneprogram for børn."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Fuld skærm"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -767,22 +767,16 @@ msgid "Drip"
 msgstr "Dryp"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Klik for at formørke hele dit billede."
+msgstr "Klik for at gøre hele dit billede »ternet«."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Klik og bevæg musen rundt for at gøre billedet »ternet«."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Klik og bevæg musen rundt for at få billedet til at ligne en kridt tegning."
+msgstr "Klik for at få hele dit billede til at ligne en kridttegning."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -832,10 +826,8 @@ msgid "Cartoon"
 msgstr "Karikatur"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Klik for at gøre hele dit billede hvidt og i en farve efter dit valg."
+msgstr "Klik for at karikere hele dit billede."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -851,19 +843,15 @@ msgstr "Klik for at kaste konfetti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Korssting"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Klik og bevæg musen rundt, for at tydeliggøre billedet."
+msgstr "Klik og bevæg musen rundt, for at brodere billedet med korssting."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Klik for at dække hele dit billede i glasruder."
+msgstr "Klik for at brodere hele dit billede med korssting."
 
 # Overvejelser: forvrængning, forvanskning, fordrejning 
 #: ../../magic/src/distortion.c:142
@@ -881,10 +869,8 @@ msgid "Emboss"
 msgstr "Tydeliggør"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Klik for at formørke hele dit billede."
+msgstr "Klik for at tydeliggøre hele dit billede."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

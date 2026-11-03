@@ -734,10 +734,8 @@ msgid "A drawing program for children."
 msgstr "子供向けお絵描きプログラム"
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "Tux Paint (Fullscreen)"
+msgstr "フルスクリーン"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -854,19 +852,16 @@ msgstr "クリックして かみふぶきを とばそう"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "クロスステッチ"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "クリックしたまま マウスをうごかして えを うきぼりに しよう"
+msgstr ""
+"クリックしたまま マウスをうごかして えを クロスステッチで ししゅうしよう。"
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "えを　クリックして　ぜんたいに　ガラスの　タイルを　かぶせよう"
+msgstr "えを クリックして ぜんたいを クロスステッチで ししゅうしよう。"
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

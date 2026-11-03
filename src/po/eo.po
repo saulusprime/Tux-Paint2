@@ -721,7 +721,7 @@ msgstr "Desegnoprogramo por infanoj."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Plenekrane"
 
 #: ../../magic/src/alien.c:64
 #, fuzzy
@@ -761,21 +761,16 @@ msgid "Drip"
 msgstr "Gutigi"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Klaku  por malheligi vian tutan bildon."
+msgstr "Alklaku por igi la tutan bildon blokeca."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Alklaku kaj movu la muson por igi la bildon blokeca."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Alklaku kaj movu la muson por ŝanĝi la bildon en kretodesegnaĵon."
+msgstr "Alklaku por ŝanĝi la tutan bildon en kretodesegnaĵon."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -824,10 +819,8 @@ msgid "Cartoon"
 msgstr "Karikaturigi"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Alklaku por ŝanĝi la tutan bildon al blanka kaj koloro kiun vi elektu."
+msgstr "Alklaku por ŝanĝi la tutan bildon al karikaturo."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -843,18 +836,15 @@ msgstr "Alklaku por ĵeti konfeton!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Kruca kudrero"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Alklaku kaj movu la muson por bosi la bildon."
+msgstr "Alklaku kaj movu la muson por brodi la bildon per krucaj kudreroj."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Alklaku la muson por kovri la tutan bildon per vitraj kaĥeloj."
+msgstr "Alklaku por brodi la tutan bildon per krucaj kudreroj."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -870,10 +860,8 @@ msgid "Emboss"
 msgstr "Bosado"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Klaku  por malheligi vian tutan bildon."
+msgstr "Alklaku por reliefigi la tutan bildon."
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy

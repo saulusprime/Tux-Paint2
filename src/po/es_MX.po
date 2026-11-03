@@ -733,7 +733,7 @@ msgstr "Un programa de dibujo para niños."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Pantalla completa"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -772,23 +772,16 @@ msgid "Drip"
 msgstr "Gotear"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
 msgid "Click to make your entire picture blocky."
-msgstr ""
-"Haz clic y arrastra el ratón alrededor para cambiar el color de la imagen."
+msgstr "Haz clic para cuadricular toda la imagen."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Haz clic y arrastra el ratón alrededor para cuadricular la imagen."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Haz clic y mueve el ratón alrededor para convertir la pintura en un dibujo "
-"de tiza."
+msgstr "Haz clic para convertir toda la imagen en un dibujo de tiza."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -842,11 +835,8 @@ msgid "Cartoon"
 msgstr "Caricatura"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Haz clic y arrastra el ratón alrededor para convertir la imagen en una "
-"caricatura."
+msgstr "Haz clic para convertir toda la imagen en una caricatura."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -864,20 +854,15 @@ msgstr ""
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Punto de cruz"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr ""
-"Haz clic y arrastra el ratón para crear un grabado en relieve de la imagen."
+msgstr "Haz clic y arrastra el ratón para bordar la imagen a punto de cruz."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr ""
-"Haz clic y arrastra el ratón alrededor para cambiar el color de la imagen."
+msgstr "Haz clic para bordar toda la imagen a punto de cruz."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -894,10 +879,8 @@ msgid "Emboss"
 msgstr "Grabar en relieve"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
 msgid "Click to emboss your entire picture."
-msgstr ""
-"Haz clic y arrastra el ratón alrededor para cambiar el color de la imagen."
+msgstr "Haz clic para crear un grabado en relieve de toda la imagen."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

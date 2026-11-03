@@ -6,8 +6,8 @@
 # Like src/po/update-po.sh, but needs only the gettext tools (no intltool,
 # which Debian 13 doesn't install by default), and merges only the
 # languages given instead of all of them. It doesn't rebuild
-# src/tuxpaint.desktop: its translations come from the .po files and are
-# kept in sync by hand.
+# src/tuxpaint.desktop, whose translations come from the .po files:
+# devtools/po/update-desktop.py does.
 
 set -e
 

@@ -743,7 +743,7 @@ msgstr "برنامج رسومات للأطفال."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "ملء الشاشة"
 
 #: ../../magic/src/alien.c:64
 #, fuzzy
@@ -790,21 +790,16 @@ msgid "Drip"
 msgstr "قطرة"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "انقر وحرك الماوس لتقليل الاضاءه على صورتك."
+msgstr "انقر لتقسيم الصورة كلها إلى قطع."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "انقر وحرّكُ الفأرة على الصورة لتقسيمها إلى قطع."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "انقر وحرّكُ الفأرة على الصورة لتحويلها إلى رسمة طبشورية."
+msgstr "انقر لتحويل الصورة كلها إلى رسمة طبشورية."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -853,10 +848,8 @@ msgid "Cartoon"
 msgstr "كرتون , كاريكاتور"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "انقر وحرك الفأره نحو لتحويل صورتك إلى اللون الأبيض و لون تختاره ."
+msgstr "انقر لتحويل الصورة كلها إلى رسمة كرتونية."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -872,19 +865,15 @@ msgstr "اضغط الفأره لتلقي بقصاصات من الورق المل
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "غرزة متقاطعة"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "انقر واسحب الماوس لزخرفه الصورة بطريقه بارزه "
+msgstr "انقر واسحب الفأرة لتطريز الصورة بغرز متقاطعة."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "انقر الماوس لوضع  بلاط من الزجاج على كل صورتك"
+msgstr "انقر لتطريز الصورة كلها بغرز متقاطعة."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -899,10 +888,8 @@ msgid "Emboss"
 msgstr "زين بنقوش بارزة"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "انقر وحرك الماوس لتقليل الاضاءه على صورتك."
+msgstr "انقر لزخرفة الصورة كلها بطريقة بارزة."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

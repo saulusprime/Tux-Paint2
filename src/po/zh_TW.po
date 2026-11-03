@@ -879,7 +879,7 @@ msgstr "適合兒童的畫圖程式"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "全螢幕"
 
 #  msgid "Shift"
 #: ../../magic/src/alien.c:64
@@ -917,21 +917,16 @@ msgid "Drip"
 msgstr "水滴"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "按一下來使整張圖畫變暗。"
+msgstr "按一下來使整張圖畫有馬賽克效果。"
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "按著並移動滑鼠來使圖畫有馬賽克效果。"
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "按著並移動滑鼠來產生粉筆的痕跡。"
+msgstr "按一下來使整張圖畫變成粉筆畫。"
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -981,10 +976,8 @@ msgid "Cartoon"
 msgstr "卡通"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "按一下來使整張圖案變成白色和你挑選的顏色。"
+msgstr "按一下來將整張圖畫變成卡通風格。"
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -1000,19 +993,15 @@ msgstr "按一下來拋出紙花"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "十字繡"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "按著並移動滑鼠來彎折圖畫。"
+msgstr "按著並移動滑鼠來使圖畫變成十字繡。"
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "按一下來使整張圖畫覆蓋上玻璃磚。"
+msgstr "按一下來使整張圖畫變成十字繡。"
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -1027,10 +1016,8 @@ msgid "Emboss"
 msgstr "浮雕"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "按一下來使整張圖畫變暗。"
+msgstr "按一下來使整張圖畫產生浮雕效果。"
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

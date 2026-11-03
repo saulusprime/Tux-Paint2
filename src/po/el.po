@@ -732,7 +732,7 @@ msgstr "Ένα πρόγραμμα ζωγραφικής για παιδιά."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Πλήρης οθόνη"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -773,23 +773,17 @@ msgid "Drip"
 msgstr "Στάξιμο"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Κάνε κλικ για να σκουρήνεις ολόκληρη τη ζωγραφιά σου."
+msgstr "Κάνε κλικ για να κάνεις ολόκληρη τη ζωγραφιά σου κομματάκια."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Κάνε κλικ και κίνησε το ποντίκι για να κάνεις τη ζωγραφιά κομματάκια."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
 msgstr ""
-"Κάνε κλικ και κίνησε το ποντίκι για να μετατρέψεις τη ζωγραφιά σε σχέδιο με "
-"κιμωλία."
+"Κάνε κλικ για να μετατρέψεις ολόκληρη τη ζωγραφιά σου σε σχέδιο με κιμωλία."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -841,12 +835,9 @@ msgid "Cartoon"
 msgstr "Σκίτσο"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
 msgstr ""
-"Κάνε κλικ για να μετατρέψεις τη ζωγραφιά σου σε άσπρη και σε ένα χρώμα της "
-"επιλογής σου."
+"Κάνε κλικ για να κάνεις ολόκληρη τη ζωγραφιά σου να μοιάζει με καρτούν."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -864,19 +855,16 @@ msgstr "Κάνε κλικ για να πετάξεις χαρτοπόλεμο!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Σταυροβελονιά"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Κάνε κλικ και σύρε το ποντίκι για να κάνεις την εικόνα ανάγλυφη."
+msgstr ""
+"Κάνε κλικ και σύρε το ποντίκι για να κεντήσεις τη ζωγραφιά με σταυροβελονιά."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Κάνε κλικ για να καλύψεις ολόκληρη τη ζωγραφιά σου με υαλότουβλα."
+msgstr "Κάνε κλικ για να κεντήσεις ολόκληρη τη ζωγραφιά σου με σταυροβελονιά."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -893,10 +881,8 @@ msgid "Emboss"
 msgstr "Ανάγλυφο"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Κάνε κλικ για να σκουρήνεις ολόκληρη τη ζωγραφιά σου."
+msgstr "Κάνε κλικ για να κάνεις ολόκληρη τη ζωγραφιά σου ανάγλυφη."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

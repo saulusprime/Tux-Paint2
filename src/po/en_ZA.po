@@ -735,7 +735,7 @@ msgstr "A drawing program for children."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Full screen"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -776,21 +776,16 @@ msgid "Drip"
 msgstr "Drip"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
 msgid "Click to make your entire picture blocky."
-msgstr "Click and move the mouse around to change the picture’s colour."
+msgstr "Click to make your entire picture blocky."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Click and move the mouse around to make the picture blocky."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Click and move the mouse around to turn the picture into a chalk drawing."
+msgstr "Click to turn your entire picture into a chalk drawing."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -844,9 +839,8 @@ msgid "Cartoon"
 msgstr "Cartoon"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Click and move the mouse around to turn the picture into a cartoon."
+msgstr "Click to turn your entire picture into a cartoon."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -862,17 +856,15 @@ msgstr "Click to throw confetti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Cross Stitch"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Click and move the mouse around to blur the picture."
+msgstr "Click and drag the mouse to embroider the picture with cross stitches."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Click and move the mouse around to change the picture’s colour."
+msgstr "Click to embroider your entire picture with cross stitches."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -888,9 +880,8 @@ msgid "Emboss"
 msgstr "Emboss"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
 msgid "Click to emboss your entire picture."
-msgstr "Click and move the mouse around to change the picture’s colour."
+msgstr "Click to emboss your entire picture."
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy

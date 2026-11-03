@@ -724,10 +724,8 @@ msgid "A drawing program for children."
 msgstr "Ett ritprogram för barn."
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "Rita med Tux (helskärm)"
+msgstr "Helskärm"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -841,19 +839,15 @@ msgstr "Klicka för att kasta konfetti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Korsstygn"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Klicka och dra med musen för att göra bilden till en relief."
+msgstr "Klicka och dra med musen för att brodera bilden med korsstygn."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Klicka för att täcka hela din bild i glasblock."
+msgstr "Klicka för att brodera hela bilden med korsstygn."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

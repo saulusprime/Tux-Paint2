@@ -743,7 +743,7 @@ msgstr "Piešimo programa vaikams."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Visas ekranas"
 
 #: ../../magic/src/alien.c:64
 #, fuzzy
@@ -784,20 +784,16 @@ msgid "Drip"
 msgstr "Varveklis"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
 msgid "Click to make your entire picture blocky."
-msgstr "Spustelėkite ir judindami pelę pakeisite piešinio spalvas."
+msgstr "Spustelėkite ir išskaidysite visą piešinį kvadratėliais."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Spustelėkite ir judindami pelę išskaidysite piešinį kvadratėliais."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Spustelėkite ir judinkite pelę ir piešinys taps panašus į kreida"
+msgstr "Spustelėkite ir visas piešinys atrodys lyg nupieštas kreida."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -850,9 +846,8 @@ msgid "Cartoon"
 msgstr "Karikatūra"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Spustelėkite ir judinkite pelę kol piešinys taps panašus į karikatūrą."
+msgstr "Spustelėkite ir visas piešinys taps panašus į karikatūrą."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -868,17 +863,15 @@ msgstr ""
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Siuvinėjimas kryželiu"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Spustelėkite ir pele pritaikykite reljefo efektą."
+msgstr "Spustelėkite ir judindami pelę išsiuvinėsite piešinį kryželiu."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Spustelėkite ir judindami pelę pakeisite piešinio spalvas."
+msgstr "Spustelėkite ir išsiuvinėsite visą piešinį kryželiu."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -894,9 +887,8 @@ msgid "Emboss"
 msgstr "Reljefo efektas"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
 msgid "Click to emboss your entire picture."
-msgstr "Spustelėkite ir judindami pelę pakeisite piešinio spalvas."
+msgstr "Spustelėkite ir visam piešiniui pritaikysite reljefo efektą."
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy

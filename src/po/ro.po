@@ -745,7 +745,7 @@ msgstr "Un program de desenat pentru copii."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Ecran complet"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -784,22 +784,16 @@ msgid "Drip"
 msgstr "Picătură"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Click pentru a închide culoarea întregii picturi."
+msgstr "Click pentru a face tot desenul pătrăţos."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Click şi mişcă mouse-ul pentru a face desenul pătrăţos."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Click şi mişcă maus-ul pentru a schimba pictura într-un desen din cretă."
+msgstr "Click pentru a schimba întreaga pictură într-un desen din cretă."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -849,12 +843,8 @@ msgid "Cartoon"
 msgstr "Desen animat"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Click şi mişcă mouse-ul pentru a transforma întreaga pictură în alb şi într-"
-"o culoare la alegere."
+msgstr "Click pentru a transforma întreaga pictură în desen animat."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -872,19 +862,15 @@ msgstr "Click pentru a împrăştia confetti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Cusătură în cruce"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Click şi trage mouse-ul pentru a grava pictura."
+msgstr "Click şi trage mouse-ul pentru a broda pictura cu cusături în cruce."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Click pentru a acoperi toată pictura cu ţigle de sticlă."
+msgstr "Click pentru a broda întreaga pictură cu cusături în cruce."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -899,10 +885,8 @@ msgid "Emboss"
 msgstr "Gravaj"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Click pentru a închide culoarea întregii picturi."
+msgstr "Click pentru a grava întreaga pictură."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

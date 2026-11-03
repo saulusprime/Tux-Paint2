@@ -732,7 +732,7 @@ msgstr "Maalausohjelma lapsille."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Koko näyttö"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -771,21 +771,16 @@ msgid "Drip"
 msgstr "Pisara"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Tummenna koko maalauksesi hiirtä napsauttamalla."
+msgstr "Rakeista koko maalauksesi hiirtä napsauttamalla."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Rakeista maalaus painamalla hiiren painiketta."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Muuta piirros liitupiirrokseksi painamalla hiiren painiketta."
+msgstr "Muuta koko maalauksesi liitupiirrokseksi hiirtä napsauttamalla."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -834,12 +829,8 @@ msgid "Cartoon"
 msgstr "Ääriviivat"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Muuta koko maalauksesi kaksiväriseksi (valitsemasi väri ja valkoinen) hiirtä "
-"raahaamalla."
+msgstr "Muuta koko maalauksesi ääriviivapiirrokseksi hiirtä napsauttamalla."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -857,19 +848,15 @@ msgstr "Heitä konfetteja (värikkäitä paperipaloja) hiirtä napsauttamalla."
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Ristipisto"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Korosta maalausta raahaamalla hiirtä."
+msgstr "Kirjo maalaukseen ristipistoja raahaamalla hiirtä."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Peitä koko maalauksesi lasiruudukolla hiirtä napsauttamalla."
+msgstr "Kirjo koko maalaukseesi ristipistoja hiirtä napsauttamalla."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -884,10 +871,8 @@ msgid "Emboss"
 msgstr "Korosta"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Tummenna koko maalauksesi hiirtä napsauttamalla."
+msgstr "Korosta koko maalaustasi hiirtä napsauttamalla."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

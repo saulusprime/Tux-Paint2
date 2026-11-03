@@ -800,7 +800,7 @@ msgstr "Дечји програм за цртање"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Цео екран"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -845,10 +845,8 @@ msgstr "Цури"
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Кликни и померај миша да би се потамнила цела твоја слика."
+msgstr "Кликни да би огрубео целу слику."
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:156
@@ -857,11 +855,8 @@ msgstr "Кликни и померај миша да би огрубео сли�
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Кликни и шетај миша да би претворио слику у цртеж кредом."
+msgstr "Кликни да би претворио целу слику у цртеж кредом."
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:162
@@ -920,10 +915,8 @@ msgstr "Цртеж"
 
 #
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Кликни да твоја цела слика из беле пређе у изабрану боју."
+msgstr "Кликни да би претворио целу слику у цртеж."
 
 #
 #: ../../magic/src/cartoon.c:117
@@ -940,22 +933,17 @@ msgstr "Кликни да бациш конфете!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Вез крстићем"
 
 #
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Кликни и мрдај мишем да би слика постала рељефна."
+msgstr "Кликни и мрдај мишем да би извезао слику крстићем."
 
 #
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr ""
-"Кликни и померај миша да цела слика била прекривена стакленим плочицама."
+msgstr "Кликни да би извезао целу слику крстићем."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -972,10 +960,8 @@ msgstr "Рељефно"
 
 #
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Кликни и померај миша да би се потамнила цела твоја слика."
+msgstr "Кликни да би цела слика постала рељефна."
 
 #
 #: ../../magic/src/emboss.c:112

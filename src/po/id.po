@@ -729,7 +729,7 @@ msgstr "Adalah sebuah program gambar untuk anak-anak."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Layar penuh"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -768,23 +768,16 @@ msgid "Drip"
 msgstr "Drip"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Klik untuk menggelapkan seluruh gambar."
+msgstr "Klik untuk membuat seluruh gambar anda berblok."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Klik dan pindah mouse ke sekitar untuk membuat gambar berblok."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Klik dan pindahkan mouse ke sekitar untuk merubah gambar ke gambar dengan "
-"kapur."
+msgstr "Klik untuk mengubah seluruh gambar anda menjadi gambar dengan kapur."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -835,12 +828,8 @@ msgid "Cartoon"
 msgstr "Kartun"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Klik untuk merubah seluruh gambar menjadi putih dan sebuah warna yang anda "
-"pilih."
+msgstr "Klik untuk mengubah seluruh gambar anda menjadi kartun."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -857,19 +846,15 @@ msgstr "Klik untuk melempar konfeti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Kristik"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Klik dan tarik mouse untuk meng-emboss gambar."
+msgstr "Klik dan tarik mouse untuk menyulam gambar dengan kristik."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Klik untuk menutupi seluruh gambar anda dengan glass tile."
+msgstr "Klik untuk menyulam seluruh gambar anda dengan kristik."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -884,10 +869,8 @@ msgid "Emboss"
 msgstr "Emboss"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Klik untuk menggelapkan seluruh gambar."
+msgstr "Klik untuk meng-emboss seluruh gambar anda."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

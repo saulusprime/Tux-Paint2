@@ -720,10 +720,8 @@ msgid "A drawing program for children."
 msgstr "Một chương trình vẽ cho đứa bé."
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "Tux Sơn (Toàn màn hình)"
+msgstr "Toàn màn hình"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -843,19 +841,15 @@ msgstr "Ấn để ném hoa giấy !"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Thêu chữ thập"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Ấn và kéo chuột để làm nổi hình ảnh."
+msgstr "Ấn và kéo chuột để biến hình ảnh thành tranh thêu chữ thập."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Nhấn vào để trải ra toàn bộ hình ảnh dùng gạch thủy tinh."
+msgstr "Nhấn để biến toàn bộ tranh thành tranh thêu chữ thập."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

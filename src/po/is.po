@@ -722,10 +722,8 @@ msgid "A drawing program for children."
 msgstr "Teikniforrit fyrir krakka."
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "Tux Paint (skjáfylli)"
+msgstr "Fylla skjá"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -839,19 +837,15 @@ msgstr "Smelltu til að kasta skrauti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Krosssaumur"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Smelltu og dragðu músina til að upphleypa myndina."
+msgstr "Smelltu og dragðu músina til að sauma myndina út með krosssaumi."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Smelltu til að brjóta myndina þína upp í glerflísar."
+msgstr "Smelltu til að sauma alla myndina út með krosssaumi."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

@@ -724,7 +724,7 @@ msgstr "Un programa de debuxo para nenos."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Pantalla completa"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -763,22 +763,16 @@ msgid "Drip"
 msgstr "Pingar"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Preme para escurecer todo o debuxo."
+msgstr "Preme para cuadricular todo o debuxo."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Preme e move o rato para cuadricular o debuxo."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Preme e move o rato para para converter o debuxo nun debuxo feito con xiz."
+msgstr "Preme para converter todo o debuxo nun debuxo feito con xiz."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -828,10 +822,8 @@ msgid "Cartoon"
 msgstr "Cómic"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Preme para que o debuxo se converta a branco máis a cor que escollas."
+msgstr "Preme para converter todo o debuxo nun debuxo de cómic."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -848,18 +840,15 @@ msgstr "Preme para lanzar confeti."
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Punto de cruz"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Preme e move o rato para desenfocar o debuxo."
+msgstr "Preme e arrastra o rato para bordar o debuxo con punto de cruz."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Preme para cubrir todo o debuxo con azulexos de vidro."
+msgstr "Preme para bordar todo o debuxo con punto de cruz."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -874,10 +863,8 @@ msgid "Emboss"
 msgstr "Realzar"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Preme para escurecer todo o debuxo."
+msgstr "Preme para realzar todo o debuxo."
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy

@@ -723,7 +723,7 @@ msgstr "Un programa de dibuix per als menuts."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Pantalla completa"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -763,10 +763,8 @@ msgid "Drip"
 msgstr "Goteja"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Feu clic per a enfosquir tota la imatge."
+msgstr "Feu clic per a fer quadradets en tota la imatge."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
@@ -774,13 +772,8 @@ msgstr ""
 "Feu clic i moveu el ratolí per la zona per a fer quadradets en la imatge."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Feu clic i moveu el ratolí per la zona per a convertir la imatge en un "
-"dibuix fet amb guix."
+msgstr "Feu clic per a convertir tota la imatge en un dibuix fet amb guix."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -831,10 +824,8 @@ msgid "Cartoon"
 msgstr "Vinyeta"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Feu clic per a convertir tota la imatge a blanc i un color a triar."
+msgstr "Feu clic per a convertir tota la imatge en una vinyeta."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -852,19 +843,16 @@ msgstr "Feu clic per a llançar paperets!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Punt de creu"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Feu clic i arrossegueu el ratolí per a fer la imatge en relleu."
+msgstr ""
+"Feu clic i arrossegueu el ratolí per a brodar la imatge amb punt de creu."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Feu clic per a omplir la imatge amb un mosaic de vidre."
+msgstr "Feu clic per a brodar tota la imatge amb punt de creu."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -880,10 +868,8 @@ msgid "Emboss"
 msgstr "Relleu"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Feu clic per a enfosquir tota la imatge."
+msgstr "Feu clic per a fer tota la imatge en relleu."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

@@ -720,7 +720,7 @@ msgstr "어린이를 위한 미술 프로그램"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "전체 화면"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -834,19 +834,15 @@ msgstr "종이조각들을 뿌려보세요!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "십자수"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "마우스를 누르면 그림을 약각 시킬 수 있어요."
+msgstr "마우스를 누르고 움직이면 그림을 십자수로 수놓을 수 있어요."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "마우스를 누르면 그림 전채가 유리타일로 깔려요."
+msgstr "마우스를 누르면 그림 전체를 십자수로 수놓을 수 있어요."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

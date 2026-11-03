@@ -726,7 +726,7 @@ msgstr "Program do rysowania dla dzieci."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Pełny ekran"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -766,10 +766,8 @@ msgid "Drip"
 msgstr "Krople"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Kliknij, aby przyciemnić cały rysunek."
+msgstr "Kliknij, aby cały obrazek wyglądał jak zrobiony z kwadracików."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
@@ -778,12 +776,8 @@ msgstr ""
 "kwadracików."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Kliknij i przesuń myszką dookoła, aby zamienić obrazek w rysunek kredą."
+msgstr "Kliknij, aby zamienić cały obrazek w rysunek kredą."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -833,10 +827,8 @@ msgid "Cartoon"
 msgstr "Kreskówka"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Kliknij, aby zmienić cały rysunek na biało i kolor, który wybrałeś."
+msgstr "Kliknij, aby zamienić cały rysunek w kreskówkę."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -852,19 +844,15 @@ msgstr "Kliknij by rozrzucić konfetti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Haft krzyżykowy"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Kliknij i przeciągnij myszką by wykonać wytłoczenie rysunku."
+msgstr "Kliknij i przeciągnij myszką, aby wyhaftować rysunek krzyżykami."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Klkinij by pokryć cały rysunek szklanymi płytkami."
+msgstr "Kliknij, aby wyhaftować cały rysunek krzyżykami."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -879,10 +867,8 @@ msgid "Emboss"
 msgstr "Wytłocz"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Kliknij, aby przyciemnić cały rysunek."
+msgstr "Kliknij, aby wytłoczyć cały rysunek."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

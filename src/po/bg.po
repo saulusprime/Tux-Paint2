@@ -722,10 +722,8 @@ msgid "A drawing program for children."
 msgstr "Програма за рисуване за деца"
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "\"Рисуване с Тъкс\" (на цял екран)"
+msgstr "Цял екран"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -842,20 +840,16 @@ msgstr "Кликнете, за да хвърлите конфети!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Кръстат бод"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Натиснете и движете мишката, за да направите рисунката релефна."
+msgstr ""
+"Натиснете и движете мишката, за да избродирате рисунката на кръстат бод."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr ""
-"Натиснете, за да покриете цялата рисунката рисунка със стъклени плочки."
+msgstr "Натиснете, за да избродирате цялата рисунка на кръстат бод."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

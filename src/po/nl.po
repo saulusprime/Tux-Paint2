@@ -726,7 +726,7 @@ msgstr "Een tekenprogramma voor kinderen."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Volledig scherm"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -775,8 +775,7 @@ msgstr "Klik en beweeg de muis om daar de tekening blokkerig te maken."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Klik en sleep de muis om de tekening te veranderen in een krijttekening."
+msgstr "Klik om de hele tekening te veranderen in een krijttekening."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -828,7 +827,7 @@ msgstr "Striptekening"
 
 #: ../../magic/src/cartoon.c:114
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Klik de hele afbeelding in een cartoon te veranderen."
+msgstr "Klik om de hele afbeelding in een cartoon te veranderen."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -844,19 +843,15 @@ msgstr "Klik om confetti te gooien"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Kruissteek"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Klik en sleep de muis om in de tekening een reliëf te maken."
+msgstr "Klik en sleep de muis om de tekening met kruissteken te borduren."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Klik om de hele tekening te bedekken met glastegels."
+msgstr "Klik om de hele tekening met kruissteken te borduren."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"

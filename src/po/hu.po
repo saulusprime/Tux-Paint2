@@ -730,7 +730,7 @@ msgstr "Rajzolóprogram gyerekeknek"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Teljes képernyő"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -767,21 +767,16 @@ msgid "Drip"
 msgstr "Csepp"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Kattints az egész rajz sötétebbé tételéhez."
+msgstr "Kattints az egész rajz kockássá változtatásához."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Kattints oda a rajzodon, ahova kockákat szeretnél rajzolni."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Kattints oda a rajzodon, ahol krétával szeretnél rajzolni."
+msgstr "Kattints az egész rajz krétarajzzá változtatásához."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -830,11 +825,8 @@ msgid "Cartoon"
 msgstr "Képregény"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Kattints az egész rajz fehérré és egy kiválasztott színűvé változtatásához."
+msgstr "Kattints az egész rajz képregénnyé változtatásához."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -851,19 +843,17 @@ msgstr "Kattints a konfetti szétdobálásához!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Keresztszemes"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Kattints oda a rajzodon, ahol a képet domborítani szeretnéd."
+msgstr ""
+"Kattints oda a rajzodon, ahol a képet keresztszemes hímzéssé szeretnéd "
+"változtatni."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Kattints az egész rajzod befedéséhez üvegmozaikkal."
+msgstr "Kattints az egész rajz keresztszemes hímzéssé változtatásához."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -878,10 +868,8 @@ msgid "Emboss"
 msgstr "Domborítás"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Kattints az egész rajz sötétebbé tételéhez."
+msgstr "Kattints az egész rajz domborításához."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

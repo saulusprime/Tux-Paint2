@@ -726,10 +726,8 @@ msgid "A drawing program for children."
 msgstr "Program na kreslenie pre deti."
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "Tux Paint (celá obrazovka)"
+msgstr "Celá obrazovka"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -828,7 +826,7 @@ msgstr "Komiks"
 
 #: ../../magic/src/cartoon.c:114
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Kliknutím a ťahaním myši zmeníš obrázok na kriedokresbu."
+msgstr "Kliknutím prekreslíš celý obrázok na komiks."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -844,19 +842,15 @@ msgstr "Ak klikneš myšou, môžeš hádzať konfety."
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Krížiková výšivka"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Kliknutím a ťahaním myši urobíš z obrázka rytinu."
+msgstr "Kliknutím a ťahaním myši vyšiješ obrázok krížikovým stehom."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Kliknutím zaplníš celý obrázok sklenenými tabuľami."
+msgstr "Kliknutím vyšiješ celý obrázok krížikovým stehom."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -872,7 +866,7 @@ msgstr "Rytina"
 
 #: ../../magic/src/emboss.c:110
 msgid "Click to emboss your entire picture."
-msgstr "Kliknutím vyrysuješ celý obrázok."
+msgstr "Kliknutím urobíš z celého obrázka rytinu."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

@@ -729,7 +729,7 @@ msgstr "תוכנת ציור לילדים."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "מסך מלא"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -768,10 +768,8 @@ msgid "Drip"
 msgstr "טפטוף"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "לחצי להאפלת כל התמונה."
+msgstr "לחצי להחלת אפקט בלוקים על כל התמונה."
 
 # 'Blocky' is very difficult to translate to Hebrew.
 #: ../../magic/src/blocks_chalk_drip.c:156
@@ -779,11 +777,8 @@ msgid "Click and move the mouse around to make the picture blocky."
 msgstr "לחצי והזיזי את העכבר לאפקט בלוקים."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "לחצי והזיזי את העכבר להפיכת התמונה לציור גיר."
+msgstr "לחצי להפיכת כל התמונה לציור גיר."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -833,10 +828,8 @@ msgid "Cartoon"
 msgstr "סרט מצוייר"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "לחצי לקביעת סף לתמונה כולה, והפיכתה לצבע טהור ואזורים לבנים."
+msgstr "לחצי כדי להפוך את כל התמונה לסרט מצויר."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -852,19 +845,15 @@ msgstr "לחצי לזריקת קונפטי!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "תפר צלב"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "לחצי וגררי את העכבר ליצירת תבליט."
+msgstr "לחצי וגררי את העכבר כדי לרקום את התמונה בתפרי צלב."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "לחצי לכיסוי כל התמונה באריחי זכוכית."
+msgstr "לחצי כדי לרקום את כל התמונה בתפרי צלב."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -879,10 +868,8 @@ msgid "Emboss"
 msgstr "תבליט"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "לחצי להאפלת כל התמונה."
+msgstr "לחצי להפיכת כל התמונה לתבליט."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

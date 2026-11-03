@@ -733,7 +733,7 @@ msgstr "Дитяча програма для малювання."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Повноекранний режим"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -854,19 +854,15 @@ msgstr "Клацніть, щоб порозкидувати конфеті!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Вишивка хрестиком"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Клацніть та посовгайте мишкою, щоб зробити малюнок рельєфнішим."
+msgstr "Клацніть та протягніть мишкою, щоб вишити малюнок хрестиком."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Клацніть, щоб покрити малюнок скляною мозаїкою."
+msgstr "Клацніть, щоб вишити хрестиком весь малюнок."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -883,7 +879,7 @@ msgstr "Рельєф"
 
 #: ../../magic/src/emboss.c:110
 msgid "Click to emboss your entire picture."
-msgstr "Клацніть, щоб зробити зробити рельєфним весь малюнок."
+msgstr "Клацніть, щоб зробити рельєфним весь малюнок."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

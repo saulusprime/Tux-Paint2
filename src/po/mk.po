@@ -733,7 +733,7 @@ msgstr "Програм за цртање за деца."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Цел екран"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -772,24 +772,16 @@ msgid "Drip"
 msgstr "Протекување"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
 msgid "Click to make your entire picture blocky."
-msgstr ""
-"Кликнете на глувчето и влечете го наоколу за да ја промените бојата на "
-"сликата."
+msgstr "Кликнете за да ја направите целата слика погруба."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Кликнете на глувчето и движете го за добиете погруба слика."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Кликнете и движете го глувчето наоколу за да ја претворите сликата во цртеж "
-"со креда."
+msgstr "Кликнете за да ја претворите целата слика во цртеж со креда."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -843,11 +835,8 @@ msgid "Cartoon"
 msgstr "Цртани"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Кликнете на глувчето и влечете го наоколу за да ја претворите сликата во "
-"цртан."
+msgstr "Кликнете за да ја претворите целата слика во цртан филм."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -893,11 +882,8 @@ msgid "Emboss"
 msgstr ""
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
 msgid "Click to emboss your entire picture."
-msgstr ""
-"Кликнете на глувчето и влечете го наоколу за да ја промените бојата на "
-"сликата."
+msgstr "Кликнете за да ја направите целата слика релјефна."
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy

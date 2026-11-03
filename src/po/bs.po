@@ -796,7 +796,7 @@ msgstr "Dječji program za crtanje"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Cijeli ekran"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -837,10 +837,8 @@ msgstr "Curiti"
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click and move the mouse around to blur the picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Klikni i pomjeraj mišem da bi zatamnio sliku."
+msgstr "Klikni da bi ogrubio cijelu sliku."
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:156
@@ -849,11 +847,8 @@ msgstr "Klikni i pomjeraj mišem da bi ogrubio sliku."
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Klikni i pomjeraj mišem da bi pretvorio sliku u crtež kredom."
+msgstr "Klikni da bi pretvorio cijelu sliku u crtež kredom."
 
 #
 #: ../../magic/src/blocks_chalk_drip.c:162
@@ -909,10 +904,8 @@ msgstr "Crtež"
 
 #
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click and move the mouse around to turn the picture into a cartoon."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Klikni i pomjeraj mišem da bi pretvorio sliku u crtež."
+msgstr "Klikni da bi pretvorio cijelu sliku u crtež."
 
 #
 #: ../../magic/src/cartoon.c:117
@@ -959,10 +952,8 @@ msgstr ""
 
 #
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click and move the mouse around to blur the picture."
 msgid "Click to emboss your entire picture."
-msgstr "Klikni i pomjeraj mišem da bi zatamnio sliku."
+msgstr "Klikni da bi cijelu sliku učinio reljefnom."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

@@ -741,10 +741,8 @@ msgid "A drawing program for children."
 msgstr "Program vizatimi për fëmijë."
 
 #: ../tuxpaint.desktop.in.h:4
-#, fuzzy
-#| msgid "Tux Paint (Fullscreen)"
 msgid "Full screen"
-msgstr "Tux Paint (Sa krejt ekrani)"
+msgstr "Ekran i plotë"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"

@@ -720,7 +720,7 @@ msgstr "Zīmēšanas programma bērniem."
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Pilnekrāns"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -759,23 +759,16 @@ msgid "Drip"
 msgstr "Pilēšana"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Noklikšķini peli, lai visu bildi padarītu tumšāku."
+msgstr "Noklikšķini peli, lai visu bildi pārvērstu klucīšos."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "Nospied, pieturi peles pogu un velc peli lai bilde būtu klucīši."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr ""
-"Nospied, pieturi peles pogu un velc peli lai zīmējums izskatītos kā ar krītu "
-"zīmētu"
+msgstr "Noklikšķini peli, lai viss zīmējums izskatītos kā ar krītu zīmēts."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -827,12 +820,8 @@ msgid "Cartoon"
 msgstr "Multene"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
-#| msgid "Click to turn your entire picture into white and a color you choose."
 msgid "Click to turn your entire picture into a cartoon."
-msgstr ""
-"Noklikšķini, lai daļu no bildes pārvērstu baltā un citā krāsā, kuru tu "
-"izvēlies."
+msgstr "Noklikšķini peli, lai viss zīmējums izskatītos kā multfilma."
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -850,19 +839,16 @@ msgstr "Klikšķini lai mestu konfeti!"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Krustdūriens"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
-#| msgid "Click and drag the mouse to emboss the picture."
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Nospied, pieturi peles pogu un velc peli lai gofrētu bildi."
+msgstr ""
+"Nospied, pieturi peles pogu un velc peli, lai izšūtu bildi krustdūrienā."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
-#| msgid "Click to cover your entire picture in glass tiles."
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "Noklikšķini peli, lai visu bildi pārklātu ar mozaīku."
+msgstr "Noklikšķini peli, lai visu bildi izšūtu krustdūrienā."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -877,10 +863,8 @@ msgid "Emboss"
 msgstr "Izkalt"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Noklikšķini peli, lai visu bildi padarītu tumšāku."
+msgstr "Noklikšķini peli, lai gofrētu visu bildi."
 
 #: ../../magic/src/emboss.c:112
 msgid "Click and drag the mouse to emboss the picture."

@@ -729,7 +729,7 @@ msgstr "โปรแกรมวาดรูปสำหรับเด็ก"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "เต็มหน้าจอ"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -768,20 +768,16 @@ msgid "Drip"
 msgstr "หยด"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
 msgid "Click to make your entire picture blocky."
-msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อเปลี่ยนสีรูป"
+msgstr "คลิกเพื่อทำให้ทั้งรูปเป็นบล็อกๆ"
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
 msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อทำให้รูปมัวเป็นบล็อกๆ"
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อทำให้รูปเป็นรูปเขียนด้วยชอล์ก"
+msgstr "คลิกเพื่อทำให้ทั้งรูปเป็นรูปเขียนด้วยชอล์ก"
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -833,9 +829,8 @@ msgid "Cartoon"
 msgstr "การ์ตูน"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "คลิกแล้วลากเมาส์ไปมา เพื่อทำให้รูปเป็นรูปการ์ตูน"
+msgstr "คลิกเพื่อทำให้ทั้งรูปเป็นรูปการ์ตูน"
 
 #: ../../magic/src/cartoon.c:117
 msgid "Click and move the mouse around to turn the picture into a cartoon."
@@ -851,17 +846,15 @@ msgstr "คลิ๊กเพื่อโยนเศษกระดาษสี
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "ครอสติช"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อทำให้รูปมัว"
+msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อทำให้รูปเป็นงานปักครอสติช"
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อเปลี่ยนสีรูป"
+msgstr "คลิกเพื่อทำให้ทั้งรูปเป็นงานปักครอสติช"
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -877,9 +870,8 @@ msgid "Emboss"
 msgstr "ทำให้เป็นภาพนูน"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
 msgid "Click to emboss your entire picture."
-msgstr "คลิกแล้วลากเมาส์ไปมาเพื่อเปลี่ยนสีรูป"
+msgstr "คลิกเพื่อทำให้ทั้งรูปเป็นภาพนูน"
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy

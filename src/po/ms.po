@@ -720,7 +720,7 @@ msgstr "Program melukis untuk kanak-kanak"
 
 #: ../tuxpaint.desktop.in.h:4
 msgid "Full screen"
-msgstr ""
+msgstr "Skrin penuh"
 
 #: ../../magic/src/alien.c:64
 msgid "Color Shift"
@@ -759,10 +759,8 @@ msgid "Drip"
 msgstr "Titisan"
 
 #: ../../magic/src/blocks_chalk_drip.c:153
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to make your entire picture blocky."
-msgstr "Klik untuk menggelapkan gambar."
+msgstr "Klik untuk menjadikan seluruh gambar berblok."
 
 #: ../../magic/src/blocks_chalk_drip.c:156
 msgid "Click and move the mouse around to make the picture blocky."
@@ -770,11 +768,8 @@ msgstr ""
 "Klik dan gerakkan tetikus di sekeliling untuk menjadikan gambar berblok."
 
 #: ../../magic/src/blocks_chalk_drip.c:159
-#, fuzzy
-#| msgid ""
-#| "Click and move the mouse around to turn the picture into a chalk drawing."
 msgid "Click to turn your entire picture into a chalk drawing."
-msgstr "Klik dan alihkan tetikus di sekeliling untuk membuat lukisan kapur."
+msgstr "Klik untuk menjadikan seluruh gambar lukisan kapur."
 
 #: ../../magic/src/blocks_chalk_drip.c:162
 msgid ""
@@ -826,9 +821,8 @@ msgid "Cartoon"
 msgstr "Kartun"
 
 #: ../../magic/src/cartoon.c:114
-#, fuzzy
 msgid "Click to turn your entire picture into a cartoon."
-msgstr "Klik dan alihkan tetikus di sekeliling untuk membuat lukisan kapur."
+msgstr "Klik untuk menjadikan seluruh gambar kartun."
 
 #: ../../magic/src/cartoon.c:117
 #, fuzzy
@@ -846,18 +840,16 @@ msgstr "ke !"
 
 #: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
-msgstr ""
+msgstr "Jahitan pangkah"
 
 #: ../../magic/src/crossstitch.c:64
-#, fuzzy
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
-msgstr "Klik dan gerakkan tetikus di sekeliling untuk menipiskan gambar."
+msgstr ""
+"Klik dan gerakkan tetikus untuk menyulam gambar dengan jahitan pangkah."
 
 #: ../../magic/src/crossstitch.c:65
-#, fuzzy
 msgid "Click to embroider your entire picture with cross stitches."
-msgstr ""
-"Klik dan gerakkan tetikus di sekeliling untuk menjadikan gambar berblok."
+msgstr "Klik untuk menyulam seluruh gambar dengan jahitan pangkah."
 
 #: ../../magic/src/distortion.c:142
 msgid "Distortion"
@@ -873,10 +865,8 @@ msgid "Emboss"
 msgstr "Ukir timbul"
 
 #: ../../magic/src/emboss.c:110
-#, fuzzy
-#| msgid "Click to darken your entire picture."
 msgid "Click to emboss your entire picture."
-msgstr "Klik untuk menggelapkan gambar."
+msgstr "Klik untuk memberikan kesan ukir timbul pada seluruh gambar."
 
 #: ../../magic/src/emboss.c:112
 #, fuzzy
