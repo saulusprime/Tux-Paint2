@@ -765,6 +765,44 @@ effect.</p>
 <hr size=1 noshade>
 
 
+<h2><a name="lessons">Lessons</a></h2>
+<blockquote>
+  <p>The lessons of the 'Learn' tool teach how to draw a picture on paper,
+  step by step.  (See <a href="README.html">README</a>.)  Each lesson is
+  two files with the same name: "<code><i>NAME</i>.svg</code>", the
+  finished, colored drawing, with one group of shapes for each step; and
+  "<code><i>NAME</i>.txt</code>", with the title and the steps, and their
+  instructions in English and in other languages.</p>
+
+  <p>Lessons go in a "<code><b>lessons</b></code>" directory, in one of
+  three subdirectories, one for each level of difficulty:
+  "<code><b>easy</b></code>", "<code><b>medium</b></code>" and
+  "<code><b>hard</b></code>".  Tux&nbsp;Paint looks for them in its data
+  directory (e.g., "<code>/usr/share/tuxpaint/lessons/easy/</code>") and
+  in your personal directory (e.g., "<code>~/.tuxpaint/lessons/easy/</code>"
+  under Linux or Unix).  A personal lesson with the same level and name as
+  one that comes with Tux&nbsp;Paint replaces it.</p>
+
+  <p>The format of the files, and advice on drawing pictures that a child
+  can copy, are described in "<code>lessons/README.txt</code>" (in
+  Tux&nbsp;Paint's source code; it is also installed in the
+  "<code>lessons</code>" folder of the data directory).  To translate a
+  lesson, add "<code><i>LANG</i>.utf8=</code>" lines to its
+  "<code>.txt</code>" file, as for the stamps' description text.</p>
+
+  <p>The script "<code>devtools/content/lesson_preview.py</code>", in the
+  source code (it needs Python&nbsp;3 and Pillow), checks a lesson's files
+  and draws a sheet with all of its steps, as Tux&nbsp;Paint shows them.
+  For example:</p>
+
+  <blockquote><code>
+    python3 devtools/content/lesson_preview.py --out /tmp/preview lessons/easy/sun.txt
+  </code></blockquote>
+</blockquote>
+
+<hr size=1 noshade>
+
+
 <h2>Translations</h2>
 <blockquote>
   <p>Tux Paint supports numerous languages, thanks to use of the

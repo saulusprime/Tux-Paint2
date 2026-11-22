@@ -478,6 +478,62 @@ New Breed Software</p>
     which can be edited later.
   </dd>
 
+  <dt><code><b>nolessons=yes</b></code></dt>
+  <dd>
+    Disables the <b>Learn</b> tool: the lessons that teach how to draw a
+    picture on paper, step by step.  (The tool is also disabled when no
+    lessons are found.)
+  </dd>
+
+  <dt><code><b>nospeech=yes</b></code></dt>
+  <dd>
+    Don't read the <b>Learn</b> tool's instructions aloud.  (By default
+    they are read aloud, if a voice is available: see
+    "<code>speechcommand</code>", below.)
+  </dd>
+
+  <dt><code><b>speechcommand=<i>COMMAND</i></b></code></dt>
+  <dd>
+    <p><i>(Not available on Windows, where the instructions aren't read
+    aloud.)</i></p>
+
+    <p>Use the command <i>COMMAND</i> to read the <b>Learn</b> tool's
+    instructions aloud.  The command is run with "<code>/bin/sh</code>"; it
+    gets the text (UTF-8) on its standard input, and must write a sound file
+    (WAV, or another format that SDL_mixer can play) to its standard output.
+    In the command, "<code>%l</code>" is replaced by the language code of
+    the text (e.g., "<code>it</code>", "<code>en</code>" or
+    "<code>pt-br</code>"), and "<code>%%</code>" by a "<code>%</code>".</p>
+
+    <p>If this option is not set, <i>Tux&nbsp;Paint</i> uses
+    eSpeak&nbsp;NG, in the language of the text, if its library
+    ("<code>libespeak-ng.so.1</code>") is installed.  (On Debian and Ubuntu
+    it is in the "<code>libespeak-ng1</code>" package, which is usually
+    already installed along with speech-dispatcher.)  The library is loaded
+    when <i>Tux&nbsp;Paint</i> runs: it isn't needed to build
+    <i>Tux&nbsp;Paint</i>.</p>
+
+    <p>Examples:</p>
+
+    <blockquote>
+      <code>speechcommand=espeak-ng -v %l --stdout</code>
+    </blockquote>
+
+    <blockquote>
+      <code>speechcommand=sh -c 'pico2wave -l it-IT -w /tmp/tp-voice.wav "$(cat)" &amp;&amp; cat /tmp/tp-voice.wav'</code>
+    </blockquote>
+
+    <p>(The second example uses Pico, in Italian; <code>pico2wave</code>
+    needs the file name to end in "<code>.wav</code>".)</p>
+
+    <p>If the command fails, <i>Tux&nbsp;Paint</i> prints a warning and
+    stays silent.</p>
+
+    <p>The voice is played through <i>Tux&nbsp;Paint's</i> own sound, so
+    the "<code>nosound</code>" option, and muting with
+    <b>[Alt]</b>&nbsp;+&nbsp;<b>[S]</b>, silence it too.</p>
+  </dd>
+
   <dt><code><b>mirrorstamps=yes</b></code></dt>
   <dd>
     <p>For stamps that can be mirrored, this option sets them to their
@@ -1514,6 +1570,9 @@ New Breed Software</p>
     --nostampcontrols<br>
     --nomagiccontrols<br>
     --nolabel<br>
+    --nolessons<br>
+    --nospeech<br>
+    --speechcommand=<i>COMMAND</i><br>
     --mouse-accessibility<br>
     --onscreen-keyboard<br>
     --onscreen-keyboard-layout<br>
@@ -1588,6 +1647,8 @@ New Breed Software</p>
     --stampcontrols<br>
     --magiccontrols<br>
     --label<br>
+    --lessons<br>
+    --speech<br>
     --nosysfonts<br>
     --currentlocalefont<br>
     --dontmirrorstamps<br>

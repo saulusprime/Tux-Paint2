@@ -646,6 +646,40 @@ Modelli
      fatto partendo da un modello ne sarà sempre influenzato.)
      __________________________________________________________________
 
+Lezioni
+
+     (Solo in questa versione)
+
+     Le lezioni dello strumento 'Impara' insegnano a disegnare un'immagine
+     su carta, passo dopo passo. (Vedi il manuale.) Ogni lezione è fatta
+     di due file con lo stesso nome: "NOME.svg", il disegno finito e
+     colorato, con un gruppo di forme per ogni passo, e "NOME.txt", con il
+     titolo e i passi, e le loro istruzioni in inglese e nelle altre
+     lingue.
+
+     Le lezioni vanno in una cartella "lessons", dentro una delle tre
+     sottocartelle, una per ogni livello di difficoltà: "easy" (facile),
+     "medium" (medio) e "hard" (difficile). Tux Paint le cerca nella sua
+     cartella dei dati (per esempio "/usr/share/tuxpaint/lessons/easy/") e
+     nella tua cartella personale (per esempio "~/.tuxpaint/lessons/easy/"
+     su Linux o Unix). Una lezione personale con lo stesso livello e lo
+     stesso nome di una di quelle fornite con Tux Paint la sostituisce.
+
+     Il formato dei file, e i consigli per fare disegni che un bambino
+     possa copiare, sono descritti (in inglese) in "lessons/README.txt",
+     nel codice sorgente di Tux Paint; il file viene installato anche
+     nella cartella "lessons" dei dati. Per tradurre una lezione, aggiungi
+     al suo file ".txt" le righe "LINGUA.utf8=", come per la descrizione
+     dei timbri.
+
+     Lo script "devtools/content/lesson_preview.py", nel codice sorgente
+     (serve Python 3 con Pillow), controlla i file di una lezione e
+     disegna un foglio con tutti i suoi passi, come li mostra Tux Paint.
+     Per esempio:
+
+     python3 devtools/content/lesson_preview.py --out /tmp/anteprima lessons/easy/sun.txt
+     __________________________________________________________________
+
 Traduzioni
 
      Tux Paint funziona in molte lingue, grazie alla libreria di

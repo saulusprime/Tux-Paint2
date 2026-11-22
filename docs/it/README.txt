@@ -110,6 +110,10 @@ Obiettivi
        anche un orologio e una scuola da colorare, una lavagna, un
        quaderno a righe, un quaderno a quadretti e un quaderno
        pentagrammato.
+     * Impara a disegnare. Il nuovo strumento "Impara" insegna a disegnare
+       su carta, passo dopo passo, 17 disegni di tre livelli di
+       difficoltà; le istruzioni compaiono accanto a Tux e vengono lette
+       ad alta voce.
      * Correzioni. Molti difetti della 0.9.22 sono stati corretti: tra gli
        altri, il Cestino che poteva perdere i disegni cancellati, i
        disegni fatti da uno Starter che perdevano lo sfondo se lo Starter
@@ -185,8 +189,8 @@ Schermata principale
           modificare il disegno.
 
           [Strumenti: Pittura, Timbro, Linee, Forme, Testo, Magie,
-          Etichetta, Annulla, Ripeti, Gomma, Nuovo, Apri, Salva, Stampa,
-          Esci]
+          Etichetta, Impara, Annulla, Ripeti, Gomma, Nuovo, Apri, Salva,
+          Stampa, Esci]
 
    Al centro: la tela
           La parte più grande dello schermo, al centro, è la tela.
@@ -381,6 +385,95 @@ Gli strumenti
                o Coreano — Hangul 2-Bul — [Alt] destro o [Alt] sinistro
                o Cinese tradizionale — [Alt] destro o [Alt] sinistro
                o Thailandese — [Alt] destro
+            ___________________________________________________________
+
+   Impara
+          (Solo in questa versione)
+
+          Lo strumento Impara insegna a disegnare un'immagine su carta,
+          passo dopo passo. Non cambia il disegno di Tux Paint: si disegna
+          e si colora su un vero foglio di carta, con una matita, una
+          gomma e i pastelli.
+
+          Fai clic sul pulsante "Impara" e sopra la tela si apre una
+          finestra. In alto ci sono tre schede: "Facile" (una stella),
+          "Medio" (due stelle) e "Difficile" (tre stelle). Sotto ci sono
+          le lezioni di quel livello, ognuna con il disegno finito, già
+          colorato, e il suo titolo. Fai clic su una lezione per
+          sceglierla (il suo nome viene letto ad alta voce), poi fai
+          doppio clic, o fai clic su "Inizia", per cominciare. Il pulsante
+          "Voce" attiva e disattiva la lettura ad alta voce, e "Indietro"
+          chiude la finestra.
+
+          Si può usare anche la tastiera: [1], [2] e [3] scelgono il
+          livello, le frecce (o [F11], [F12], [F8] e [F7]) passano da una
+          lezione all'altra, [Invio] inizia la lezione scelta ed [Esc]
+          torna indietro.
+
+          La lezione compare su un foglio di carta disegnato sullo
+          schermo, con il titolo in alto a sinistra e, in alto a destra,
+          dei pallini che mostrano a che punto sei. Prima si vede il
+          disegno finito, e Tux dice: "Disegniamo: (nome)! Prendi un
+          foglio, una matita, una gomma e i tuoi pastelli." Poi la lezione
+          va avanti un passo alla volta. Tux mostra le istruzioni del
+          passo, e una voce le legge ad alta voce. Le linee nuove del
+          passo sono di colore rosso arancio e lampeggiano; quelle dei
+          passi precedenti sono nere. Accanto al foglio, un'immagine
+          mostra che cosa usare:
+
+          + una matita: disegna le linee nuove;
+          + una matita più chiara: disegna senza calcare una forma di
+            'guida' (per esempio un grande ovale che aiuta a mettere al
+            posto giusto le altre parti);
+          + una gomma: cancella le forme di guida (sullo schermo
+            spariscono piano piano);
+          + un pastello: colora la parte che lampeggia, del colore del
+            pastello.
+
+          Fai clic su "Avanti" (o sul disegno) per passare al passo
+          successivo, su "Prima" per tornare a quello precedente, su
+          "Riascolta" per sentire di nuovo le istruzioni e veder
+          lampeggiare di nuovo il passo, o su "Indietro" per tornare
+          all'elenco delle lezioni. Con la tastiera: [freccia a destra],
+          [Spazio], [Invio] o [Pag giù] per il passo successivo;
+          [freccia a sinistra], [Backspace] o [Pag su] per quello
+          precedente; [R] per riascoltare; [Esc] per tornare indietro.
+
+          Dopo l'ultimo passo si vede di nuovo il disegno finito, e Tux
+          dice: "Ottimo lavoro! Hai finito: (nome). Il tuo disegno
+          assomiglia a questo?"
+
+        Le lezioni
+                Tux Paint comprende 17 lezioni. "Facile": mela,
+                palloncino, pesce, fiore, casa e sole (5 passi ciascuna).
+                "Medio": farfalla, gatto, barca a vela, lumaca, albero e
+                tartaruga (6 o 7 passi). "Difficile": automobile,
+                dinosauro, gufo, pinguino e razzo (9 o 10 passi, con forme
+                di guida leggere che vengono cancellate prima di
+                colorare).
+
+                I testi sono in italiano e in inglese; nelle altre lingue
+                si usano quelli inglesi. (Le traduzioni si possono
+                aggiungere nei file delle lezioni.) Per aggiungere lezioni
+                tue, vedi EXTENDING.
+
+        La voce
+                Le istruzioni vengono lette ad alta voce da eSpeak NG,
+                nella lingua del testo, se la sua libreria
+                ("libespeak-ng.so.1") è installata. (Su Debian e Ubuntu è
+                nel pacchetto "libespeak-ng1", di solito già installato
+                insieme a speech-dispatcher.) Con l'opzione
+                "speechcommand" si può usare un altro programma per la
+                voce.
+
+                La voce passa per l'audio di Tux Paint, quindi tace anche
+                con l'opzione "--nosound" o quando l'audio è tolto con
+                [Alt] + [S]. L'opzione "--nospeech" la disattiva del
+                tutto. (Vedi la documentazione delle opzioni, in inglese.)
+
+          Lo strumento Impara si può disattivare (per esempio avviando
+          Tux Paint con l'opzione "--nolessons"). È disattivato (grigio)
+          anche quando non ci sono lezioni.
             ___________________________________________________________
 
    Magie (effetti speciali)
@@ -840,8 +933,9 @@ A mano
 
      Altri documenti forniti con Tux Paint (nella cartella "docs"):
      * EXTENDING.html
-       Come creare pennelli, timbri, Starter e modelli, e aggiungere tipi
-       di carattere, per espandere Tux Paint (in italiano).
+       Come creare pennelli, timbri, Starter, modelli e lezioni, e
+       aggiungere tipi di carattere, per espandere Tux Paint (in
+       italiano).
      * Documentazione delle magie ("magic-docs")
        La descrizione di ogni magia installata (in inglese).
      * AUTHORS.txt

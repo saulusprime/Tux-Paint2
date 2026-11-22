@@ -150,8 +150,8 @@ Main Screen
 
                The toolbar contains the drawing and editing controls.
 
-   [Tools: Paint, Stamp, Lines, Shapes, Text, Magic, Label, Undo, Redo,      
-                     Eraser, New, Open, Save, Print, Quit]
+  [Tools: Paint, Stamp, Lines, Shapes, Text, Magic, Label, Learn, Undo,      
+                  Redo, Eraser, New, Open, Save, Print, Quit]
 
        Middle: Drawing Canvas
 
@@ -365,6 +365,96 @@ Available Tools
                                  * Traditional Chinese - right [Alt] or
                                    left [Alt]
                                  * Thai - right [Alt]
+
+     ----------------------------------------------------------------------
+
+         Learn
+
+                 The 'Learn' tool teaches you to draw a picture on paper,
+                 step by step. It doesn't change your picture in Tux Paint:
+                 you draw and color on a real sheet of paper, with a pencil,
+                 an eraser and crayons.
+
+                 Click the 'Learn' button and a dialog appears over the
+                 canvas. At the top there are three tabs: "Easy" (one star),
+                 "Medium" (two stars) and "Hard" (three stars). Below them
+                 are the lessons of that level, each one showing the
+                 finished, colored picture and its title. Click a lesson to
+                 select it (its name is read aloud), then double-click it, or
+                 click "Start", to begin. The "Voice" button turns reading
+                 aloud on and off, and "Back" closes the dialog.
+
+                 You can also use the keyboard: [1], [2] and [3] pick a
+                 level, the arrow keys (or [F11], [F12], [F8] and [F7]) move
+                 between the lessons, [Enter] starts the selected lesson, and
+                 [Escape] goes back.
+
+                 The lesson is shown on a sheet of paper drawn on the screen,
+                 with its title at the top left and, at the top right, dots
+                 that show how far along you are. First comes the finished
+                 picture, and Tux says: "Let's draw: (name)! Get a sheet of
+                 paper, a pencil, an eraser and your crayons." Then the
+                 lesson goes one step at a time. Tux shows the instruction
+                 for the step, and a voice reads it aloud. The new lines of
+                 the step are shown in orange-red, and blink; the lines of
+                 the earlier steps are black. Next to the sheet, a picture
+                 shows what to use:
+
+                   * a pencil: draw the new lines;
+                   * a paler pencil: draw a light 'guide' shape, softly
+                     (e.g., a big oval that helps you place the other parts);
+                   * an eraser: erase the guide shapes (on the screen, they
+                     fade away);
+                   * a crayon: color the blinking area, with the crayon's
+                     color.
+
+                 Click "Next" (or click the picture) to go to the next step,
+                 "Previous" to go back one step, "Repeat" to hear the
+                 instruction again and see the step blink again, or "Back" to
+                 return to the list of lessons. On the keyboard, press
+                 [Right], [Space], [Enter] or [Page Down] for the next step;
+                 [Left], [Backspace] or [Page Up] for the previous one; [R]
+                 to repeat; and [Escape] to go back.
+
+                 After the last step, the finished picture is shown again,
+                 and Tux says: "Well done! You finished: (name). Does your
+                 drawing look like this one?"
+
+                      Lessons
+
+                              Tux Paint comes with 17 lessons. "Easy": apple,
+                              balloon, fish, flower, house and sun (5 steps
+                              each). "Medium": butterfly, cat, sailboat,
+                              snail, tree and turtle (6 or 7 steps). "Hard":
+                              car, dinosaur, owl, penguin and rocket (9 or 10
+                              steps, with light guide shapes that are erased
+                              before coloring).
+
+                              Their texts are in English and Italian; in
+                              other languages, the English ones are used.
+                              (Translations can be added to the lesson
+                              files.) To add your own lessons, see EXTENDING.
+
+                      The Voice
+
+                              The instructions are read aloud by eSpeak NG,
+                              in the language of the text, if its library
+                              ("libespeak-ng.so.1") is installed. (On Debian
+                              and Ubuntu it is in the "libespeak-ng1"
+                              package, which is usually already installed
+                              along with speech-dispatcher.) Another voice
+                              program can be used instead, with the
+                              "speechcommand" option.
+
+                              The voice plays through Tux Paint's own sound,
+                              so it is silent with the "--nosound" option, or
+                              when sound is muted with [Alt] + [S]. The
+                              "--nospeech" option turns it off altogether.
+                              (See the "Options" documentation.)
+
+                 The 'Learn' tool can be disabled (e.g., by running Tux Paint
+                 with the "--nolessons" command-line option). It's also
+                 disabled (greyed out) when no lessons are found.
 
      ----------------------------------------------------------------------
 

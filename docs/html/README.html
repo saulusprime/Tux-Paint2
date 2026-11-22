@@ -210,8 +210,8 @@ version
 
       <!-- FIXME: Updated screenshot -->
       <p align=center><img src="images/tools.jpg" width=324 height=254
-      alt="[Tools: Paint, Stamp, Lines, Shapes, Text, Magic, Label, Undo, Redo,
-      Eraser, New, Open, Save, Print, Quit]"></p>
+      alt="[Tools: Paint, Stamp, Lines, Shapes, Text, Magic, Label, Learn, Undo,
+      Redo, Eraser, New, Open, Save, Print, Quit]"></p>
     </dd>
 
     <dt>Middle: Drawing Canvas</dt>
@@ -495,6 +495,102 @@ version
           </p>
          </dl>
         </dd>
+
+        <hr size=1>
+      </dd>
+
+
+      <dt><b>Learn</b></dt>
+      <dd>
+        <p>The 'Learn' tool teaches you to draw a picture on paper, step by
+        step.  It doesn't change your picture in Tux&nbsp;Paint: you draw
+        and color on a real sheet of paper, with a pencil, an eraser and
+        crayons.</p>
+
+        <p>Click the 'Learn' button and a dialog appears over the canvas.
+        At the top there are three tabs: "Easy" (one star), "Medium" (two
+        stars) and "Hard" (three stars).  Below them are the lessons of
+        that level, each one showing the finished, colored picture and its
+        title.  Click a lesson to select it (its name is read aloud), then
+        double-click it, or click "Start", to begin.  The "Voice" button
+        turns reading aloud on and off, and "Back" closes the dialog.</p>
+
+        <p>You can also use the keyboard: <b>[1]</b>, <b>[2]</b> and
+        <b>[3]</b> pick a level, the arrow keys (or <b>[F11]</b>,
+        <b>[F12]</b>, <b>[F8]</b> and <b>[F7]</b>) move between the
+        lessons, <b>[Enter]</b> starts the selected lesson, and
+        <b>[Escape]</b> goes back.</p>
+
+        <p>The lesson is shown on a sheet of paper drawn on the screen, with
+        its title at the top left and, at the top right, dots that show how
+        far along you are.  First comes the finished picture, and Tux says:
+        "Let's draw: <i>(name)</i>! Get a sheet of paper, a pencil, an
+        eraser and your crayons."  Then the lesson goes one step at a time.
+        Tux shows the instruction for the step, and a voice reads it aloud.
+        The new lines of the step are shown in orange-red, and blink; the
+        lines of the earlier steps are black.  Next to the sheet, a picture
+        shows what to use:</p>
+
+        <ul>
+        <li>a pencil: draw the new lines;
+        <li>a paler pencil: draw a light 'guide' shape, softly (e.g., a big
+          oval that helps you place the other parts);
+        <li>an eraser: erase the guide shapes (on the screen, they fade
+          away);
+        <li>a crayon: color the blinking area, with the crayon's color.
+        </ul>
+
+        <p>Click "Next" (or click the picture) to go to the next step,
+        "Previous" to go back one step, "Repeat" to hear the instruction
+        again and see the step blink again, or "Back" to return to the list
+        of lessons.  On the keyboard, press <b>[Right]</b>,
+        <b>[Space]</b>, <b>[Enter]</b> or <b>[Page&nbsp;Down]</b> for the
+        next step; <b>[Left]</b>, <b>[Backspace]</b> or
+        <b>[Page&nbsp;Up]</b> for the previous one; <b>[R]</b> to repeat;
+        and <b>[Escape]</b> to go back.</p>
+
+        <p>After the last step, the finished picture is shown again, and Tux
+        says: "Well done! You finished: <i>(name)</i>. Does your drawing look
+        like this one?"</p>
+
+        <dl>
+        <dt><b>Lessons</b></dt>
+        <dd>
+          <p>Tux&nbsp;Paint comes with 17 lessons.  "Easy": apple, balloon,
+          fish, flower, house and sun (5 steps each).  "Medium": butterfly,
+          cat, sailboat, snail, tree and turtle (6 or 7 steps).  "Hard":
+          car, dinosaur, owl, penguin and rocket (9 or 10 steps, with light
+          guide shapes that are erased before coloring).</p>
+
+          <p>Their texts are in English and Italian; in other languages, the
+          English ones are used.  (Translations can be added to the lesson
+          files.)  To add your own lessons, see
+          <a href="EXTENDING.html#lessons">EXTENDING</a>.</p>
+        </dd>
+
+        <dt><b>The Voice</b></dt>
+        <dd>
+          <p>The instructions are read aloud by eSpeak&nbsp;NG, in the
+          language of the text, if its library
+          ("<code>libespeak-ng.so.1</code>") is installed.  (On Debian and
+          Ubuntu it is in the "<code>libespeak-ng1</code>" package, which is
+          usually already installed along with speech-dispatcher.)  Another
+          voice program can be used instead, with the
+          "<code>speechcommand</code>" option.</p>
+
+          <p>The voice plays through Tux&nbsp;Paint's own sound, so it is
+          silent with the "<code>--nosound</code>" option, or when sound is
+          muted with <b>[Alt]</b>&nbsp;+&nbsp;<b>[S]</b>.  The
+          "<code>--nospeech</code>" option turns it off altogether.  (See
+          the "<a href="OPTIONS.html"><i>Options</i></a>"
+          documentation.)</p>
+        </dd>
+        </dl>
+
+        <p>The 'Learn' tool can be disabled (e.g., by running
+        <i>Tux&nbsp;Paint</i> with the "<code>--nolessons</code>"
+        command-line option).  It's also disabled (greyed out) when no
+        lessons are found.</p>
 
         <hr size=1>
       </dd>

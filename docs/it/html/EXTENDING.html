@@ -830,6 +830,50 @@ Tux&nbsp;Paint.</p>
 <hr size=1 noshade>
 
 
+<h2><a name="lessons">Lezioni</a></h2>
+<blockquote>
+  <p><i>(Solo in questa versione)</i></p>
+
+  <p>Le lezioni dello strumento 'Impara' insegnano a disegnare
+  un'immagine su carta, passo dopo passo. (Vedi il
+  <a href="README.html#learn">manuale</a>.) Ogni lezione è fatta di due
+  file con lo stesso nome: "<code><i>NOME</i>.svg</code>", il disegno
+  finito e colorato, con un gruppo di forme per ogni passo, e
+  "<code><i>NOME</i>.txt</code>", con il titolo e i passi, e le loro
+  istruzioni in inglese e nelle altre lingue.</p>
+
+  <p>Le lezioni vanno in una cartella "<code><b>lessons</b></code>",
+  dentro una delle tre sottocartelle, una per ogni livello di difficoltà:
+  "<code><b>easy</b></code>" (facile), "<code><b>medium</b></code>"
+  (medio) e "<code><b>hard</b></code>" (difficile). Tux&nbsp;Paint le
+  cerca nella sua cartella dei dati (per esempio
+  "<code>/usr/share/tuxpaint/lessons/easy/</code>") e nella tua cartella
+  personale (per esempio "<code>~/.tuxpaint/lessons/easy/</code>" su
+  Linux o Unix). Una lezione personale con lo stesso livello e lo stesso
+  nome di una di quelle fornite con Tux&nbsp;Paint la sostituisce.</p>
+
+  <p>Il formato dei file, e i consigli per fare disegni che un bambino
+  possa copiare, sono descritti (in inglese) in
+  "<code>lessons/README.txt</code>", nel codice sorgente di
+  Tux&nbsp;Paint; il file viene installato anche nella cartella
+  "<code>lessons</code>" dei dati. Per tradurre una lezione, aggiungi al
+  suo file "<code>.txt</code>" le righe
+  "<code><i>LINGUA</i>.utf8=</code>", come per la descrizione dei
+  timbri.</p>
+
+  <p>Lo script "<code>devtools/content/lesson_preview.py</code>", nel
+  codice sorgente (serve Python&nbsp;3 con Pillow), controlla i file di
+  una lezione e disegna un foglio con tutti i suoi passi, come li mostra
+  Tux&nbsp;Paint. Per esempio:</p>
+
+  <blockquote><code>
+    python3 devtools/content/lesson_preview.py --out /tmp/anteprima lessons/easy/sun.txt
+  </code></blockquote>
+</blockquote>
+
+<hr size=1 noshade>
+
+
 <h2>Traduzioni</h2>
 <blockquote>
   <p>Tux&nbsp;Paint funziona in molte lingue, grazie alla libreria di

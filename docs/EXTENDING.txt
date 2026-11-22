@@ -600,6 +600,36 @@ Fonts
 
      ----------------------------------------------------------------------
 
+Lessons
+
+     The lessons of the 'Learn' tool teach how to draw a picture on paper,
+     step by step. (See README.) Each lesson is two files with the same name:
+     "NAME.svg", the finished, colored drawing, with one group of shapes for
+     each step; and "NAME.txt", with the title and the steps, and their
+     instructions in English and in other languages.
+
+     Lessons go in a "lessons" directory, in one of three subdirectories, one
+     for each level of difficulty: "easy", "medium" and "hard". Tux Paint
+     looks for them in its data directory (e.g.,
+     "/usr/share/tuxpaint/lessons/easy/") and in your personal directory
+     (e.g., "~/.tuxpaint/lessons/easy/" under Linux or Unix). A personal
+     lesson with the same level and name as one that comes with Tux Paint
+     replaces it.
+
+     The format of the files, and advice on drawing pictures that a child can
+     copy, are described in "lessons/README.txt" (in Tux Paint's source code;
+     it is also installed in the "lessons" folder of the data directory). To
+     translate a lesson, add "LANG.utf8=" lines to its ".txt" file, as for
+     the stamps' description text.
+
+     The script "devtools/content/lesson_preview.py", in the source code (it
+     needs Python 3 and Pillow), checks a lesson's files and draws a sheet
+     with all of its steps, as Tux Paint shows them. For example:
+
+       python3 devtools/content/lesson_preview.py --out /tmp/preview lessons/easy/sun.txt
+
+     ----------------------------------------------------------------------
+
 Translations
 
      Tux Paint supports numerous languages, thanks to use of the "gettext"

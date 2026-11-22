@@ -45,6 +45,9 @@ _tuxpaint()
 			--sysfonts --nosysfonts \
 			--nostampcontrols --stampcontrols \
 			--nomagiccontrols --magiccontrols \
+			--nolessons --lessons \
+			--nospeech --speech \
+			--speechcommand= \
 			--mirrorstamps --dontmirrorstamps \
 			--stampsize=0 --stampsize=1 \
 			--stampsize=2 --stampsize=3 \

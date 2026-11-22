@@ -63,6 +63,12 @@ tuxpaint -- "Tux Paint", a drawing program for young children.
 .br
 [\-\-nolabel]
 .br
+[\-\-nolessons]
+.br
+[\-\-nospeech]
+.br
+[\-\-speechcommand=\fICOMMAND\fP]
+.br
 [\-\-mirrorstamps]
 .br
 [\-\-mouse-accessibility]
@@ -188,6 +194,10 @@ tuxpaint -- "Tux Paint", a drawing program for young children.
 [\-\-magiccontrols]
 .br
 [\-\-label]
+.br
+[\-\-lessons]
+.br
+[\-\-speech]
 .br
 [\-\-dontmirrorstamps]
 .br
@@ -423,6 +433,34 @@ controllable.)
 .B \-\-nolabel \-\-label
 Disable or enable (default) the \fILabel\fP tool, which lets you create
 text which can be altered or moved later.
+
+.TP 8
+.B \-\-nolessons \-\-lessons
+Disable or enable (default) the \fILearn\fP tool, which teaches how to draw
+a picture on paper, step by step.  Lessons are read from the \fIlessons\fP
+folder of the data directory (e.g. \%\fI/usr/share/tuxpaint/lessons/\fP)
+and of the user's own directory \%(\fI$HOME/.tuxpaint/lessons/\fP).  (The
+tool is also disabled when no lessons are found.)
+
+.TP 8
+.B \-\-nospeech \-\-speech
+Don't read, or read (default), the \fILearn\fP tool's instructions aloud.
+The voice is played like the other sounds, so \-\-nosound (or muting with
+\fIAlt+S\fP) silences it too.
+
+.TP 8
+.B \-\-speechcommand=\fICOMMAND\fP
+Read the \fILearn\fP tool's instructions aloud with \fICOMMAND\fP, run
+with \fI/bin/sh\fP: it gets the text (UTF-8) on its standard input and must
+write a sound file (e.g. WAV) to its standard output.  "%l" in
+\fICOMMAND\fP is replaced by the language code (e.g. "it", "en",
+\%"pt-br"), and "%%" by "%".  By default, eSpeak NG
+\%(\fIlibespeak-ng.so.1\fP) is used, if installed.  If the command fails, a
+warning is printed and nothing is read aloud.  For example:
+.RS
+.PP
+\-\-speechcommand='espeak\-ng \-v %l \-\-stdout'
+.RE
 
 .TP 8
 .B \-\-mirrorstamps \-\-dontmirrorstamps

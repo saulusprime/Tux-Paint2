@@ -389,6 +389,51 @@ Windows Users
                Disables the Label tool: the tool that allows text entry which
                can be edited later.
 
+       nolessons=yes
+               Disables the Learn tool: the lessons that teach how to draw a
+               picture on paper, step by step. (The tool is also disabled when
+               no lessons are found.)
+
+       nospeech=yes
+               Don't read the Learn tool's instructions aloud. (By default
+               they are read aloud, if a voice is available: see
+               "speechcommand", below.)
+
+       speechcommand=COMMAND
+
+               (Not available on Windows, where the instructions aren't read
+               aloud.)
+
+               Use the command COMMAND to read the Learn tool's instructions
+               aloud. The command is run with "/bin/sh"; it gets the text
+               (UTF-8) on its standard input, and must write a sound file
+               (WAV, or another format that SDL_mixer can play) to its
+               standard output. In the command, "%l" is replaced by the
+               language code of the text (e.g., "it", "en" or "pt-br"), and
+               "%%" by a "%".
+
+               If this option is not set, Tux Paint uses eSpeak NG, in the
+               language of the text, if its library ("libespeak-ng.so.1") is
+               installed. (On Debian and Ubuntu it is in the "libespeak-ng1"
+               package, which is usually already installed along with
+               speech-dispatcher.) The library is loaded when Tux Paint runs:
+               it isn't needed to build Tux Paint.
+
+               Examples:
+
+                 speechcommand=espeak-ng -v %l --stdout
+
+                 speechcommand=sh -c 'pico2wave -l it-IT -w /tmp/tp-voice.wav "$(cat)" && cat /tmp/tp-voice.wav'
+
+               (The second example uses Pico, in Italian; pico2wave needs the
+               file name to end in ".wav".)
+
+               If the command fails, Tux Paint prints a warning and stays
+               silent.
+
+               The voice is played through Tux Paint's own sound, so the
+               "nosound" option, and muting with [Alt] + [S], silence it too.
+
        mirrorstamps=yes
 
                For stamps that can be mirrored, this option sets them to
@@ -994,6 +1039,9 @@ Windows Users
          --nostampcontrols
          --nomagiccontrols
          --nolabel
+         --nolessons
+         --nospeech
+         --speechcommand=COMMAND
          --mouse-accessibility
          --onscreen-keyboard
          --onscreen-keyboard-layout
@@ -1065,6 +1113,8 @@ Windows Users
          --stampcontrols
          --magiccontrols
          --label
+         --lessons
+         --speech
          --nosysfonts
          --currentlocalefont
          --dontmirrorstamps
