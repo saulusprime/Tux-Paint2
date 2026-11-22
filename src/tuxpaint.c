@@ -11939,10 +11939,15 @@ static char *loaddesc(const char *const fname, Uint8 * locale_text)
 	  {
 	    lang_prefix = wished_langs[i].lang_prefix;
 	    free((char *) short_lang_prefix);
-	    short_lang_prefix = strdup(lang_prefix);
-	    /* When in doubt, cut off country code */
-	    if (strchr(short_lang_prefix, '_'))
-	      *strchr(short_lang_prefix, '_') = '\0';
+	    {
+	      /* (As in i18n.c: cut through a char *) */
+	      char *prefix = strdup(lang_prefix);
+
+	      /* When in doubt, cut off country code */
+	      if (strchr(prefix, '_'))
+		*strchr(prefix, '_') = '\0';
+	      short_lang_prefix = prefix;
+	    }
 
 	    need_own_font = wished_langs[i].need_own_font;
 	    need_right_to_left = wished_langs[i].need_right_to_left;

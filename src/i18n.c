@@ -923,10 +923,16 @@ printf ("Locale AFTER is: %s\n", setlocale(LC_ALL,NULL));//EP
 
   lang_prefix = lang_prefixes[wished_langs[0].langint];
 
-  short_lang_prefix = strdup(lang_prefix);
-  /* When in doubt, cut off country code */
-  if (strchr(short_lang_prefix, '_'))
-    *strchr(short_lang_prefix, '_') = '\0';
+  {
+    /* (Cut through a char *: with C23, strchr() of a const char * is a
+       const char * too) */
+    char *prefix = strdup(lang_prefix);
+
+    /* When in doubt, cut off country code */
+    if (strchr(prefix, '_'))
+      *strchr(prefix, '_') = '\0';
+    short_lang_prefix = prefix;
+  }
 
   need_own_font = wished_langs[0].need_own_font;
   need_right_to_left = wished_langs[0].need_right_to_left;
