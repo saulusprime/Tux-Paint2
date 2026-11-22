@@ -457,6 +457,25 @@ Gli strumenti
                 aggiungere nei file delle lezioni.) Per aggiungere lezioni
                 tue, vedi EXTENDING.
 
+        Le tue immagini
+                Una scheda "Personali" (con un cuore) compare quando nella
+                cartella "custom" delle lezioni ci sono immagini o lezioni:
+                "~/.tuxpaint/lessons/custom/" in Linux e Unix (oppure
+                "custom" nella cartella "lessons" dei dati). Tux Paint non
+                ne fornisce: serve per i tuoi disegni, o per immagini prese
+                altrove (attenzione alla loro licenza).
+
+                Si possono mettere immagini SVG, PNG o JPEG. (I file EPS non
+                si leggono: vanno convertiti in SVG, per esempio con
+                Inkscape.) Ogni immagine diventa una lezione che la fa
+                copiare con la quadrettatura: si guarda l'immagine; si
+                traccia sul foglio una griglia leggera di 3 per 3 riquadri;
+                si copia il disegno un riquadro alla volta; si cancella la
+                griglia; si colora. Il titolo è il nome del file, oppure
+                quello scritto in un file "NOME.txt" accanto (solo il
+                titolo, come in una lezione). Lì possono andare anche
+                lezioni con i passi (vedi EXTENDING).
+
         La voce
                 Le istruzioni vengono lette ad alta voce da eSpeak NG,
                 nella lingua del testo, se la sua libreria

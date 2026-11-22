@@ -616,6 +616,12 @@ Lessons
      lesson with the same level and name as one that comes with Tux Paint
      replaces it.
 
+     A fourth subdirectory, "custom", is for your own pictures and lessons:
+     Tux Paint doesn't install anything there, and shows its "Mine" tab only
+     when it isn't empty. Besides lessons, it can hold plain pictures (SVG,
+     PNG or JPEG, maybe with a "NAME.txt" holding just the title): Tux Paint
+     teaches to copy them with a grid. (See README.)
+
      The format of the files, and advice on drawing pictures that a child can
      copy, are described in "lessons/README.txt" (in Tux Paint's source code;
      it is also installed in the "lessons" folder of the data directory). To

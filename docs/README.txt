@@ -435,6 +435,28 @@ Available Tools
                               (Translations can be added to the lesson
                               files.) To add your own lessons, see EXTENDING.
 
+                      Your Own Pictures
+
+                              A "Mine" tab (with a heart) appears when there
+                              are pictures or lessons in the "custom" lessons
+                              folder: "~/.tuxpaint/lessons/custom/" under
+                              Linux and Unix (or "custom" in the data
+                              directory's "lessons" folder). Tux Paint
+                              doesn't come with any: it is for your own
+                              drawings, or for pictures you got elsewhere
+                              (mind their license).
+
+                              Put SVG, PNG or JPEG pictures there. (EPS files
+                              can't be read: convert them to SVG, e.g. with
+                              Inkscape.) Each picture becomes a lesson that
+                              copies it with a grid: look at it; draw a light
+                              grid of 3 by 3 boxes on the paper; copy the
+                              drawing one box at a time; erase the grid;
+                              color it. Its title is the file's name, or the
+                              one in a "NAME.txt" file next to it (just the
+                              title, as in a lesson). Lessons with steps can
+                              go there too (see EXTENDING).
+
                       The Voice
 
                               The instructions are read aloud by eSpeak NG,

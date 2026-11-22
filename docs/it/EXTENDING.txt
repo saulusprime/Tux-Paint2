@@ -665,6 +665,13 @@ Lezioni
      su Linux o Unix). Una lezione personale con lo stesso livello e lo
      stesso nome di una di quelle fornite con Tux Paint la sostituisce.
 
+     Una quarta sottocartella, "custom", è per le tue immagini e lezioni:
+     Tux Paint non vi installa nulla, e mostra la sua scheda "Personali"
+     solo quando non è vuota. Oltre alle lezioni, può contenere semplici
+     immagini (SVG, PNG o JPEG, eventualmente con un "NOME.txt" che contiene
+     solo il titolo): Tux Paint insegna a copiarle con la quadrettatura.
+     (Vedi README.)
+
      Il formato dei file, e i consigli per fare disegni che un bambino
      possa copiare, sono descritti (in inglese) in "lessons/README.txt",
      nel codice sorgente di Tux Paint; il file viene installato anche
