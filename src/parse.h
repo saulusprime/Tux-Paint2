@@ -15,6 +15,7 @@ struct cfginfo
   const char *colorfile;
   const char *datadir;
   const char *disable_label;
+  const char *disable_lessons;
   const char *disable_magic_controls;
   const char *disable_print;
   const char *disable_quit;
@@ -50,6 +51,8 @@ struct cfginfo
   const char *rotate_orientation;
   const char *savedir;
   const char *simple_shapes;
+  const char *disable_speech;
+  const char *speechcommand;
   const char *stamp_size_override;
   const char *start_blank;
   const char *use_print_config;

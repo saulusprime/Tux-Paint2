@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-01 08:58+0100\n"
+"POT-Creation-Date: 2026-11-22 18:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -375,6 +375,11 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+#. Learn to draw on paper, step by step (it was a reserved, empty slot)
+#: ../tools.h:80
+msgid "Learn"
+msgstr ""
+
 #. Undo last action
 #: ../tools.h:86
 msgid "Undo"
@@ -398,7 +403,7 @@ msgstr ""
 #. Open a saved picture
 #. buttons for the file open dialog
 #. Open dialog: 'Open' button, to load the selected picture
-#: ../tools.h:98 ../tuxpaint.c:8212
+#: ../tools.h:98 ../tuxpaint.c:8410
 msgid "Open"
 msgstr ""
 
@@ -453,6 +458,11 @@ msgid ""
 "Press [Enter] or [Tab] to complete the text. By using the selector button "
 "and clicking an exist label, you can move it, edit it and change its text "
 "style."
+msgstr ""
+
+#. Learn tool instructions (shown while its dialog is being prepared)
+#: ../tools.h:133
+msgid "Pick a picture, and learn to draw it on paper, step by step!"
 msgstr ""
 
 #. Magic tool instruction
@@ -521,179 +531,246 @@ msgid "OK then… Let’s keep drawing this one!"
 msgstr ""
 
 #. Prompt to confirm user wishes to quit
-#: ../tuxpaint.c:2348
+#: ../tuxpaint.c:2538
 msgid "Do you really want to quit?"
 msgstr ""
 
 #. Quit prompt positive response (quit)
-#: ../tuxpaint.c:2351
+#: ../tuxpaint.c:2541
 msgid "Yes, I’m done!"
 msgstr ""
 
 #. Quit prompt negative response (don't quit)
-#: ../tuxpaint.c:2354 ../tuxpaint.c:2381
+#: ../tuxpaint.c:2544 ../tuxpaint.c:2571
 msgid "No, take me back!"
 msgstr ""
 
 #. Current picture is not saved; user is quitting
-#: ../tuxpaint.c:2358
+#: ../tuxpaint.c:2548
 msgid "If you quit, you’ll lose your picture! Save it?"
 msgstr ""
 
-#: ../tuxpaint.c:2359 ../tuxpaint.c:2364
+#: ../tuxpaint.c:2549 ../tuxpaint.c:2554
 msgid "Yes, save it!"
 msgstr ""
 
-#: ../tuxpaint.c:2360 ../tuxpaint.c:2365
+#: ../tuxpaint.c:2550 ../tuxpaint.c:2555
 msgid "No, don’t bother saving!"
 msgstr ""
 
 #. Current picture is not saved; user is opening another picture
-#: ../tuxpaint.c:2363
+#: ../tuxpaint.c:2553
 msgid "Save your picture first?"
 msgstr ""
 
 #. Error opening picture
-#: ../tuxpaint.c:2368
+#: ../tuxpaint.c:2558
 msgid "Can’t open that picture!"
 msgstr ""
 
 #. Generic dialog dismissal
-#: ../tuxpaint.c:2371 ../tuxpaint.c:2376 ../tuxpaint.c:2385 ../tuxpaint.c:2392
-#: ../tuxpaint.c:2401
+#: ../tuxpaint.c:2561 ../tuxpaint.c:2566 ../tuxpaint.c:2575 ../tuxpaint.c:2582
+#: ../tuxpaint.c:2591 ../tuxpaint.c:20975
 msgid "OK"
 msgstr ""
 
 #. Notification that 'Open' dialog has nothing to show
-#: ../tuxpaint.c:2375
+#: ../tuxpaint.c:2565
 msgid "There are no saved files!"
 msgstr ""
 
 #. Verification of print action
-#: ../tuxpaint.c:2379
+#: ../tuxpaint.c:2569
 msgid "Print your picture now?"
 msgstr ""
 
-#: ../tuxpaint.c:2380
+#: ../tuxpaint.c:2570
 msgid "Yes, print it!"
 msgstr ""
 
 #. Confirmation of successful (we hope) printing
-#: ../tuxpaint.c:2384
+#: ../tuxpaint.c:2574
 msgid "Your picture has been printed!"
 msgstr ""
 
 #. We got an error printing
-#: ../tuxpaint.c:2388
+#: ../tuxpaint.c:2578
 msgid "Sorry! Your picture could not be printed!"
 msgstr ""
 
 #. Notification that it's too soon to print again (--printdelay option is in effect)
-#: ../tuxpaint.c:2391
+#: ../tuxpaint.c:2581
 msgid "You can’t print yet!"
 msgstr ""
 
 #. Prompt to confirm erasing a picture in the Open dialog
-#: ../tuxpaint.c:2395
+#: ../tuxpaint.c:2585
 msgid "Erase this picture?"
 msgstr ""
 
-#: ../tuxpaint.c:2396
+#: ../tuxpaint.c:2586
 msgid "Yes, erase it!"
 msgstr ""
 
-#: ../tuxpaint.c:2397
+#: ../tuxpaint.c:2587
 msgid "No, don’t erase it!"
 msgstr ""
 
 #. Reminder that Mouse Button 1 is the button to use in Tux Paint
-#: ../tuxpaint.c:2400
+#: ../tuxpaint.c:2590
 msgid "Remember to use the left mouse button!"
 msgstr ""
 
 #. Sound has been muted (silenced) via keyboard shortcut
-#: ../tuxpaint.c:2746
+#: ../tuxpaint.c:2900
 msgid "Sound muted."
 msgstr ""
 
 #. Sound has been unmuted (unsilenced) via keyboard shortcut
-#: ../tuxpaint.c:2751
+#: ../tuxpaint.c:2905
 msgid "Sound unmuted."
 msgstr ""
 
 #. Wait while Text tool finishes loading fonts
-#: ../tuxpaint.c:3498
+#: ../tuxpaint.c:3652
 msgid "Please wait…"
 msgstr ""
 
 #. Open dialog: 'Erase' button, to erase/deleted the selected picture
-#: ../tuxpaint.c:8215
+#: ../tuxpaint.c:8413
 msgid "Erase"
 msgstr ""
 
 #. Open dialog: 'Slides' button, to switch to slide show mode
-#: ../tuxpaint.c:8218
+#: ../tuxpaint.c:8416
 msgid "Slides"
 msgstr ""
 
 #. Open dialog: 'Back' button, to dismiss Open dialog without opening a picture
-#: ../tuxpaint.c:8221
+#: ../tuxpaint.c:8419
 msgid "Back"
 msgstr ""
 
 #. Slideshow: 'Next' button, to load next slide (image)
-#: ../tuxpaint.c:8224
+#: ../tuxpaint.c:8422
 msgid "Next"
 msgstr ""
 
 #. Slideshow: 'Play' button, to begin a slideshow sequence
-#: ../tuxpaint.c:8227
+#: ../tuxpaint.c:8425
 msgid "Play"
 msgstr ""
 
+#. Learn dialog: 'Start' button, to begin the chosen lesson
+#: ../tuxpaint.c:8428
+msgid "Start"
+msgstr ""
+
+#. Learn dialog: 'Previous' button, to go back to the step before
+#: ../tuxpaint.c:8431
+msgid "Previous"
+msgstr ""
+
+#. Learn dialog: 'Repeat' button, to hear the step's instructions again
+#: ../tuxpaint.c:8434
+msgid "Repeat"
+msgstr ""
+
+#. Learn dialog: 'Voice' button, to read the instructions aloud or not
+#: ../tuxpaint.c:8437
+msgid "Voice"
+msgstr ""
+
 #. Label for 'Letters' buttons (font selector, down the right when the Text tool is being used); used to show the difference between font faces
-#: ../tuxpaint.c:9325
+#: ../tuxpaint.c:9579
 msgid "Aa"
 msgstr ""
 
 #. Admittedly stupid way of determining which keys can be used for
 #. positive and negative responses in dialogs (e.g., [Y] (for 'yes') in English)
-#: ../tuxpaint.c:12671
+#: ../tuxpaint.c:12943
 msgid "Yes"
 msgstr ""
 
-#: ../tuxpaint.c:12675
+#: ../tuxpaint.c:12947
 msgid "No"
 msgstr ""
 
 #. Prompt to ask whether user wishes to save over old version of their file
-#: ../tuxpaint.c:13606
+#: ../tuxpaint.c:13920
 msgid "Replace the picture with your changes?"
 msgstr ""
 
 #. Positive response to saving over old version
 #. (like a 'File:Save' action in other applications)
-#: ../tuxpaint.c:13610
+#: ../tuxpaint.c:13924
 msgid "Yes, replace the old one!"
 msgstr ""
 
 #. Negative response to saving over old version (saves a new image)
 #. (like a 'File:Save As...' action in other applications)
-#: ../tuxpaint.c:13614
+#: ../tuxpaint.c:13928
 msgid "No, save a new file!"
 msgstr ""
 
-#: ../tuxpaint.c:14863
+#: ../tuxpaint.c:15185
 msgid "Choose the picture you want, then click “Open”."
 msgstr ""
 
 #. Let user choose images:
 #. Instructions for Slideshow file dialog (FIXME: Make a #define)
-#: ../tuxpaint.c:15896 ../tuxpaint.c:16224
+#: ../tuxpaint.c:16248 ../tuxpaint.c:16608
 msgid "Choose the pictures you want, then click “Play”."
 msgstr ""
 
-#: ../tuxpaint.c:23395
+#. --- Learn: lessons that teach to draw a picture on paper, step by step,
+#. and to color it (see src/lessons.c and lessons/README.txt) ---
+#. Learn dialog: what to do while choosing a lesson
+#: ../tuxpaint.c:20962
+msgid ""
+"Pick a picture to draw on paper! Start with the easy ones, then try the "
+"harder ones."
+msgstr ""
+
+#. Learn dialog: there are no lessons in the chosen level
+#: ../tuxpaint.c:20965
+msgid "There are no pictures to learn here yet."
+msgstr ""
+
+#. Learn dialog: before the first step of a lesson; %s is the picture's name (e.g., "Sun")
+#: ../tuxpaint.c:20968
+#, c-format
+msgid ""
+"Let’s draw: %s! Get a sheet of paper, a pencil, an eraser and your crayons."
+msgstr ""
+
+#. Learn dialog: after the last step of a lesson; %s is the picture's name (e.g., "Sun")
+#: ../tuxpaint.c:20971
+#, c-format
+msgid "Well done! You finished: %s. Does your drawing look like this one?"
+msgstr ""
+
+#. Learn dialog: a lesson can't be shown (e.g., its picture is missing)
+#: ../tuxpaint.c:20974
+msgid "Sorry! This lesson can’t be shown."
+msgstr ""
+
+#. Learn dialog: the tab with the easiest lessons
+#: ../tuxpaint.c:20979
+msgid "Easy"
+msgstr ""
+
+#. Learn dialog: the tab with the lessons of medium difficulty
+#: ../tuxpaint.c:20982
+msgid "Medium"
+msgstr ""
+
+#. Learn dialog: the tab with the hardest lessons
+#: ../tuxpaint.c:20985
+msgid "Hard"
+msgstr ""
+
+#: ../tuxpaint.c:24734
 msgid "Pick a color."
 msgstr ""
 
@@ -821,15 +898,15 @@ msgstr ""
 msgid "Click to throw confetti!"
 msgstr ""
 
-#: ../../magic/src/crossstitch.c:56
+#: ../../magic/src/crossstitch.c:58
 msgid "Cross Stitch"
 msgstr ""
 
-#: ../../magic/src/crossstitch.c:62
+#: ../../magic/src/crossstitch.c:64
 msgid "Click and drag the mouse to embroider the picture with cross stitches."
 msgstr ""
 
-#: ../../magic/src/crossstitch.c:63
+#: ../../magic/src/crossstitch.c:65
 msgid "Click to embroider your entire picture with cross stitches."
 msgstr ""
 
@@ -1152,14 +1229,6 @@ msgstr ""
 msgid "Click and drag to draw train track rails on your picture."
 msgstr ""
 
-#: ../../magic/src/rainbow.c:139
-msgid "Rainbow"
-msgstr ""
-
-#: ../../magic/src/rainbow.c:146
-msgid "You can draw in rainbow colors!"
-msgstr ""
-
 #: ../../magic/src/rain.c:65
 msgid "Rain"
 msgstr ""
@@ -1170,6 +1239,14 @@ msgstr ""
 
 #: ../../magic/src/rain.c:69
 msgid "Click to cover your picture with rain drops."
+msgstr ""
+
+#: ../../magic/src/rainbow.c:139
+msgid "Rainbow"
+msgstr ""
+
+#: ../../magic/src/rainbow.c:146
+msgid "You can draw in rainbow colors!"
 msgstr ""
 
 #: ../../magic/src/realrainbow.c:110

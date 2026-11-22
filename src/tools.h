@@ -41,7 +41,7 @@ enum
   TOOL_SHAPES,
   TOOL_TEXT,
   TOOL_LABEL,
-  TOOL_NA,
+  TOOL_LEARN,
   TOOL_MAGIC,
   TOOL_UNDO,
   TOOL_REDO,
@@ -76,8 +76,8 @@ const char *const tool_names[NUM_TOOLS] = {
   // Label tool
   gettext_noop("Label"),
 
-  // Reserved...
-  " ",
+  // Learn to draw on paper, step by step (it was a reserved, empty slot)
+  gettext_noop("Learn"),
 
   // "Magic" effects tools (blur, flip image, etc.)
   gettext_noop("Magic"),
@@ -129,8 +129,8 @@ const char *const tool_tips[NUM_TOOLS] = {
   // Label tool instructions
   gettext_noop("Choose a style of text. Click on your drawing and you can start typing. Press [Enter] or [Tab] to complete the text. By using the selector button and clicking an exist label, you can move it, edit it and change its text style."),
 
-  // Reserved...
-  " ",
+  // Learn tool instructions (shown while its dialog is being prepared)
+  gettext_noop("Pick a picture, and learn to draw it on paper, step by step!"),
 
   // Magic tool instruction
   gettext_noop("Pick a magical effect to use on your drawing!"),
@@ -182,7 +182,7 @@ const char *const tool_img_fnames[NUM_TOOLS] = {
   DATA_PREFIX "images/tools/shapes.png",
   DATA_PREFIX "images/tools/text.png",
   DATA_PREFIX "images/tools/label.png",
-  DATA_PREFIX "images/ui/dead40x40.png",
+  DATA_PREFIX "images/tools/learn.png",
   DATA_PREFIX "images/tools/magic.png",
   DATA_PREFIX "images/tools/undo.png",
   DATA_PREFIX "images/tools/redo.png",

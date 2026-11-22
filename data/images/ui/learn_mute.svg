@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 40 30">
+<!-- Made by devtools/content/learn_icons.py -->
+  <path d="M5,11 H11 L18,5 V25 L11,19 H5 Z" fill="#000000" fill-opacity="0.35" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+  <path d="M24,9.5 L35,20.5 M35,9.5 L24,20.5" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6"/>
+</svg>

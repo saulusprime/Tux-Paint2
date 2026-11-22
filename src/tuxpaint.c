@@ -494,6 +494,8 @@ static void mtw(wchar_t * wtok, char * tok)
 #include "dirwalk.h"
 #include "get_fname.h"
 #include "onscreen_keyboard.h"
+#include "lessons.h"
+#include "speech.h"
 
 #include "tools.h"
 #include "titles.h"
@@ -1208,6 +1210,12 @@ static int joystick_dev = 0;
 
 static int disable_print;
 static int print_delay;
+
+/* The Learn tool (lessons to draw on paper) and its voice */
+static int disable_lessons;
+static int disable_speech;
+static const char *speechcommand;
+static int num_lessons_found;
 static int use_print_config = 1;
 static int alt_print_command_default = ALTPRINT_MOD;
 static int want_alt_printcommand;
@@ -1451,6 +1459,7 @@ static SDL_Surface *img_dead40x40;
 static SDL_Surface *img_black, *img_grey;
 static SDL_Surface *img_yes, *img_no;
 static SDL_Surface *img_sfx, *img_speak;
+static SDL_Surface *img_learn_prev, *img_learn_next, *img_learn_voice, *img_learn_mute;
 static SDL_Surface *img_open, *img_erase, *img_back, *img_trash;
 static SDL_Surface *img_slideshow, *img_play, *img_select_digits;
 static SDL_Surface *img_printer, *img_printer_wait;
@@ -1755,7 +1764,8 @@ static SDL_Surface *img_shapes[NUM_SHAPES], *img_shape_names[NUM_SHAPES];
 static SDL_Surface *img_shapes_small[NUM_SHAPES];
 static SDL_Surface *img_openlabels_open, *img_openlabels_erase,
   *img_openlabels_slideshow, *img_openlabels_back, *img_openlabels_play,
-  *img_openlabels_next;
+  *img_openlabels_next, *img_openlabels_start, *img_openlabels_previous,
+  *img_openlabels_repeat, *img_openlabels_voice;
 
 static SDL_Surface *img_tux[NUM_TIP_TUX];
 
@@ -2001,6 +2011,8 @@ static void get_new_file_id(void);
 static int do_quit(int tool);
 static int do_open(void);
 static int do_new_dialog(void);
+static void do_learn(void);
+static int count_lessons(void);
 static int do_color_picker(void);
 static int do_slideshow(void);
 static void play_slideshow(int * selected, int num_selected, char * dirname,
@@ -3846,6 +3858,46 @@ static void mainloop(void)
                 draw_shapes();
               else if (cur_tool == TOOL_ERASER)
                 draw_erasers();
+	    }
+	    else if (cur_tool == TOOL_LEARN)
+	    {
+	      /* (A dialog: the canvas doesn't change) */
+	      shape_tool_mode = SHAPE_TOOL_MODE_DONE;
+
+	      disable_avail_tools();
+	      draw_toolbar();
+	      draw_colors(COLORSEL_CLOBBER_WIPE);
+	      draw_none();
+
+	      do_learn();
+
+	      cur_tool = old_tool;
+	      enable_avail_tools();
+
+	      draw_toolbar();
+	      update_screen_rect(&r_tools);
+	      draw_colors(COLORSEL_REFRESH);
+	      draw_tux_text(tool_tux[cur_tool], tool_tips[cur_tool], 1);
+
+	      if (cur_tool == TOOL_BRUSH || cur_tool == TOOL_LINES)
+		draw_brushes();
+	      else if (cur_tool == TOOL_MAGIC)
+		draw_magic();
+	      else if (cur_tool == TOOL_STAMP)
+		draw_stamps();
+	      else if (cur_tool == TOOL_TEXT || cur_tool == TOOL_LABEL)
+	      {
+		draw_fonts();
+		if (onscreen_keyboard && kbd)
+		{
+		  SDL_BlitSurface(kbd->surface, &kbd->rect, screen, &kbd_rect);
+		  update_screen_rect(&kbd_rect);
+		}
+	      }
+	      else if (cur_tool == TOOL_SHAPES)
+		draw_shapes();
+	      else if (cur_tool == TOOL_ERASER)
+		draw_erasers();
 	    }
 	    else if (cur_tool == TOOL_PRINT)
 	    {
@@ -6935,6 +6987,9 @@ void show_usage(int exitcode)
 	  "  %s [--nostampcontrols | --stampcontrols]\n"
 	  "  %s [--nomagiccontrols | --magiccontrols]\n"
           "  %s [--nolabel | --label]\n"
+          "  %s [--nolessons | --lessons]\n"
+          "  %s [--nospeech | --speech]\n"
+          "  %s [--speechcommand=COMMAND]\n"
 	  "  %s [--mirrorstamps | --dontmirrorstamps]\n"
 	  "  %s [--stampsize=[0-10] | --stampsize=default]\n"
 	  "  %s [--saveoverask | --saveover | --saveovernew]\n"
@@ -6968,6 +7023,7 @@ void show_usage(int exitcode)
 	  blank, blank, blank, blank,
 	  blank, blank, blank, blank,
 	  blank, blank, blank, blank, blank, blank, blank, blank, blank,
+	  blank, blank, blank,
 #ifdef WIN32
 	  blank,
 #endif
@@ -8367,6 +8423,18 @@ static void create_button_labels(void)
 
   /* Slideshow: 'Play' button, to begin a slideshow sequence */
   img_openlabels_play = do_render_button_label(gettext_noop("Play"));
+
+  /* Learn dialog: 'Start' button, to begin the chosen lesson */
+  img_openlabels_start = do_render_button_label(gettext_noop("Start"));
+
+  /* Learn dialog: 'Previous' button, to go back to the step before */
+  img_openlabels_previous = do_render_button_label(gettext_noop("Previous"));
+
+  /* Learn dialog: 'Repeat' button, to hear the step's instructions again */
+  img_openlabels_repeat = do_render_button_label(gettext_noop("Repeat"));
+
+  /* Learn dialog: 'Voice' button, to read the instructions aloud or not */
+  img_openlabels_voice = do_render_button_label(gettext_noop("Voice"));
 }
 
 
@@ -11109,9 +11177,10 @@ static void reset_avail_tools(void)
     tool_avail[TOOL_LABEL] = 0;
 
 
-  /* TBD... */
+  /* Learn: only with lessons to show */
 
-  tool_avail[TOOL_NA] = 0;
+  if (disable_lessons || num_lessons_found == 0)
+    tool_avail[TOOL_LEARN] = 0;
 
 
   /* Disable save? */
@@ -13412,6 +13481,9 @@ static void cleanup(void)
     }
   }
 #endif
+
+  /* (Before the mixer closes: it plays on one of its channels) */
+  speech_quit();
 
 #ifndef NOSOUND
   if (use_sound)
@@ -20883,6 +20955,915 @@ cleanup_and_return:
   return(which != -1);
 }
 
+/* --- Learn: lessons that teach to draw a picture on paper, step by step,
+   and to color it (see src/lessons.c and lessons/README.txt) --- */
+
+/* Learn dialog: what to do while choosing a lesson */
+#define TIP_LEARN_CHOOSE gettext_noop("Pick a picture to draw on paper! Start with the easy ones, then try the harder ones.")
+
+/* Learn dialog: there are no lessons in the chosen level */
+#define TIP_LEARN_EMPTY gettext_noop("There are no pictures to learn here yet.")
+
+/* Learn dialog: before the first step of a lesson; %s is the picture's name (e.g., "Sun") */
+#define TIP_LEARN_START gettext_noop("Let’s draw: %s! Get a sheet of paper, a pencil, an eraser and your crayons.")
+
+/* Learn dialog: after the last step of a lesson; %s is the picture's name (e.g., "Sun") */
+#define TIP_LEARN_DONE gettext_noop("Well done! You finished: %s. Does your drawing look like this one?")
+
+/* Learn dialog: a lesson can't be shown (e.g., its picture is missing) */
+#define PROMPT_LEARN_BROKEN_TXT gettext_noop("Sorry! This lesson can’t be shown.")
+#define PROMPT_LEARN_BROKEN_YES gettext_noop("OK")
+
+static const char *const learn_level_names[NUM_LESSON_LEVELS] = {
+  /* Learn dialog: the tab with the easiest lessons */
+  gettext_noop("Easy"),
+
+  /* Learn dialog: the tab with the lessons of medium difficulty */
+  gettext_noop("Medium"),
+
+  /* Learn dialog: the tab with the hardest lessons */
+  gettext_noop("Hard")
+};
+
+/* How long the new part of a step blinks (ms) */
+#define LEARN_ANIM_MS 2000
+
+/* Lessons shown at once in the selector */
+#define LEARN_COLS 3
+#define LEARN_ROWS 2
+
+static int learn_level;		/* the level chosen last */
+static int learn_voice_on = 1;	/* the "Voice" button */
+
+/* Where the selector's parts go (they follow the screen's size) */
+typedef struct learn_layout
+{
+  SDL_Rect tabs[NUM_LESSON_LEVELS];
+  SDL_Rect grid;
+  int card_w, card_h;
+  int thumb_w, thumb_h;
+  int buttons_y;
+} learn_layout;
+
+static void learn_get_layout(learn_layout * lay)
+{
+  int i, gap = SCALED(6), tab_h = button_h * 3 / 4, tab_w, title_h;
+
+  tab_w = (r_canvas.w - gap * (NUM_LESSON_LEVELS + 1)) / NUM_LESSON_LEVELS;
+  for (i = 0; i < NUM_LESSON_LEVELS; i++)
+  {
+    lay->tabs[i].x = r_canvas.x + gap + i * (tab_w + gap);
+    lay->tabs[i].y = gap;
+    lay->tabs[i].w = tab_w;
+    lay->tabs[i].h = tab_h;
+  }
+
+  lay->grid.x = r_canvas.x;
+  lay->grid.y = gap * 2 + tab_h;
+  lay->grid.w = r_canvas.w;
+  lay->grid.h = r_canvas.h - button_h - SCALED(2) - lay->grid.y;
+  lay->card_w = lay->grid.w / LEARN_COLS;
+  lay->card_h = lay->grid.h / LEARN_ROWS;
+
+  title_h = TuxPaint_Font_FontHeight(medium_font);
+  lay->thumb_w = lay->card_w - SCALED(24);
+  lay->thumb_h = lay->card_h - SCALED(20) - title_h;
+  if (lay->thumb_w < 1)
+    lay->thumb_w = 1;
+  if (lay->thumb_h < 1)
+    lay->thumb_h = 1;
+
+  lay->buttons_y = r_canvas.h - button_h;
+}
+
+/* Whether lessons can be read aloud now */
+static int learn_voice_usable(void)
+{
+#ifndef NOSOUND
+  return use_sound && !mute && !disable_speech && speech_available();
+#else
+  return 0;
+#endif
+}
+
+static void learn_say(const char *text, const char *lang)
+{
+  if (learn_voice_on && learn_voice_usable())
+    speech_say(text, lang);
+}
+
+/* An interface text (formatted with arg, if not NULL) shown by Tux and
+   read aloud, in the interface's language */
+static void learn_tux_says(int which_tux, const char *msgid, const char *arg, int speak)
+{
+  char buf[1024];
+  const char *fmt = gettext(msgid);
+  int translated = (strcmp(fmt, msgid) != 0);
+
+  if (arg != NULL)
+    snprintf(buf, sizeof(buf), fmt, arg);
+  else
+    snprintf(buf, sizeof(buf), "%s", fmt);
+
+  draw_tux_text_ex(which_tux, buf, 1, translated);
+
+  if (speak)
+    learn_say(buf, translated ? lang_prefix : "en");
+}
+
+/* A button with an icon of the Learn dialog: state 0 is off (grey), 1 up,
+   2 down. (Icon and label are recolored in place, as draw_toolbar() does;
+   they go back to black afterwards, since other dialogs share some, e.g.
+   the slideshow's "Next".) */
+static void learn_button(int x, int y, SDL_Surface * icon, SDL_Surface * name, int state)
+{
+  SDL_Rect dest;
+  SDL_Surface *color = (state == 0 ? img_grey : img_black);
+
+  dest.x = x;
+  dest.y = y;
+  SDL_BlitSurface(state == 0 ? img_btn_off : (state == 2 ? img_btn_down : img_btn_up),
+		  NULL, screen, &dest);
+
+  if (icon != NULL)
+  {
+    SDL_BlitSurface(color, NULL, icon, NULL);
+    dest.x = x + (button_w - icon->w) / 2;
+    dest.y = y + SCALED(2);
+    SDL_BlitSurface(icon, NULL, screen, &dest);
+    if (state == 0)
+      SDL_BlitSurface(img_black, NULL, icon, NULL);
+  }
+
+  if (name != NULL)
+  {
+    SDL_BlitSurface(color, NULL, name, NULL);
+    dest.x = x + (button_w - name->w) / 2;
+    dest.y = y + button_h - name->h;
+    SDL_BlitSurface(name, NULL, screen, &dest);
+    if (state == 0)
+      SDL_BlitSurface(img_black, NULL, name, NULL);
+  }
+}
+
+/* A button that is a picture of its own (img_play, img_back), with its
+   label */
+static void learn_image_button(int x, int y, SDL_Surface * img, SDL_Surface * name)
+{
+  SDL_Rect dest;
+
+  dest.x = x;
+  dest.y = y;
+  SDL_BlitSurface(img, NULL, screen, &dest);
+
+  dest.x = x + (button_w - name->w) / 2;
+  dest.y = y + button_h - name->h;
+  SDL_BlitSurface(name, NULL, screen, &dest);
+}
+
+static int learn_hit(int x, int y, int bx, int by, int bw, int bh)
+{
+  return x >= bx && x < bx + bw && y >= by && y < by + bh;
+}
+
+/* A line of text in the interface's medium font, just as big as the
+   text (Tux's tip leaves a minimum size in the font's Pango context, see
+   wordwrap_text_ex()) */
+static SDL_Surface *learn_render_text(const char *text)
+{
+  SDL_Color black = { 0, 0, 0, 0 };
+
+#ifndef NO_SDLPANGO
+  if (medium_font->typ == FONT_TYPE_PANGO)
+    SDLPango_SetMinimumSize(medium_font->pango_context, 0, 0);
+#endif
+
+  return render_text(medium_font, text, black);
+}
+
+/* A text in the interface's medium font, centered in the rectangle (and
+   cut to its width) */
+static void learn_draw_text(const char *text, SDL_Rect * r)
+{
+  SDL_Surface *s;
+  SDL_Rect src, dest;
+
+  s = learn_render_text(text);
+  if (s == NULL)
+    return;
+
+  src.x = 0;
+  src.y = 0;
+  src.w = min(s->w, (int) r->w);
+  src.h = min(s->h, (int) r->h);
+  dest.x = r->x + (r->w - src.w) / 2;
+  dest.y = r->y + (r->h - src.h) / 2;
+  SDL_BlitSurface(s, &src, screen, &dest);
+  SDL_FreeSurface(s);
+}
+
+
+/* Draw the selector: level tabs, lessons of the level, buttons */
+static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int which,
+			       int scroll, SDL_Surface ** thumbs, learn_layout * lay)
+{
+  SDL_Rect dest, r;
+  SDL_Surface *s, *tmp;
+  int i, k, n, x, y, text_x;
+  lesson *l;
+
+  dest.x = r_canvas.x;
+  dest.y = 0;
+  dest.w = r_canvas.w;
+  dest.h = r_canvas.h;
+  SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
+
+  /* Tabs */
+  for (i = 0; i < NUM_LESSON_LEVELS; i++)
+  {
+    s = lesson_level_tab(i, lay->tabs[i].w, lay->tabs[i].h, i == learn_level, &text_x);
+    if (s == NULL)
+      continue;
+    dest = lay->tabs[i];
+    SDL_BlitSurface(s, NULL, screen, &dest);
+    SDL_FreeSurface(s);
+
+    r.x = lay->tabs[i].x + text_x;
+    r.y = lay->tabs[i].y;
+    r.w = lay->tabs[i].w - text_x - lay->tabs[i].h / 4;
+    r.h = lay->tabs[i].h;
+    learn_draw_text(gettext(learn_level_names[i]), &r);
+  }
+
+  /* Lessons: a card with the finished picture and the title */
+  for (k = 0; k < LEARN_COLS * LEARN_ROWS && scroll + k < count; k++)
+  {
+    n = scroll + k;
+    l = lessons[in_level[n]];
+    x = lay->grid.x + (k % LEARN_COLS) * lay->card_w;
+    y = lay->grid.y + (k / LEARN_COLS) * lay->card_h;
+
+    s = lesson_card(learn_level, lay->card_w, lay->card_h, n == which);
+    if (s != NULL)
+    {
+      dest.x = x;
+      dest.y = y;
+      SDL_BlitSurface(s, NULL, screen, &dest);
+      SDL_FreeSurface(s);
+    }
+
+    if (thumbs[in_level[n]] == NULL)
+    {
+      tmp = lesson_thumbnail(l, lay->thumb_w, lay->thumb_h);
+      if (tmp != NULL)
+      {
+	thumbs[in_level[n]] = SDL_DisplayFormat(tmp);
+	SDL_FreeSurface(tmp);
+      }
+    }
+
+    if (thumbs[in_level[n]] != NULL)
+    {
+      s = thumbs[in_level[n]];
+      dest.x = x + (lay->card_w - s->w) / 2;
+      dest.y = y + SCALED(10) + (lay->thumb_h - s->h) / 2;
+      SDL_BlitSurface(s, NULL, screen, &dest);
+    }
+
+    r.x = x + SCALED(8);
+    r.y = y + SCALED(10) + lay->thumb_h;
+    r.w = lay->card_w - SCALED(16);
+    r.h = lay->card_h - SCALED(14) - lay->thumb_h;
+    learn_draw_text(l->title, &r);
+  }
+
+  /* "Start", "Voice", the arrows and "Back" */
+  if (count > 0)
+    learn_image_button(r_canvas.x, lay->buttons_y, img_play, img_openlabels_start);
+  else
+    learn_button(r_canvas.x, lay->buttons_y, NULL, img_openlabels_start, 0);
+
+  if (learn_voice_usable())
+    learn_button(r_canvas.x + button_w, lay->buttons_y,
+		 learn_voice_on ? img_learn_voice : img_learn_mute,
+		 img_openlabels_voice, learn_voice_on ? 2 : 1);
+
+  if (count > LEARN_COLS * LEARN_ROWS)
+  {
+    dest.x = (WINDOW_WIDTH - img_scroll_up->w) / 2;
+    dest.y = lay->buttons_y;
+    SDL_BlitSurface(scroll > 0 ? img_scroll_up : img_scroll_up_off, NULL, screen, &dest);
+    dest.x = (WINDOW_WIDTH - img_scroll_down->w) / 2;
+    dest.y = lay->buttons_y + button_h / 2;
+    SDL_BlitSurface(scroll + LEARN_COLS * LEARN_ROWS < count ?
+		    img_scroll_down : img_scroll_down_off, NULL, screen, &dest);
+  }
+
+  learn_image_button(WINDOW_WIDTH - button_w * 3, lay->buttons_y, img_back, img_openlabels_back);
+
+  SDL_Flip(screen);
+}
+
+
+/* Show a lesson, step by step. Returns 0 when the child goes back to the
+   selector, 1 if Tux Paint is closing. */
+static int learn_play(lesson * l)
+{
+  lesson_pics *pics = NULL;
+  SDL_Surface *frame, *title = NULL;
+  SDL_Event event;
+  SDL_Rect dest, src;
+  SDLKey key;
+  int pos = -1, n = l->num_steps, done = 0, quitting = 0;
+  int need_layout = 1, need_buttons = 1, step_changed = 1, go;
+  int redraws, top_h = 1, area_h = 1, prev_x, next_x, repeat_x, back_x, buttons_y;
+  int val_x, val_y, motioner, valhat_x, valhat_y, hatmotioner, voice;
+  Uint32 anim_start = 0, last_frame = 0;
+  float anim, last_anim = -1;
+  lesson_step *step;
+
+  val_x = val_y = motioner = 0;
+  valhat_x = valhat_y = hatmotioner = 0;
+
+  redraws = screen_redraws;
+  do_setcursor(cursor_arrow);
+
+  do
+  {
+    /* The window changed size, or fullscreen was switched: again, at
+       the new size */
+    if (dialog_screen_change() || redraws != screen_redraws)
+    {
+      redraws = screen_redraws;
+      need_layout = 1;
+    }
+
+    prev_x = r_canvas.x;
+    next_x = r_canvas.x + button_w;
+    repeat_x = r_canvas.x + button_w * 2;
+    back_x = WINDOW_WIDTH - button_w * 3;
+    buttons_y = r_canvas.h - button_h;
+
+    if (need_layout)
+    {
+      lesson_pics_free(pics);
+      free_surface(&title);
+
+      top_h = button_h * 2 / 3;
+      area_h = r_canvas.h - button_h;
+      pics = lesson_pics_new(l, r_canvas.w, area_h, top_h);
+      if (pics == NULL)
+      {
+	do_prompt(PROMPT_LEARN_BROKEN_TXT, PROMPT_LEARN_BROKEN_YES, "", 0, 0);
+	break;
+      }
+      title = learn_render_text(l->title);
+
+      dest.x = r_canvas.x;
+      dest.y = 0;
+      dest.w = r_canvas.w;
+      dest.h = r_canvas.h;
+      SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
+      SDL_Flip(screen);
+
+      need_layout = 0;
+      need_buttons = 1;
+      last_anim = -1;
+    }
+
+    /* A new step: Tux says it (aloud too), and its animation starts */
+    if (step_changed)
+    {
+      step_changed = 0;
+      anim_start = SDL_GetTicks();
+      last_anim = -1;
+      need_buttons = 1;
+
+      if (pos < 0)
+	learn_tux_says(TUX_DEFAULT, TIP_LEARN_START, l->title, 1);
+      else if (pos >= n)
+      {
+	learn_tux_says(TUX_GREAT, TIP_LEARN_DONE, l->title, 1);
+	playsound(screen, 1, SND_TUXOK, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+      }
+      else
+      {
+	step = &l->steps[pos];
+	draw_tux_text_ex(TUX_DEFAULT, step->text, 1, strcmp(step->lang, "en") != 0);
+	learn_say(step->text, step->lang);
+      }
+    }
+
+    /* The picture, while it changes */
+    anim = 1;
+    if (pos >= 0 && pos < n)
+    {
+      anim = (float) (SDL_GetTicks() - anim_start) / LEARN_ANIM_MS;
+      if (anim > 1)
+	anim = 1;
+    }
+
+    /* (About 40 frames a second while it blinks) */
+    if (anim != last_anim && (anim >= 1 || last_anim < 0 || SDL_GetTicks() - last_frame >= 25))
+    {
+      last_frame = SDL_GetTicks();
+      frame = lesson_pics_frame(pics, pos, anim);
+      dest.x = r_canvas.x;
+      dest.y = 0;
+      SDL_BlitSurface(frame, NULL, screen, &dest);
+
+      if (title != NULL)
+      {
+	src.x = 0;
+	src.y = 0;
+	src.w = min(title->w, lesson_pics_dots_x(pics) - SCALED(16));
+	src.h = min(title->h, top_h);
+	dest.x = r_canvas.x + SCALED(8);
+	dest.y = (top_h - src.h) / 2;
+	if (src.w > 0)
+	  SDL_BlitSurface(title, &src, screen, &dest);
+      }
+
+      update_screen(r_canvas.x, 0, r_canvas.x + r_canvas.w, area_h);
+      last_anim = anim;
+    }
+
+    voice = learn_voice_on && learn_voice_usable();
+
+    if (need_buttons)
+    {
+      dest.x = r_canvas.x;
+      dest.y = buttons_y;
+      dest.w = r_canvas.w;
+      dest.h = button_h;
+      SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
+
+      learn_button(prev_x, buttons_y, img_learn_prev, img_openlabels_previous, pos > -1);
+      learn_button(next_x, buttons_y, img_learn_next, img_openlabels_next, pos < n);
+      learn_button(repeat_x, buttons_y, img_learn_voice, img_openlabels_repeat, voice);
+      learn_image_button(back_x, buttons_y, img_back, img_openlabels_back);
+
+      update_screen_rect(&dest);
+      need_buttons = 0;
+    }
+
+    while (poll_event_dialog(&event))
+    {
+      go = 0;			/* -1: previous step, 1: next, 2: say it again */
+
+      if (event.type == SDL_QUIT)
+      {
+	done = 1;
+	quitting = 1;
+      }
+      else if (event.type == SDL_ACTIVEEVENT)
+      {
+	handle_active(&event);
+      }
+      else if (event.type == SDL_KEYUP)
+      {
+	handle_keymouse(event.key.keysym.sym, SDL_KEYUP, SCALED(24), NULL, NULL);
+      }
+      else if (event.type == SDL_KEYDOWN)
+      {
+	key = event.key.keysym.sym;
+	handle_keymouse(key, SDL_KEYDOWN, SCALED(24), NULL, NULL);
+
+	if (key == SDLK_ESCAPE)
+	{
+	  done = 1;
+	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
+	}
+	else if (key == SDLK_RETURN || key == SDLK_KP_ENTER || key == SDLK_PAGEDOWN ||
+		 ((key == SDLK_SPACE || key == SDLK_RIGHT) && !keymouse))
+	  go = 1;		/* (with the keyboard mouse, space and arrows are its own) */
+	else if (key == SDLK_PAGEUP || key == SDLK_BACKSPACE || (key == SDLK_LEFT && !keymouse))
+	  go = -1;
+	else if (key == SDLK_r)
+	  go = 2;
+      }
+      else if (event.type == SDL_MOUSEBUTTONDOWN && valid_click(event.button.button))
+      {
+	if (learn_hit(event.button.x, event.button.y, prev_x, buttons_y, button_w, button_h))
+	  go = -1;
+	else if (learn_hit(event.button.x, event.button.y, next_x, buttons_y, button_w, button_h))
+	  go = 1;
+	else if (learn_hit(event.button.x, event.button.y, repeat_x, buttons_y, button_w, button_h))
+	  go = 2;
+	else if (learn_hit(event.button.x, event.button.y, back_x, buttons_y, button_w, button_h))
+	{
+	  done = 1;
+	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
+	}
+	else if (learn_hit(event.button.x, event.button.y, r_canvas.x, 0, r_canvas.w, area_h))
+	  go = 1;		/* (a click on the picture: next) */
+      }
+      else if (event.type == SDL_MOUSEMOTION)
+      {
+	if ((learn_hit(event.button.x, event.button.y, prev_x, buttons_y, button_w, button_h) && pos > -1) ||
+	    (learn_hit(event.button.x, event.button.y, next_x, buttons_y, button_w, button_h) && pos < n) ||
+	    (learn_hit(event.button.x, event.button.y, repeat_x, buttons_y, button_w, button_h) && voice) ||
+	    learn_hit(event.button.x, event.button.y, back_x, buttons_y, button_w, button_h) ||
+	    (learn_hit(event.button.x, event.button.y, r_canvas.x, 0, r_canvas.w, area_h) && pos < n))
+	  do_setcursor(cursor_hand);
+	else
+	  do_setcursor(cursor_arrow);
+	oldpos_x = event.button.x;
+	oldpos_y = event.button.y;
+      }
+      else if (event.type == SDL_JOYAXISMOTION)
+	handle_joyaxismotion(event, &motioner, &val_x, &val_y);
+      else if (event.type == SDL_JOYHATMOTION)
+	handle_joyhatmotion(event, oldpos_x, oldpos_y, &valhat_x, &valhat_y, &hatmotioner, &old_hat_ticks);
+      else if (event.type == SDL_JOYBALLMOTION)
+	handle_joyballmotion(event, oldpos_x, oldpos_y);
+      else if (event.type == SDL_JOYBUTTONDOWN || event.type == SDL_JOYBUTTONUP)
+	handle_joybuttonupdown(event, oldpos_x, oldpos_y);
+
+      if (go == 1 && pos < n)
+      {
+	pos++;
+	step_changed = 1;
+	playsound(screen, 1, SND_CLICK, 1, SNDPOS_LEFT, SNDDIST_NEAR);
+      }
+      else if (go == -1 && pos > -1)
+      {
+	pos--;
+	step_changed = 1;
+	playsound(screen, 1, SND_CLICK, 1, SNDPOS_LEFT, SNDDIST_NEAR);
+      }
+      else if (go == 2 && voice)
+      {
+	step_changed = 1;	/* (said again, and blinks again) */
+      }
+    }
+
+    if (motioner | hatmotioner)
+      handle_motioners(oldpos_x, oldpos_y, motioner, hatmotioner, old_hat_ticks, val_x, val_y,
+		       valhat_x, valhat_y);
+
+    speech_poll();
+    SDL_Delay(10);
+  }
+  while (!done);
+
+  speech_stop();
+  lesson_pics_free(pics);
+  free_surface(&title);
+
+  return quitting;
+}
+
+
+/* The Learn dialog: choose a lesson (by level), then follow it */
+static void do_learn(void)
+{
+  const char *dirs[2], *langs[256];
+  char *personal;
+  lesson **lessons;
+  SDL_Surface **thumbs;
+  SDL_Event event;
+  SDLKey key;
+  learn_layout lay;
+  int num_lessons, num_langs = 0, i, count = 0, which = -1, scroll = 0, done = 0;
+  int *in_level = NULL, update = 1, reload_level = 1, start = 0, redraws, was_wiped;
+  int thumb_w = -1, thumb_h = -1, n, k, x, y, pick, quit_wanted = 0;
+  int last_click_which = -1, last_click_button = -1;
+  Uint32 last_click_time = 0;
+  int val_x, val_y, motioner, valhat_x, valhat_y, hatmotioner;
+
+  val_x = val_y = motioner = 0;
+  valhat_x = valhat_y = hatmotioner = 0;
+
+  was_wiped = screen_wiped_for_dialog;
+  screen_wiped_for_dialog = 1;
+
+  /* The lessons: Tux Paint's, then the user's own */
+  for (i = 0; i < num_wished_langs && num_langs < 255; i++)
+    if (wished_langs[i].lang_prefix != NULL)
+      langs[num_langs++] = wished_langs[i].lang_prefix;
+  if (num_langs == 0)
+    langs[num_langs++] = lang_prefix;
+
+  personal = get_fname("lessons", DIR_DATA);
+  dirs[0] = DATA_PREFIX "lessons";
+  dirs[1] = personal;
+
+  do_setcursor(cursor_watch);
+  lessons = lessons_find(dirs, 2, langs, num_langs, &num_lessons);
+  free(personal);
+
+  thumbs = calloc(num_lessons > 0 ? num_lessons : 1, sizeof(SDL_Surface *));
+  in_level = calloc(num_lessons > 0 ? num_lessons : 1, sizeof(int));
+  if (thumbs == NULL || in_level == NULL)
+    done = 1;
+
+  learn_tux_says(TUX_BORED, TIP_LEARN_CHOOSE, NULL, 1);
+  do_setcursor(cursor_arrow);
+
+  redraws = screen_redraws;
+
+  while (!done)
+  {
+    /* The window changed size, or fullscreen was switched: the thumbnails
+       are for the old size */
+    if (dialog_screen_change() || redraws != screen_redraws)
+    {
+      redraws = screen_redraws;
+      update = 1;
+    }
+
+    learn_get_layout(&lay);
+    if (lay.thumb_w != thumb_w || lay.thumb_h != thumb_h)
+    {
+      free_surface_array(thumbs, num_lessons);
+      thumb_w = lay.thumb_w;
+      thumb_h = lay.thumb_h;
+    }
+
+    if (reload_level)
+    {
+      count = 0;
+      for (i = 0; i < num_lessons; i++)
+	if (lessons[i]->level == learn_level)
+	  in_level[count++] = i;
+      which = (count > 0 ? 0 : -1);
+      scroll = 0;
+      reload_level = 0;
+      update = 1;
+      last_click_which = -1;	/* (a click on another level's card isn't half a double click) */
+    }
+
+    if (update)
+    {
+      learn_draw_chooser(lessons, in_level, count, which, scroll, thumbs, &lay);
+      update = 0;
+    }
+
+    while (!done && !start && poll_event_dialog(&event))
+    {
+      pick = -2;		/* (the lesson clicked, if any) */
+
+      if (event.type == SDL_QUIT)
+      {
+	done = 1;
+	quit_wanted = 1;
+      }
+      else if (event.type == SDL_ACTIVEEVENT)
+      {
+	handle_active(&event);
+      }
+      else if (event.type == SDL_KEYUP)
+      {
+	handle_keymouse(event.key.keysym.sym, SDL_KEYUP, SCALED(24), NULL, NULL);
+      }
+      else if (event.type == SDL_KEYDOWN)
+      {
+	key = event.key.keysym.sym;
+	handle_keymouse(key, SDL_KEYDOWN, SCALED(24), NULL, NULL);
+
+	if (key == SDLK_ESCAPE)
+	{
+	  done = 1;
+	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
+	}
+	else if ((key == SDLK_RETURN || key == SDLK_KP_ENTER) && which >= 0)
+	  start = 1;
+	else if (key >= SDLK_1 && key < SDLK_1 + NUM_LESSON_LEVELS && !keymouse)
+	{
+	  learn_level = key - SDLK_1;
+	  reload_level = 1;
+	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	}
+	else if (count > 0 && (key == SDLK_F11 || (key == SDLK_LEFT && !keymouse)))
+	  pick = max(which - 1, 0);
+	else if (count > 0 && (key == SDLK_F12 || (key == SDLK_RIGHT && !keymouse)))
+	  pick = min(which + 1, count - 1);
+	else if (count > 0 && (key == SDLK_F8 || (key == SDLK_UP && !keymouse)))
+	  pick = max(which - LEARN_COLS, 0);
+	else if (count > 0 && (key == SDLK_F7 || (key == SDLK_DOWN && !keymouse)))
+	  pick = min(which + LEARN_COLS, count - 1);
+      }
+      else if (event.type == SDL_MOUSEBUTTONDOWN && valid_click(event.button.button))
+      {
+	x = event.button.x;
+	y = event.button.y;
+
+	for (i = 0; i < NUM_LESSON_LEVELS; i++)
+	{
+	  if (learn_hit(x, y, lay.tabs[i].x, lay.tabs[i].y, lay.tabs[i].w, lay.tabs[i].h) &&
+	      i != learn_level)
+	  {
+	    learn_level = i;
+	    reload_level = 1;
+	    playsound(screen, 1, SND_CLICK, 1, x, SNDDIST_NEAR);
+	    learn_say(gettext(learn_level_names[i]),
+		      strcmp(gettext(learn_level_names[i]), learn_level_names[i]) ? lang_prefix : "en");
+	  }
+	}
+
+	if (learn_hit(x, y, lay.grid.x, lay.grid.y, lay.card_w * LEARN_COLS, lay.card_h * LEARN_ROWS))
+	{
+	  n = scroll + (y - lay.grid.y) / lay.card_h * LEARN_COLS + (x - lay.grid.x) / lay.card_w;
+	  if (n < count)
+	  {
+	    pick = n;
+	    if (n == last_click_which && SDL_GetTicks() < last_click_time + 1000 &&
+		event.button.button == last_click_button)
+	      start = 1;	/* (double click) */
+
+	    last_click_which = n;
+	    last_click_time = SDL_GetTicks();
+	    last_click_button = event.button.button;
+	  }
+	}
+	else if (learn_hit(x, y, r_canvas.x, lay.buttons_y, button_w, button_h) && which >= 0)
+	{
+	  start = 1;
+	}
+	else if (learn_hit(x, y, r_canvas.x + button_w, lay.buttons_y, button_w, button_h) &&
+		 learn_voice_usable())
+	{
+	  learn_voice_on = !learn_voice_on;
+	  if (!learn_voice_on)
+	    speech_stop();
+	  playsound(screen, 1, SND_CLICK, 1, x, SNDDIST_NEAR);
+	  update = 1;
+	}
+	else if (learn_hit(x, y, WINDOW_WIDTH - button_w * 3, lay.buttons_y, button_w, button_h))
+	{
+	  done = 1;
+	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
+	}
+	else if (count > LEARN_COLS * LEARN_ROWS &&
+		 learn_hit(x, y, (WINDOW_WIDTH - img_scroll_up->w) / 2, lay.buttons_y,
+			   img_scroll_up->w, button_h))
+	{
+	  k = scroll;
+	  if (y < lay.buttons_y + button_h / 2)
+	    scroll = max(scroll - LEARN_COLS, 0);
+	  else if (scroll + LEARN_COLS * LEARN_ROWS < count)
+	    scroll += LEARN_COLS;
+	  if (scroll != k)
+	  {
+	    playsound(screen, 1, SND_SCROLL, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	    update = 1;
+	  }
+	}
+      }
+      else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button >= 4 &&
+	       event.button.button <= 5 && wheely && count > LEARN_COLS * LEARN_ROWS)
+      {
+	k = scroll;
+	if (event.button.button == 4)
+	  scroll = max(scroll - LEARN_COLS, 0);
+	else if (scroll + LEARN_COLS * LEARN_ROWS < count)
+	  scroll += LEARN_COLS;
+	if (scroll != k)
+	{
+	  playsound(screen, 1, SND_SCROLL, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	  update = 1;
+	}
+      }
+      else if (event.type == SDL_MOUSEMOTION)
+      {
+	x = event.button.x;
+	y = event.button.y;
+	n = -1;
+	if (learn_hit(x, y, lay.grid.x, lay.grid.y, lay.card_w * LEARN_COLS, lay.card_h * LEARN_ROWS))
+	  n = scroll + (y - lay.grid.y) / lay.card_h * LEARN_COLS + (x - lay.grid.x) / lay.card_w;
+
+	k = 0;
+	for (i = 0; i < NUM_LESSON_LEVELS; i++)
+	  if (learn_hit(x, y, lay.tabs[i].x, lay.tabs[i].y, lay.tabs[i].w, lay.tabs[i].h))
+	    k = 1;
+
+	if (k || (n >= 0 && n < count) ||
+	    (learn_hit(x, y, r_canvas.x, lay.buttons_y, button_w, button_h) && which >= 0) ||
+	    (learn_hit(x, y, r_canvas.x + button_w, lay.buttons_y, button_w, button_h) &&
+	     learn_voice_usable()) ||
+	    learn_hit(x, y, WINDOW_WIDTH - button_w * 3, lay.buttons_y, button_w, button_h) ||
+	    (count > LEARN_COLS * LEARN_ROWS &&
+	     learn_hit(x, y, (WINDOW_WIDTH - img_scroll_up->w) / 2, lay.buttons_y,
+		       img_scroll_up->w, button_h)))
+	  do_setcursor(cursor_hand);
+	else
+	  do_setcursor(cursor_arrow);
+	oldpos_x = x;
+	oldpos_y = y;
+      }
+      else if (event.type == SDL_JOYAXISMOTION)
+	handle_joyaxismotion(event, &motioner, &val_x, &val_y);
+      else if (event.type == SDL_JOYHATMOTION)
+	handle_joyhatmotion(event, oldpos_x, oldpos_y, &valhat_x, &valhat_y, &hatmotioner, &old_hat_ticks);
+      else if (event.type == SDL_JOYBALLMOTION)
+	handle_joyballmotion(event, oldpos_x, oldpos_y);
+      else if (event.type == SDL_JOYBUTTONDOWN || event.type == SDL_JOYBUTTONUP)
+	handle_joybuttonupdown(event, oldpos_x, oldpos_y);
+
+      /* A lesson picked: select it (scrolling to it), say its name */
+      if (pick >= 0 && pick < count)
+      {
+	if (pick != which)
+	  playsound(screen, 1, SND_BLEEP, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	which = pick;
+	while (which < scroll)
+	  scroll -= LEARN_COLS;
+	while (which >= scroll + LEARN_COLS * LEARN_ROWS)
+	  scroll += LEARN_COLS;
+	learn_say(lessons[in_level[which]]->title, lessons[in_level[which]]->title_lang);
+	update = 1;
+      }
+
+      if (reload_level)
+	break;
+    }
+
+    if (motioner | hatmotioner)
+      handle_motioners(oldpos_x, oldpos_y, motioner, hatmotioner, old_hat_ticks, val_x, val_y,
+		       valhat_x, valhat_y);
+
+    if (start && which >= 0)
+    {
+      start = 0;
+      speech_stop();
+      playsound(screen, 1, SND_HARP, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+
+      if (learn_play(lessons[in_level[which]]))
+      {
+	done = 1;
+	quit_wanted = 1;
+      }
+      else
+      {
+	learn_tux_says(TUX_BORED, TIP_LEARN_CHOOSE, NULL, 0);
+	update = 1;
+      }
+      do_setcursor(cursor_arrow);
+    }
+    start = 0;
+
+    if (reload_level)
+    {
+      /* (The tip for the new level: is it empty?) */
+      n = 0;
+      for (i = 0; i < num_lessons; i++)
+	if (lessons[i]->level == learn_level)
+	  n++;
+      learn_tux_says(TUX_BORED, n > 0 ? TIP_LEARN_CHOOSE : TIP_LEARN_EMPTY, NULL, n == 0);
+    }
+
+    speech_poll();
+    SDL_Delay(10);
+  }
+
+  speech_stop();
+
+  if (thumbs != NULL)
+    free_surface_array(thumbs, num_lessons);
+  free(thumbs);
+  free(in_level);
+  lessons_free(lessons, num_lessons);
+
+  /* The canvas again, under where the dialog was */
+  update_canvas(0, 0, canvas->w, canvas->h);
+
+  screen_wiped_for_dialog = was_wiped;
+
+  /* The window was closed: the main loop asks whether to quit */
+  if (quit_wanted)
+  {
+    SDL_Event quit_event;
+
+    memset(&quit_event, 0, sizeof(quit_event));
+    quit_event.type = SDL_QUIT;
+    SDL_PushEvent(&quit_event);
+  }
+}
+
+/* How many lessons there are (0: the Learn tool is off) */
+static int count_lessons(void)
+{
+  const char *dirs[2], *langs[1];
+  char *personal;
+  lesson **lessons;
+  int num;
+
+  if (disable_lessons || !lessons_supported())
+    return 0;
+
+  personal = get_fname("lessons", DIR_DATA);
+  dirs[0] = DATA_PREFIX "lessons";
+  dirs[1] = personal;
+  langs[0] = "en";
+  lessons = lessons_find(dirs, 2, langs, 1, &num);
+  lessons_free(lessons, num);
+  free(personal);
+
+  return num;
+}
+
+
 /* FIXME: Use a bitmask! */
 
 static void reset_touched(void)
@@ -23183,6 +24164,8 @@ static void setup_config(char *argv[])
   SETBOOL(all_locale_fonts);
   SETBOOL(autosave_on_quit);
   SETBOOL(disable_label);
+  SETBOOL(disable_lessons);
+  SETBOOL(disable_speech);
   SETBOOL(disable_magic_controls);
   SETBOOL(disable_print);
   SETBOOL(disable_quit);
@@ -23285,6 +24268,8 @@ static void setup_config(char *argv[])
   if(tmpcfg.altprintcommand)
     altprintcommand = tmpcfg.altprintcommand;
 #endif
+  if(tmpcfg.speechcommand)
+    speechcommand = tmpcfg.speechcommand;
   if(tmpcfg.alt_print_command_default)
   {
     // FIXME: probably need extra variables
@@ -24070,6 +25055,11 @@ static void load_ui_images(void)
   img_sfx = loadimagerb(DATA_PREFIX "images/tools/sfx.png");
   img_speak = loadimagerb(DATA_PREFIX "images/tools/speak.png");
 
+  img_learn_prev = loadimagerb(DATA_PREFIX "images/ui/learn_prev.png");
+  img_learn_next = loadimagerb(DATA_PREFIX "images/ui/learn_next.png");
+  img_learn_voice = loadimagerb(DATA_PREFIX "images/ui/learn_voice.png");
+  img_learn_mute = loadimagerb(DATA_PREFIX "images/ui/learn_mute.png");
+
   img_black = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
 				   img_btn_off->w, img_btn_off->h,
 				   img_btn_off->format->BitsPerPixel,
@@ -24376,6 +25366,15 @@ static void free_ui_images(void)
   free_surface(&img_openlabels_back);
   free_surface(&img_openlabels_next);
   free_surface(&img_openlabels_play);
+  free_surface(&img_openlabels_start);
+  free_surface(&img_openlabels_previous);
+  free_surface(&img_openlabels_repeat);
+  free_surface(&img_openlabels_voice);
+
+  free_surface(&img_learn_prev);
+  free_surface(&img_learn_next);
+  free_surface(&img_learn_voice);
+  free_surface(&img_learn_mute);
 
   free_surface(&img_yes);
   free_surface(&img_no);
@@ -25112,6 +26111,10 @@ static void setup(void)
   }
 #endif
 
+  /* The voice of the Learn tool (nothing is loaded until it speaks) */
+  if (use_sound && !disable_speech)
+    speech_init(speechcommand);
+
 
   /* Set-up Key-Repeat: */
   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
@@ -25692,6 +26695,7 @@ static void claim_to_be_ready(void)
   magic_scroll = 0;
   tool_scroll = 0;
 
+  num_lessons_found = count_lessons();
   reset_avail_tools();
 
 

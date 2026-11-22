@@ -451,6 +451,7 @@ install:	install-bin install-data install-man install-doc \
 		install-icon install-gettext install-im install-importscript \
 		install-default-config install-example-stamps \
 		install-example-starters install-example-templates \
+		install-lessons \
 		install-bash-completion \
 		install-osk \
 		$(ARCH_INSTALL)
@@ -919,6 +920,15 @@ install-importscript:
 
 # Install the data (sound, graphics, fonts):
 .PHONY: install-data
+# Install the "Learn" tool's lessons (one folder per difficulty level)
+.PHONY: install-lessons
+install-lessons:
+	@echo
+	@echo "...Installing lessons..."
+	@install -d $(DATA_PREFIX)/lessons
+	@cp -R lessons/README.txt lessons/easy lessons/medium lessons/hard $(DATA_PREFIX)/lessons
+	@chmod -R a+rX,g-w,o-w $(DATA_PREFIX)/lessons
+
 install-data:
 	@echo
 	@echo "...Installing data files..."
@@ -986,6 +996,7 @@ install-man:
 tuxpaint:	obj/tuxpaint.o obj/i18n.o obj/im.o obj/cursor.o obj/pixels.o \
 		obj/rgblinear.o obj/playsound.o obj/fonts.o obj/parse.o \
 		obj/progressbar.o obj/dirwalk.o obj/get_fname.o obj/onscreen_keyboard.o \
+		obj/lessons.o obj/speech.o \
 		$(ARCH_LIBS)
 	@echo
 	@echo "...Linking Tux Paint..."
@@ -1006,6 +1017,7 @@ obj/tuxpaint.o:	src/tuxpaint.c \
 		src/tools.h src/titles.h src/colors.h src/shapes.h \
 		src/sounds.h src/tip_tux.h src/great.h \
 		src/tp_magic_api.h src/parse.h src/onscreen_keyboard.h \
+		src/lessons.h src/speech.h \
 		src/$(MOUSEDIR)/arrow.xbm src/$(MOUSEDIR)/arrow-mask.xbm \
 		src/$(MOUSEDIR)/hand.xbm src/$(MOUSEDIR)/hand-mask.xbm \
 		src/$(MOUSEDIR)/insertion.xbm \
@@ -1112,6 +1124,19 @@ obj/rgblinear.o:	src/rgblinear.c src/rgblinear.h \
 	@echo "...Compiling RGB to Linear functions..."
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(SDL_CFLAGS) $(DEFS) \
 		-c src/rgblinear.c -o obj/rgblinear.o
+
+
+obj/lessons.o:	src/lessons.c src/lessons.h Makefile
+	@echo
+	@echo "...Compiling drawing lessons..."
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(SDL_CFLAGS) $(SVG_CFLAGS) $(DEFS) \
+		-c src/lessons.c -o obj/lessons.o
+
+obj/speech.o:	src/speech.c src/speech.h Makefile
+	@echo
+	@echo "...Compiling speech..."
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(SDL_CFLAGS) $(DEFS) \
+		-c src/speech.c -o obj/speech.o
 
 
 obj/BeOS_print.o:	src/BeOS_print.cpp src/BeOS_print.h
