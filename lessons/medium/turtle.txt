@@ -1,0 +1,31 @@
+# Tux Paint lesson: steps for turtle.svg (see ../README.txt)
+Turtle
+it.utf8=Tartaruga
+
+draw shell
+Draw a big half oval in the middle, with the flat side down: it's the shell.
+it.utf8=Disegna in mezzo un grande mezzo ovale, con la parte piatta in giù: è il guscio.
+
+draw head
+On the right, draw the head: a round shape on a short neck that comes out of the shell.
+it.utf8=A destra disegna la testa: una forma tonda su un collo corto che esce dal guscio.
+
+draw legs
+Under the shell, draw four short legs like the letter U, and a little pointy tail on the left.
+it.utf8=Sotto il guscio disegna quattro zampette a forma di U e, a sinistra, una codina a punta.
+
+draw spots
+On the shell, draw three circles.
+it.utf8=Sul guscio disegna tre cerchi.
+
+draw face
+On the head, draw a dot for the eye and a big smile.
+it.utf8=Sulla testa disegna un puntino per l'occhio e un bel sorriso.
+
+color shell-green
+Color the shell green, but not the circles.
+it.utf8=Colora il guscio di verde, ma non i cerchi.
+
+color light-green
+Color the head, the legs, the tail and the circles light green.
+it.utf8=Colora di verde chiaro la testa, le zampe, la coda e i cerchi.

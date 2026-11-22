@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Flower</title>
+  <g id="middle-yellow" fill="#ffd93b" stroke="none">
+    <circle cx="320" cy="170" r="38"/>
+  </g>
+  <g id="petals-pink" fill="#ff8fab" stroke="none">
+    <ellipse cx="320" cy="86" rx="30" ry="46"/>
+    <ellipse cx="399.9" cy="144" rx="30" ry="46" transform="rotate(72 399.9 144)"/>
+    <ellipse cx="369.4" cy="238" rx="30" ry="46" transform="rotate(144 369.4 238)"/>
+    <ellipse cx="270.6" cy="238" rx="30" ry="46" transform="rotate(-144 270.6 238)"/>
+    <ellipse cx="240.1" cy="144" rx="30" ry="46" transform="rotate(-72 240.1 144)"/>
+  </g>
+  <g id="leaves-green" fill="#43aa8b" stroke="none">
+    <ellipse cx="278.3" cy="378.6" rx="46" ry="20" transform="rotate(35 278.3 378.6)"/>
+    <ellipse cx="361.7" cy="338.6" rx="46" ry="20" transform="rotate(-35 361.7 338.6)"/>
+  </g>
+  <g id="flower" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="320" cy="170" r="38"/>
+    <ellipse cx="320" cy="86" rx="30" ry="46"/>
+    <ellipse cx="399.9" cy="144" rx="30" ry="46" transform="rotate(72 399.9 144)"/>
+    <ellipse cx="369.4" cy="238" rx="30" ry="46" transform="rotate(144 369.4 238)"/>
+    <ellipse cx="270.6" cy="238" rx="30" ry="46" transform="rotate(-144 270.6 238)"/>
+    <ellipse cx="240.1" cy="144" rx="30" ry="46" transform="rotate(-72 240.1 144)"/>
+  </g>
+  <g id="stem" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320,208 V450"/>
+    <ellipse cx="278.3" cy="378.6" rx="46" ry="20" transform="rotate(35 278.3 378.6)"/>
+    <ellipse cx="361.7" cy="338.6" rx="46" ry="20" transform="rotate(-35 361.7 338.6)"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+# Tux Paint lesson: steps for flower.svg (see ../README.txt)
+Flower
+it.utf8=Fiore
+
+draw flower
+Draw a small circle near the top, then five ovals all around it: they are the petals.
+it.utf8=In alto disegna un cerchietto e, tutto intorno, cinque ovali: sono i petali.
+
+draw stem
+From the flower, draw a long line going down for the stem, and an oval leaf on each side.
+it.utf8=Dal fiore fai scendere una lunga linea, il gambo, e disegna una foglia ovale per lato.
+
+color middle-yellow
+Color the middle of the flower yellow.
+it.utf8=Colora di giallo il centro del fiore.
+
+color petals-pink
+Color the petals pink.
+it.utf8=Colora i petali di rosa.
+
+color leaves-green
+Color the leaves green.
+it.utf8=Colora le foglie di verde.

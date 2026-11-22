@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Car</title>
+  <g id="car-red" fill="#e63946" stroke="none">
+    <path fill-rule="evenodd" d="M99,350 L64,350 A24,24 0 0 1 40,326 L40,251 A36,36 0 0 1 76,215 L150,215 L196.4,101.2 A34,34 0 0 1 227.9,80 L383.6,80 A34,34 0 0 1 414.3,99.3 L470,215 L564,215 A36,36 0 0 1 600,251 L600,326 A24,24 0 0 1 576,350 L541,350 A66,66 0 0 0 409,350 L231,350 A66,66 0 0 0 99,350 Z M187.4,200 A8,8 0 0 1 180,189 L215.1,103 A8,8 0 0 1 222.5,98 L292,98 A8,8 0 0 1 300,106 L300,192 A8,8 0 0 1 292,200 Z M328,200 A8,8 0 0 1 320,192 L320,106 A8,8 0 0 1 328,98 L388.7,98 A8,8 0 0 1 395.9,102.5 L437.3,188.5 A8,8 0 0 1 430.1,200 Z M547,252 A18,18 0 1 0 583,252 A18,18 0 1 0 547,252 Z"/>
+  </g>
+  <g id="windows-light-blue" fill="#8ecae6" stroke="none">
+    <path d="M187.4,200 A8,8 0 0 1 180,189 L215.1,103 A8,8 0 0 1 222.5,98 L292,98 A8,8 0 0 1 300,106 L300,192 A8,8 0 0 1 292,200 Z M328,200 A8,8 0 0 1 320,192 L320,106 A8,8 0 0 1 328,98 L388.7,98 A8,8 0 0 1 395.9,102.5 L437.3,188.5 A8,8 0 0 1 430.1,200 Z"/>
+  </g>
+  <g id="tires-black" fill="#2b2b2b" stroke="none">
+    <path fill-rule="evenodd" d="M111,350 A54,54 0 1 0 219,350 A54,54 0 1 0 111,350 Z M143,350 A22,22 0 1 0 187,350 A22,22 0 1 0 143,350 Z"/>
+    <path fill-rule="evenodd" d="M421,350 A54,54 0 1 0 529,350 A54,54 0 1 0 421,350 Z M453,350 A22,22 0 1 0 497,350 A22,22 0 1 0 453,350 Z"/>
+  </g>
+  <g id="light-yellow" fill="#ffd93b" stroke="none">
+    <circle cx="565" cy="252" r="18"/>
+  </g>
+  <g id="rectangle-guides" fill="none" stroke="#8a9bb0" stroke-width="3" stroke-dasharray="10 8">
+    <rect x="40" y="215" width="560" height="135"/>
+    <path d="M150,215 L205,80 L405,80 L470,215"/>
+  </g>
+  <g id="body" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M99,350 L64,350 A24,24 0 0 1 40,326 L40,251 A36,36 0 0 1 76,215 L150,215 L196.4,101.2 A34,34 0 0 1 227.9,80 L383.6,80 A34,34 0 0 1 414.3,99.3 L470,215 L564,215 A36,36 0 0 1 600,251 L600,326 A24,24 0 0 1 576,350 L541,350 A66,66 0 0 0 409,350 L231,350 A66,66 0 0 0 99,350 Z"/>
+  </g>
+  <g id="wheels" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="165" cy="350" r="54"/>
+    <circle cx="165" cy="350" r="22"/>
+    <circle cx="475" cy="350" r="54"/>
+    <circle cx="475" cy="350" r="22"/>
+  </g>
+  <g id="windows" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M187.4,200 A8,8 0 0 1 180,189 L215.1,103 A8,8 0 0 1 222.5,98 L292,98 A8,8 0 0 1 300,106 L300,192 A8,8 0 0 1 292,200 Z M328,200 A8,8 0 0 1 320,192 L320,106 A8,8 0 0 1 328,98 L388.7,98 A8,8 0 0 1 395.9,102.5 L437.3,188.5 A8,8 0 0 1 430.1,200 Z"/>
+  </g>
+  <g id="door-light" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M310,214 L310,334"/>
+    <circle cx="565" cy="252" r="18"/>
+  </g>
+</svg>

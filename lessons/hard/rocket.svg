@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Rocket</title>
+  <g id="tip-fins-red" fill="#e63946" stroke="none">
+    <path d="M264.1,112 C277.2,76.3 297.9,47.1 320,28 C342.1,47.1 362.8,76.3 375.9,112 Q320,138 264.1,112 Z"/>
+    <path d="M250,258 Q190,286 188,398 Q214,364 250,345 Z"/>
+    <path d="M390,258 Q450,286 452,398 Q426,364 390,345 Z"/>
+  </g>
+  <g id="window-light-blue" fill="#8ecae6" stroke="none">
+    <circle cx="320" cy="206" r="40"/>
+  </g>
+  <g id="flame-stars-yellow" fill="#ffd93b" stroke="none">
+    <path d="M282,345 Q264,392 288,430 L303,404 L320,454 L337,404 L352,430 Q376,392 358,345 Z"/>
+    <path d="M122,78 L134.4,106.9 L165.7,109.8 L142.1,130.5 L149,161.2 L122,145.2 L95,161.2 L101.9,130.5 L78.3,109.8 L109.6,106.9 Z"/>
+    <path d="M150,306 L158.7,326.1 L180.4,328.1 L164,342.5 L168.8,363.9 L150,352.7 L131.2,363.9 L136,342.5 L119.6,328.1 L141.3,326.1 Z"/>
+    <path d="M514,58 L523.2,79.3 L546.3,81.5 L528.9,96.8 L534,119.5 L514,107.6 L494,119.5 L499.1,96.8 L481.7,81.5 L504.8,79.3 Z"/>
+    <path d="M508,254 L520.4,282.9 L551.7,285.8 L528.1,306.5 L535,337.2 L508,321.2 L481,337.2 L487.9,306.5 L464.3,285.8 L495.6,282.9 Z"/>
+  </g>
+  <g id="middle-line-guide" fill="none" stroke="#8a9bb0" stroke-width="3" stroke-dasharray="10 8">
+    <path d="M320,26 L320,454"/>
+  </g>
+  <g id="body" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M250,345 L250,192 C250,120 283,60 320,28 C357,60 390,120 390,192 L390,345 Z"/>
+  </g>
+  <g id="tip-window" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M264.1,112 Q320,138 375.9,112"/>
+    <circle cx="320" cy="206" r="40"/>
+  </g>
+  <g id="fins" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M250,258 Q190,286 188,398 Q214,364 250,345"/>
+    <path d="M390,258 Q450,286 452,398 Q426,364 390,345"/>
+  </g>
+  <g id="flame" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M282,345 Q264,392 288,430 L303,404 L320,454 L337,404 L352,430 Q376,392 358,345"/>
+  </g>
+  <g id="stars" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M122,78 L134.4,106.9 L165.7,109.8 L142.1,130.5 L149,161.2 L122,145.2 L95,161.2 L101.9,130.5 L78.3,109.8 L109.6,106.9 Z"/>
+    <path d="M150,306 L158.7,326.1 L180.4,328.1 L164,342.5 L168.8,363.9 L150,352.7 L131.2,363.9 L136,342.5 L119.6,328.1 L141.3,326.1 Z"/>
+    <path d="M514,58 L523.2,79.3 L546.3,81.5 L528.9,96.8 L534,119.5 L514,107.6 L494,119.5 L499.1,96.8 L481.7,81.5 L504.8,79.3 Z"/>
+    <path d="M508,254 L520.4,282.9 L551.7,285.8 L528.1,306.5 L535,337.2 L508,321.2 L481,337.2 L487.9,306.5 L464.3,285.8 L495.6,282.9 Z"/>
+  </g>
+</svg>

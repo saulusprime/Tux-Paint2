@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Sailboat</title>
+  <g id="boat-red" fill="#e63946" stroke="none">
+    <path d="M145,300 L495,300 A175,80 0 0 1 145,300 Z"/>
+    <path d="M320,48 L376,65 L320,82 Z"/>
+  </g>
+  <g id="sails-yellow" fill="#ffd93b" stroke="none">
+    <path d="M320,84 L142,272 L320,272 Z M320,112 L456,272 L320,272 Z"/>
+  </g>
+  <g id="sea-blue" fill="#3a86ff" stroke="none">
+    <path d="M191,354.1 Q175.5,365.2 160,345 Q140,319 120,345 Q100,371 80,345 Q60,319 40,345 L40,420 Q40,444 64,444 L576,444 Q600,444 600,420 L600,345 Q580,371 560,345 Q540,319 520,345 Q500,371 480,345 Q476.9,341 473.8,338.2 A175,80 0 0 1 191,354.1 Z"/>
+  </g>
+  <g id="boat" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M145,300 L495,300 A175,80 0 0 1 145,300 Z"/>
+  </g>
+  <g id="mast" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320,300 L320,44"/>
+    <path d="M320,48 L376,65 L320,82"/>
+  </g>
+  <g id="sails" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320,84 L142,272 L456,272 L320,112"/>
+  </g>
+  <g id="sea" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M191,354.1 Q175.5,365.2 160,345 Q140,319 120,345 Q100,371 80,345 Q60,319 40,345 L40,420 Q40,444 64,444 L576,444 Q600,444 600,420 L600,345 Q580,371 560,345 Q540,319 520,345 Q500,371 480,345 Q476.9,341 473.8,338.2"/>
+  </g>
+</svg>

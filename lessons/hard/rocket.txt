@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for rocket.svg (see ../README.txt)
+Rocket
+it.utf8=Razzo
+
+guide middle-line-guide
+With a light pencil, softly draw a straight line from top to bottom, in the middle. It's a helper!
+it.utf8=Con la matita leggera traccia piano una riga dritta dall'alto in basso, in mezzo. Ci aiuterà!
+
+draw body
+Draw a tall shape with a pointed top, the same on both sides of the line: it's the rocket.
+it.utf8=Disegna una forma alta con la punta in cima, uguale ai due lati della riga: è il razzo.
+
+draw tip-window
+Draw a curved line under the tip, and a round window in the middle.
+it.utf8=Disegna una linea curva sotto la punta e un oblò rotondo nel mezzo.
+
+draw fins
+At the bottom, draw a fin on each side, like a pointed wing.
+it.utf8=In basso disegna un'aletta per lato, come un'ala a punta.
+
+draw flame
+Under the rocket, draw a big flame with three points.
+it.utf8=Sotto il razzo disegna una grande fiamma con tre punte.
+
+draw stars
+Draw four stars around the rocket, two on each side.
+it.utf8=Intorno al razzo disegna quattro stelle, due per lato.
+
+erase
+Now erase the light line with the eraser.
+it.utf8=Adesso cancella con la gomma la riga leggera.
+
+color tip-fins-red
+Color the tip and the fins red.
+it.utf8=Colora la punta e le alette di rosso.
+
+color window-light-blue
+Color the window light blue.
+it.utf8=Colora l'oblò di azzurro.
+
+color flame-stars-yellow
+Color the flame and the stars yellow.
+it.utf8=Colora la fiamma e le stelle di giallo.

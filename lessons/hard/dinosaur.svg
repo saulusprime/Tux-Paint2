@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Dinosaur</title>
+  <g id="dinosaur-green" fill="#43aa8b" stroke="none">
+    <path fill-rule="evenodd" d="M402,200.6 A160,96 0 0 0 178,227.5 C146,256 96,262 46,262 C88,280 144,286 164,316.5 A160,96 0 0 0 460,243.5 C486,222 510,188 524,146 C558,146 592,134 592,102 C592,64 542,52 500,52 A48,48 0 0 0 456.5,120.3 C440,152 418,180 402,200.6 Z M220,254 A24,24 0 1 0 268,254 A24,24 0 1 0 220,254 Z M292,236 A28,28 0 1 0 348,236 A28,28 0 1 0 292,236 Z M372,260 A22,22 0 1 0 416,260 A22,22 0 1 0 372,260 Z"/>
+    <path d="M194,344.8 L194,418 Q194,434 210,434 L228,434 Q244,434 244,418 L244,366.9 Z"/>
+    <path d="M256,369.9 L256,418 Q256,434 272,434 L290,434 Q306,434 306,418 L306,375.9 Z"/>
+    <path d="M334,375.1 L334,418 Q334,434 350,434 L368,434 Q384,434 384,418 L384,365.7 Z"/>
+    <path d="M396,361.7 L396,418 Q396,434 412,434 L430,434 Q446,434 446,418 L446,332.5 Z"/>
+  </g>
+  <g id="spots-light-green" fill="#90d26d" stroke="none">
+    <circle cx="244" cy="254" r="24"/>
+    <circle cx="320" cy="236" r="28"/>
+    <circle cx="394" cy="260" r="22"/>
+  </g>
+  <g id="oval-circle-guides" fill="none" stroke="#8a9bb0" stroke-width="3" stroke-dasharray="10 8">
+    <ellipse cx="312" cy="280" rx="160" ry="96"/>
+    <circle cx="500" cy="100" r="48"/>
+  </g>
+  <g id="head-neck" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M402,200.6 C418,180 440,152 456.5,120.3 A48,48 0 0 1 500,52 C542,52 592,64 592,102 C592,134 558,146 524,146 C510,188 486,222 460,243.5"/>
+  </g>
+  <g id="body-tail" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M402,200.6 A160,96 0 0 0 178,227.5 C146,256 96,262 46,262 C88,280 144,286 164,316.5 A160,96 0 0 0 460,243.5"/>
+  </g>
+  <g id="legs" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M194,344.8 L194,418 Q194,434 210,434 L228,434 Q244,434 244,418 L244,366.9"/>
+    <path d="M256,369.9 L256,418 Q256,434 272,434 L290,434 Q306,434 306,418 L306,375.9"/>
+    <path d="M334,375.1 L334,418 Q334,434 350,434 L368,434 Q384,434 384,418 L384,365.7"/>
+    <path d="M396,361.7 L396,418 Q396,434 412,434 L430,434 Q446,434 446,418 L446,332.5"/>
+  </g>
+  <g id="face" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="512" cy="90" r="10" fill="#2b2b2b"/>
+    <path d="M546,116 Q564,128 580,114"/>
+  </g>
+  <g id="spots" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="244" cy="254" r="24"/>
+    <circle cx="320" cy="236" r="28"/>
+    <circle cx="394" cy="260" r="22"/>
+  </g>
+</svg>

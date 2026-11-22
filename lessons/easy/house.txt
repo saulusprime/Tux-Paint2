@@ -1,0 +1,23 @@
+# Tux Paint lesson: steps for house.svg (see ../README.txt)
+House
+it.utf8=Casa
+
+draw walls
+Draw a big square at the bottom of the paper: it is the house.
+it.utf8=Disegna un grande quadrato in basso sul foglio: è la casa.
+
+draw roof
+On top of the square, draw a big triangle: it is the roof.
+it.utf8=Sopra il quadrato disegna un grande triangolo: è il tetto.
+
+draw door-window
+Draw a tall rectangle at the bottom for the door, and a small square with a cross for the window.
+it.utf8=In basso disegna un rettangolo alto per la porta e un quadratino con una croce per la finestra.
+
+color roof-door-red
+Color the roof and the door red.
+it.utf8=Colora di rosso il tetto e la porta.
+
+color walls-yellow
+Color the walls yellow, but leave the window white.
+it.utf8=Colora i muri di giallo, ma lascia bianca la finestra.

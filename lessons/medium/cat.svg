@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Cat</title>
+  <g id="cat-orange" fill="#ff9f1c" stroke="none">
+    <path fill-rule="evenodd" d="M182,172 A96,96 0 0 1 374,172 A96,96 0 0 1 182,172 Z M261,190 L295,190 L278,210 Z"/>
+    <path fill-rule="evenodd" d="M190.3,133 L186,32 L245.2,81.8 Z M199,104 L197,54 L226,79 Z"/>
+    <path fill-rule="evenodd" d="M365.7,133 L370,32 L310.8,81.8 Z M357,104 L359,54 L330,79 Z"/>
+    <ellipse cx="278" cy="350" rx="92" ry="100"/>
+    <path d="M362,390.9 C436.8,408.4 472.9,334.2 443.4,268.6 A16,16 0 0 1 472.6,255.4 C509.4,337.6 449.9,451.3 344.4,419.2 Z"/>
+  </g>
+  <g id="pink" fill="#ff8fab" stroke="none">
+    <path d="M199,104 L197,54 L226,79 Z M357,104 L359,54 L330,79 Z"/>
+    <path d="M261,190 L295,190 L278,210 Z"/>
+  </g>
+  <g id="head" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="278" cy="172" r="96"/>
+  </g>
+  <g id="ears" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M190.3,133 L186,32 L245.2,81.8"/>
+    <path d="M365.7,133 L370,32 L310.8,81.8"/>
+    <path d="M199,104 L197,54 L226,79 Z"/>
+    <path d="M357,104 L359,54 L330,79 Z"/>
+  </g>
+  <g id="body" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M238.7,259.6 A92,100 0 1 0 317.3,259.6"/>
+    <ellipse cx="245" cy="420" rx="24" ry="15"/>
+    <ellipse cx="311" cy="420" rx="24" ry="15"/>
+  </g>
+  <g id="tail" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M362,390.9 C436.8,408.4 472.9,334.2 443.4,268.6 A16,16 0 0 1 472.6,255.4 C509.4,337.6 449.9,451.3 344.4,419.2"/>
+  </g>
+  <g id="face" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="242" cy="163" rx="12" ry="18" fill="#2b2b2b"/>
+    <ellipse cx="314" cy="163" rx="12" ry="18" fill="#2b2b2b"/>
+    <path d="M261,190 L295,190 L278,210 Z"/>
+    <path d="M254,214 Q266,229 278,214 Q290,229 302,214"/>
+    <path d="M228,197 L168,187 M228,211 L170,221"/>
+    <path d="M328,197 L388,187 M328,211 L386,221"/>
+  </g>
+</svg>

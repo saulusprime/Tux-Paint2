@@ -1,0 +1,31 @@
+# Tux Paint lesson: steps for sailboat.svg (see ../README.txt)
+Sailboat
+it.utf8=Barca a vela
+
+draw boat
+Draw a big smile low on the paper, then close it with a straight line on top: it's the boat.
+it.utf8=Disegna un grande sorriso in basso sul foglio e chiudilo sopra con una linea dritta: è la barca.
+
+draw mast
+From the middle of the boat, draw a long line straight up, with a little flag at the top.
+it.utf8=Dal centro della barca traccia una lunga linea dritta verso l'alto, con una bandierina in cima.
+
+draw sails
+Draw two sails: a big triangle on the left of the long line and a small one on the right.
+it.utf8=Disegna due vele: un triangolo grande a sinistra della linea lunga e uno piccolo a destra.
+
+draw sea
+Draw the sea: a wavy line on each side of the boat, then go down and close it with a long line.
+it.utf8=Disegna il mare: onde ai lati della barca, poi scendi e chiudilo con una lunga linea sotto.
+
+color boat-red
+Color the boat and the little flag red.
+it.utf8=Colora di rosso la barca e la bandierina.
+
+color sails-yellow
+Color the sails yellow.
+it.utf8=Colora le vele di giallo.
+
+color sea-blue
+Color the sea blue.
+it.utf8=Colora il mare di blu.

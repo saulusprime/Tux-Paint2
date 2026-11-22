@@ -1,0 +1,39 @@
+# Tux Paint lesson: steps for dinosaur.svg (see ../README.txt)
+Dinosaur
+it.utf8=Dinosauro
+
+guide oval-circle-guides
+With a light pencil, softly draw a big oval in the middle and a small circle up on the right.
+it.utf8=Con la matita leggera disegna piano un grande ovale in mezzo e un piccolo cerchio in alto a destra.
+
+draw head-neck
+Draw the head around the circle, with a round nose, and a long neck going down to the oval.
+it.utf8=Disegna la testa intorno al cerchio, con il muso tondo, e un lungo collo che scende fino all'ovale.
+
+draw body-tail
+Go over the oval for the back and the tummy, and on the left draw a long pointed tail.
+it.utf8=Ripassa l'ovale per la schiena e la pancia, e a sinistra disegna una lunga coda a punta.
+
+draw legs
+Under the tummy, draw four short and fat legs.
+it.utf8=Sotto la pancia disegna quattro zampe corte e grosse.
+
+draw face
+Draw a dot for the eye and a little smile.
+it.utf8=Disegna un puntino per l'occhio e un piccolo sorriso.
+
+draw spots
+Draw three round spots on the back.
+it.utf8=Sulla schiena disegna tre macchie rotonde.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color dinosaur-green
+Color the dinosaur green, but not the spots.
+it.utf8=Colora il dinosauro di verde, ma non le macchie.
+
+color spots-light-green
+Color the spots light green.
+it.utf8=Colora le macchie di verde chiaro.

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Fish</title>
+  <g id="fish-orange" fill="#ff9f1c" stroke="none" fill-rule="evenodd">
+    <path d="M95,240 A175,115 0 1,0 445,240 A175,115 0 1,0 95,240 Z
+             M154,210 A26,26 0 1,0 206,210 A26,26 0 1,0 154,210 Z"/>
+  </g>
+  <g id="tail-yellow" fill="#ffd93b" stroke="none">
+    <path d="M445,240 L545,160 L545,320 Z"/>
+  </g>
+  <g id="body" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="270" cy="240" rx="175" ry="115"/>
+  </g>
+  <g id="tail" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M445,240 L545,160 L545,320 Z"/>
+  </g>
+  <g id="face" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="180" cy="210" r="26"/>
+    <circle cx="180" cy="210" r="11" fill="#2b2b2b"/>
+    <path d="M118,266 Q142,290 166,266"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+# Tux Paint lesson: steps for sun.svg (see ../README.txt)
+Sun
+it.utf8=Sole
+
+draw circle
+Draw a big circle in the middle of the paper.
+it.utf8=Disegna un grande cerchio in mezzo al foglio.
+
+draw face
+Inside the circle, draw two dots for the eyes and a smile.
+it.utf8=Dentro il cerchio disegna due puntini per gli occhi e un sorriso.
+
+draw rays
+All around the circle, draw eight pointed triangles: they are the rays.
+it.utf8=Tutto intorno al cerchio disegna otto triangoli a punta: sono i raggi.
+
+color sun-yellow
+Color the sun yellow.
+it.utf8=Colora il sole di giallo.
+
+color rays-orange
+Color the rays orange.
+it.utf8=Colora i raggi di arancione.

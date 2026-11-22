@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Apple</title>
+  <g id="apple-red" fill="#e63946" stroke="none">
+    <circle cx="320" cy="280" r="155"/>
+  </g>
+  <g id="leaf-green" fill="#43aa8b" stroke="none">
+    <ellipse cx="364" cy="84" rx="48" ry="22" transform="rotate(-25 364 84)"/>
+  </g>
+  <g id="apple" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="320" cy="280" r="155"/>
+  </g>
+  <g id="stem" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320,125 Q318,92 306,64"/>
+  </g>
+  <g id="leaf" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="364" cy="84" rx="48" ry="22" transform="rotate(-25 364 84)"/>
+  </g>
+</svg>

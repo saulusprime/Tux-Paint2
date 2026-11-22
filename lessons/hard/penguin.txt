@@ -1,0 +1,39 @@
+# Tux Paint lesson: steps for penguin.svg (see ../README.txt)
+Penguin
+it.utf8=Pinguino
+
+guide circle-oval-guides
+With a light pencil, softly draw a circle on top and a big oval under it. They are only helpers!
+it.utf8=Con la matita leggera disegna piano un cerchio in alto e sotto un grande ovale. Ci servono solo d'aiuto!
+
+draw body
+Draw a strong line all around the two shapes, with a straight line on each side.
+it.utf8=Ora con una linea decisa gira intorno alle due forme, con una riga dritta su ogni lato.
+
+draw wings
+On each side draw a wing, like a long leaf pointing down.
+it.utf8=Su ogni lato disegna un'ala, come una lunga foglia che punta verso il basso.
+
+draw feet
+At the bottom, draw two flat feet, like two half ovals.
+it.utf8=In basso disegna due zampe piatte, come due mezzi ovali.
+
+draw face-tummy
+Draw a big heart in the head for the face, and a big oval for the tummy.
+it.utf8=Nella testa disegna un grande cuore per la faccia, e più in basso un grande ovale per la pancia.
+
+draw eyes-beak
+In the heart, draw two dots for the eyes and a small triangle for the beak.
+it.utf8=Nel cuore disegna due puntini per gli occhi e un triangolino per il becco.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color penguin-black
+Color the penguin black, but leave the face and the tummy white.
+it.utf8=Colora il pinguino di nero, ma lascia bianche la faccia e la pancia.
+
+color beak-feet-orange
+Color the beak and the feet orange.
+it.utf8=Colora il becco e le zampe di arancione.

@@ -1,0 +1,31 @@
+# Tux Paint lesson: steps for cat.svg (see ../README.txt)
+Cat
+it.utf8=Gatto
+
+draw head
+Draw a big circle near the top of the paper: it's the cat's head.
+it.utf8=Disegna un grande cerchio in alto sul foglio: è la testa del gatto.
+
+draw ears
+On top of the head, draw two pointy triangles for the ears, with a small triangle inside each one.
+it.utf8=Sopra la testa disegna due triangoli a punta per le orecchie, ognuno con dentro un triangolino.
+
+draw body
+Under the head, draw a big oval for the body, with two small ovals at the bottom for the paws.
+it.utf8=Sotto la testa disegna un grande ovale per il corpo e, in basso, due ovalini per le zampe.
+
+draw tail
+On the right, draw a long, fat tail that curves up.
+it.utf8=A destra disegna una coda lunga e cicciotta che sale verso l'alto.
+
+draw face
+Draw two black ovals for the eyes, a little triangle for the nose, a mouth like a w and the whiskers.
+it.utf8=Disegna due ovali neri per gli occhi, un triangolino per il naso, la bocca a forma di w e i baffi.
+
+color cat-orange
+Color the cat orange.
+it.utf8=Colora il gatto di arancione.
+
+color pink
+Color the nose and the inside of the ears pink.
+it.utf8=Colora di rosa il naso e l'interno delle orecchie.

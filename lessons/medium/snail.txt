@@ -1,0 +1,27 @@
+# Tux Paint lesson: steps for snail.svg (see ../README.txt)
+Snail
+it.utf8=Lumaca
+
+draw shell
+Draw a big circle in the middle of the paper: it's the snail's shell.
+it.utf8=Disegna un grande cerchio in mezzo al foglio: è il guscio della lumaca.
+
+draw body
+Under the shell, draw a long body with a pointy tail on the left and a round head on the right.
+it.utf8=Sotto il guscio disegna un corpo lungo, con la coda a punta a sinistra e la testa tonda a destra.
+
+draw spiral
+Inside the shell, draw a spiral that goes round and round from the middle to the edge.
+it.utf8=Dentro il guscio disegna una spirale che gira e rigira dal centro fino al bordo.
+
+draw face
+On the head, draw a dot for the eye, a smile, and two antennae with a dot at the end.
+it.utf8=Sulla testa disegna un puntino per l'occhio, un sorriso e due antenne con un pallino in cima.
+
+color shell-orange
+Color the shell orange.
+it.utf8=Colora il guscio di arancione.
+
+color body-green
+Color the body light green.
+it.utf8=Colora il corpo di verde chiaro.

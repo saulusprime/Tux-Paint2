@@ -1,0 +1,23 @@
+# Tux Paint lesson: steps for fish.svg (see ../README.txt)
+Fish
+it.utf8=Pesce
+
+draw body
+Draw a big oval lying down in the middle of the paper: it is the fish.
+it.utf8=Disegna un grande ovale sdraiato in mezzo al foglio: è il pesce.
+
+draw tail
+On the right, draw a triangle that touches the oval with its tip: it is the tail.
+it.utf8=A destra disegna un triangolo che tocca l'ovale con la punta: è la coda.
+
+draw face
+On the left, draw a circle with a dot inside for the eye, and a little smile.
+it.utf8=A sinistra disegna l'occhio, un cerchietto con un puntino dentro, e poi un piccolo sorriso.
+
+color fish-orange
+Color the fish orange, but leave the eye white.
+it.utf8=Colora il pesce di arancione, ma lascia bianco l'occhio.
+
+color tail-yellow
+Color the tail yellow.
+it.utf8=Colora la coda di giallo.

@@ -1,0 +1,31 @@
+# Tux Paint lesson: steps for butterfly.svg (see ../README.txt)
+Butterfly
+it.utf8=Farfalla
+
+draw body
+In the middle, draw a long thin oval for the body, and a small circle on top for the head.
+it.utf8=In mezzo disegna un ovale lungo e stretto per il corpo e, sopra, un cerchietto per la testa.
+
+draw top-wings
+On each side of the body, draw a big round wing.
+it.utf8=Ai lati del corpo disegna due grandi ali rotonde, una per parte.
+
+draw bottom-wings
+Under the big wings, draw two smaller wings.
+it.utf8=Sotto le ali grandi disegna due ali più piccole.
+
+draw details
+Draw a circle in each wing, then two antennae on the head, with a dot at the end.
+it.utf8=Disegna un cerchio in ogni ala e, sulla testa, due antenne con un puntino in cima.
+
+color wings-purple
+Color the wings purple, but not the circles.
+it.utf8=Colora le ali di viola, ma non i cerchi.
+
+color spots-yellow
+Color the circles yellow.
+it.utf8=Colora i cerchi di giallo.
+
+color body-brown
+Color the body and the head brown.
+it.utf8=Colora il corpo e la testa di marrone.

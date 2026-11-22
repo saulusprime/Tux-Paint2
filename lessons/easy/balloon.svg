@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Balloon</title>
+  <g id="balloon-red" fill="#e63946" stroke="none" fill-rule="evenodd">
+    <path d="M202,180 A118,140 0 1,0 438,180 A118,140 0 1,0 202,180 Z
+             M278.6,85.5 A15,32 40 1,0 237.4,134.5 A15,32 40 1,0 278.6,85.5 Z
+             M320,320 L342,346 L298,346 Z"/>
+  </g>
+  <g id="balloon" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="320" cy="180" rx="118" ry="140"/>
+  </g>
+  <g id="shine" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="258" cy="110" rx="15" ry="32" transform="rotate(40 258 110)"/>
+  </g>
+  <g id="knot" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320,320 L342,346 L298,346 Z"/>
+  </g>
+  <g id="string" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320,346 Q294,370 320,395 T320,444"/>
+  </g>
+</svg>

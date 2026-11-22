@@ -1,0 +1,23 @@
+# Tux Paint lesson: steps for apple.svg (see ../README.txt)
+Apple
+it.utf8=Mela
+
+draw apple
+Draw a big circle in the middle of the paper: it is the apple.
+it.utf8=Disegna un grande cerchio in mezzo al foglio: è la mela.
+
+draw stem
+On top of the circle, draw a short line going up: it is the stem.
+it.utf8=In cima al cerchio disegna una lineetta verso l'alto: è il picciolo.
+
+draw leaf
+Next to the stem, draw a small tilted oval: it is the leaf.
+it.utf8=Accanto al picciolo disegna un piccolo ovale inclinato: è la foglia.
+
+color apple-red
+Color the apple red.
+it.utf8=Colora la mela di rosso.
+
+color leaf-green
+Color the leaf green.
+it.utf8=Colora la foglia di verde.

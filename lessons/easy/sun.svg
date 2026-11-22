@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Sun</title>
+  <g id="rays-orange" fill="#ff9f1c" stroke="none">
+    <path d="M458.6,270.7 L514.0,320.4 L439.8,316.3 Z M396.3,359.8 L400.4,434.0 L350.7,378.6 Z M289.3,378.6 L239.6,434.0 L243.7,359.8 Z M200.2,316.3 L126.0,320.4 L181.4,270.7 Z M181.4,209.3 L126.0,159.6 L200.2,163.7 Z M243.7,120.2 L239.6,46.0 L289.3,101.4 Z M350.7,101.4 L400.4,46.0 L396.3,120.2 Z M439.8,163.7 L514.0,159.6 L458.6,209.3 Z"/>
+  </g>
+  <g id="sun-yellow" fill="#ffd93b" stroke="none">
+    <circle cx="320" cy="240" r="120"/>
+  </g>
+  <g id="circle" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="320" cy="240" r="120"/>
+  </g>
+  <g id="face" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="282" cy="215" r="9" fill="#2b2b2b"/>
+    <circle cx="358" cy="215" r="9" fill="#2b2b2b"/>
+    <path d="M268,268 Q320,318 372,268"/>
+  </g>
+  <g id="rays" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M458.6,270.7 L514.0,320.4 L439.8,316.3 Z M396.3,359.8 L400.4,434.0 L350.7,378.6 Z M289.3,378.6 L239.6,434.0 L243.7,359.8 Z M200.2,316.3 L126.0,320.4 L181.4,270.7 Z M181.4,209.3 L126.0,159.6 L200.2,163.7 Z M243.7,120.2 L239.6,46.0 L289.3,101.4 Z M350.7,101.4 L400.4,46.0 L396.3,120.2 Z M439.8,163.7 L514.0,159.6 L458.6,209.3 Z"/>
+  </g>
+</svg>

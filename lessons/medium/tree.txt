@@ -1,0 +1,31 @@
+# Tux Paint lesson: steps for tree.svg (see ../README.txt)
+Tree
+it.utf8=Albero
+
+draw leaves
+Near the top, draw a big fluffy cloud: these are the leaves of the tree.
+it.utf8=In alto disegna una grande nuvola soffice: sono le foglie dell'albero.
+
+draw hill
+At the bottom, draw half an oval with the flat side down: it's a little hill.
+it.utf8=In basso disegna mezzo ovale con la parte piatta in giù: è una collinetta.
+
+draw trunk
+Draw two lines from the leaves down to the hill: it's the trunk.
+it.utf8=Traccia due linee dalle foglie fino alla collinetta: è il tronco.
+
+draw apples
+In the leaves, draw five small circles: they're the apples.
+it.utf8=Tra le foglie disegna cinque cerchietti: sono le mele.
+
+color green
+Color the leaves and the hill green, but not the apples.
+it.utf8=Colora di verde le foglie e la collinetta, ma non le mele.
+
+color trunk-brown
+Color the trunk brown.
+it.utf8=Colora il tronco di marrone.
+
+color apples-red
+Color the apples red.
+it.utf8=Colora le mele di rosso.

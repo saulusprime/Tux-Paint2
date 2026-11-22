@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for car.svg (see ../README.txt)
+Car
+it.utf8=Automobile
+
+guide rectangle-guides
+With a light pencil, softly draw a long rectangle, and on top a smaller shape with slanted sides.
+it.utf8=Con la matita leggera disegna piano un lungo rettangolo e sopra una forma più piccola con i lati inclinati.
+
+draw body
+Go around the shapes with a strong line: round the corners and make two half circles for the wheels.
+it.utf8=Ripassa il contorno con una linea decisa: arrotonda gli angoli e fai due mezzi cerchi per le ruote.
+
+draw wheels
+In each half circle draw a wheel: a big circle with a small circle in the middle.
+it.utf8=In ogni mezzo cerchio disegna una ruota: un cerchio grande con uno piccolo nel mezzo.
+
+draw windows
+In the top part, draw two windows, with a little space between them.
+it.utf8=Nella parte di sopra disegna due finestrini, con un piccolo spazio in mezzo.
+
+draw door-light
+Draw a line down the middle for the doors, and a round light in front.
+it.utf8=Disegna una riga in mezzo per le portiere e un faro rotondo davanti.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color car-red
+Color the car red, but not the windows and the light.
+it.utf8=Colora l'automobile di rosso, ma non i finestrini e il faro.
+
+color windows-light-blue
+Color the windows light blue.
+it.utf8=Colora i finestrini di azzurro.
+
+color tires-black
+Color the tires black, and leave the middle of the wheels white.
+it.utf8=Colora le gomme di nero e lascia bianco il centro delle ruote.
+
+color light-yellow
+Color the light yellow.
+it.utf8=Colora il faro di giallo.

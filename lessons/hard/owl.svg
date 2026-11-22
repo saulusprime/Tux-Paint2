@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>Owl</title>
+  <g id="owl-brown" fill="#9c6644" stroke="none">
+    <path fill-rule="evenodd" d="M186.5,178 L176,36 L240,94 Q320,62 400,94 L464,36 L453.5,178 A145,174 0 1 1 186.5,178 Z M212,184 A54,54 0 1 0 320,184 A54,54 0 1 0 212,184 Z M320,184 A54,54 0 1 0 428,184 A54,54 0 1 0 320,184 Z M299,240 L341,240 L320,276 Z M254,346 A66,52 0 1 0 386,346 A66,52 0 1 0 254,346 Z"/>
+    <path fill-rule="evenodd" d="M79,396 A27,27 0 0 0 79,450 L561,450 A27,27 0 0 0 561,396 Z M260.4,404.6 A14,14 0 0 0 274.9,428.6 A14,14 0 0 0 296.3,435 A14,14 0 0 0 319.9,420 A145,174 0 0 1 260.4,404.6 Z M320.1,420 A14,14 0 0 0 343.7,435 A14,14 0 0 0 365.1,428.6 A14,14 0 0 0 379.6,404.6 A145,174 0 0 1 320.1,420 Z"/>
+  </g>
+  <g id="eyes-tummy-yellow" fill="#ffd93b" stroke="none">
+    <circle cx="266" cy="184" r="54"/>
+    <circle cx="374" cy="184" r="54"/>
+    <ellipse cx="320" cy="346" rx="66" ry="52"/>
+  </g>
+  <g id="beak-feet-orange" fill="#ff9f1c" stroke="none">
+    <path d="M299,240 L341,240 L320,276 Z"/>
+    <path d="M260.4,404.6 A14,14 0 0 0 274.9,428.6 A14,14 0 0 0 296.3,435 A14,14 0 0 0 319.9,420 A145,174 0 0 1 260.4,404.6 Z"/>
+    <path d="M320.1,420 A14,14 0 0 0 343.7,435 A14,14 0 0 0 365.1,428.6 A14,14 0 0 0 379.6,404.6 A145,174 0 0 1 320.1,420 Z"/>
+  </g>
+  <g id="oval-guide" fill="none" stroke="#8a9bb0" stroke-width="3" stroke-dasharray="10 8">
+    <ellipse cx="320" cy="246" rx="145" ry="174"/>
+  </g>
+  <g id="body" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M186.5,178 L176,36 L240,94 Q320,62 400,94 L464,36 L453.5,178 A145,174 0 1 1 186.5,178 Z"/>
+  </g>
+  <g id="eyes-beak" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="266" cy="184" r="54"/>
+    <circle cx="374" cy="184" r="54"/>
+    <circle cx="271" cy="190" r="22" fill="#2b2b2b"/>
+    <circle cx="369" cy="190" r="22" fill="#2b2b2b"/>
+    <path d="M299,240 L341,240 L320,276 Z"/>
+  </g>
+  <g id="wings" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M177.5,214 C221.5,244 248,306.1 234,386.1"/>
+    <path d="M462.5,214 C418.5,244 392,306.1 406,386.1"/>
+  </g>
+  <g id="tummy" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="320" cy="346" rx="66" ry="52"/>
+    <path d="M283,328 L294,340 L305,328 M335,328 L346,340 L357,328 M309,360 L320,372 L331,360"/>
+  </g>
+  <g id="branch-feet" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M246.5,396 L79,396 A27,27 0 0 0 79,450 L561,450 A27,27 0 0 0 561,396 L393.5,396"/>
+    <path d="M260.4,404.6 A14,14 0 0 0 274.9,428.6 A14,14 0 0 0 296.3,435 A14,14 0 0 0 319.9,420"/>
+    <path d="M320.1,420 A14,14 0 0 0 343.7,435 A14,14 0 0 0 365.1,428.6 A14,14 0 0 0 379.6,404.6"/>
+  </g>
+</svg>

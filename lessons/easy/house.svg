@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <title>House</title>
+  <g id="walls-yellow" fill="#ffd93b" stroke="none" fill-rule="evenodd">
+    <path d="M200,205 H440 V445 H200 Z
+             M232,445 V335 H297 V445 Z
+             M335,270 H405 V340 H335 Z"/>
+  </g>
+  <g id="roof-door-red" fill="#e63946" stroke="none">
+    <path d="M175,205 L320,45 L465,205 Z"/>
+    <path d="M232,445 V335 H297 V445 Z"/>
+  </g>
+  <g id="walls" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M200,205 H440 V445 H200 Z"/>
+  </g>
+  <g id="roof" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M175,205 L320,45 L465,205 Z"/>
+  </g>
+  <g id="door-window" fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232,445 V335 H297 V445"/>
+    <path d="M335,270 H405 V340 H335 Z M370,270 V340 M335,305 H405"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+# Tux Paint lesson: steps for balloon.svg (see ../README.txt)
+Balloon
+it.utf8=Palloncino
+
+draw balloon
+Draw a big oval near the top of the paper: it is the balloon.
+it.utf8=Disegna un grande ovale in alto sul foglio: è il palloncino.
+
+draw shine
+Inside the oval, at the top on the left, draw a small tilted oval: it makes the balloon shine.
+it.utf8=Dentro l'ovale, in alto a sinistra, disegna un piccolo ovale inclinato: fa brillare il palloncino.
+
+draw knot
+Under the balloon, draw a small triangle that touches the oval with its tip.
+it.utf8=Sotto il palloncino disegna un piccolo triangolo che tocca l'ovale con la punta.
+
+draw string
+From the triangle, draw a long wavy line going down: it is the string.
+it.utf8=Dal triangolo fai scendere una lunga linea ondulata: è il filo.
+
+color balloon-red
+Color the balloon and the little triangle red, but leave the small oval white.
+it.utf8=Colora di rosso il palloncino e il triangolino, ma lascia bianco il piccolo ovale.

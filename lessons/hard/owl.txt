@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for owl.svg (see ../README.txt)
+Owl
+it.utf8=Gufo
+
+guide oval-guide
+With a light pencil, softly draw a big oval in the middle of the paper. It's only a helper!
+it.utf8=Con la matita leggera disegna piano un grande ovale in mezzo al foglio. Ci serve solo d'aiuto!
+
+draw body
+Go over the sides and the bottom of the oval, and on top draw two pointy ears.
+it.utf8=Ripassa i lati e la parte di sotto dell'ovale, e in alto disegna due orecchie a punta.
+
+draw eyes-beak
+Draw two big circles for the eyes, with a big dot inside, and a small triangle for the beak.
+it.utf8=Disegna due grandi cerchi per gli occhi, con dentro un grosso puntino, e un triangolino per il becco.
+
+draw wings
+On each side, draw a long curved line down to the bottom: they are the wings.
+it.utf8=Su ogni lato disegna una lunga linea curva che scende fino in basso: sono le ali.
+
+draw tummy
+Draw an oval on the tummy, with three small Vs inside for the feathers.
+it.utf8=Sulla pancia disegna un ovale, con dentro tre piccole V per le piume.
+
+draw branch-feet
+Under the owl, draw two little feet with three round toes, and a long branch behind them.
+it.utf8=Sotto il gufo disegna due zampette con tre dita tonde, e dietro un lungo ramo.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color owl-brown
+Color the owl and the branch brown, but not the eyes, the tummy, the beak and the feet.
+it.utf8=Colora il gufo e il ramo di marrone, ma non gli occhi, la pancia, il becco e le zampette.
+
+color eyes-tummy-yellow
+Color the eyes and the tummy yellow.
+it.utf8=Colora gli occhi e la pancia di giallo.
+
+color beak-feet-orange
+Color the beak and the feet orange.
+it.utf8=Colora il becco e le zampette di arancione.
