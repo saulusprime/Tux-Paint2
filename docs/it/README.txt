@@ -465,7 +465,7 @@ Gli strumenti
                 ne fornisce: serve per i tuoi disegni, o per immagini prese
                 altrove (attenzione alla loro licenza).
 
-                Si possono mettere immagini SVG, PNG o JPEG. (I file EPS non
+                Si possono mettere immagini SVG, PNG, JPEG o WebP. (I file EPS non
                 si leggono: vanno convertiti in SVG, per esempio con
                 Inkscape.) Ogni immagine diventa una lezione che la fa
                 copiare con la quadrettatura: si guarda l'immagine; si

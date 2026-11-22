@@ -416,7 +416,7 @@ static int picture_rank(const char *fname, size_t *ext_len)
     const char *ext;
     int rank;
   } exts[] = {
-    {".svg", 3}, {".png", 2}, {".jpg", 1}, {".jpeg", 1}
+    {".svg", 3}, {".png", 2}, {".jpg", 1}, {".jpeg", 1}, {".webp", 1}
   };
   size_t len = strlen(fname), n;
   unsigned int i;
@@ -567,7 +567,7 @@ lesson **lessons_find(const char *const *dirs, int num_dirs,
       }
 
       /* In "custom", also the pictures with no steps of their own: one
-         per name, the best kind of file (SVG, then PNG, then JPEG) */
+         per name, the best kind of file (SVG, then PNG, then JPEG or WebP) */
       if (level == LESSON_CUSTOM)
       {
 	rewinddir(dir);

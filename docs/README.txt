@@ -446,7 +446,7 @@ Available Tools
                               drawings, or for pictures you got elsewhere
                               (mind their license).
 
-                              Put SVG, PNG or JPEG pictures there. (EPS files
+                              Put SVG, PNG, JPEG or WebP pictures there. (EPS files
                               can't be read: convert them to SVG, e.g. with
                               Inkscape.) Each picture becomes a lesson that
                               copies it with a grid: look at it; draw a light

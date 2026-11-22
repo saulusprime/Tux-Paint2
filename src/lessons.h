@@ -83,7 +83,7 @@ int lessons_supported(void);
    folders win over earlier ones for a lesson of the same level and name),
    sorted by level, number of steps and title. Texts are in the first of
    langs found (e.g. "it_IT", "it"), else in English.
-   In "custom" a picture (SVG, PNG, JPEG) with no steps of its own (no
+   In "custom" a picture (SVG, PNG, JPEG, WebP) with no steps of its own (no
    NAME.txt, or one with just the title) becomes a lesson that copies it
    with a grid; its texts come from gettext(), in ui_lang ("en" when
    untranslated). NULL if none. */

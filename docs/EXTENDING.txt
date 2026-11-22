@@ -619,7 +619,7 @@ Lessons
      A fourth subdirectory, "custom", is for your own pictures and lessons:
      Tux Paint doesn't install anything there, and shows its "Mine" tab only
      when it isn't empty. Besides lessons, it can hold plain pictures (SVG,
-     PNG or JPEG, maybe with a "NAME.txt" holding just the title): Tux Paint
+     PNG, JPEG or WebP, maybe with a "NAME.txt" holding just the title): Tux Paint
      teaches to copy them with a grid. (See README.)
 
      The format of the files, and advice on drawing pictures that a child can

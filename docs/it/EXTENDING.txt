@@ -668,7 +668,7 @@ Lezioni
      Una quarta sottocartella, "custom", è per le tue immagini e lezioni:
      Tux Paint non vi installa nulla, e mostra la sua scheda "Personali"
      solo quando non è vuota. Oltre alle lezioni, può contenere semplici
-     immagini (SVG, PNG o JPEG, eventualmente con un "NOME.txt" che contiene
+     immagini (SVG, PNG, JPEG o WebP, eventualmente con un "NOME.txt" che contiene
      solo il titolo): Tux Paint insegna a copiarle con la quadrettatura.
      (Vedi README.)
 
