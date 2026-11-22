@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
   dirs[0] = argv[1];
   langs[0] = argv[2];
-  lessons = lessons_find(dirs, 1, langs, 1, &num);
+  lessons = lessons_find(dirs, 1, langs, 1, langs[0], &num);
   printf("%d lessons\n", num);
 
   for (i = 0; i < num; i++)

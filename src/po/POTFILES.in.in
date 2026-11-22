@@ -4,6 +4,7 @@ dirwalk.c
 fonts.c
 great.h
 im.c
+lessons.c
 shapes.h
 titles.h
 tools.h

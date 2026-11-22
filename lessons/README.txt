@@ -17,6 +17,17 @@ Tux Paint looks for them in its data folder (e.g. /usr/share/tuxpaint/lessons)
 and in the user's own folder (~/.tuxpaint/lessons/easy, …). Within a level,
 lessons are listed by number of steps, then by title.
 
+A fourth folder, custom/, is for the user's own pictures and lessons (usually
+~/.tuxpaint/lessons/custom). Tux Paint doesn't ship or install anything
+there, and its "Mine" tab only shows when it isn't empty. Besides lessons, it
+takes plain pictures, SVG, PNG or JPEG, with no steps of their own: each
+becomes a lesson that copies it with a 3 by 3 grid (look; draw a light grid;
+copy box by box; erase the grid; color). For two files with the same name,
+SVG wins over PNG, PNG over JPEG. The title is the file's name ("my_red-car"
+becomes "My red car"), or the first block of NAME.txt if there is one with
+just the title (and its translations); "#" comment lines there are a good
+place for credits. EPS files aren't read: convert them to SVG first.
+
 
 A lesson is two files with the same name
 ----------------------------------------

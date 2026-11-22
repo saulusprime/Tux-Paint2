@@ -21,12 +21,12 @@ eval "$(devtools/sysroot/sysroot.sh env | head -1)"
 cc -g -O1 -W -Wall -fsanitize=address -Isrc \
   $(pkg-config --cflags sdl librsvg-2.0 cairo) \
   -o ~/.cache/lesson_frames devtools/lesson-test/lesson_frames.c src/lessons.c \
-  $(pkg-config --libs sdl librsvg-2.0 cairo) -lm
+  $(pkg-config --libs sdl librsvg-2.0 cairo) -lSDL_image -lm
 mkdir -p ~/.cache/lesson-frames
 ~/.cache/lesson_frames lessons it ~/.cache/lesson-frames 608 424
 ```
 
-Argomenti: la cartella delle lezioni (con `easy/`, `medium/`, `hard/`), la
-lingua dei testi, la cartella di uscita e, facoltative, larghezza e altezza
-dell'area del lettore (608×424 è quella a 800×600). Stampa titoli e passi
-nella lingua scelta.
+Argomenti: la cartella delle lezioni (con `easy/`, `medium/`, `hard/`,
+`custom/`), la lingua dei testi, la cartella di uscita e, facoltative,
+larghezza e altezza dell'area del lettore (608×424 è quella a 800×600).
+Stampa titoli e passi nella lingua scelta.

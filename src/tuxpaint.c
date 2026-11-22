@@ -20982,7 +20982,11 @@ static const char *const learn_level_names[NUM_LESSON_LEVELS] = {
   gettext_noop("Medium"),
 
   /* Learn dialog: the tab with the hardest lessons */
-  gettext_noop("Hard")
+  gettext_noop("Hard"),
+
+  /* Learn dialog: the tab with the user's own pictures and lessons (shown
+     only when there are some) */
+  gettext_noop("Mine")
 };
 
 /* How long the new part of a step blinks (ms) */
@@ -20994,6 +20998,7 @@ static const char *const learn_level_names[NUM_LESSON_LEVELS] = {
 
 static int learn_level;		/* the level chosen last */
 static int learn_voice_on = 1;	/* the "Voice" button */
+static int learn_num_tabs = LESSON_CUSTOM;	/* (+1 with the user's own) */
 
 /* Where the selector's parts go (they follow the screen's size) */
 typedef struct learn_layout
@@ -21009,8 +21014,8 @@ static void learn_get_layout(learn_layout * lay)
 {
   int i, gap = SCALED(6), tab_h = button_h * 3 / 4, tab_w, title_h;
 
-  tab_w = (r_canvas.w - gap * (NUM_LESSON_LEVELS + 1)) / NUM_LESSON_LEVELS;
-  for (i = 0; i < NUM_LESSON_LEVELS; i++)
+  tab_w = (r_canvas.w - gap * (learn_num_tabs + 1)) / learn_num_tabs;
+  for (i = 0; i < learn_num_tabs; i++)
   {
     lay->tabs[i].x = r_canvas.x + gap + i * (tab_w + gap);
     lay->tabs[i].y = gap;
@@ -21179,7 +21184,7 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
 
   /* Tabs */
-  for (i = 0; i < NUM_LESSON_LEVELS; i++)
+  for (i = 0; i < learn_num_tabs; i++)
   {
     s = lesson_level_tab(i, lay->tabs[i].w, lay->tabs[i].h, i == learn_level, &text_x);
     if (s == NULL)
@@ -21550,8 +21555,16 @@ static void do_learn(void)
   dirs[1] = personal;
 
   do_setcursor(cursor_watch);
-  lessons = lessons_find(dirs, 2, langs, num_langs, &num_lessons);
+  lessons = lessons_find(dirs, 2, langs, num_langs, lang_prefix, &num_lessons);
   free(personal);
+
+  /* The "Mine" tab only when the user has pictures or lessons there */
+  learn_num_tabs = LESSON_CUSTOM;
+  for (i = 0; i < num_lessons; i++)
+    if (lessons[i]->level == LESSON_CUSTOM)
+      learn_num_tabs = LESSON_CUSTOM + 1;
+  if (learn_level >= learn_num_tabs)
+    learn_level = 0;
 
   thumbs = calloc(num_lessons > 0 ? num_lessons : 1, sizeof(SDL_Surface *));
   in_level = calloc(num_lessons > 0 ? num_lessons : 1, sizeof(int));
@@ -21629,7 +21642,7 @@ static void do_learn(void)
 	}
 	else if ((key == SDLK_RETURN || key == SDLK_KP_ENTER) && which >= 0)
 	  start = 1;
-	else if (key >= SDLK_1 && key < SDLK_1 + NUM_LESSON_LEVELS && !keymouse)
+	else if (key >= SDLK_1 && (int) key < SDLK_1 + learn_num_tabs && !keymouse)
 	{
 	  learn_level = key - SDLK_1;
 	  reload_level = 1;
@@ -21649,7 +21662,7 @@ static void do_learn(void)
 	x = event.button.x;
 	y = event.button.y;
 
-	for (i = 0; i < NUM_LESSON_LEVELS; i++)
+	for (i = 0; i < learn_num_tabs; i++)
 	{
 	  if (learn_hit(x, y, lay.tabs[i].x, lay.tabs[i].y, lay.tabs[i].w, lay.tabs[i].h) &&
 	      i != learn_level)
@@ -21734,7 +21747,7 @@ static void do_learn(void)
 	  n = scroll + (y - lay.grid.y) / lay.card_h * LEARN_COLS + (x - lay.grid.x) / lay.card_w;
 
 	k = 0;
-	for (i = 0; i < NUM_LESSON_LEVELS; i++)
+	for (i = 0; i < learn_num_tabs; i++)
 	  if (learn_hit(x, y, lay.tabs[i].x, lay.tabs[i].y, lay.tabs[i].w, lay.tabs[i].h))
 	    k = 1;
 
@@ -21856,7 +21869,7 @@ static int count_lessons(void)
   dirs[0] = DATA_PREFIX "lessons";
   dirs[1] = personal;
   langs[0] = "en";
-  lessons = lessons_find(dirs, 2, langs, 1, &num);
+  lessons = lessons_find(dirs, 2, langs, 1, "en", &num);
   lessons_free(lessons, num);
   free(personal);
 

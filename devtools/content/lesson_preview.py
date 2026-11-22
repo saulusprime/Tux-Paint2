@@ -197,8 +197,10 @@ def parse_lesson(txt_path):
 
 
 def check_lesson(lesson, langs, handle):
-    if lesson.level not in LEVELS:
-        lesson.warnings.append(f"folder '{lesson.level}' is not easy/medium/hard")
+    if lesson.level == "custom":
+        pass  # (the user's own: any number of steps)
+    elif lesson.level not in LEVELS:
+        lesson.warnings.append(f"folder '{lesson.level}' is not easy/medium/hard/custom")
     else:
         lo, hi = LEVELS[lesson.level]
         if not lo <= len(lesson.steps) <= hi:
@@ -442,6 +444,10 @@ def main():
     failed = False
     for txt in find_lessons(args.paths):
         lesson = parse_lesson(txt)
+        if lesson.level == "custom" and not lesson.steps and not lesson.errors:
+            # (Just a title: Tux Paint copies the picture with a grid)
+            print(f"custom/{lesson.name}: a picture with its title, nothing to check")
+            continue
         try:
             handle = Svg(lesson.svg_path)
         except OSError as e:

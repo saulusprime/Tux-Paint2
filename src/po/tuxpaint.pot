@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 18:28+0100\n"
+"POT-Creation-Date: 2026-11-22 19:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -228,6 +228,35 @@ msgstr ""
 #. Input Method: Traditional Chinese mode
 #: ../im.c:90
 msgid "ZH_TW"
+msgstr ""
+
+#. Learn dialog: first step to copy a picture of the user's own
+#: ../lessons.c:71
+msgid "Look carefully at the picture: we are going to copy it on paper."
+msgstr ""
+
+#. Learn dialog: second step to copy a picture (a 3 by 3 grid is shown on it)
+#: ../lessons.c:73
+msgid ""
+"With a light pencil, divide your paper into nine boxes: draw two lines down "
+"and two lines across, like on the picture."
+msgstr ""
+
+#. Learn dialog: third step to copy a picture
+#: ../lessons.c:75
+msgid ""
+"Copy the drawing one box at a time: in each box of your paper, draw what you "
+"see in the same box of the picture."
+msgstr ""
+
+#. Learn dialog: fourth step to copy a picture
+#: ../lessons.c:77
+msgid "Now erase the light lines of the grid with the eraser."
+msgstr ""
+
+#. Learn dialog: last step to copy a picture
+#: ../lessons.c:79
+msgid "Color your drawing: like the picture, or with the colors you like best!"
 msgstr ""
 
 #. Square shape tool (4 equally-lengthed sides at right angles)
@@ -770,7 +799,13 @@ msgstr ""
 msgid "Hard"
 msgstr ""
 
-#: ../tuxpaint.c:24734
+#. Learn dialog: the tab with the user's own pictures and lessons (shown
+#. only when there are some)
+#: ../tuxpaint.c:20989
+msgid "Mine"
+msgstr ""
+
+#: ../tuxpaint.c:24769
 msgid "Pick a color."
 msgstr ""
 

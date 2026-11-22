@@ -28,12 +28,15 @@
 
 #include "SDL.h"
 
-/* Difficulty levels: the lessons' subfolders */
+/* Difficulty levels: the lessons' subfolders. "custom" is for the user's
+   own pictures and lessons (shown only when there are some): Tux Paint
+   doesn't ship any. */
 enum
 {
   LESSON_EASY,
   LESSON_MEDIUM,
   LESSON_HARD,
+  LESSON_CUSTOM,
   NUM_LESSON_LEVELS
 };
 
@@ -44,7 +47,13 @@ typedef enum
   LESSON_STEP_DRAW,		/* lines to draw */
   LESSON_STEP_GUIDE,		/* a light helper shape, erased later */
   LESSON_STEP_COLOR,		/* an area to color */
-  LESSON_STEP_ERASE		/* erase the helper shapes */
+  LESSON_STEP_ERASE,		/* erase the helper shapes (or the grid) */
+
+  /* A plain picture's steps, to copy it with a grid (see lesson.picture) */
+  LESSON_STEP_LOOK,		/* look at the picture */
+  LESSON_STEP_GRID,		/* draw a light grid on the paper */
+  LESSON_STEP_COPY,		/* copy it one box at a time */
+  LESSON_STEP_PAINT		/* color it */
 } lesson_step_kind;
 
 typedef struct lesson_step
@@ -57,8 +66,9 @@ typedef struct lesson_step
 
 typedef struct lesson
 {
-  char *name;			/* file name, without ".txt" */
-  char *svg_fname;
+  char *name;			/* file name, without its extension */
+  char *svg_fname;		/* the drawing; for a picture, maybe a PNG or JPEG */
+  int picture;			/* a plain picture (in "custom", with no steps of its own) */
   char *title;
   char *title_lang;
   int level;
@@ -72,9 +82,13 @@ int lessons_supported(void);
 /* All the lessons in the levels' subfolders of the folders given (later
    folders win over earlier ones for a lesson of the same level and name),
    sorted by level, number of steps and title. Texts are in the first of
-   langs found (e.g. "it_IT", "it"), else in English. NULL if none. */
+   langs found (e.g. "it_IT", "it"), else in English.
+   In "custom" a picture (SVG, PNG, JPEG) with no steps of its own (no
+   NAME.txt, or one with just the title) becomes a lesson that copies it
+   with a grid; its texts come from gettext(), in ui_lang ("en" when
+   untranslated). NULL if none. */
 lesson **lessons_find(const char *const *dirs, int num_dirs,
-		      const char *const *langs, int num_langs, int *num);
+		      const char *const *langs, int num_langs, const char *ui_lang, int *num);
 void lessons_free(lesson ** lessons, int num);
 
 /* The finished picture, w x h at most, on white */

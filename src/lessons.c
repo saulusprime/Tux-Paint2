@@ -37,7 +37,13 @@
 #endif
 
 #include "SDL.h"
+#include "SDL_image.h"
 #include "lessons.h"
+
+#include <libintl.h>
+#ifndef gettext_noop
+#define gettext_noop(String) String
+#endif
 
 #if !defined(NOSVG) && !defined(OLD_SVG)
 #include <librsvg/rsvg.h>
@@ -51,8 +57,29 @@
 #endif
 
 const char *const lesson_level_dirs[NUM_LESSON_LEVELS] = {
-  "easy", "medium", "hard"
+  "easy", "medium", "hard", "custom"
 };
+
+/* The steps of a plain picture of the user's (in "custom"), to copy it on
+   paper with a grid */
+static const struct
+{
+  lesson_step_kind kind;
+  const char *text;
+} picture_steps[] = {
+  /* Learn dialog: first step to copy a picture of the user's own */
+  {LESSON_STEP_LOOK, gettext_noop("Look carefully at the picture: we are going to copy it on paper.")},
+  /* Learn dialog: second step to copy a picture (a 3 by 3 grid is shown on it) */
+  {LESSON_STEP_GRID, gettext_noop("With a light pencil, divide your paper into nine boxes: draw two lines down and two lines across, like on the picture.")},
+  /* Learn dialog: third step to copy a picture */
+  {LESSON_STEP_COPY, gettext_noop("Copy the drawing one box at a time: in each box of your paper, draw what you see in the same box of the picture.")},
+  /* Learn dialog: fourth step to copy a picture */
+  {LESSON_STEP_ERASE, gettext_noop("Now erase the light lines of the grid with the eraser.")},
+  /* Learn dialog: last step to copy a picture */
+  {LESSON_STEP_PAINT, gettext_noop("Color your drawing: like the picture, or with the colors you like best!")}
+};
+
+#define NUM_PICTURE_STEPS (int) (sizeof(picture_steps) / sizeof(picture_steps[0]))
 
 #define LINE_LEN 2048
 
@@ -267,7 +294,8 @@ static lesson *lesson_load(const char *txt_fname, const char *svg_fname, const c
   l = calloc(1, sizeof(lesson));
   if (l == NULL || num_blocks < 2 || blocks[0].num == 0)
   {
-    if (num_blocks < 2)
+    /* (In "custom", a title alone is a picture's: see picture_lesson()) */
+    if (num_blocks < 2 && level != LESSON_CUSTOM)
       fprintf(stderr, "Lesson %s: no steps\n", txt_fname);
     free(l);
     free_blocks(blocks, num_blocks);
@@ -352,15 +380,142 @@ static int compare_lessons(const void *a, const void *b)
   return strcasecmp(la->title, lb->title);
 }
 
-lesson **lessons_find(const char *const *dirs, int num_dirs,
-		      const char *const *langs, int num_langs, int *num)
+/* Add a lesson to the list; one of the same level and name already there
+   is replaced (a later folder wins). 0 if out of memory (then l is freed). */
+static int add_lesson(lesson *** found, int *num, lesson * l)
 {
-  lesson **found = NULL, **bigger, *l;
-  int d, level, i, replaced;
+  lesson **bigger;
+  int i;
+
+  for (i = 0; i < *num; i++)
+  {
+    if ((*found)[i]->level == l->level && strcmp((*found)[i]->name, l->name) == 0)
+    {
+      lesson_free((*found)[i]);
+      (*found)[i] = l;
+      return 1;
+    }
+  }
+
+  bigger = realloc(*found, sizeof(lesson *) * (*num + 1));
+  if (bigger == NULL)
+  {
+    lesson_free(l);
+    return 0;
+  }
+  *found = bigger;
+  (*found)[(*num)++] = l;
+  return 1;
+}
+
+/* How good a picture file is (an SVG is the best); 0 if it isn't one */
+static int picture_rank(const char *fname, size_t *ext_len)
+{
+  static const struct
+  {
+    const char *ext;
+    int rank;
+  } exts[] = {
+    {".svg", 3}, {".png", 2}, {".jpg", 1}, {".jpeg", 1}
+  };
+  size_t len = strlen(fname), n;
+  unsigned int i;
+
+  for (i = 0; i < sizeof(exts) / sizeof(exts[0]); i++)
+  {
+    n = strlen(exts[i].ext);
+    if (len > n && strcasecmp(fname + len - n, exts[i].ext) == 0)
+    {
+      *ext_len = n;
+      return exts[i].rank;
+    }
+  }
+
+  return 0;
+}
+
+/* A picture of the user's as a lesson that copies it with a grid. The
+   title is NAME.txt's, if there is one, else the file's name. */
+static lesson *picture_lesson(const char *dir_path, const char *fname, const char *name,
+			      const char *const *langs, int num_langs, const char *ui_lang)
+{
+  lesson *l;
+  block *blocks;
+  int num_blocks, i;
+  char path[1024];
+  const char *text;
+  size_t n;
+
+  l = calloc(1, sizeof(lesson));
+  if (l == NULL)
+    return NULL;
+
+  l->picture = 1;
+  l->level = LESSON_CUSTOM;
+  l->name = strdup(name);
+  l->steps = calloc(NUM_PICTURE_STEPS, sizeof(lesson_step));
+  if (snprintf(path, sizeof(path), "%s/%s", dir_path, fname) < (int) sizeof(path))
+    l->svg_fname = strdup(path);
+  if (l->name == NULL || l->steps == NULL || l->svg_fname == NULL)
+  {
+    lesson_free(l);
+    return NULL;
+  }
+
+  if (snprintf(path, sizeof(path), "%s/%s.txt", dir_path, name) < (int) sizeof(path))
+  {
+    blocks = read_blocks(path, &num_blocks);
+    if (blocks != NULL)
+    {
+      if (num_blocks > 0 && blocks[0].num > 0)
+	pick_text(&blocks[0], 0, langs, num_langs, &l->title, &l->title_lang);
+      free_blocks(blocks, num_blocks);
+    }
+  }
+
+  if (l->title == NULL)
+  {
+    /* "my_red-car" -> "My red car" */
+    l->title = strdup(name);
+    l->title_lang = strdup(ui_lang);
+    if (l->title == NULL || l->title_lang == NULL)
+    {
+      lesson_free(l);
+      return NULL;
+    }
+    for (n = 0; l->title[n] != '\0'; n++)
+      if (l->title[n] == '_' || l->title[n] == '-')
+	l->title[n] = ' ';
+    l->title[0] = toupper((unsigned char) l->title[0]);
+  }
+
+  for (i = 0; i < NUM_PICTURE_STEPS; i++)
+  {
+    text = gettext(picture_steps[i].text);
+    l->steps[i].kind = picture_steps[i].kind;
+    l->steps[i].text = strdup(text);
+    l->steps[i].lang = strdup(strcmp(text, picture_steps[i].text) != 0 ? ui_lang : "en");
+    if (l->steps[i].text == NULL || l->steps[i].lang == NULL)
+    {
+      l->num_steps = i + 1;
+      lesson_free(l);
+      return NULL;
+    }
+  }
+  l->num_steps = NUM_PICTURE_STEPS;
+
+  return l;
+}
+
+lesson **lessons_find(const char *const *dirs, int num_dirs,
+		      const char *const *langs, int num_langs, const char *ui_lang, int *num)
+{
+  lesson **found = NULL, *l;
+  int d, level, i, rank, best, here_first;
   DIR *dir;
   struct dirent *ent;
   char path[1024], txt_fname[1024], svg_fname[1024], name[256];
-  size_t len;
+  size_t len, ext_len = 0;
   FILE *fi;
 
   *num = 0;
@@ -382,6 +537,10 @@ lesson **lessons_find(const char *const *dirs, int num_dirs,
       if (dir == NULL)
 	continue;
 
+      /* (Lessons found in this folder start here in the list) */
+      here_first = *num;
+
+      /* Lessons: NAME.txt with the steps of NAME.svg */
       while ((ent = readdir(dir)) != NULL)
       {
 	len = strlen(ent->d_name);
@@ -403,31 +562,40 @@ lesson **lessons_find(const char *const *dirs, int num_dirs,
 	fclose(fi);
 
 	l = lesson_load(txt_fname, svg_fname, name, level, langs, num_langs);
-	if (l == NULL)
-	  continue;
+	if (l != NULL)
+	  add_lesson(&found, num, l);
+      }
 
-	/* (The same lesson from a later folder, e.g. the user's, wins) */
-	replaced = 0;
-	for (i = 0; i < *num && !replaced; i++)
+      /* In "custom", also the pictures with no steps of their own: one
+         per name, the best kind of file (SVG, then PNG, then JPEG) */
+      if (level == LESSON_CUSTOM)
+      {
+	rewinddir(dir);
+	while ((ent = readdir(dir)) != NULL)
 	{
-	  if (found[i]->level == level && strcmp(found[i]->name, name) == 0)
+	  rank = picture_rank(ent->d_name, &ext_len);
+	  len = strlen(ent->d_name);
+	  if (rank == 0 || ent->d_name[0] == '.' || len - ext_len >= sizeof(name))
+	    continue;
+	  memcpy(name, ent->d_name, len - ext_len);
+	  name[len - ext_len] = '\0';
+
+	  /* (A lesson, or a better file, of that name in this folder?) */
+	  best = 1;
+	  for (i = here_first; i < *num && best; i++)
 	  {
-	    lesson_free(found[i]);
-	    found[i] = l;
-	    replaced = 1;
+	    if (found[i]->level != LESSON_CUSTOM || strcmp(found[i]->name, name) != 0)
+	      continue;
+	    if (!found[i]->picture || picture_rank(found[i]->svg_fname, &ext_len) >= rank)
+	      best = 0;
 	  }
-	}
-	if (replaced)
-	  continue;
+	  if (!best)
+	    continue;
 
-	bigger = realloc(found, sizeof(lesson *) * (*num + 1));
-	if (bigger == NULL)
-	{
-	  lesson_free(l);
-	  continue;
+	  l = picture_lesson(path, ent->d_name, name, langs, num_langs, ui_lang);
+	  if (l != NULL)
+	    add_lesson(&found, num, l);
 	}
-	found = bigger;
-	found[(*num)++] = l;
       }
 
       closedir(dir);
@@ -471,6 +639,7 @@ struct lesson_pics
   int pic_x, pic_y, pic_w, pic_h;
   double tool_cx, tool_w;	/* the column for the tool, right of the picture */
   cairo_surface_t **layers;	/* each step's group alone, at the picture's size */
+  cairo_surface_t *picture;	/* a plain picture (lesson.picture), at that size */
   double (*colors)[3];		/* each color step's color */
   cairo_surface_t *frame;
   SDL_Surface *frame_sdl;	/* (the frame's pixels) */
@@ -498,21 +667,6 @@ static RsvgHandle *open_svg(const char *fname)
   return handle;
 }
 
-/* Width / height of the drawing */
-static double picture_aspect(RsvgHandle * handle)
-{
-  gboolean has_w, has_h, has_vb;
-  RsvgLength w, h;
-  RsvgRectangle vb;
-
-  rsvg_handle_get_intrinsic_dimensions(handle, &has_w, &w, &has_h, &h, &has_vb, &vb);
-
-  if (has_vb && vb.width > 0 && vb.height > 0)
-    return vb.width / vb.height;
-
-  return 4.0 / 3.0;
-}
-
 /* The biggest w x h of that aspect that fits in max_w x max_h */
 static void fit(double aspect, int max_w, int max_h, int *w, int *h)
 {
@@ -530,6 +684,168 @@ static void fit(double aspect, int max_w, int max_h, int *w, int *h)
     *w = 1;
   if (*h < 1)
     *h = 1;
+}
+
+/* Width / height of the drawing */
+static double picture_aspect(RsvgHandle * handle)
+{
+  gboolean has_w, has_h, has_vb;
+  RsvgLength w, h;
+  RsvgRectangle vb;
+
+  rsvg_handle_get_intrinsic_dimensions(handle, &has_w, &w, &has_h, &h, &has_vb, &vb);
+
+  if (has_vb && vb.width > 0 && vb.height > 0)
+    return vb.width / vb.height;
+
+#if LIBRSVG_CHECK_VERSION(2, 52, 0)
+  {
+    gdouble pw, ph;
+
+    /* (No viewBox: its size, if in absolute units) */
+    if (rsvg_handle_get_intrinsic_size_in_pixels(handle, &pw, &ph) && pw > 0 && ph > 0)
+      return pw / ph;
+  }
+#endif
+
+  return 4.0 / 3.0;
+}
+
+/* A plain picture of the user's: an SVG, or an image SDL_image reads */
+typedef struct picture_src
+{
+  RsvgHandle *svg;
+  cairo_surface_t *raster;	/* (premultiplied ARGB) */
+  double aspect;
+} picture_src;
+
+/* The biggest raster kept: bigger photos are scaled down when read */
+#define MAX_RASTER 2048
+
+static int picture_open(const char *fname, picture_src * ps)
+{
+  SDL_Surface *img, *argb;
+  cairo_surface_t *full;
+  cairo_t *cr;
+  unsigned char *data;
+  Uint32 *src, a, px;
+  int x, y, stride, keep_alpha, w, h;
+  size_t len = strlen(fname);
+
+  memset(ps, 0, sizeof(*ps));
+
+  if (len > 4 && strcasecmp(fname + len - 4, ".svg") == 0)
+  {
+    ps->svg = open_svg(fname);
+    if (ps->svg == NULL)
+      return 0;
+    ps->aspect = picture_aspect(ps->svg);
+    return 1;
+  }
+
+  img = IMG_Load(fname);
+  if (img == NULL)
+  {
+    fprintf(stderr, "Lesson %s: can't read it (%s)\n", fname, IMG_GetError());
+    return 0;
+  }
+
+  /* To 32-bit ARGB, then premultiplied for cairo (an image with no alpha
+     is opaque) */
+  keep_alpha = (img->format->Amask != 0);
+  argb = SDL_CreateRGBSurface(SDL_SWSURFACE, img->w, img->h, 32,
+			      0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+  if (argb == NULL)
+  {
+    SDL_FreeSurface(img);
+    return 0;
+  }
+  SDL_SetAlpha(img, 0, 0);
+  SDL_BlitSurface(img, NULL, argb, NULL);
+  SDL_FreeSurface(img);
+
+  full = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, argb->w, argb->h);
+  if (cairo_surface_status(full) != CAIRO_STATUS_SUCCESS)
+  {
+    cairo_surface_destroy(full);
+    SDL_FreeSurface(argb);
+    return 0;
+  }
+  cairo_surface_flush(full);
+  data = cairo_image_surface_get_data(full);
+  stride = cairo_image_surface_get_stride(full);
+  SDL_LockSurface(argb);
+  for (y = 0; y < argb->h; y++)
+  {
+    src = (Uint32 *) ((Uint8 *) argb->pixels + y * argb->pitch);
+    for (x = 0; x < argb->w; x++)
+    {
+      px = src[x];
+      a = keep_alpha ? px >> 24 : 255;
+      *(Uint32 *) (data + y * stride + x * 4) =
+	(a << 24) | ((((px >> 16) & 0xff) * a / 255) << 16) |
+	((((px >> 8) & 0xff) * a / 255) << 8) | ((px & 0xff) * a / 255);
+    }
+  }
+  SDL_UnlockSurface(argb);
+  cairo_surface_mark_dirty(full);
+  ps->aspect = (double) argb->w / argb->h;
+  w = argb->w;
+  h = argb->h;
+  SDL_FreeSurface(argb);
+
+  /* (A big photo, smaller: it's only shown at the screen's size) */
+  if (w > MAX_RASTER || h > MAX_RASTER)
+  {
+    fit(ps->aspect, MAX_RASTER, MAX_RASTER, &x, &y);
+    ps->raster = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, x, y);
+    cr = cairo_create(ps->raster);
+    cairo_scale(cr, (double) x / w, (double) y / h);
+    cairo_set_source_surface(cr, full, 0, 0);
+    cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_GOOD);
+    cairo_paint(cr);
+    cairo_destroy(cr);
+    cairo_surface_destroy(full);
+  }
+  else
+    ps->raster = full;
+
+  return 1;
+}
+
+/* The whole picture into x, y, w, h (of its aspect) */
+static void picture_draw(picture_src * ps, cairo_t * cr, double x, double y, double w, double h)
+{
+  RsvgRectangle viewport;
+
+  if (ps->svg != NULL)
+  {
+    viewport.x = x;
+    viewport.y = y;
+    viewport.width = w;
+    viewport.height = h;
+    rsvg_handle_render_document(ps->svg, cr, &viewport, NULL);
+  }
+  else if (ps->raster != NULL)
+  {
+    cairo_save(cr);
+    cairo_translate(cr, x, y);
+    cairo_scale(cr, w / cairo_image_surface_get_width(ps->raster),
+		h / cairo_image_surface_get_height(ps->raster));
+    cairo_set_source_surface(cr, ps->raster, 0, 0);
+    cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_GOOD);
+    cairo_paint(cr);
+    cairo_restore(cr);
+  }
+}
+
+static void picture_close(picture_src * ps)
+{
+  if (ps->svg != NULL)
+    g_object_unref(ps->svg);
+  if (ps->raster != NULL)
+    cairo_surface_destroy(ps->raster);
+  memset(ps, 0, sizeof(*ps));
 }
 
 /* One group of the drawing (all of it if id is NULL) into cr, the whole
@@ -558,8 +874,9 @@ static int render_group(RsvgHandle * handle, cairo_t * cr, const char *id,
   return ok;
 }
 
-/* The commonest color of a group's opaque pixels */
-static void main_color(cairo_surface_t * s, double rgb[3])
+/* The commonest color of a group's opaque pixels; with colorful, only
+   among the clearly colored ones (not white, grey or black): 0 if none */
+static int main_color(cairo_surface_t * s, double rgb[3], int colorful)
 {
   int x, y, w, h, stride, best = 0, *counts;
   unsigned char *data;
@@ -571,7 +888,7 @@ static void main_color(cairo_surface_t * s, double rgb[3])
 
   counts = calloc(32768, sizeof(int));
   if (counts == NULL)
-    return;
+    return 0;
 
   cairo_surface_flush(s);
   data = cairo_image_surface_get_data(s);
@@ -590,6 +907,15 @@ static void main_color(cairo_surface_t * s, double rgb[3])
       r = ((p >> 16) & 0xff) * 255 / a;
       g = ((p >> 8) & 0xff) * 255 / a;
       b = (p & 0xff) * 255 / a;
+      if (colorful)
+      {
+	Uint32 hi = (r > g ? r : g), lo = (r < g ? r : g);
+
+	hi = (b > hi ? b : hi);
+	lo = (b < lo ? b : lo);
+	if (hi - lo < 60)
+	  continue;
+      }
       counts[((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3)]++;
     }
 
@@ -622,12 +948,15 @@ static void main_color(cairo_surface_t * s, double rgb[3])
   }
 
   free(counts);
+  return n > 0;
 }
 
 lesson_pics *lesson_pics_new(const lesson * l, int area_w, int area_h, int top_h)
 {
+  static const double default_crayon[3] = { 0x3a / 255.0, 0x86 / 255.0, 0xff / 255.0 };
   lesson_pics *p;
-  RsvgHandle *handle;
+  RsvgHandle *handle = NULL;
+  picture_src ps;
   double aspect;
   int i, side, pic_area_h;
   cairo_t *cr;
@@ -635,14 +964,27 @@ lesson_pics *lesson_pics_new(const lesson * l, int area_w, int area_h, int top_h
   if (area_w < 16 || area_h - top_h < 16)
     return NULL;
 
-  handle = open_svg(l->svg_fname);
-  if (handle == NULL)
-    return NULL;
+  if (l->picture)
+  {
+    if (!picture_open(l->svg_fname, &ps))
+      return NULL;
+    aspect = ps.aspect;
+  }
+  else
+  {
+    handle = open_svg(l->svg_fname);
+    if (handle == NULL)
+      return NULL;
+    aspect = picture_aspect(handle);
+  }
 
   p = calloc(1, sizeof(lesson_pics));
   if (p == NULL)
   {
-    g_object_unref(handle);
+    if (handle != NULL)
+      g_object_unref(handle);
+    if (l->picture)
+      picture_close(&ps);
     return NULL;
   }
 
@@ -652,7 +994,6 @@ lesson_pics *lesson_pics_new(const lesson * l, int area_w, int area_h, int top_h
   p->top_h = top_h;
 
   /* Room on both sides (the picture stays centered) for the tool */
-  aspect = picture_aspect(handle);
   pic_area_h = area_h - top_h;
   side = pic_area_h / 6;
   fit(aspect, area_w - side * 2, pic_area_h - pic_area_h / 30, &p->pic_w, &p->pic_h);
@@ -679,9 +1020,27 @@ lesson_pics *lesson_pics_new(const lesson * l, int area_w, int area_h, int top_h
   if (p->layers == NULL || p->colors == NULL ||
       cairo_surface_status(p->frame) != CAIRO_STATUS_SUCCESS)
   {
-    g_object_unref(handle);
+    if (handle != NULL)
+      g_object_unref(handle);
+    if (l->picture)
+      picture_close(&ps);
     lesson_pics_free(p);
     return NULL;
+  }
+
+  /* A plain picture: drawn once; its main color is the crayon's */
+  if (l->picture)
+  {
+    p->picture = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, p->pic_w, p->pic_h);
+    cr = cairo_create(p->picture);
+    picture_draw(&ps, cr, 0, 0, p->pic_w, p->pic_h);
+    cairo_destroy(cr);
+    picture_close(&ps);
+
+    for (i = 0; i < l->num_steps; i++)
+      if (l->steps[i].kind == LESSON_STEP_PAINT &&
+	  !main_color(p->picture, p->colors[i], 1))
+	memcpy(p->colors[i], default_crayon, sizeof(default_crayon));
   }
 
   for (i = 0; i < l->num_steps; i++)
@@ -703,10 +1062,11 @@ lesson_pics *lesson_pics_new(const lesson * l, int area_w, int area_h, int top_h
     cairo_destroy(cr);
 
     if (l->steps[i].kind == LESSON_STEP_COLOR)
-      main_color(p->layers[i], p->colors[i]);
+      main_color(p->layers[i], p->colors[i], 0);
   }
 
-  g_object_unref(handle);
+  if (handle != NULL)
+    g_object_unref(handle);
 
   /* (RGB24 is 32-bit xRGB in native-endian words) */
   p->frame_sdl = SDL_CreateRGBSurfaceFrom(cairo_image_surface_get_data(p->frame),
@@ -733,6 +1093,8 @@ void lesson_pics_free(lesson_pics * p)
     SDL_FreeSurface(p->frame_sdl);
   if (p->frame != NULL)
     cairo_surface_destroy(p->frame);
+  if (p->picture != NULL)
+    cairo_surface_destroy(p->picture);
   if (p->layers != NULL)
   {
     for (i = 0; i < p->l->num_steps; i++)
@@ -872,7 +1234,11 @@ static void draw_tool(cairo_t * cr, lesson_pics * p, int step, float anim)
 
   switch (p->l->steps[step].kind)
   {
+  case LESSON_STEP_LOOK:
+    break;			/* (nothing to use yet) */
+
   case LESSON_STEP_COLOR:
+  case LESSON_STEP_PAINT:
     for (i = 0; i < 3; i++)
       darker[i] = p->colors[step][i] * 0.75;
     cairo_rotate(cr, 0.2 + 0.3 * wiggle);
@@ -880,6 +1246,7 @@ static void draw_tool(cairo_t * cr, lesson_pics * p, int step, float anim)
     break;
 
   case LESSON_STEP_GUIDE:
+  case LESSON_STEP_GRID:
     /* (Drawn lightly: a paler pencil) */
     cairo_push_group(cr);
     cairo_rotate(cr, 0.2 + 0.3 * wiggle);
@@ -934,6 +1301,95 @@ int lesson_pics_dots_x(const lesson_pics * p)
   return (int) p->dots_x;
 }
 
+/* The 3 x 3 grid of a picture's steps, over it */
+static void draw_grid(cairo_t * cr, lesson_pics * p, const double rgb[3], double alpha)
+{
+  double lw = p->pic_h / 150.0, dashes[2];
+  int i;
+
+  if (alpha <= 0)
+    return;
+  if (lw < 1.5)
+    lw = 1.5;
+  dashes[0] = lw * 4;
+  dashes[1] = lw * 3;
+
+  cairo_save(cr);
+  cairo_new_path(cr);
+  for (i = 1; i < 3; i++)
+  {
+    cairo_move_to(cr, p->pic_x + p->pic_w * i / 3.0, p->pic_y);
+    cairo_line_to(cr, p->pic_x + p->pic_w * i / 3.0, p->pic_y + p->pic_h);
+    cairo_move_to(cr, p->pic_x, p->pic_y + p->pic_h * i / 3.0);
+    cairo_line_to(cr, p->pic_x + p->pic_w, p->pic_y + p->pic_h * i / 3.0);
+  }
+  cairo_set_source_rgba(cr, rgb[0], rgb[1], rgb[2], alpha);
+  cairo_set_line_width(cr, lw);
+  cairo_set_dash(cr, dashes, 2, 0);
+  cairo_stroke(cr);
+  cairo_restore(cr);
+}
+
+/* A plain picture, in color or (to copy its lines) pale and grey */
+static void paint_picture(cairo_t * cr, lesson_pics * p, int pale, double alpha)
+{
+  if (alpha <= 0)
+    return;
+
+  cairo_push_group(cr);
+  cairo_set_source_surface(cr, p->picture, p->pic_x, p->pic_y);
+  cairo_paint(cr);
+  if (pale)
+  {
+    cairo_set_operator(cr, CAIRO_OPERATOR_HSL_SATURATION);
+    cairo_set_source_rgb(cr, 0.5, 0.5, 0.5);
+    cairo_mask_surface(cr, p->picture, p->pic_x, p->pic_y);
+    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+    cairo_set_source_rgba(cr, 1, 1, 1, 0.35);
+    cairo_mask_surface(cr, p->picture, p->pic_x, p->pic_y);
+  }
+  cairo_pop_group_to_source(cr);
+  cairo_paint_with_alpha(cr, alpha);
+}
+
+/* A plain picture's steps: look, grid, copy, erase the grid, color */
+static void picture_frame(cairo_t * cr, lesson_pics * p, int step, float anim)
+{
+  static const double grid_color[3] = { 0x8a / 255.0, 0x9b / 255.0, 0xb0 / 255.0 };
+  lesson_step_kind kind;
+
+  if (step < 0 || step >= p->l->num_steps)
+  {
+    paint_picture(cr, p, 0, 1);
+    return;
+  }
+
+  kind = p->l->steps[step].kind;
+  switch (kind)
+  {
+  case LESSON_STEP_GRID:
+    paint_picture(cr, p, 1, 1);
+    draw_grid(cr, p, guide_highlight, pulse(anim));
+    break;
+  case LESSON_STEP_COPY:
+    paint_picture(cr, p, 1, 1);
+    draw_grid(cr, p, grid_color, 1);
+    break;
+  case LESSON_STEP_ERASE:
+    paint_picture(cr, p, 1, 1);
+    draw_grid(cr, p, highlight, 1 - anim);	/* (fading away) */
+    break;
+  case LESSON_STEP_PAINT:
+    /* (The colors come back) */
+    paint_picture(cr, p, 1, 1);
+    paint_picture(cr, p, 0, anim < 0.5 ? anim * 2 : 1);
+    break;
+  default:
+    paint_picture(cr, p, 0, 1);
+    break;
+  }
+}
+
 SDL_Surface *lesson_pics_frame(lesson_pics * p, int step, float anim)
 {
   const lesson *l = p->l;
@@ -959,6 +1415,12 @@ SDL_Surface *lesson_pics_frame(lesson_pics * p, int step, float anim)
   cairo_set_source_rgb(cr, paper_edge[0], paper_edge[1], paper_edge[2]);
   cairo_set_line_width(cr, edge);
   cairo_stroke(cr);
+
+  if (l->picture)
+  {
+    picture_frame(cr, p, step, anim);
+    last = -1;			/* (no groups) */
+  }
 
   /* Colors under guides under lines; the new step blinks */
   for (i = 0; i <= last; i++)
@@ -1012,7 +1474,8 @@ static void round_rect(cairo_t * cr, double x, double y, double w, double h, dou
 static const double level_colors[NUM_LESSON_LEVELS][3] = {
   {0x90 / 255.0, 0xd2 / 255.0, 0x6d / 255.0},
   {0xff / 255.0, 0xd9 / 255.0, 0x3b / 255.0},
-  {0xff / 255.0, 0x8f / 255.0, 0x6b / 255.0}
+  {0xff / 255.0, 0x8f / 255.0, 0x6b / 255.0},
+  {0x8e / 255.0, 0xca / 255.0, 0xe6 / 255.0}	/* (custom: light blue) */
 };
 
 static SDL_Surface *cairo_to_sdl(cairo_surface_t * cs)
@@ -1032,6 +1495,15 @@ static SDL_Surface *cairo_to_sdl(cairo_surface_t * cs)
   SDL_UnlockSurface(s);
 
   return s;
+}
+
+static void heart(cairo_t * cr, double cx, double cy, double r)
+{
+  cairo_new_path(cr);
+  cairo_move_to(cr, cx, cy + r * 0.9);
+  cairo_curve_to(cr, cx - r * 1.4, cy - r * 0.1, cx - r * 0.7, cy - r * 1.2, cx, cy - r * 0.45);
+  cairo_curve_to(cr, cx + r * 0.7, cy - r * 1.2, cx + r * 1.4, cy - r * 0.1, cx, cy + r * 0.9);
+  cairo_close_path(cr);
 }
 
 static void star(cairo_t * cr, double cx, double cy, double r)
@@ -1081,11 +1553,16 @@ SDL_Surface *lesson_level_tab(int level, int w, int h, int selected, int *text_x
   cairo_set_line_width(cr, selected ? lw * 1.5 : lw);
   cairo_stroke(cr);
 
-  /* One star for each level of difficulty */
+  /* One star for each level of difficulty; the user's own, a heart */
+  if (r > w * 0.05)
+    r = w * 0.05;
   x = h * 0.2;
-  for (i = 0; i <= level; i++)
+  for (i = 0; i <= (level == LESSON_CUSTOM ? 0 : level); i++)
   {
-    star(cr, x + r, h / 2.0, r);
+    if (level == LESSON_CUSTOM)
+      heart(cr, x + r, h / 2.0, r);
+    else
+      star(cr, x + r, h / 2.0, r);
     cairo_set_source_rgb(cr, 1, 1, 1);
     cairo_fill_preserve(cr);
     cairo_set_source_rgb(cr, ink[0], ink[1], ink[2]);
@@ -1152,8 +1629,26 @@ SDL_Surface *lesson_thumbnail(const lesson * l, int w, int h)
   cairo_surface_t *cs;
   cairo_t *cr;
   SDL_Surface *s;
+  picture_src ps;
   int pw, ph, i, pass;
   lesson_step_kind kinds[2] = { LESSON_STEP_COLOR, LESSON_STEP_DRAW };
+
+  if (l->picture)
+  {
+    if (!picture_open(l->svg_fname, &ps))
+      return NULL;
+    fit(ps.aspect, w, h, &pw, &ph);
+    cs = cairo_image_surface_create(CAIRO_FORMAT_RGB24, pw, ph);
+    cr = cairo_create(cs);
+    cairo_set_source_rgb(cr, 1, 1, 1);
+    cairo_paint(cr);
+    picture_draw(&ps, cr, 0, 0, pw, ph);
+    cairo_destroy(cr);
+    picture_close(&ps);
+    s = cairo_to_sdl(cs);
+    cairo_surface_destroy(cs);
+    return s;
+  }
 
   handle = open_svg(l->svg_fname);
   if (handle == NULL)

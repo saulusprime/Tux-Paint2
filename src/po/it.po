@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TuxPaint 0.9.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 18:27+0100\n"
+"POT-Creation-Date: 2026-11-22 19:10+0100\n"
 "PO-Revision-Date: 2026-11-01 09:00+0100\n"
 "Last-Translator: Paolo\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
@@ -250,6 +250,40 @@ msgstr "Tailandese"
 #: ../im.c:90
 msgid "ZH_TW"
 msgstr "ZH_TW"
+
+#. Learn dialog: first step to copy a picture of the user's own
+#: ../lessons.c:71
+msgid "Look carefully at the picture: we are going to copy it on paper."
+msgstr "Guarda bene l'immagine: adesso la copiamo sul foglio."
+
+#. Learn dialog: second step to copy a picture (a 3 by 3 grid is shown on it)
+#: ../lessons.c:73
+msgid ""
+"With a light pencil, divide your paper into nine boxes: draw two lines down "
+"and two lines across, like on the picture."
+msgstr ""
+"Con la matita leggera dividi il foglio in nove riquadri: traccia due linee "
+"in verticale e due in orizzontale, come sull'immagine."
+
+#. Learn dialog: third step to copy a picture
+#: ../lessons.c:75
+msgid ""
+"Copy the drawing one box at a time: in each box of your paper, draw what you "
+"see in the same box of the picture."
+msgstr ""
+"Copia il disegno un riquadro alla volta: in ogni riquadro del foglio disegna "
+"quello che vedi nello stesso riquadro dell'immagine."
+
+#. Learn dialog: fourth step to copy a picture
+#: ../lessons.c:77
+msgid "Now erase the light lines of the grid with the eraser."
+msgstr "Adesso cancella con la gomma le linee leggere della griglia."
+
+#. Learn dialog: last step to copy a picture
+#: ../lessons.c:79
+msgid "Color your drawing: like the picture, or with the colors you like best!"
+msgstr ""
+"Colora il tuo disegno: come nell'immagine, o con i colori che preferisci!"
 
 #. Square shape tool (4 equally-lengthed sides at right angles)
 #: ../shapes.h:171 ../shapes.h:172
@@ -827,7 +861,13 @@ msgstr "Medio"
 msgid "Hard"
 msgstr "Difficile"
 
-#: ../tuxpaint.c:24734
+#. Learn dialog: the tab with the user's own pictures and lessons (shown
+#. only when there are some)
+#: ../tuxpaint.c:20989
+msgid "Mine"
+msgstr "Personali"
+
+#: ../tuxpaint.c:24769
 msgid "Pick a color."
 msgstr "Scegli un colore."
 
