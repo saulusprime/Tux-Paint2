@@ -114,8 +114,14 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   `master`, tutto funzionante, compresi Testo ed Etichetta, con la
   raccolta completa dei timbri (`./dev.sh stamps`, 957 timbri).
   Lanciatore nel menu, con la voce "Schermo intero" nel menu dell'icona
-  (clic destro); dati utente in `~/.tuxpaint/`. **Sulla macchina Ubuntu
-  non è installato nulla**: le prove usano `~/.cache/tuxpaint-learn-prefix`.
+  (clic destro); dati utente in `~/.tuxpaint/`. **Sulla macchina Ubuntu**
+  (dal 2026-11-22, sera) è installato `feature/learn-to-draw` con
+  `devtools/sysroot/sysroot.sh install`, lanciatore nel menu compreso; le
+  9 librerie che il sistema non ha sono copiate in
+  `~/.local/lib/tuxpaint/sysroot-libs` (RPATH). Senza la raccolta
+  completa dei timbri. Nella cartella personale dell'utente:
+  `~/.tuxpaint/lessons/hard/octopus.*` e tre immagini in
+  `~/.tuxpaint/lessons/custom/` (con un `.txt` di solo titolo ciascuna).
 - **Modifiche rispetto a 0.9.22**:
 
 | Area | Commit | Cosa |
@@ -351,9 +357,14 @@ devtools/sysroot/sysroot.sh run ./tuxpaint --windowed …
   cartella) e `PKG_CONFIG_PATH`; `PREFIX` dall'ambiente (default
   `~/.local`). Il Makefile non si accorge di un `PREFIX` cambiato: dopo
   un cambio, `make clean`.
-- `run` aggiunge la cartella a `LD_LIBRARY_PATH`: l'rpath del binario
-  (RUNPATH) vale solo per le sue dipendenze dirette, non per quelle di
+- `run` aggiunge la cartella a `LD_LIBRARY_PATH`. Dal 2026-11-22 il
+  binario ha un `DT_RPATH` vecchio stile (`--disable-new-dtags`): il
+  RUNPATH vale solo per le dipendenze dirette, non per quelle di
   SDL_mixer (per esempio `libmikmod.so.3`).
+- `install` fa quello che fa `dev.sh install` (ricompila da zero se
+  `PREFIX` è cambiato, lanciatore corretto) e copia in
+  `PREFIX/lib/tuxpaint/sysroot-libs` le librerie che `ldd` trova nella
+  cartella scaricata: l'installazione poi non dipende da `~/.cache`.
 
 ### Warning della build
 
@@ -2143,6 +2154,20 @@ sintetizzatore vocale che accompagna le istruzioni. Note tecniche in
   l'attribuzione e vietano la sublicenza. Il `#uuid=` del link è un codice
   di ricerca, non un'immagine. Nessun download.
 
+- Poi, su richiesta: la prima lezione da un'immagine dell'utente ("Polpo al
+  mare", 10 passi, da una pagina da colorare di Etsy, ridisegnata
+  semplificata) in `~/.tuxpaint/lessons/hard/`, fuori dal repository; le
+  altre due ("Gatto e amici", "Volpe e amici", da immagini fatte
+  dall'utente con Qwen) affidate a due agenti. **Installazione** in
+  `~/.local` con il nuovo `devtools/sysroot/sysroot.sh install` (librerie
+  mancanti copiate accanto, `DT_RPATH`); i WebP accettati nella cartella
+  `custom` (SDL_image li legge). Durante una reinstallazione l'utente
+  aveva Tux Paint aperto: il binario occupato si sostituisce togliendolo
+  prima, e le librerie ora si copiano con file nuovo e `mv` (riscriverle
+  sul posto può far cadere il programma aperto; quella volta si era già
+  chiuso da sé).
+
 Stato alla chiusura: branch `feature/learn-to-draw` committato e
 pubblicato su `origin` (la repo GitHub dell'utente), con la cartella
-`custom`; non unito in `master`. Manca la prova a mano con l'audio vero.
+`custom`; non unito in `master`; installato in `~/.local`. Manca la prova
+a mano con l'audio vero.
