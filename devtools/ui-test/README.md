@@ -25,6 +25,7 @@ tastiera: le finestre di prova compaiono sul suo schermo.
 | `compare.py` | Confronta due cartelle di catture |
 | `segv_backtrace.c` | Pila delle chiamate ai crash, da caricare con `LD_PRELOAD` |
 | `nodlclose.c` | Rende nullo `dlclose()`, da caricare con `LD_PRELOAD`: separa nei rapporti di AddressSanitizer la memoria dei plugin |
+| `headless.c` | Prove **senza finestra** (in fondo a questo file): con `SDL_VIDEODRIVER=dummy` dà a Tux Paint gli eventi di uno script e salva lo schermo in BMP |
 
 ## Esempi
 
@@ -156,3 +157,77 @@ Sicurezza: lo script usa solo la finestra del processo che ha avviato, la
 porta in primo piano e non clicca mai se sotto il puntatore c'è un'altra
 finestra. Allo stesso modo non preme tasti se il focus della tastiera non è
 in quella finestra. In entrambi i casi scrive "STOP" e si ferma.
+
+## Prove senza finestra (`headless.c`)
+
+Aggiunto il 2026-11-22. Una libreria per `LD_PRELOAD` che, con il driver
+video `dummy` di SDL, sostituisce `SDL_PollEvent()`: Tux Paint riceve gli
+eventi di uno script (`$TP_SCRIPT`) e lo schermo si salva in BMP quando lo
+script lo chiede. Non compare nessuna finestra, quindi **non serve chiedere
+all'utente di non toccare nulla**, e non servono gli strumenti di X. Con
+`SDL_AUDIODRIVER=dummy` il suono è attivo ma muto; la libreria scrive su
+stderr ogni suono del canale 3 (la voce dello strumento Impara), con la sua
+lunghezza.
+
+Comandi dello script, uno per riga (`#` per i commenti):
+
+| Comando | Cosa fa |
+|---------|---------|
+| `wait MS` | aspetta MS millisecondi |
+| `click X Y` | movimento, pressione e rilascio del tasto sinistro in X, Y |
+| `move X Y` | movimento del mouse |
+| `key NOME` | pressione e rilascio di un tasto (nome di SDL 1.2: `right`, `escape`, `return`, `space`, `1`, `r`…) |
+| `resize L A` | il gestore delle finestre porta la finestra a L×A (`SDL_VIDEORESIZE`) |
+| `shot FILE` | salva lo schermo in FILE (BMP) |
+| `exit` | chiude subito Tux Paint (`_exit(0)`, senza pulizie) |
+
+Compilazione (con le librerie di `devtools/sysroot/sysroot.sh`; con i
+pacchetti `-dev` installati basta `pkg-config` com'è):
+
+```sh
+eval "$(devtools/sysroot/sysroot.sh env | head -1)"
+cc -shared -fPIC -o ~/.cache/headless.so devtools/ui-test/headless.c \
+  $(pkg-config --cflags sdl) -ldl
+```
+
+Esempio di script, `~/.cache/learn.txt` (a 800×600 apre lo strumento
+Impara e ne salva lo schermo):
+
+```
+wait 4500
+click 400 560
+wait 1500
+click 24 208
+wait 2000
+shot /home/UTENTE/.cache/impara.bmp
+exit
+```
+
+Avvio, **sempre con `SDL_VIDEODRIVER=dummy`** (senza, la finestra compare
+sullo schermo) e con una `HOME` di prova; `SYSROOT` va dato esplicito,
+perché il suo default sta nella `HOME`:
+
+```sh
+SYSROOT=$HOME/.cache/tuxpaint-sysroot HOME=$HOME/.cache/tp-home \
+  TP_SCRIPT=$HOME/.cache/learn.txt SDL_VIDEODRIVER=dummy \
+  SDL_AUDIODRIVER=dummy LD_PRELOAD=~/.cache/headless.so \
+  devtools/sysroot/sysroot.sh run ./tuxpaint --windowed --windowsize=800x600 --nolockfile
+```
+
+Insidie:
+
+- Il primo clic chiude la schermata iniziale; se cade sulla tela lascia un
+  punto (come nelle prove in finestra): farlo nell'area di Tux, per
+  esempio (400, 560) a 800×600.
+- Dopo un `resize` i pulsanti cambiano posto (cambia la scala
+  dell'interfaccia): le coordinate dei clic successivi vanno ricalcolate.
+- Con AddressSanitizer la libreria va caricata dopo il suo runtime:
+  `ASAN_OPTIONS=verify_asan_link_order=0`. Per il rapporto delle perdite
+  Tux Paint deve uscire da sé: Esci (72, 400) e poi Sì (205, 250) a
+  800×600.
+- Il testo di SDL_Pango con il driver `dummy` si vede bene (sdl12-compat
+  1.2.72); le catture non sono state confrontate al pixel con quelle in
+  finestra.
+- Non scrivere script ed esempi con un heredoc `<<EOF` dentro un altro
+  heredoc: il primo `EOF` chiude quello esterno e la shell esegue il resto
+  come comandi (il 2026-11-22 ha aperto una finestra vera di Tux Paint).
