@@ -443,3 +443,9 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
 - [x] 2026-11-22 — Prove dell'interfaccia senza finestra —
   `devtools/ui-test/headless.c`: con `SDL_VIDEODRIVER=dummy`, eventi da
   uno script e catture BMP; registra i suoni della voce.
+- [x] 2026-11-22 — Cartella `custom` di Impara — scheda "Personali" solo
+  se `~/.tuxpaint/lessons/custom/` (o `custom` nei dati) contiene
+  qualcosa; immagini SVG, PNG, JPEG dell'utente insegnate con la
+  quadrettatura (guarda, griglia, copia, cancella, colora), lezioni vere
+  accanto; niente nel repository né nei pacchetti. L'archivio Magnific non
+  è stato scaricato: le sue condizioni vietano i download automatici.

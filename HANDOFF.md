@@ -59,7 +59,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   `feature/learn-to-draw`, committato e pubblicato su `origin`, non unito
   in `master` (§5sexies, diario del 2026-11-22). Compila e passa le prove
   senza finestra e una revisione indipendente; manca la prova a mano con
-  l'audio vero (§6). Dopo: la cartella `custom` delle lezioni (TODO).
+  l'audio vero (§6). Comprende la cartella `custom` per le immagini
+  dell'utente (scheda "Personali").
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -990,6 +991,23 @@ un sintetizzatore vocale.
   Backspace, R. Si rifà dopo un cambio di misura (`dialog_screen_change()`
   come gli altri dialoghi). Icone nuove (`learn_icons.py`): `learn` dello
   strumento e quattro dei pulsanti, SVG più PNG 40×30.
+- **Cartella `custom`** (dal 2026-11-22, commit a parte): quarta
+  sottocartella delle lezioni, `LESSON_CUSTOM`, per immagini e lezioni
+  dell'utente (di solito `~/.tuxpaint/lessons/custom/`); `make install`
+  non la tocca e il repository non ne ha. La scheda "Personali" (un cuore,
+  azzurra) compare solo se c'è qualcosa (`learn_num_tabs`). Oltre alle
+  lezioni vere accetta immagini SVG, PNG, JPEG senza passi: ognuna diventa
+  una lezione di 5 passi a quadrettatura (guarda; griglia leggera 3×3;
+  copia riquadro per riquadro, con l'immagine pallida e grigia
+  (`CAIRO_OPERATOR_HSL_SATURATION`); cancella la griglia; colora, con i
+  colori che tornano e il pastello del colore principale "vivace"
+  dell'immagine). Testi dei passi in `lessons.c` con `gettext()` (aggiunto
+  a `POTFILES.in.in`), lingua per la voce passata da `lessons_find()`.
+  Titolo dal nome del file o da un `NOME.txt` con il solo titolo (i
+  commenti `#` vanno bene per i crediti); a parità di nome vince SVG, poi
+  PNG, poi JPEG; gli EPS si ignorano. Le foto più grandi di 2048 px si
+  riducono alla lettura (`MAX_RASTER`). Raster letti con SDL_image,
+  premoltiplicati per cairo.
 - **Insidia di SDL_Pango**: `wordwrap_text_ex()` (il testo di Tux) lascia
   nel contesto Pango del font medio una misura minima larga quanto l'area
   di Tux; `render_text()` con quel font dà poi superfici enormi (titoli
@@ -1009,7 +1027,8 @@ un sintetizzatore vocale.
 0. **Impara** (`feature/learn-to-draw`, pubblicato): provarlo a mano con
    l'audio vero (voce italiana di eSpeak NG: chiarezza, velocità), seguire
    su carta almeno una lezione per livello, poi decidere l'unione in
-   `master`. Subito dopo: la cartella `custom` (TODO). Per provarlo su questa macchina:
+   `master`. Provare anche la scheda "Personali" con qualche immagine
+   in `~/.tuxpaint/lessons/custom/`. Per provarlo su questa macchina:
    `PREFIX=~/.cache/tuxpaint-learn-prefix devtools/sysroot/sysroot.sh make`
    e `… install`, poi `devtools/sysroot/sysroot.sh run
    ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
@@ -2108,6 +2127,22 @@ sintetizzatore vocale che accompagna le istruzioni. Note tecniche in
   Prossimo passo concordato: la cartella `custom` per immagini scaricate
   a mano dall'utente.
 
+- Dopo il primo push, la **cartella `custom`** chiesta dall'utente
+  (§5sexies): scheda "Personali" solo se ci sono file, immagini SVG, PNG,
+  JPEG copiate con la quadrettatura, lezioni vere accanto. Provata con una
+  cartella di prova (SVG senza testo, PNG e JPEG con lo stesso nome,
+  JPEG con un `.txt` di solo titolo, foto 3200×2400, un EPS da ignorare,
+  una lezione copiata): `lesson_frames` con AddressSanitizer pulito,
+  prova senza finestra della scheda e di una lezione intera, in italiano
+  e con la voce. Documentazione e `lessons/README.txt` aggiornati.
+- L'archivio Magnific l'ho guardato anche in Chrome (estensione Claude,
+  collegata in un secondo momento): le condizioni d'uso
+  (`/it/legal/terms-of-use`) vietano i download fatti con "robots,
+  spiders or any other mechanism, mobile application, program or tool",
+  le 20 immagini della prima pagina sono Premium, e le gratuite chiedono
+  l'attribuzione e vietano la sublicenza. Il `#uuid=` del link è un codice
+  di ricerca, non un'immagine. Nessun download.
+
 Stato alla chiusura: branch `feature/learn-to-draw` committato e
-pubblicato su `origin` (la repo GitHub dell'utente); non unito in
-`master`. Manca la prova a mano con l'audio vero.
+pubblicato su `origin` (la repo GitHub dell'utente), con la cartella
+`custom`; non unito in `master`. Manca la prova a mano con l'audio vero.

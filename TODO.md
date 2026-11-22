@@ -114,12 +114,9 @@ Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
 `HANDOFF.md` §5sexies); committato e pubblicato su `origin`, non unito in
 `master`.
 
-- [ ] [P1] Cartella `custom` per immagini e lezioni dell'utente, fuori dal
-  repository e dai pacchetti (`~/.tuxpaint/lessons/custom/`): scheda
-  "Personali" solo se ci sono file; lezioni vere (`.svg` + `.txt`) e
-  semplici immagini SVG, PNG, JPG, queste con una lezione a quadrettatura
-  (guarda, griglia leggera e copia quadretto per quadretto, colora).
-  Richiesta dall'utente il 2026-11-22, da fare subito dopo il push.
+- [ ] [P3] Cartella `custom`: leggere anche gli EPS (con Ghostscript, se
+  c'è) e scegliere la misura della griglia in base all'immagine (oggi
+  sempre 3×3).
 - [ ] [P1] Prova a mano con l'audio vero: chiarezza e velocità della voce
   italiana di eSpeak NG, una lezione per livello seguita davvero su carta;
   poi decidere l'unione in `master`.
