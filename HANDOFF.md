@@ -27,16 +27,24 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 2. Controllare il branch: `git branch -v`. Il lavoro nuovo si fa su un
    branch dedicato, **mai direttamente su `master`**. Si committa solo su
    richiesta, si fa push solo su richiesta, sul remote `github` (§1).
-3. La shell di VS Code è un sandbox Flatpak: compilazione ed esecuzione
-   avvengono **sull'host**. `./dev.sh build|install|run` passa da solo
-   all'host (§4); per altri comandi usare
+3. **Dal 2026-11-22 la macchina è un'altra** (§4, "Macchina Ubuntu
+   26.04"): Ubuntu 26.04 con GCC 15, VS Code senza sandbox Flatpak, il
+   repository in `~/Sviluppo/Tux-Paint2`, **nessun pacchetto `-dev`
+   installato e niente sudo**. Finché l'utente non installa le
+   dipendenze, si compila con `devtools/sysroot/sysroot.sh` (pacchetti
+   scaricati, non installati). Quanto segue sul sandbox Flatpak vale per
+   la macchina Debian 13 di prima: lì compilazione ed esecuzione
+   avvengono **sull'host**, `./dev.sh build|install|run` passa da solo
+   all'host (§4) e per altri comandi si usa
    `flatpak-spawn --host --directory=$HOME bash -c '…'`.
 4. Prove dell'interfaccia: script in `devtools/ui-test/` (§5bis).
-   **Prima di ogni prova automatica chiedere all'utente di non usare
-   mouse, rotella e tastiera per qualche minuto**: le finestre di prova
-   compaiono sul suo schermo e ogni interferenza sporca le catture. A
-   800×600 tutto deve restare identico al pixel al binario di
-   riferimento.
+   **Prima di ogni prova automatica in finestra chiedere all'utente di
+   non usare mouse, rotella e tastiera per qualche minuto**: le finestre
+   di prova compaiono sul suo schermo e ogni interferenza sporca le
+   catture. A 800×600 tutto deve restare identico al pixel al binario di
+   riferimento. Dal 2026-11-22 c'è anche la prova **senza finestra**
+   (`devtools/ui-test/headless.c`, `SDL_VIDEODRIVER=dummy`): non disturba
+   l'utente e non serve chiedere; è quella usata per lo strumento Impara.
 5. A fine attività: spostare la voce da TODO ad ASIS con data ed esito,
    aggiungere una voce di diario qui (§7) e aggiornare §1 e §6 se
    cambiano.
@@ -44,7 +52,14 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-11-01)
+## 1. Stato attuale (al 2026-11-22)
+
+- **In corso**: lo strumento **Impara** (lezioni per imparare a disegnare
+  e colorare su carta, passo passo, con la voce), sul branch
+  `feature/learn-to-draw`, committato e pubblicato su `origin`, non unito
+  in `master` (§5sexies, diario del 2026-11-22). Compila e passa le prove
+  senza finestra e una revisione indipendente; manca la prova a mano con
+  l'audio vero (§6). Dopo: la cartella `custom` delle lezioni (TODO).
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -72,6 +87,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
 | `master` | ultimo commit | tutto, fino a "UI scalabile con la finestra": avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`. Il lavoro nuovo parte da qui, su un branch nuovo |
+| `feature/learn-to-draw` | da `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies). Pubblicato su `origin`, non unito in `master` |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
 | `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`); già unito in `master` |
@@ -85,12 +101,20 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   repository (`.git/config`).
 - **Build**: sull'host Debian 13.7 con GCC 14.2; 0 errori e, dal
   2026-10-31, **0 warning** (erano 96), anche con AddressSanitizer a
-  `-O1`. Un warning nuovo è un segnale da guardare.
-- **Installato in `~/.local`**: la build di `master`, tutto
-  funzionante, compresi Testo ed Etichetta, con la raccolta completa dei
-  timbri (`./dev.sh stamps`, 957 timbri). Lanciatore nel menu, con la
-  voce "Schermo intero" nel menu dell'icona (clic destro); dati utente in
-  `~/.tuxpaint/`.
+  `-O1`. Un warning nuovo è un segnale da guardare. Sulla macchina Ubuntu
+  26.04 (GCC 15.2, dal 2026-11-22) `master` non compilava: due righe di
+  `strchr()` su un `const char *` sono errori in C23 (corrette sul branch
+  `feature/learn-to-draw`). Restano 47 avvisi che con GCC 14 su Debian non
+  c'erano, tutti dal compilatore di Ubuntu: `-Wunused-result` (Ubuntu
+  compila con `_FORTIFY_SOURCE`: `fscanf`, `fgets`, `system`…) e
+  `-Wunterminated-string-initialization` (GCC 15, in `src/rgblinear.h`).
+  Il codice nuovo non ne aggiunge.
+- **Installato in `~/.local`**: sulla macchina Debian, la build di
+  `master`, tutto funzionante, compresi Testo ed Etichetta, con la
+  raccolta completa dei timbri (`./dev.sh stamps`, 957 timbri).
+  Lanciatore nel menu, con la voce "Schermo intero" nel menu dell'icona
+  (clic destro); dati utente in `~/.tuxpaint/`. **Sulla macchina Ubuntu
+  non è installato nulla**: le prove usano `~/.cache/tuxpaint-learn-prefix`.
 - **Modifiche rispetto a 0.9.22**:
 
 | Area | Commit | Cosa |
@@ -111,6 +135,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Icone SVG, seconda parte | `c7414af`…`922b762` (su `feature/more-svg-icons`) | `load_icon()` nell'API dei plugin e sua versione 0x00010003; SVG per 39 icone delle magie e 10 dell'interfaccia (§5bis, ASIS) |
 | Dialoghi alla nuova dimensione | `6bfe48f`, `41af788` (su `feature/dialog-resize`) | ogni dialogo si rifà quando la finestra cambia o con Alt+Invio; copia del testo di Tux (§5bis, ASIS) |
 | Strumenti e magie | `799621f`…`6f79f5d` (su `feature/tools`) | Blocks, Chalk, Cartoon, Emboss e Puzzle a tutta immagine; Punto croce (plugin nuovo); Schiuma colorata; Mezzatinta con un angolo per inchiostro; suoni per Halftone, Puzzle, Color & White; tastiera a schermo con i caratteri di Maiuscolo e AltGr, e i caratteri oltre U+FFFF; etichette lunghe su due righe; rettangolo da aggiornare in 10 plugin; due leak (§5quinquies, ASIS) |
+| Strumento Impara | su `feature/learn-to-draw` | lo slot vuoto della barra (`TOOL_NA`) diventa `TOOL_LEARN`: selettore di lezioni per livello (Facile, Medio, Difficile) e lettore passo passo, con voce (eSpeak NG caricato a runtime, o un comando); 17 lezioni SVG in `lessons/`; opzioni `nolessons`, `nospeech`, `speechcommand`; correzione C23 per GCC 15 (§5sexies) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -124,6 +149,15 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   - `tuxpaint-asan/` (`quality/fixme`) e `tuxpaint-asan-base/` (`master`):
     worktree con build AddressSanitizer (§5ter); `nodlclose.so`, compilata
     da `devtools/ui-test/nodlclose.c`.
+- **Cartelle di supporto in `~/.cache` sulla macchina Ubuntu** (dal
+  2026-11-22; quelle sopra erano sulla macchina Debian):
+  - `tuxpaint-sysroot/`: i pacchetti `-dev` scaricati (`debs/`, 127
+    pacchetti, ~42 MB) e scompattati (`root/`), per
+    `devtools/sysroot/sysroot.sh`;
+  - `tuxpaint-learn-prefix/`: installazione di prova del branch
+    `feature/learn-to-draw` (`PREFIX` delle prove);
+  - `tuxpaint-learn-asan/`: copia del sorgente (senza `.git`) con la build
+    AddressSanitizer di `tuxpaint`.
 
 ## 2. Mappa del repository
 
@@ -151,6 +185,11 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | [devtools/po/](devtools/po/) | *Aggiunto nel fork*: `update-po.sh`, rigenera il modello delle traduzioni senza intltool (§5quater) |
 | [devtools/content/](devtools/content/) | *Aggiunto nel fork*: `school_svgs.py` (Starter e modelli per la scuola, §5quater), `shape_icons.py` (icone SVG delle forme) e `trace_icons.py` (icone SVG degli strumenti, con potrace) (§5bis), `crossstitch_icon.py` e `magic_sounds.py` (icona di Punto croce e suoni sintetizzati, §5quinquies), `svg_icons.py` (rifà tutte le icone tracciate, §5bis) |
 | [devtools/magic-test/](devtools/magic-test/) | *Aggiunto nel fork*: `magic_run.c`, fa girare un plugin Magia su un'immagine, senza interfaccia (§5quinquies) |
+| [lessons/](lessons/) | *Aggiunto nel fork*: le lezioni dello strumento Impara, in `easy/`, `medium/`, `hard/` (un `.svg` e un `.txt` ciascuna); formato in [lessons/README.txt](lessons/README.txt) (§5sexies) |
+| `src/lessons.c`, `src/speech.c` | *Aggiunti nel fork*: lettura e disegno delle lezioni (librsvg, cairo); voce (eSpeak NG con `dlopen()`, o un comando) (§5sexies) |
+| [devtools/lesson-test/](devtools/lesson-test/) | *Aggiunto nel fork*: `lesson_frames.c`, disegna in BMP quello che Impara mostra, senza Tux Paint (§5sexies) |
+| [devtools/sysroot/](devtools/sysroot/) | *Aggiunto nel fork*: `sysroot.sh`, compila senza i pacchetti `-dev` installati (§4) |
+| `devtools/content/lesson_preview.py`, `learn_icons.py` | *Aggiunti nel fork*: controllo e fogli dei passi delle lezioni; icone di Impara (§5sexies) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
 ## 3. Documentazione letta
@@ -269,6 +308,51 @@ riesegue da solo sull'host con `flatpak-spawn --host`.
 - `install-bash-completion` scrive sempre in `/etc/bash_completion.d`
   (`COMPLETIONDIR`), anche con un `PREFIX` utente: in quel caso va
   sovrascritto anche `COMPLETIONDIR`.
+
+### Macchina Ubuntu 26.04 (dal 2026-11-22)
+
+Il 2026-11-22 il lavoro riparte su un'altra macchina: Ubuntu 26.04.1,
+kernel 7.0, GCC 15.2, VS Code senza sandbox Flatpak, sessione Wayland,
+repository clonato da `github` in `~/Sviluppo/Tux-Paint2` (qui il remote
+si chiama `origin`). Nessuna dipendenza di build installata (niente
+SDL 1.2, librsvg, cairo, pango né gperf di sviluppo) e niente sudo senza
+password. Ci sono `libespeak-ng.so.1` con i dati delle voci (da
+speech-dispatcher), `spd-say`, Python 3 con Pillow; non ci sono
+`python3-gi-cairo`, `espeak-ng` (il programma), `Xvfb`, `xdotool`,
+`lynx`.
+
+Tutti i pacchetti dell'elenco di Debian esistono anche in Ubuntu 26.04
+con lo stesso nome (sdl12-compat 1.2.72). Quando l'utente li installa:
+
+```sh
+sudo apt install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev \
+  libsdl-ttf2.0-dev libsdl-pango-dev librsvg2-dev libcairo2-dev \
+  libfribidi-dev libpaper-dev gperf
+```
+
+e poi `./dev.sh build|install|run` come prima (`dev.sh` non è nel sandbox
+e gira direttamente). Fino ad allora:
+
+```sh
+devtools/sysroot/sysroot.sh fetch        # una volta: scarica e scompatta
+devtools/sysroot/sysroot.sh make -j4     # come make, con quelle librerie
+devtools/sysroot/sysroot.sh run ./tuxpaint --windowed …
+```
+
+- `fetch` usa `apt-get install -s` (simulazione, senza root) per
+  l'elenco, `apt-get download` e `dpkg-deb -x` in
+  `~/.cache/tuxpaint-sysroot/root`; i collegamenti alle librerie che il
+  sistema ha già puntano a quelle di sistema; i `.pc` di pkg-config sono
+  riscritti con percorsi assoluti nella cartella. Non si usa
+  `PKG_CONFIG_SYSROOT_DIR`: aggiungerebbe il prefisso anche ai `.pc` del
+  sistema (zlib, expat), che servono così come sono.
+- `make` passa `GPERF`, `CPPFLAGS` e `LDFLAGS` (con `-rpath` sulla
+  cartella) e `PKG_CONFIG_PATH`; `PREFIX` dall'ambiente (default
+  `~/.local`). Il Makefile non si accorge di un `PREFIX` cambiato: dopo
+  un cambio, `make clean`.
+- `run` aggiunge la cartella a `LD_LIBRARY_PATH`: l'rpath del binario
+  (RUNPATH) vale solo per le sue dipendenze dirette, non per quelle di
+  SDL_mixer (per esempio `libmikmod.so.3`).
 
 ### Warning della build
 
@@ -845,7 +929,90 @@ cartella temporanea.
   SDL_Pango risulta senza alfa, quindi non dice nulla sul disegno.
   `timeout` manda SIGTERM, che Tux Paint ignora: usare `timeout -s KILL`.
 
+## 5sexies. Strumento Impara: note tecniche (2026-11-22)
+
+Richiesta dell'utente: una funzione che insegni ai bambini a disegnare e
+colorare **su carta**, scegliendo da una libreria di immagini vettoriali
+colorate raggruppate per difficoltà, con istruzioni passo passo lette da
+un sintetizzatore vocale.
+
+- **Dove**: lo slot vuoto della barra degli strumenti (`TOOL_NA`, tra
+  Etichetta e Magie, già riservato nella 0.9.22) diventa `TOOL_LEARN`,
+  "Impara". Funziona come Apri e Nuovo: un dialogo sopra la tela, che non
+  cambia. Disponibile se le lezioni ci sono e senza `nolessons`
+  (`num_lessons_found`, contate all'avvio).
+- **Lezioni** (`lessons/`, installate in `DATA_PREFIX/lessons`, e quelle
+  dell'utente in `~/.tuxpaint/lessons`, che vincono a parità di livello e
+  nome): cartelle `easy/` (3-5 passi), `medium/` (5-7), `hard/` (7-10);
+  un SVG 640×480 colorato con un gruppo di primo livello per passo, e un
+  `.txt` con titolo e passi (`draw ID`, `guide ID`, `color ID`, `erase`),
+  inglese più `LANG.utf8=`. Regole complete in `lessons/README.txt`;
+  `devtools/content/lesson_preview.py` le controlla e disegna un foglio
+  dei passi (usa librsvg e cairo con `ctypes`: `python3-gi-cairo` non
+  c'era). Nel selettore, per livello: per numero di passi, poi per titolo.
+- **Libreria**: 17 lezioni con testi in inglese e italiano — facili: sole,
+  palloncino, mela, pesce, casa, fiore; medie: gatto, chiocciola (titolo
+  "Lumaca"), barca a vela, farfalla, albero, tartaruga; difficili:
+  pinguino, gufo, razzo, automobile, dinosauro, tutte con la tecnica della
+  forma guida leggera cancellata prima di colorare. Disegnate da tre
+  agenti in parallelo (uno per livello) sulla specifica e il sole di
+  esempio, poi controllate con il foglio dei passi.
+- **Disegno** (`src/lessons.c`, con librsvg ≥ 2.46 e cairo; senza, Impara
+  non c'è): `rsvg_handle_render_layer()` disegna ogni gruppo da solo una
+  volta, alla misura dell'area; ogni fotogramma si compone con cairo:
+  colori sotto, guide, linee sopra (qualunque sia l'ordine nell'SVG). Il
+  passo nuovo: linee e guide nel colore di evidenza (`#ff4d2e`, guide
+  `#ff9e80`, con `cairo_mask_surface()`), che compaiono e lampeggiano due
+  volte in 2 s; un colore lampeggia; le guide cancellate sfumano. Accanto
+  al foglio lo strumento da usare, disegnato con cairo: matita, matita
+  chiara (guide), gomma, pastello del colore del passo (il colore più
+  frequente dei pixel opachi del gruppo). In alto i pallini dei passi.
+  Anche le schede dei livelli (stelle) e le cornici delle miniature sono
+  di `lessons.c`; i testi li scrive `tuxpaint.c` con i suoi font.
+- **Voce** (`src/speech.c`): la sintesi gira in un thread e il suono passa
+  da SDL_mixer sul canale 3 (`SPEECH_CHANNEL`; 0-2 sono di Tux Paint),
+  quindi `nosound` e il muto ([Alt]+[S]) valgono anche per lei. Di base
+  eSpeak NG caricato con `dlopen("libespeak-ng.so.1")` (nessuna dipendenza
+  di build; sintesi sincrona in memoria, WAV costruito a mano, 150 parole
+  al minuto, voce della lingua del testo, poi della lingua senza paese,
+  poi inglese). In alternativa `speechcommand`: `/bin/sh -c`, testo su
+  stdin, file audio su stdout, `%l` = lingua; il comando che non legge
+  tutto dà `EPIPE` (SIGPIPE ignorato, ripristinato nel figlio). Ogni nuova
+  frase interrompe la precedente (contatore `current_id`; eSpeak si ferma
+  dalla callback, il comando con SIGKILL). Prova: 3,2 s di parlato
+  italiano in 5 ms.
+- **Dialogo** (`do_learn()`, `learn_play()` in `tuxpaint.c`, dopo
+  `do_new_dialog()`): schede Facile/Medio/Difficile, 3×2 schede-lezione
+  con frecce se servono, Inizia, Voce, Indietro; poi il lettore: titolo e
+  pallini, foglio, Prima, Avanti, Riascolta, Indietro; un clic sul foglio
+  va avanti. Tasti: 1-3, frecce (se non c'è il mouse da tastiera),
+  F7/F8/F11/F12, Invio, Esc; nel lettore anche Spazio, Pagina su/giù,
+  Backspace, R. Si rifà dopo un cambio di misura (`dialog_screen_change()`
+  come gli altri dialoghi). Icone nuove (`learn_icons.py`): `learn` dello
+  strumento e quattro dei pulsanti, SVG più PNG 40×30.
+- **Insidia di SDL_Pango**: `wordwrap_text_ex()` (il testo di Tux) lascia
+  nel contesto Pango del font medio una misura minima larga quanto l'area
+  di Tux; `render_text()` con quel font dà poi superfici enormi (titoli
+  non centrati). `learn_render_text()` la azzera prima.
+- **Prove**: tutte senza finestra (`devtools/ui-test/headless.c`): a
+  800×600, a 1600×1200, con un ridimensionamento a dialogo aperto, con
+  `--nolessons`, `--nosound`, `--nospeech`, un `speechcommand` che dà un
+  WAV e uno che fallisce; build AddressSanitizer per tutto il percorso,
+  fino all'uscita normale: nessun errore; perdite solo nelle librerie
+  (2,7 KB in eSpeak NG alla scelta della voce, fontconfig, un thread di
+  SDL già noto). Il disegno in C anche con `devtools/lesson-test/`.
+  **Non provato**: l'audio vero (con `SDL_AUDIODRIVER=dummy` il suono
+  "suona" in silenzio; si sa solo che i campioni arrivano al mixer).
+
 ## 6. Prossimi passi consigliati
+
+0. **Impara** (`feature/learn-to-draw`, pubblicato): provarlo a mano con
+   l'audio vero (voce italiana di eSpeak NG: chiarezza, velocità), seguire
+   su carta almeno una lezione per livello, poi decidere l'unione in
+   `master`. Subito dopo: la cartella `custom` (TODO). Per provarlo su questa macchina:
+   `PREFIX=~/.cache/tuxpaint-learn-prefix devtools/sysroot/sysroot.sh make`
+   e `… install`, poi `devtools/sysroot/sysroot.sh run
+   ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
 
 Le prove a mano 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -1876,3 +2043,71 @@ contributore.
   rimanda già a quello inglese.
 - Branch `docs/authors`, unito in `master` con avanzamento rapido e
   caricato su `github`. L'identità git resta `Paolo`.
+
+### 2026-11-22 — Strumento Impara: imparare a disegnare su carta, con la voce
+
+Richiesta dell'utente: un selettore che apre una libreria di immagini
+vettoriali colorate, raggruppate per difficoltà, e una procedura passo
+passo che insegna a un bambino a disegnarle e colorarle su carta, con un
+sintetizzatore vocale che accompagna le istruzioni. Note tecniche in
+§5sexies.
+
+- **Macchina nuova**: Ubuntu 26.04 senza dipendenze di build e senza sudo
+  (§4). `master` non compilava con GCC 15: due `strchr()` su
+  `const char *` (`src/i18n.c`, `loaddesc()`), corretti passando da un
+  `char *`. Build con i pacchetti scaricati e scompattati in
+  `~/.cache/tuxpaint-sysroot`, poi messa in `devtools/sysroot/sysroot.sh`.
+- Branch `feature/learn-to-draw` da `master`.
+- Formato delle lezioni e `lesson_preview.py`, con il sole come esempio;
+  poi tre agenti in parallelo per le lezioni facili, medie e difficili (17
+  in tutto, testi in inglese e italiano), tutte senza errori né avvisi del
+  controllo e guardate una per una.
+- `src/speech.c` (eSpeak NG con `dlopen()`, o `speechcommand`),
+  `src/lessons.c` (lettura, disegno con cairo e librsvg), il dialogo in
+  `tuxpaint.c`, opzioni `nolessons`/`nospeech`/`speechcommand`
+  (`parse.gperf`, `parse.h`, `--usage`), `install-lessons` nel Makefile,
+  icone, 14 stringhe nuove in `it.po` ("Repeat" è "Riascolta": "Ripeti" è
+  già "Redo").
+- Prove senza finestra con `devtools/ui-test/headless.c` (nuovo) e
+  AddressSanitizer, vedi §5sexies. Corretti lungo la strada: titoli non
+  centrati (misura minima lasciata da Pango), icona dello strumento che
+  usciva dalla sua colonna oscillando, animazione ridisegnata a ogni giro
+  del ciclo (ora circa 40 fotogrammi al secondo).
+- Documentazione (manuale inglese e italiano, OPTIONS, pagina man,
+  `tuxpaint.conf`, completamento, EXTENDING) scritta da un agente in
+  parallelo.
+- **Incidente**: un comando con un heredoc dentro un altro heredoc ha
+  fatto eseguire alla shell il testo di un README, che conteneva l'esempio
+  di avvio: per circa due minuti si è aperta sullo schermo dell'utente una
+  finestra vera di Tux Paint (senza il driver `dummy`), chiusa fermando il
+  comando. Non ha scritto nulla (`~/.tuxpaint` non esiste). Annotato tra
+  le insidie in `devtools/ui-test/README.md`.
+
+- **Revisione indipendente** del codice C (un agente che non l'aveva
+  scritto; ASan, TSan e file di lezione rotti apposta): nessun errore di
+  memoria né stallo; tre difetti dell'interfaccia, corretti: con il mouse
+  da tastiera lo Spazio contava due volte (ora Spazio, frecce e cifre
+  restano del mouse da tastiera); due clic veloci su carte di livelli
+  diversi facevano partire la lezione sbagliata; le etichette condivise
+  ("Avanti" della presentazione, "Inizia") restavano grigie dopo un
+  pulsante spento. Corretti anche: traduzione vuota che vinceva
+  sull'inglese; comando vocale che chiude l'uscita e resta vivo (l'uscita
+  da Tux Paint aspettava lui: ora gruppo di processi, `kill(-pid)` e
+  attesa con `WNOHANG`, da 2,7 s a 30 ms); `espeak_rate` letto senza lock;
+  `speechcommand` letto solo con libpaper; chiudere la finestra durante
+  Impara ora arriva al ciclo principale (`SDL_QUIT` rimesso in coda).
+  Lasciato com'è: aprendo Impara il testo in corso di Testo o Etichetta
+  viene applicato, come passando a un altro strumento (tenerlo aperto
+  vorrebbe dire aggiungere `TOOL_LEARN` alle liste di
+  `do_render_cur_text()` e affini).
+- L'utente ha chiesto anche di scaricare l'archivio "Disegni" di Magnific
+  (ex Freepik) in una cartella `custom` fuori dal pacchetto: non fatto.
+  Le condizioni d'uso vietano i download generati da robot o programmi, le
+  immagini della categoria sono Premium, e quelle gratuite chiedono
+  l'attribuzione e vietano la sublicenza (incompatibile con la GPL).
+  Prossimo passo concordato: la cartella `custom` per immagini scaricate
+  a mano dall'utente.
+
+Stato alla chiusura: branch `feature/learn-to-draw` committato e
+pubblicato su `origin` (la repo GitHub dell'utente); non unito in
+`master`. Manca la prova a mano con l'audio vero.

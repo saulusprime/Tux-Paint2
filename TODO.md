@@ -108,6 +108,42 @@ Le nove voci del 2026-10-29 sono chiuse e unite in `master` (branch
   hanno una pagina (Fretwork, Halftone, Tornado, Xor Colors); tutte sono
   solo in inglese.
 
+## Strumento Impara (branch `feature/learn-to-draw`, 2026-11-22)
+
+Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
+`HANDOFF.md` §5sexies); committato e pubblicato su `origin`, non unito in
+`master`.
+
+- [ ] [P1] Cartella `custom` per immagini e lezioni dell'utente, fuori dal
+  repository e dai pacchetti (`~/.tuxpaint/lessons/custom/`): scheda
+  "Personali" solo se ci sono file; lezioni vere (`.svg` + `.txt`) e
+  semplici immagini SVG, PNG, JPG, queste con una lezione a quadrettatura
+  (guarda, griglia leggera e copia quadretto per quadretto, colora).
+  Richiesta dall'utente il 2026-11-22, da fare subito dopo il push.
+- [ ] [P1] Prova a mano con l'audio vero: chiarezza e velocità della voce
+  italiana di eSpeak NG, una lezione per livello seguita davvero su carta;
+  poi decidere l'unione in `master`.
+- [ ] [P3] Aprendo Impara il testo in corso di Testo o Etichetta viene
+  applicato (come passando a un altro strumento): si potrebbe lasciarlo in
+  sospeso come fa Apri, aggiungendo `TOOL_LEARN` alle liste di
+  `do_render_cur_text()`, `tmp_apply_uncommited_text()` e affini.
+- [ ] [P2] Installare sulla macchina Ubuntu le dipendenze di build (serve
+  sudo: comando in `HANDOFF.md` §4), così da tornare a `./dev.sh`.
+- [ ] [P3] Voce più naturale: provare e documentare una ricetta verificata
+  per `speechcommand` con Piper o RHVoice (oggi l'esempio è eSpeak NG o
+  pico2wave, non provati come comando su questa macchina).
+- [ ] [P3] Stampare il foglio dei passi di una lezione (tutti i passi in
+  una pagina), da tenere accanto al foglio da disegno.
+- [ ] [P3] Testi di lezioni e interfaccia di Impara anche in `ca`, `de`,
+  `es`, `fr` (oggi ricadono sull'inglese).
+- [ ] [P3] `lesson_preview.py`: controllare anche i margini (20 unità) e i
+  riempimenti (nessun vuoto bianco dentro le linee, nessun colore fuori):
+  l'agente delle lezioni medie ne ha uno di prova (`regions.py`, rimasto
+  nella cartella temporanea della sessione).
+- [ ] [P3] Avvisi del compilatore di Ubuntu (`-Wunused-result` per
+  `_FORTIFY_SOURCE`, `-Wunterminated-string-initialization` di GCC 15):
+  47, tutti in codice vecchio; per tornare a 0 come su Debian.
+
 ## Contenuti e localizzazione
 
 Le quattro voci del 2026-10-29 sono chiuse (branch `content/l10n`, vedi

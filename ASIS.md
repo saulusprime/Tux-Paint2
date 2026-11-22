@@ -418,3 +418,28 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
 - [x] 2026-11-01 — Paolo Pierno tra i contributori — voce per il fork in
   `docs/AUTHORS.txt` e autore di `crossstitch.c`; branch `docs/authors`,
   unito in `master` e caricato su `github`.
+
+## 2026-11
+
+- [x] 2026-11-22 — Build sulla macchina Ubuntu 26.04 (GCC 15, senza
+  pacchetti `-dev` né sudo) — corretti i due `strchr()` che in C23 non
+  compilavano; `devtools/sysroot/sysroot.sh` scarica i pacchetti, li
+  scompatta in `~/.cache/tuxpaint-sysroot` e compila con quelli. Restano
+  47 avvisi del compilatore di Ubuntu nel codice vecchio (TODO).
+- [x] 2026-11-22 — Strumento Impara (branch `feature/learn-to-draw`,
+  pubblicato su `origin`) — slot vuoto della barra; selettore per livello (Facile,
+  Medio, Difficile) con miniature; lettore passo passo su un foglio
+  disegnato, con il passo nuovo evidenziato e lampeggiante, lo strumento
+  da usare accanto (matita, matita chiara, gomma, pastello del colore) e
+  i pallini dei passi; voce con eSpeak NG caricato a runtime o con
+  `speechcommand`; opzioni `nolessons`, `nospeech`, `speechcommand`; 17
+  lezioni SVG in inglese e italiano (6 facili, 6 medie, 5 difficili con
+  forme guida); `lesson_preview.py`, `lesson_frames.c`, icone,
+  traduzione italiana, documentazione. Verifiche senza finestra a
+  800×600, 1600×1200 e con un ridimensionamento, con AddressSanitizer
+  (nessun errore, perdite solo nelle librerie); revisione indipendente del
+  codice C: tre difetti dell'interfaccia e alcuni minori, corretti; manca
+  la prova con l'audio vero (TODO).
+- [x] 2026-11-22 — Prove dell'interfaccia senza finestra —
+  `devtools/ui-test/headless.c`: con `SDL_VIDEODRIVER=dummy`, eventi da
+  uno script e catture BMP; registra i suoni della voce.
