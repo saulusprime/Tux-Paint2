@@ -444,13 +444,16 @@ Gli strumenti
           assomiglia a questo?"
 
         Le lezioni
-                Tux Paint comprende 17 lezioni. "Facile": mela,
+                Tux Paint comprende 27 lezioni. "Facile": mela,
                 palloncino, pesce, fiore, casa e sole (5 passi ciascuna).
                 "Medio": farfalla, gatto, barca a vela, lumaca, albero e
-                tartaruga (6 o 7 passi). "Difficile": automobile,
-                dinosauro, gufo, pinguino e razzo (9 o 10 passi, con forme
-                di guida leggere che vengono cancellate prima di
-                colorare).
+                tartaruga (6 o 7 passi). "Difficile": amici a maglia,
+                automobile, avvoltoio in volo, biplano, cavallo con
+                puledro, dinosauro, distributore di palline, due volpi nel
+                bosco, gatto con la zucca, gufo, orsetti gommosi,
+                pinguino, pulcini nel nido, razzo e sedia in giardino (9 o
+                10 passi, con forme di guida leggere che vengono cancellate
+                prima di colorare).
 
                 I testi sono in italiano e in inglese; nelle altre lingue
                 si usano quelli inglesi. (Le traduzioni si possono

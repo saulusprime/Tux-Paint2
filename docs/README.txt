@@ -422,12 +422,16 @@ Available Tools
 
                       Lessons
 
-                              Tux Paint comes with 17 lessons. "Easy": apple,
+                              Tux Paint comes with 27 lessons. "Easy": apple,
                               balloon, fish, flower, house and sun (5 steps
                               each). "Medium": butterfly, cat, sailboat,
                               snail, tree and turtle (6 or 7 steps). "Hard":
-                              car, dinosaur, owl, penguin and rocket (9 or 10
-                              steps, with light guide shapes that are erased
+                              biplane, car, cat with a pumpkin, chicks in a
+                              nest, dinosaur, flying vulture, garden chair,
+                              gumball machine, gummy bears, horse with a
+                              foal, knitting friends, owl, penguin, rocket
+                              and two foxes in the woods (9 or 10 steps,
+                              with light guide shapes that are erased
                               before coloring).
 
                               Their texts are in English and Italian; in
