@@ -108,18 +108,19 @@ Le nove voci del 2026-10-29 sono chiuse e unite in `master` (branch
   hanno una pagina (Fretwork, Halftone, Tornado, Xor Colors); tutte sono
   solo in inglese.
 
-## Strumento Impara (branch `feature/learn-to-draw`, 2026-11-22)
+## Strumento Impara (2026-11-22)
 
 Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
-`HANDOFF.md` §5sexies); committato e pubblicato su `origin`, non unito in
-`master`.
+`HANDOFF.md` §5sexies); unito in `master` il 2026-11-23 (branch
+`feature/learn-to-draw`).
 
 - [ ] [P3] Cartella `custom`: leggere anche gli EPS (con Ghostscript, se
   c'è) e scegliere la misura della griglia in base all'immagine (oggi
   sempre 3×3).
-- [ ] [P1] Prova a mano con l'audio vero: chiarezza e velocità della voce
-  italiana di eSpeak NG, una lezione per livello seguita davvero su carta;
-  poi decidere l'unione in `master`.
+- [ ] [P1] Prova a mano con l'audio vero, ora che è in `master` (unito su
+  richiesta dell'utente prima della prova): chiarezza e velocità della
+  voce italiana di eSpeak NG, una lezione per livello seguita davvero su
+  carta. Un difetto trovato lì si corregge su un branch nuovo.
 - [ ] [P3] Aprendo Impara il testo in corso di Testo o Etichetta viene
   applicato (come passando a un altro strumento): si potrebbe lasciarlo in
   sospeso come fa Apri, aggiungendo `TOOL_LEARN` alle liste di

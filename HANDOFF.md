@@ -52,15 +52,16 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-11-22)
+## 1. Stato attuale (al 2026-11-23)
 
-- **In corso**: lo strumento **Impara** (lezioni per imparare a disegnare
-  e colorare su carta, passo passo, con la voce), sul branch
-  `feature/learn-to-draw`, committato e pubblicato su `origin`, non unito
-  in `master` (§5sexies, diario del 2026-11-22). Compila e passa le prove
-  senza finestra e una revisione indipendente; manca la prova a mano con
-  l'audio vero (§6). Comprende la cartella `custom` per le immagini
-  dell'utente (scheda "Personali").
+- **Ultimo lavoro**: lo strumento **Impara** (lezioni per imparare a
+  disegnare e colorare su carta, passo passo, con la voce), dal branch
+  `feature/learn-to-draw`, **unito in `master`** il 2026-11-23 con
+  avanzamento rapido, su richiesta dell'utente prima della prova a mano
+  (§5sexies, diario del 2026-11-22 e del 2026-11-23). Compila e passa le
+  prove senza finestra e una revisione indipendente; manca la prova a
+  mano con l'audio vero (§6). Comprende la cartella `custom` per le
+  immagini dell'utente (scheda "Personali").
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -87,8 +88,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino a "UI scalabile con la finestra": avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`. Il lavoro nuovo parte da qui, su un branch nuovo |
-| `feature/learn-to-draw` | da `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies). Pubblicato su `origin`, non unito in `master` |
+| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`. Il lavoro nuovo parte da qui, su un branch nuovo |
+| `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
 | `feature/more-svg-icons` | `922b762` | `load_icon()` nell'API dei plugin, la sua versione 0x00010003, icone SVG per 39 magie e 10 immagini dell'interfaccia (`c7414af`…`922b762`); già unito in `master` |
@@ -142,7 +143,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Icone SVG, seconda parte | `c7414af`…`922b762` (su `feature/more-svg-icons`) | `load_icon()` nell'API dei plugin e sua versione 0x00010003; SVG per 39 icone delle magie e 10 dell'interfaccia (§5bis, ASIS) |
 | Dialoghi alla nuova dimensione | `6bfe48f`, `41af788` (su `feature/dialog-resize`) | ogni dialogo si rifà quando la finestra cambia o con Alt+Invio; copia del testo di Tux (§5bis, ASIS) |
 | Strumenti e magie | `799621f`…`6f79f5d` (su `feature/tools`) | Blocks, Chalk, Cartoon, Emboss e Puzzle a tutta immagine; Punto croce (plugin nuovo); Schiuma colorata; Mezzatinta con un angolo per inchiostro; suoni per Halftone, Puzzle, Color & White; tastiera a schermo con i caratteri di Maiuscolo e AltGr, e i caratteri oltre U+FFFF; etichette lunghe su due righe; rettangolo da aggiornare in 10 plugin; due leak (§5quinquies, ASIS) |
-| Strumento Impara | su `feature/learn-to-draw` | lo slot vuoto della barra (`TOOL_NA`) diventa `TOOL_LEARN`: selettore di lezioni per livello (Facile, Medio, Difficile) e lettore passo passo, con voce (eSpeak NG caricato a runtime, o un comando); 17 lezioni SVG in `lessons/`; opzioni `nolessons`, `nospeech`, `speechcommand`; correzione C23 per GCC 15 (§5sexies) |
+| Strumento Impara | `073ba5b`…`320509b` (su `feature/learn-to-draw`) | lo slot vuoto della barra (`TOOL_NA`) diventa `TOOL_LEARN`: selettore di lezioni per livello (Facile, Medio, Difficile) e lettore passo passo, con voce (eSpeak NG caricato a runtime, o un comando); 17 lezioni SVG in `lessons/`; opzioni `nolessons`, `nospeech`, `speechcommand`; correzione C23 per GCC 15 (§5sexies) |
 
 - **Cartelle di supporto in `~/.cache`** (sull'host):
   - `tuxpaint-baseline/`: worktree git con il binario di riferimento
@@ -1035,16 +1036,16 @@ un sintetizzatore vocale.
 
 ## 6. Prossimi passi consigliati
 
-0. **Impara** (`feature/learn-to-draw`, pubblicato): provarlo a mano con
-   l'audio vero (voce italiana di eSpeak NG: chiarezza, velocità), seguire
-   su carta almeno una lezione per livello, poi decidere l'unione in
-   `master`. Provare anche la scheda "Personali" con qualche immagine
-   in `~/.tuxpaint/lessons/custom/`. Per provarlo su questa macchina:
+0. **Impara** (in `master` dal 2026-11-23): provarlo a mano con l'audio
+   vero (voce italiana di eSpeak NG: chiarezza, velocità), seguire su
+   carta almeno una lezione per livello. Provare anche la scheda
+   "Personali" con qualche immagine in `~/.tuxpaint/lessons/custom/`. Per
+   provarlo su questa macchina:
    `PREFIX=~/.cache/tuxpaint-learn-prefix devtools/sysroot/sysroot.sh make`
    e `… install`, poi `devtools/sysroot/sysroot.sh run
    ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
 
-Le prove a mano 1 e 2 riguardano lavoro già in `master`, unito su
+Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
 un branch nuovo.
 
@@ -2171,3 +2172,19 @@ Stato alla chiusura: branch `feature/learn-to-draw` committato e
 pubblicato su `origin` (la repo GitHub dell'utente), con la cartella
 `custom`; non unito in `master`; installato in `~/.local`. Manca la prova
 a mano con l'audio vero.
+
+### 2026-11-23 — Impara unito in master
+
+Richiesta dell'utente: unire il branch in `master` e fare il push.
+
+- `master` (`ab1c9b8`) era antenato di `feature/learn-to-draw`:
+  avanzamento rapido, senza commit di unione, come le volte precedenti.
+- Prima dell'unione, sul branch, aggiornati i file di progetto (§1, §6,
+  TODO, ASIS). La prova a mano con l'audio vero non c'è stata e resta tra
+  i prossimi passi (§6) e nel TODO.
+- Push di `master` su `origin`, che su questa macchina è la repo GitHub
+  dell'utente (§4, "Macchina Ubuntu 26.04").
+
+Stato alla chiusura: `master` uguale a `feature/learn-to-draw`, tutti e
+due in pari su `origin`; il lavoro nuovo parte da `master` su un branch
+nuovo.

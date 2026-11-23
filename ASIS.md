@@ -449,3 +449,7 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   quadrettatura (guarda, griglia, copia, cancella, colora), lezioni vere
   accanto; niente nel repository né nei pacchetti. L'archivio Magnific non
   è stato scaricato: le sue condizioni vietano i download automatici.
+- [x] 2026-11-23 — Unione in `master` di `feature/learn-to-draw` —
+  avanzamento rapido, su richiesta dell'utente prima della prova a mano
+  con l'audio vero, che resta nel TODO; caricato su `origin` (la repo
+  GitHub dell'utente).
