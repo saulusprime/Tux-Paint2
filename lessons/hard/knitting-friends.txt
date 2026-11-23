@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for knitting-friends.svg (see ../README.txt)
+Knitting friends
+it.utf8=Amici a maglia
+
+guide guides
+With a light pencil, softly draw two big circles side by side and a small one between them, lower down.
+it.utf8=Con la matita leggera disegna piano due cerchi grandi vicini e uno piccolo più in basso, in mezzo.
+
+draw kitten
+On the left, draw a kitten: a round head with two pointy ears, a round body, two paws and a tail.
+it.utf8=A sinistra disegna un gattino: la testa tonda con due orecchie a punta, il corpo, due zampine e la coda.
+
+draw bunny
+On the right, draw a bunny: a round head with two long ears, a body, two paws and two big feet.
+it.utf8=A destra disegna un coniglietto: la testa tonda con due orecchie lunghe, il corpo, due zampine e i piedi.
+
+draw faces
+Draw their faces: happy eyes, a little nose, a smile, round cheeks, and lines inside the ears.
+it.utf8=Disegna i musetti: occhi felici, il nasino, il sorriso, le guance tonde e le righe dentro le orecchie.
+
+draw yarn
+Draw a ball of yarn between them, and the kitten's two needles with a little piece of knitting.
+it.utf8=In mezzo disegna un gomitolo, e al gattino due ferri con un pezzetto di maglia.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color kitten-orange
+Color the kitten orange.
+it.utf8=Colora il gattino di arancione.
+
+color bunny-gray
+Color the bunny gray.
+it.utf8=Colora il coniglietto di grigio.
+
+color pink
+Color the cheeks and the inside of the ears pink.
+it.utf8=Colora di rosa le guance e l'interno delle orecchie.
+
+color yarn-purple
+Color the ball of yarn and the knitting purple.
+it.utf8=Colora di viola il gomitolo e la maglia.

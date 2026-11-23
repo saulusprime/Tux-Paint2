@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for biplane.svg (see ../README.txt)
+Biplane
+it.utf8=Biplano
+
+guide guides
+With a light pencil, softly draw a long oval in the middle and two long lines, above and under it.
+it.utf8=Con la matita leggera disegna piano un ovale lungo in mezzo e due righe lunghe, sopra e sotto.
+
+draw body
+Draw the plane's long body, a fin on its tail, a small tail wing, and the pilot's head on top.
+it.utf8=Disegna il corpo lungo dell'aereo, la pinna sulla coda, una piccola ala dietro e la testa del pilota.
+
+draw wings
+Draw two long wings with round ends: one above the plane and one under it.
+it.utf8=Disegna due ali lunghe con le punte tonde: una sopra l'aereo e una sotto.
+
+draw struts-propeller
+Join the wings with two sticks, and draw the propeller on the nose: a tall thin oval.
+it.utf8=Unisci le ali con due bastoncini e sul muso disegna l'elica: un ovale alto e sottile.
+
+draw wheels
+Under the plane, draw two little legs like a V and a round wheel.
+it.utf8=Sotto l'aereo disegna due gambette a V e una ruota tonda.
+
+draw sky
+Draw three fluffy clouds and some lines behind the plane: it's going fast!
+it.utf8=Disegna tre nuvole soffici e qualche riga dietro l'aereo: va velocissimo!
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color body-red
+Color the plane's body red.
+it.utf8=Colora il corpo dell'aereo di rosso.
+
+color wings-yellow
+Color the wings and the propeller yellow.
+it.utf8=Colora di giallo le ali e l'elica.
+
+color wheel-gray
+Color the wheel gray.
+it.utf8=Colora la ruota di grigio.

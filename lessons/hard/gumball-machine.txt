@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for gumball-machine.svg (see ../README.txt)
+Gumball machine
+it.utf8=Distributore di palline
+
+guide guides
+With a light pencil, softly draw a big circle on top and a rectangle under it: they are helpers!
+it.utf8=Con la matita leggera disegna piano un grande cerchio in alto e sotto un rettangolo: ci aiutano!
+
+draw globe
+Go over the big circle: it's the glass ball. Add a little curved line inside for the shine.
+it.utf8=Ripassa il grande cerchio: è la palla di vetro. Dentro aggiungi una lineetta curva per il riflesso.
+
+draw cap-base
+Draw a little cap with a knob on top, and under the ball a band and a big base.
+it.utf8=Disegna in alto un cappellino con il pomello, e sotto la palla una fascia e una grande base.
+
+draw dial-door
+On the base, draw a round knob with a little bar to turn it, and a small door at the bottom.
+it.utf8=Sulla base disegna una manopola tonda con una sbarretta per girarla, e in basso una porticina.
+
+draw gumballs
+Fill the glass ball with round gumballs, and draw two more on the floor.
+it.utf8=Riempi la palla di vetro di palline tonde, e disegnane altre due per terra.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color red
+Color the cap, the band and the base red.
+it.utf8=Colora di rosso il cappellino, la fascia e la base.
+
+color yellow
+Color some gumballs yellow.
+it.utf8=Colora alcune palline di giallo.
+
+color blue
+Color some gumballs blue.
+it.utf8=Colora altre palline di blu.
+
+color green
+Color the last gumballs green.
+it.utf8=Colora di verde le palline che restano.

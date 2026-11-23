@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for garden-chair.svg (see ../README.txt)
+Chair in the garden
+it.utf8=Sedia in giardino
+
+draw chair-back
+In the middle, draw the back of a chair: tall, with a round top, and three lines down for the boards.
+it.utf8=In mezzo disegna lo schienale di una sedia: alto, tondo in cima, con tre righe giù per le assi.
+
+draw chair-seat
+Draw the seat under the back, a flat armrest on each side and two legs under each armrest.
+it.utf8=Sotto lo schienale disegna il sedile, un bracciolo piatto per lato e sotto ogni bracciolo due gambe.
+
+draw table
+On the right, draw a small table with a glass of lemonade, a straw and a slice of lemon.
+it.utf8=A destra disegna un tavolino con un bicchiere di limonata, la cannuccia e una fetta di limone.
+
+draw fence
+Behind the chair, draw a fence: boards with a pointed top and two long lines across.
+it.utf8=Dietro la sedia disegna uno steccato: assi con la punta e due lunghe righe di traverso.
+
+draw garden
+Draw the ground, four little flowers in the grass and the sun up on the left.
+it.utf8=Disegna il prato, quattro fiorellini nell'erba e in alto a sinistra il sole.
+
+color chair-blue
+Color the chair blue.
+it.utf8=Colora la sedia di blu.
+
+color wood-brown
+Color the fence and the table brown.
+it.utf8=Colora di marrone lo steccato e il tavolino.
+
+color yellow
+Color the sun, the lemonade and the middle of the flowers yellow.
+it.utf8=Colora di giallo il sole, la limonata e il centro dei fiori.
+
+color flowers-pink
+Color the petals pink.
+it.utf8=Colora i petali di rosa.
+
+color grass-green
+Color the grass green.
+it.utf8=Colora il prato di verde.

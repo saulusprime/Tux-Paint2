@@ -1,0 +1,39 @@
+# Tux Paint lesson: steps for horse-foal.svg (see ../README.txt)
+Horse and foal
+it.utf8=Cavallo e puledro
+
+guide guides
+With a light pencil, softly draw a big oval on the left and a small one on the right: they are helpers!
+it.utf8=Con la matita leggera disegna piano un ovale grande a sinistra e uno piccolo a destra: ci aiutano!
+
+draw horse
+Draw the big horse: the oval body, a long neck with a wavy mane, and a long head with a pointy ear.
+it.utf8=Disegna il cavallo grande: il corpo ovale, il collo lungo con la criniera a onde e la testa con l'orecchio.
+
+draw horse-legs
+Give it four long legs with hooves and a long tail.
+it.utf8=Fagli quattro zampe lunghe con gli zoccoli e una lunga coda.
+
+draw foal
+On the right, draw the foal the same way, but small and looking at the horse.
+it.utf8=A destra disegna il puledro allo stesso modo, ma piccolo e girato verso il cavallo.
+
+draw faces
+Draw their faces: an eye, a nostril and a little mouth. Add some grass on the ground.
+it.utf8=Disegna i musi: un occhio, la narice e la bocca. Aggiungi qualche ciuffo d'erba per terra.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color horse-brown
+Color the big horse brown.
+it.utf8=Colora il cavallo grande di marrone.
+
+color foal-light-brown
+Color the foal light brown.
+it.utf8=Colora il puledro di marrone chiaro.
+
+color manes-dark
+Color the manes, the tails and the hooves dark brown.
+it.utf8=Colora di marrone scuro le criniere, le code e gli zoccoli.

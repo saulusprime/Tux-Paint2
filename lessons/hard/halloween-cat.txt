@@ -1,0 +1,39 @@
+# Tux Paint lesson: steps for halloween-cat.svg (see ../README.txt)
+Cat and pumpkin
+it.utf8=Gatto e zucca
+
+draw pumpkin
+On the right, draw a big round pumpkin with two curved lines inside, a stem on top and a leaf.
+it.utf8=A destra disegna una grande zucca tonda con due linee curve dentro, il gambo in alto e una foglia.
+
+draw pumpkin-face
+Give the pumpkin a funny face: two triangle eyes, a small triangle nose and a smile with teeth.
+it.utf8=Fai alla zucca una faccia buffa: due occhi a triangolo, un nasino a triangolo e un sorriso coi denti.
+
+draw cat
+On the left, draw a cat sitting: a round head with two pointy ears, a body, two legs and a curly tail.
+it.utf8=A sinistra disegna un gatto seduto: testa tonda con due orecchie a punta, il corpo, due zampe e la coda.
+
+draw cat-face
+Draw the cat's face: two oval eyes with a thin black line inside, a nose, a mouth and long whiskers.
+it.utf8=Disegna il muso del gatto: occhi ovali con una righetta nera dentro, il naso, la bocca e i baffi.
+
+draw sky
+Up in the sky, draw a moon like a big letter C and three little stars.
+it.utf8=In cielo disegna una luna come una grande lettera C e tre stelline.
+
+color pumpkin-orange
+Color the pumpkin orange.
+it.utf8=Colora la zucca di arancione.
+
+color yellow
+Color the pumpkin's face, the cat's eyes, the moon and the stars yellow.
+it.utf8=Colora di giallo la faccia della zucca, gli occhi del gatto, la luna e le stelle.
+
+color cat-gray
+Color the cat gray.
+it.utf8=Colora il gatto di grigio.
+
+color stem-green
+Color the stem and the leaf green.
+it.utf8=Colora di verde il gambo e la foglia.

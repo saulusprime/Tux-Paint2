@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for two-foxes.svg (see ../README.txt)
+Two foxes in the woods
+it.utf8=Due volpi nel bosco
+
+guide guides
+With a light pencil, softly draw two circles and an oval under each one: they are helpers!
+it.utf8=Con la matita leggera disegna piano due cerchi e sotto ognuno un ovale: ci aiutano!
+
+draw heads
+Draw two fox heads looking at each other: big pointy ears on top and pointy cheeks on the sides.
+it.utf8=Disegna due teste di volpe che si guardano: grandi orecchie a punta in alto e guance a punta ai lati.
+
+draw faces
+Draw the faces: a line in each ear, a line like two hills on the cheeks, two eyes and a black nose.
+it.utf8=Disegna i musi: una riga in ogni orecchio, una linea a due collinette sulle guance, gli occhi e il naso.
+
+draw bodies
+Under each head draw a round body with a U on the chest, two front legs and round paws.
+it.utf8=Sotto ogni testa disegna un corpo tondo con una U sul petto, due zampe davanti e le zampette tonde.
+
+draw tails
+Draw a big fluffy tail on the outer side of each fox, and a line near the tip.
+it.utf8=Disegna una grande coda soffice sul lato esterno di ogni volpe, e una riga vicino alla punta.
+
+draw woods
+Between the foxes, draw two mushrooms with dots. Add grass and a few falling leaves.
+it.utf8=Tra le volpi disegna due funghi con i pallini. Aggiungi l'erba e qualche foglia che cade.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color foxes-orange
+Color the foxes orange. Leave white the cheeks, the chest and the tail tips!
+it.utf8=Colora le volpi di arancione. Lascia bianchi le guance, il petto e la punta della coda!
+
+color mushrooms-red
+Color the mushroom caps red, but not the dots.
+it.utf8=Colora di rosso i cappelli dei funghi, ma non i pallini.
+
+color leaves-green
+Color the falling leaves green.
+it.utf8=Colora di verde le foglie che cadono.

@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for nest-chicks.svg (see ../README.txt)
+Chicks in the nest
+it.utf8=Pulcini nel nido
+
+guide guides
+With a light pencil, softly draw a big oval at the bottom and three circles on it: they are helpers!
+it.utf8=Con la matita leggera disegna piano un grande ovale in basso e sopra tre cerchi: ci aiutano!
+
+draw nest
+Draw the nest: a wide smile for its edge and a big round bowl under it.
+it.utf8=Disegna il nido: un grande sorriso per il bordo e sotto una ciotola tonda.
+
+draw chicks
+Draw three round chicks peeking out of the nest: the one in the middle is the biggest.
+it.utf8=Disegna tre pulcini tondi che spuntano dal nido: quello in mezzo è il più grande.
+
+draw shell-tufts
+Put half an eggshell with a zigzag edge on the middle chick, and a little curl on the other two.
+it.utf8=Metti mezzo guscio d'uovo a zig-zag sul pulcino in mezzo, e un ricciolo sulla testa degli altri due.
+
+draw faces
+Draw their faces: two dot eyes each and a beak like a diamond, open with a line in the middle.
+it.utf8=Disegna i musetti: due occhi a puntino e un becco a rombo, aperto con una riga in mezzo.
+
+draw straw
+Draw some curved lines on the nest, and a few twigs sticking out of its sides.
+it.utf8=Sul nido fai qualche linea curva, e ai lati qualche rametto che spunta fuori.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color chicks-yellow
+Color the chicks yellow.
+it.utf8=Colora i pulcini di giallo.
+
+color beaks-orange
+Color the beaks orange.
+it.utf8=Colora i becchi di arancione.
+
+color nest-brown
+Color the nest brown. The eggshell stays white!
+it.utf8=Colora il nido di marrone. Il guscio resta bianco!

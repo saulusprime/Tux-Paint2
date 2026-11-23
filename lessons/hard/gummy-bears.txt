@@ -1,0 +1,39 @@
+# Tux Paint lesson: steps for gummy-bears.svg (see ../README.txt)
+Gummy bears
+it.utf8=Orsetti gommosi
+
+guide guides
+With a light pencil, softly draw three circles and an oval under each one: they are helpers!
+it.utf8=Con la matita leggera disegna piano tre cerchi e sotto ognuno un ovale: ci aiutano!
+
+draw heads
+Draw three round heads, each with two small round ears. The middle bear is the biggest.
+it.utf8=Disegna tre teste tonde, ognuna con due orecchie tonde piccole. L'orsetto in mezzo è il più grande.
+
+draw bodies
+Under each head draw a round body, with an oval on the tummy.
+it.utf8=Sotto ogni testa disegna un corpo tondo, con un ovale sulla pancia.
+
+draw arms-legs
+Give each bear two short round arms on the sides and two round feet at the bottom.
+it.utf8=A ogni orsetto disegna due braccine corte e tonde ai lati e due piedini tondi in basso.
+
+draw faces
+Draw the faces: two dot eyes, a little black nose and a small smile.
+it.utf8=Disegna i musetti: due occhi a puntino, un nasino nero e un piccolo sorriso.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color bear-red
+Color the bear on the left red.
+it.utf8=Colora di rosso l'orsetto a sinistra.
+
+color bear-green
+Color the bear in the middle green.
+it.utf8=Colora di verde l'orsetto in mezzo.
+
+color bear-yellow
+Color the bear on the right yellow.
+it.utf8=Colora di giallo l'orsetto a destra.

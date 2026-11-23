@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for vulture.svg (see ../README.txt)
+Flying vulture
+it.utf8=Avvoltoio in volo
+
+guide guides
+With a light pencil, softly draw an oval in the middle, a small circle on top and a long line across.
+it.utf8=Con la matita leggera disegna piano un ovale in mezzo, sopra un cerchietto e una lunga riga di traverso.
+
+draw head
+Draw the vulture's bald head: a circle with two eyes, grumpy eyebrows and a big hooked beak.
+it.utf8=Disegna la testa pelata dell'avvoltoio: un cerchio con due occhi, le sopracciglia e un grosso becco a uncino.
+
+draw body
+Draw a short neck, a fluffy collar with soft points and the body under it, like a big oval.
+it.utf8=Disegna il collo corto, un collare soffice a punte morbide e sotto il corpo, come un grande ovale.
+
+draw wings
+Draw two big open wings, one on each side, with long feathers at the ends like fingers.
+it.utf8=Disegna due grandi ali aperte, una per lato, con le piume lunghe in fondo come dita.
+
+draw tail
+Under the body, draw the tail like a fan with three points.
+it.utf8=Sotto il corpo disegna la coda come un ventaglio con tre punte.
+
+draw sky
+Draw the sun up on the right and two fluffy clouds down below.
+it.utf8=In alto a destra disegna il sole e in basso due nuvole soffici.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color brown
+Color the body, the wings and the tail brown.
+it.utf8=Colora di marrone il corpo, le ali e la coda.
+
+color head-pink
+Color the head and the neck pink.
+it.utf8=Colora di rosa la testa e il collo.
+
+color yellow
+Color the beak and the sun yellow.
+it.utf8=Colora di giallo il becco e il sole.
