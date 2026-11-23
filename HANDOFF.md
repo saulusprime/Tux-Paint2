@@ -62,6 +62,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   prove senza finestra e una revisione indipendente; manca la prova a
   mano con l'audio vero (§6). Comprende la cartella `custom` per le
   immagini dell'utente (scheda "Personali").
+- **Dopo** (2026-11-23, branch `lessons-hard-ten`, **non ancora unito in
+  `master`**): dieci lezioni difficili nuove, disegni originali, che
+  portano la libreria a 27 (§5sexies, diario del 2026-11-23).
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -89,6 +92,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
 | `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`. Il lavoro nuovo parte da qui, su un branch nuovo |
+| `lessons-hard-ten` | ultimo commit, solo locale | dieci lezioni difficili nuove in `lessons/hard`, documentazione (27 lezioni) e file di progetto; da unire in `master` se l'utente lo chiede |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
@@ -120,9 +124,19 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   `devtools/sysroot/sysroot.sh install`, lanciatore nel menu compreso; le
   9 librerie che il sistema non ha sono copiate in
   `~/.local/lib/tuxpaint/sysroot-libs` (RPATH). Senza la raccolta
-  completa dei timbri. Nella cartella personale dell'utente:
-  `~/.tuxpaint/lessons/hard/octopus.*` e tre immagini in
-  `~/.tuxpaint/lessons/custom/` (con un `.txt` di solo titolo ciascuna).
+  completa dei timbri. Nella cartella personale dell'utente
+  (`~/.tuxpaint/lessons/`, fuori dal repository, al 2026-11-23):
+  - `hard/`: le dieci lezioni di `lessons-hard-ten` (stesso livello e
+    stesso nome di quelle del repository, quindi vincono loro: vanno tolte
+    da lì se si cambiano quelle del repository);
+  - `custom/`: tre lezioni complete fatte dalle immagini dell'utente
+    ("Gatto e amici", 22 passi; "Polpo al mare", 25; "Volpe e amici", 20;
+    file con il nome dell'immagine) e dodici immagini insegnate con la
+    griglia, tra cui dieci pagine scaricate dall'utente da crayola.com
+    (solo uso personale), con un `.txt` di solo titolo "… (Crayola)";
+  - accanto, `~/.tuxpaint/lessons-riserva-2026-11-23/`: tre vecchie
+    versioni semplificate di gatto, volpe e polpo, che Tux Paint non
+    legge.
 - **Modifiche rispetto a 0.9.22**:
 
 | Area | Commit | Cosa |
@@ -969,7 +983,16 @@ un sintetizzatore vocale.
   pinguino, gufo, razzo, automobile, dinosauro, tutte con la tecnica della
   forma guida leggera cancellata prima di colorare. Disegnate da tre
   agenti in parallelo (uno per livello) sulla specifica e il sole di
-  esempio, poi controllate con il foglio dei passi.
+  esempio, poi controllate con il foglio dei passi. Dal 2026-11-23 (branch
+  `lessons-hard-ten`) le difficili sono 15, con biplano, sedia in
+  giardino, distributore di palline, orsetti gommosi, gatto con la zucca,
+  cavallo con puledro, amici a maglia, pulcini nel nido, due volpi nel
+  bosco e avvoltoio in volo: 27 lezioni in tutto. Queste dieci sono
+  disegni originali, scritti a mano in coordinate del foglio; i colori
+  sono ricavati dalle linee stesse (riempimento rasterizzato, poi
+  contorno vettoriale), le parti nascoste con `clipPath`. Lo script che
+  le genera (`lessonkit.py` e due file di soggetti) è rimasto nella
+  cartella temporanea della sessione (TODO).
 - **Disegno** (`src/lessons.c`, con librsvg ≥ 2.46 e cairo; senza, Impara
   non c'è): `rsvg_handle_render_layer()` disegna ogni gruppo da solo una
   volta, alla misura dell'area; ogni fotogramma si compone con cairo:
@@ -1044,6 +1067,9 @@ un sintetizzatore vocale.
    `PREFIX=~/.cache/tuxpaint-learn-prefix devtools/sysroot/sysroot.sh make`
    e `… install`, poi `devtools/sysroot/sysroot.sh run
    ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
+
+0bis. **Lezioni difficili nuove** (branch `lessons-hard-ten`): unirle in
+   `master` se l'utente lo chiede; seguirne almeno una su carta.
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2188,3 +2214,33 @@ Richiesta dell'utente: unire il branch in `master` e fare il push.
 Stato alla chiusura: `master` uguale a `feature/learn-to-draw`, tutti e
 due in pari su `origin`; il lavoro nuovo parte da `master` su un branch
 nuovo.
+
+### 2026-11-23 — Lezioni dell'utente e dieci lezioni difficili nuove
+
+Richieste dell'utente, nell'ordine: lezioni passo passo dalle sue
+immagini; scaricare le pagine gratuite di crayola.com in `lessons/hard`;
+farne lezioni; poi aggiungere al repository le dieci lezioni originali.
+
+- **Lezioni dalle immagini dell'utente** (fuori dal repository, in
+  `~/.tuxpaint/lessons/custom/`, §1): gatto (22 passi), polpo (25) e
+  volpe (20), con le linee ricalcate dalle immagini (percorso minimo sui
+  pixel scuri, poi curve lisciate) e i colori ricavati dalle linee. Non
+  vanno nel repository: le immagini sono di terzi. Rifiutata una lezione
+  da un personaggio protetto (Super Mario).
+- **Crayola**: le condizioni del sito permettono solo l'uso personale,
+  vietano lo scaricamento automatico, le opere derivate e l'uso dentro
+  applicazioni; quindi niente download automatico e niente ricalco. Le
+  dieci pagine scaricate a mano dall'utente restano in `custom/`,
+  insegnate con la griglia, con un titolo italiano "… (Crayola)".
+- **Dieci lezioni originali sugli stessi soggetti** (branch
+  `lessons-hard-ten`, `0f523a8`; documentazione in `ef0c7f2`): disegnate
+  da zero in coordinate del foglio, 9 o 10 passi, testi in inglese e
+  italiano. Controlli: `lesson_preview.py` "ok" per tutte; un controllo
+  delle aree (nessun vuoto bianco dentro le linee, nessun colore che
+  attraversa una linea): 0 problemi; il lettore C delle lezioni
+  (`lessons.c`, binario di prova con ASan) legge le 27 lezioni del
+  repository senza errori né perdite.
+
+Resta aperto: unire `lessons-hard-ten` in `master` (decisione
+dell'utente); lo script delle lezioni è solo nella cartella temporanea.
+

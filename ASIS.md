@@ -453,3 +453,9 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   avanzamento rapido, su richiesta dell'utente prima della prova a mano
   con l'audio vero, che resta nel TODO; caricato su `origin` (la repo
   GitHub dell'utente).
+- [x] 2026-11-23 — Dieci lezioni difficili nuove (branch
+  `lessons-hard-ten`) — biplano, sedia in giardino, distributore di
+  palline, orsetti gommosi, gatto con la zucca, cavallo con puledro, amici
+  a maglia, pulcini nel nido, due volpi nel bosco, avvoltoio in volo:
+  disegni originali, 9 o 10 passi; libreria a 27 lezioni, documentazione
+  aggiornata; non ancora in `master`.
