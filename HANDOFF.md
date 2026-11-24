@@ -66,8 +66,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   portano la libreria a 27, e lo script che le genera
   (`devtools/content/lessonkit/`), dal branch `lessons-hard-ten`, **unito
   in `master`** il 2026-11-24 con avanzamento rapido, su richiesta
-  dell'utente (§5sexies, diario del 2026-11-23 e del 2026-11-24). Il push
-  non è stato fatto: `master` locale è avanti a `origin`.
+  dell'utente (§5sexies, diario del 2026-11-23 e del 2026-11-24), e
+  caricato su `origin` lo stesso giorno.
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -94,7 +94,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` (non ancora caricato su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
+| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` (caricato su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
 | `lessons-hard-ten` | come `master`, solo locale | dieci lezioni difficili nuove in `lessons/hard`, il loro script (`devtools/content/lessonkit/`), documentazione (27 lezioni) e file di progetto; già unito in `master` (2026-11-24) |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
@@ -1077,7 +1077,7 @@ un sintetizzatore vocale.
    ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
 
 0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24): seguirne
-   almeno una su carta; fare il push di `master` se l'utente lo chiede.
+   almeno una su carta.
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2272,9 +2272,10 @@ lezioni difficili e unire il branch in `master`.
 - Prima dell'unione, sul branch, aggiornati i file di progetto (§1, §2,
   §5sexies, §6, TODO, ASIS).
 - **Unione**: `master` (`123e41f`) era antenato di `lessons-hard-ten`:
-  avanzamento rapido, senza commit di unione. Push non fatto (non
-  richiesto).
+  avanzamento rapido, senza commit di unione. Poi, su richiesta
+  dell'utente, push di `master` su `origin` (la repo GitHub dell'utente);
+  il branch `lessons-hard-ten` resta solo locale.
 
-Stato alla chiusura: `master` uguale a `lessons-hard-ten`, avanti a
+Stato alla chiusura: `master` uguale a `lessons-hard-ten` e in pari con
 `origin/master`; il lavoro nuovo parte da `master` su un branch nuovo.
 

@@ -466,4 +466,4 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   metà della voce su `lesson_preview.py`, che resta per i margini): le 27
   lezioni non hanno problemi.
 - [x] 2026-11-24 — Unione in `master` di `lessons-hard-ten` — avanzamento
-  rapido, su richiesta dell'utente; push non fatto.
+  rapido, su richiesta dell'utente; caricato su `origin`.
