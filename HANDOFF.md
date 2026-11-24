@@ -52,7 +52,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-11-23)
+## 1. Stato attuale (al 2026-11-24)
 
 - **Ultimo lavoro**: lo strumento **Impara** (lezioni per imparare a
   disegnare e colorare su carta, passo passo, con la voce), dal branch
@@ -62,9 +62,12 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   prove senza finestra e una revisione indipendente; manca la prova a
   mano con l'audio vero (§6). Comprende la cartella `custom` per le
   immagini dell'utente (scheda "Personali").
-- **Dopo** (2026-11-23, branch `lessons-hard-ten`, **non ancora unito in
-  `master`**): dieci lezioni difficili nuove, disegni originali, che
-  portano la libreria a 27 (§5sexies, diario del 2026-11-23).
+- **Dopo**: dieci lezioni difficili nuove, disegni originali, che
+  portano la libreria a 27, e lo script che le genera
+  (`devtools/content/lessonkit/`), dal branch `lessons-hard-ten`, **unito
+  in `master`** il 2026-11-24 con avanzamento rapido, su richiesta
+  dell'utente (§5sexies, diario del 2026-11-23 e del 2026-11-24). Il push
+  non è stato fatto: `master` locale è avanti a `origin`.
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -91,8 +94,8 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`. Il lavoro nuovo parte da qui, su un branch nuovo |
-| `lessons-hard-ten` | ultimo commit, solo locale | dieci lezioni difficili nuove in `lessons/hard`, documentazione (27 lezioni) e file di progetto; da unire in `master` se l'utente lo chiede |
+| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` (non ancora caricato su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
+| `lessons-hard-ten` | come `master`, solo locale | dieci lezioni difficili nuove in `lessons/hard`, il loro script (`devtools/content/lessonkit/`), documentazione (27 lezioni) e file di progetto; già unito in `master` (2026-11-24) |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
@@ -211,6 +214,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 | `src/lessons.c`, `src/speech.c` | *Aggiunti nel fork*: lettura e disegno delle lezioni (librsvg, cairo); voce (eSpeak NG con `dlopen()`, o un comando) (§5sexies) |
 | [devtools/lesson-test/](devtools/lesson-test/) | *Aggiunto nel fork*: `lesson_frames.c`, disegna in BMP quello che Impara mostra, senza Tux Paint (§5sexies) |
 | [devtools/sysroot/](devtools/sysroot/) | *Aggiunto nel fork*: `sysroot.sh`, compila senza i pacchetti `-dev` installati (§4) |
+| `devtools/content/lessonkit/` | *Aggiunto nel fork*: lo script delle dieci lezioni difficili del 2026-11-23 (`lessonkit.py`, `hard_a.py`, `hard_b.py`, `make_hard.py`) e `check_areas.py`, il controllo dei colori di qualunque lezione (§5sexies) |
 | `devtools/content/lesson_preview.py`, `learn_icons.py` | *Aggiunti nel fork*: controllo e fogli dei passi delle lezioni; icone di Impara (§5sexies) |
 | `HANDOFF.md`, `TODO.md`, `ASIS.md` | *Aggiunti nel fork*: file di progetto (vedi in cima a questo file) |
 
@@ -990,9 +994,13 @@ un sintetizzatore vocale.
   bosco e avvoltoio in volo: 27 lezioni in tutto. Queste dieci sono
   disegni originali, scritti a mano in coordinate del foglio; i colori
   sono ricavati dalle linee stesse (riempimento rasterizzato, poi
-  contorno vettoriale), le parti nascoste con `clipPath`. Lo script che
-  le genera (`lessonkit.py` e due file di soggetti) è rimasto nella
-  cartella temporanea della sessione (TODO).
+  contorno vettoriale), le parti nascoste con `clipPath`. Sono scritte in
+  Python con `devtools/content/lessonkit/` (`hard_a.py`, `hard_b.py`):
+  si cambiano lì e si rigenerano con `make_hard.py` (circa 45 s per
+  tutte), non a mano nell'SVG. `check_areas.py`, nella stessa cartella,
+  controlla i colori di qualunque lezione (vuoti bianchi dentro le linee,
+  due colori senza una linea in mezzo): al 2026-11-24 le 27 lezioni non
+  hanno problemi.
 - **Disegno** (`src/lessons.c`, con librsvg ≥ 2.46 e cairo; senza, Impara
   non c'è): `rsvg_handle_render_layer()` disegna ogni gruppo da solo una
   volta, alla misura dell'area; ogni fotogramma si compone con cairo:
@@ -1068,8 +1076,8 @@ un sintetizzatore vocale.
    e `… install`, poi `devtools/sysroot/sysroot.sh run
    ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
 
-0bis. **Lezioni difficili nuove** (branch `lessons-hard-ten`): unirle in
-   `master` se l'utente lo chiede; seguirne almeno una su carta.
+0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24): seguirne
+   almeno una su carta; fare il push di `master` se l'utente lo chiede.
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2242,5 +2250,31 @@ farne lezioni; poi aggiungere al repository le dieci lezioni originali.
   repository senza errori né perdite.
 
 Resta aperto: unire `lessons-hard-ten` in `master` (decisione
-dell'utente); lo script delle lezioni è solo nella cartella temporanea.
+dell'utente); lo script delle lezioni è solo nella cartella temporanea
+(fatti tutti e due il 2026-11-24, voce seguente).
+
+### 2026-11-24 — Script delle lezioni nel repository, unione in master
+
+Richiesta dell'utente: portare nel repository lo script delle dieci
+lezioni difficili e unire il branch in `master`.
+
+- **`devtools/content/lessonkit/`** (`0be2342`): i moduli della cartella
+  temporanea (geometria, riempimenti, kit) riuniti in `lessonkit.py`,
+  senza il tracciatore delle immagini dell'utente, che queste lezioni non
+  usano; i disegni in `hard_a.py` e `hard_b.py`; `make_hard.py` costruisce
+  in `lessons/hard` (o `--out`), stampa il rapporto dei colori, fa
+  `check_areas.py` e, con `--sheet`, un foglio con tutti i disegni finiti.
+  Rigenerate, le dieci lezioni sono **identiche byte per byte** a quelle
+  già nel repository. `check_areas.py` provato su una copia guastata (un
+  colore spostato di 12 unità: 3 problemi, uscita 1) e su tutte le 27
+  lezioni (nessun problema). Nota in `lessons/README.txt` ("Checking a
+  lesson").
+- Prima dell'unione, sul branch, aggiornati i file di progetto (§1, §2,
+  §5sexies, §6, TODO, ASIS).
+- **Unione**: `master` (`123e41f`) era antenato di `lessons-hard-ten`:
+  avanzamento rapido, senza commit di unione. Push non fatto (non
+  richiesto).
+
+Stato alla chiusura: `master` uguale a `lessons-hard-ten`, avanti a
+`origin/master`; il lavoro nuovo parte da `master` su un branch nuovo.
 

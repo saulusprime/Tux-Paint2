@@ -134,17 +134,11 @@ Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
   una pagina), da tenere accanto al foglio da disegno.
 - [ ] [P3] Testi di lezioni e interfaccia di Impara anche in `ca`, `de`,
   `es`, `fr` (oggi ricadono sull'inglese).
-- [ ] [P2] Unire in `master` il branch `lessons-hard-ten` (dieci lezioni
-  difficili nuove, 2026-11-23), se l'utente lo chiede.
-- [ ] [P3] Portare nel repository (in `devtools/content/`) lo script che
-  genera le dieci lezioni difficili del 2026-11-23 (`lessonkit.py`,
-  `set_a.py`, `set_b.py` e il controllo delle aree): oggi è solo nella
-  cartella temporanea della sessione, e senza le lezioni si correggono
-  solo a mano.
-- [ ] [P3] `lesson_preview.py`: controllare anche i margini (20 unità) e i
-  riempimenti (nessun vuoto bianco dentro le linee, nessun colore fuori):
-  l'agente delle lezioni medie ne ha uno di prova (`regions.py`, rimasto
-  nella cartella temporanea della sessione).
+- [ ] [P3] `lesson_preview.py`: controllare anche i margini (20 unità).
+  I riempimenti (nessun vuoto bianco dentro le linee, nessun colore che
+  passa una linea) li controlla dal 2026-11-24
+  `devtools/content/lessonkit/check_areas.py`: si potrebbe chiamarlo da
+  lì.
 - [ ] [P3] Avvisi del compilatore di Ubuntu (`-Wunused-result` per
   `_FORTIFY_SOURCE`, `-Wunterminated-string-initialization` di GCC 15):
   47, tutti in codice vecchio; per tornare a 0 come su Debian.

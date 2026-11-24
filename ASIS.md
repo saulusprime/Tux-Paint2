@@ -459,3 +459,11 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   a maglia, pulcini nel nido, due volpi nel bosco, avvoltoio in volo:
   disegni originali, 9 o 10 passi; libreria a 27 lezioni, documentazione
   aggiornata; non ancora in `master`.
+- [x] 2026-11-24 — Script delle lezioni difficili nel repository —
+  `devtools/content/lessonkit/` (`lessonkit.py`, `hard_a.py`, `hard_b.py`,
+  `make_hard.py`); rigenera le dieci lezioni identiche byte per byte.
+  Con `check_areas.py`, controllo dei colori di qualunque lezione (fa
+  metà della voce su `lesson_preview.py`, che resta per i margini): le 27
+  lezioni non hanno problemi.
+- [x] 2026-11-24 — Unione in `master` di `lessons-hard-ten` — avanzamento
+  rapido, su richiesta dell'utente; push non fatto.
