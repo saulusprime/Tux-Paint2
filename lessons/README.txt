@@ -127,3 +127,15 @@ and cairo directly, as Tux Paint does) checks a lesson's files against these
 rules and draws a sheet with every step as Tux Paint shows it:
 
   python3 devtools/content/lesson_preview.py --out /tmp/preview lessons/easy/sun.txt
+
+devtools/content/lessonkit/check_areas.py checks the colors: it reports any
+area between the lines that is partly white, or that has two colors with no
+line between them:
+
+  python3 devtools/content/lessonkit/check_areas.py lessons/hard/owl.txt
+
+The hard lessons biplane, garden-chair, gumball-machine, gummy-bears,
+halloween-cat, horse-foal, knitting-friends, nest-chicks, two-foxes and
+vulture are written in Python with devtools/content/lessonkit/, which also
+fills their colors from the lines. To change them, change hard_a.py or
+hard_b.py there and run make_hard.py, rather than editing their SVG.
