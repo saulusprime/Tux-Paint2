@@ -480,6 +480,19 @@ Gli strumenti
                 titolo, come in una lezione). Lì possono andare anche
                 lezioni con i passi (vedi EXTENDING).
 
+                Il pulsante "Aggiungi" del dialogo Impara ci mette
+                un'immagine senza uscire da Tux Paint. Al posto dei
+                livelli mostra le immagini delle cartelle Scaricati,
+                Immagini e Scrivania (quelle che ci sono; in Linux, con
+                i nomi scritti in "~/.config/user-dirs.dirs"). Se ne
+                sceglie una e si preme "Aggiungi": viene copiata in
+                "custom", insieme al file "NOME.txt" accanto, se c'è,
+                con i suoi passi o il suo titolo. Prima Tux Paint la
+                controlla: un'immagine che non si legge, o dei passi i
+                cui gruppi non sono nell'SVG, non vengono aggiunti.
+                Non si sostituisce niente: se il nome è già usato, la
+                copia ne prende un altro ("gatto-2").
+
         La voce
                 Le istruzioni vengono lette ad alta voce da eSpeak NG,
                 nella lingua del testo, se la sua libreria

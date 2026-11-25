@@ -27,6 +27,9 @@ SVG wins over PNG, PNG over JPEG and WebP. The title is the file's name ("my_red
 becomes "My red car"), or the first block of NAME.txt if there is one with
 just the title (and its translations); "#" comment lines there are a good
 place for credits. EPS files aren't read: convert them to SVG first.
+The Learn dialog's "Add" button copies a picture there, with the NAME.txt
+next to it, from the user's Downloads, Pictures or Desktop folder, after
+checking that it can be shown (and under another name if its name is taken).
 
 
 A lesson is two files with the same name

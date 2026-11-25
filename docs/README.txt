@@ -463,6 +463,20 @@ Available Tools
                               title, as in a lesson). Lessons with steps can
                               go there too (see EXTENDING).
 
+                              The "Add" button of the Learn dialog puts a
+                              picture there without leaving Tux Paint. It
+                              shows, instead of the levels, the pictures in
+                              your Downloads, Pictures and Desktop folders
+                              (those you have; under Linux, as named in
+                              "~/.config/user-dirs.dirs"). Pick one and press
+                              "Add": it is copied to "custom", together with
+                              the "NAME.txt" file next to it, if there is
+                              one, with its steps or its title. Tux Paint
+                              checks it first: a picture it can't read, or
+                              steps whose groups aren't in the SVG, are not
+                              added. Nothing is replaced: if the name is
+                              taken, the copy gets another ("cat-2").
+
                       The Voice
 
                               The instructions are read aloud by eSpeak NG,

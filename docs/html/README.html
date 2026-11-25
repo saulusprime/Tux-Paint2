@@ -590,6 +590,18 @@ version
           in a "<code><i>NAME</i>.txt</code>" file next to it (just the
           title, as in a lesson).  Lessons with steps can go there too (see
           <a href="EXTENDING.html#lessons">EXTENDING</a>).</p>
+
+          <p>The "Add" button of the Learn dialog puts a picture there
+          without leaving Tux&nbsp;Paint.  It shows, instead of the levels,
+          the pictures in your Downloads, Pictures and Desktop folders (those
+          you have; under Linux, as named in
+          "<code>~/.config/user-dirs.dirs</code>").  Pick one and press
+          "Add": it is copied to "<code>custom</code>", together with the
+          "<code><i>NAME</i>.txt</code>" file next to it, if there is one,
+          with its steps or its title.  Tux&nbsp;Paint checks it first: a
+          picture it can't read, or steps whose groups aren't in the SVG, are
+          not added.  Nothing is replaced: if the name is taken, the copy
+          gets another ("<code>cat-2</code>").</p>
         </dd>
 
         <dt><b>The Voice</b></dt>
