@@ -134,6 +134,11 @@ Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
   una pagina), da tenere accanto al foglio da disegno.
 - [ ] [P3] Testi di lezioni e interfaccia di Impara anche in `ca`, `de`,
   `es`, `fr` (oggi ricadono sull'inglese).
+- [ ] [P2] Pulsante "Aggiungi" di Impara (in `master` e installato dal
+  2026-11-25): prova a mano in finestra, a schermo intero e a 1600×1200.
+- [ ] [P3] Togliere un disegno da "Personali" dall'interno di Impara (oggi
+  si aggiunge con "Aggiungi", ma si toglie solo dalla cartella
+  `~/.tuxpaint/lessons/custom/`).
 - [ ] [P3] `lesson_preview.py`: controllare anche i margini (20 unità).
   I riempimenti (nessun vuoto bianco dentro le linee, nessun colore che
   passa una linea) li controlla dal 2026-11-24

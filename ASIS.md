@@ -477,3 +477,12 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   (prima 17): le nuove non si vedevano perché erano solo nel repository.
 - [x] 2026-11-25 — Unione in `master` di `lessons-cat-fox` — avanzamento
   rapido, su richiesta dell'utente; caricato su `origin`.
+- [x] 2026-11-25 — Impara: pulsante "Aggiungi" (branch
+  `feature/lesson-import`) — sceglie dentro Tux Paint
+  un'immagine da Scaricati, Immagini o Scrivania e la copia, con il suo
+  `.txt`, in "Personali", dopo averla controllata; provato senza finestra,
+  anche con ASan.
+- [x] 2026-11-25 — Unione in `master` di `feature/lesson-import` e
+  installazione in `~/.local` — avanzamento rapido e push, su richiesta
+  dell'utente; ricompilato da capo, binario installato provato senza
+  finestra.

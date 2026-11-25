@@ -74,6 +74,13 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   (gatto e volpe con gli amici, una breve e una lunga ciascuno); il
   livello Difficile va ora da 7 a 100 passi; 31 lezioni (§5sexies,
   diario del 2026-11-25).
+- **Ultimo lavoro** (2026-11-25, branch `feature/lesson-import`, unito
+  in `master`, caricato su `origin` e installato in `~/.local`): pulsante
+  "Aggiungi" nel selettore di Impara,
+  per aggiungere a "Personali" un'immagine (con il suo `.txt` di passi o
+  di titolo) presa da Scaricati, Immagini o Scrivania, scelta dentro Tux
+  Paint (§5sexies, diario del 2026-11-25). Provato senza finestra, anche
+  con ASan e con il binario installato; manca la prova a mano.
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -100,9 +107,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` e il 2026-11-25 a `lessons-cat-fox` (tutti e due caricati su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
+| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` e il 2026-11-25 a `lessons-cat-fox` e a `feature/lesson-import` (tutti caricati su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
 | `lessons-hard-ten` | come `master`, solo locale | dieci lezioni difficili nuove in `lessons/hard`, il loro script (`devtools/content/lessonkit/`), documentazione (27 lezioni) e file di progetto; già unito in `master` (2026-11-24) |
 | `lessons-cat-fox` | come `master`, solo locale | gatto e volpe con gli amici (quattro lezioni difficili), livello Difficile da 7 a 100 passi, documentazione (31 lezioni) e file di progetto; già unito in `master` (2026-11-25) |
+| `feature/lesson-import` | come `master`, solo locale | pulsante "Aggiungi" di Impara (`lessons_in_folder()`, `lesson_import()`), icona, testi in italiano, documentazione e file di progetto; già unito in `master` (2026-11-25) |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
@@ -1065,6 +1073,36 @@ un sintetizzatore vocale.
   PNG, poi JPEG; gli EPS si ignorano. Le foto più grandi di 2048 px si
   riducono alla lettura (`MAX_RASTER`). Raster letti con SDL_image,
   premoltiplicati per cairo.
+- **Aggiungere un'immagine** (2026-11-25, branch `feature/lesson-import`):
+  pulsante "Aggiungi" (`img_learn_add`, icona `ui/learn_add` da
+  `devtools/content/learn_icons.py`) nel selettore, accanto a "Voce". Il
+  selettore passa in una seconda modalità (`learn_adding`): al posto dei
+  livelli le cartelle Scaricati, Immagini e Scrivania lette da
+  `~/.config/user-dirs.dirs` (o `$XDG_CONFIG_HOME`; altrimenti
+  `~/Downloads`, `~/Pictures`, `~/Desktop`), solo quelle che esistono,
+  ognuna una volta; le schede hanno il cuore, il "livello" di ogni
+  immagine è l'indice della sua cartella. Le immagini vengono da
+  `lessons_in_folder()` (stessa lettura di `custom`, `find_in()` comune
+  con `lessons_find()`, ordinate per titolo). "Aggiungi" (o Invio, o il
+  doppio clic) chiama `lesson_import()`: controlla che l'immagine si
+  legga e che ogni gruppo dei passi sia nell'SVG
+  (`rsvg_handle_has_sub()`), poi copia immagine (estensione in
+  minuscolo) e `NOME.txt` in `custom/` con un nome libero (`NOME`,
+  `NOME-2`…), creando le cartelle; se gli stessi file ci sono già non
+  copia (`LESSON_IMPORT_THERE`); su errore di scrittura non lascia file a
+  metà. Poi torna alle lezioni, sulla scheda "Personali", con il disegno
+  nuovo selezionato, e Tux lo dice. Esc e "Indietro" tornano alle lezioni.
+  Un'immagine illeggibile ha una miniatura vuota (1×1 trasparente), così
+  non si rilegge a ogni ridisegno.
+- **Build misto** (2026-11-25): per le prove `tuxpaint.o`, `lessons.o` e
+  `i18n.o` erano stati compilati con il prefisso di prova
+  (`~/.cache/tuxpaint-learn-prefix`, dove il catalogo `it` e l'icona
+  nuova sono stati copiati a mano); tolto `obj/.build-prefix`,
+  `sysroot.sh install` ha poi ricompilato tutto da capo per `~/.local`
+  (il timbro ora dice di nuovo `~/.local`). Con `i18n.o` di un altro
+  prefisso Tux Paint legge il catalogo di quell'altro prefisso: i testi
+  nuovi restano in inglese. Le prove con un prefisso diverso si fanno
+  meglio in una copia del sorgente, come per ASan.
 - **Insidia di SDL_Pango**: `wordwrap_text_ex()` (il testo di Tux) lascia
   nel contesto Pango del font medio una misura minima larga quanto l'area
   di Tux; `render_text()` con quel font dà poi superfici enormi (titoli
@@ -1092,6 +1130,9 @@ un sintetizzatore vocale.
 
 0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24 e dal
    2026-11-25, installate in `~/.local`): seguirne almeno una su carta.
+0ter. **Pulsante "Aggiungi"** (in `master` dal 2026-11-25, installato in
+   `~/.local`): provarlo a mano in finestra (anche a schermo intero e a
+   1600×1200).
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2347,4 +2388,41 @@ il branch in `master` e fare il push.
 
 Stato alla chiusura: `master` uguale a `lessons-cat-fox` e in pari con
 `origin/master`.
+
+### 2026-11-25 — Impara: aggiungere un'immagine dell'utente
+
+Richiesta dell'utente: una funzione per caricare immagine e file
+descrittore di un disegno, così da aggiungere disegni a piacimento. Scelta
+dell'utente (tra una finestra di sistema con zenity e un selettore dentro
+Tux Paint): **dentro Tux Paint**, dalle cartelle Scaricati, Immagini e
+Scrivania, con il descrittore dallo stesso nome accanto all'immagine.
+
+- Fatto sul branch `feature/lesson-import` (da `master`), **non
+  committato** (si committa solo su richiesta): `lessons.c/.h`
+  (`find_in()`, `lessons_in_folder()`, `lesson_import()`), `tuxpaint.c`
+  (modalità "aggiungi" del selettore, §5sexies), icona `ui/learn_add`,
+  8 testi nuovi in `tuxpaint.pot` e tradotti in `it.po` (con
+  `devtools/po/update-po.sh it`; `POTFILES.in` ora ha `lessons.c`),
+  manuale inglese e italiano (testo e HTML), `lessons/README.txt`.
+- Prove: un programma di prova di `lessons.c` con ASan e UBSan (lezione
+  con passi, immagini, estensione maiuscola, SVG illeggibile, gruppo
+  mancante, stesso file due volte, descrittore cambiato → `gatto-2`,
+  cartella in sola lettura → nessun file lasciato); prova senza finestra
+  a 800×600 con una HOME di prova (aggiungi, cartella vuota, rifiuto,
+  aggiunta, "c'è già", Invio, Esc, avvio della lezione aggiunta), anche
+  con il binario ASan (`~/.cache/tuxpaint-learn-asan`, sorgente
+  ricopiato): nessun errore, perdite solo nelle librerie (eSpeak NG,
+  fontconfig, SDL). Compilazione senza avvisi nuovi.
+- Non provato: in finestra vera, a schermo intero, a 1600×1200.
+
+- Su richiesta dell'utente: commit sul branch (`a05937b` funzione,
+  `4081717` documentazione, poi i file di progetto), installazione in
+  `~/.local` con `devtools/sysroot/sysroot.sh install` (ricompilato da
+  capo; avvisi tutti del codice originale, nessuno delle righe nuove),
+  prova senza finestra del binario installato (stesso giro, stessi
+  risultati), unione in `master` (avanzamento rapido) e push.
+
+Stato alla chiusura: `master` uguale a `feature/lesson-import` e in pari
+con `origin/master`. Restano la prova a mano in finestra e l'idea, nel
+TODO, di togliere un disegno da "Personali" dall'interno.
 
