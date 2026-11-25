@@ -134,8 +134,6 @@ Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
   una pagina), da tenere accanto al foglio da disegno.
 - [ ] [P3] Testi di lezioni e interfaccia di Impara anche in `ca`, `de`,
   `es`, `fr` (oggi ricadono sull'inglese).
-- [ ] [P2] Unire in `master` il branch `lessons-cat-fox` (gatto e volpe
-  con gli amici, 2026-11-25) e fare il push, se l'utente lo chiede.
 - [ ] [P3] `lesson_preview.py`: controllare anche i margini (20 unità).
   I riempimenti (nessun vuoto bianco dentro le linee, nessun colore che
   passa una linea) li controlla dal 2026-11-24

@@ -473,3 +473,7 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   passi; libreria a 31 lezioni. I due polpi (pagina Etsy, solo uso
   personale) restano fuori, in `~/.tuxpaint/lessons/custom/`. Non ancora
   in `master`.
+- [x] 2026-11-25 — Lezioni installate in `~/.local` — le 31 di `master`
+  (prima 17): le nuove non si vedevano perché erano solo nel repository.
+- [x] 2026-11-25 — Unione in `master` di `lessons-cat-fox` — avanzamento
+  rapido, su richiesta dell'utente; caricato su `origin`.

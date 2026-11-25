@@ -68,8 +68,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   in `master`** il 2026-11-24 con avanzamento rapido, su richiesta
   dell'utente (§5sexies, diario del 2026-11-23 e del 2026-11-24), e
   caricato su `origin` lo stesso giorno.
-- **Poi** (2026-11-25, branch `lessons-cat-fox`, **non ancora unito in
-  `master`**): quattro lezioni difficili dalle immagini dell'utente
+- **Poi** (2026-11-25, branch `lessons-cat-fox`, **unito in `master`** e
+  caricato su `origin` lo stesso giorno): quattro lezioni difficili dalle
+  immagini dell'utente
   (gatto e volpe con gli amici, una breve e una lunga ciascuno); il
   livello Difficile va ora da 7 a 100 passi; 31 lezioni (§5sexies,
   diario del 2026-11-25).
@@ -99,9 +100,9 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` (caricato su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
+| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` e il 2026-11-25 a `lessons-cat-fox` (tutti e due caricati su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
 | `lessons-hard-ten` | come `master`, solo locale | dieci lezioni difficili nuove in `lessons/hard`, il loro script (`devtools/content/lessonkit/`), documentazione (27 lezioni) e file di progetto; già unito in `master` (2026-11-24) |
-| `lessons-cat-fox` | ultimo commit, solo locale | gatto e volpe con gli amici (quattro lezioni difficili), livello Difficile da 7 a 100 passi, documentazione (31 lezioni) e file di progetto; da unire in `master` se l'utente lo chiede |
+| `lessons-cat-fox` | come `master`, solo locale | gatto e volpe con gli amici (quattro lezioni difficili), livello Difficile da 7 a 100 passi, documentazione (31 lezioni) e file di progetto; già unito in `master` (2026-11-25) |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
@@ -133,7 +134,12 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   `devtools/sysroot/sysroot.sh install`, lanciatore nel menu compreso; le
   9 librerie che il sistema non ha sono copiate in
   `~/.local/lib/tuxpaint/sysroot-libs` (RPATH). Senza la raccolta
-  completa dei timbri. Nella cartella personale dell'utente
+  completa dei timbri. Le lezioni installate
+  (`~/.local/share/tuxpaint/lessons`) sono le 31 di `master` dal
+  2026-11-25 (`make install-lessons PREFIX=$HOME/.local`, senza
+  ricompilare: il codice non era cambiato); prima erano le 17 del
+  2026-11-22, e le altre si vedevano solo grazie alle copie in
+  `~/.tuxpaint/lessons`. Nella cartella personale dell'utente
   (`~/.tuxpaint/lessons/`, fuori dal repository), al 2026-11-25, c'è solo
   `custom/` con le due lezioni del polpo ("Polpo al mare", 10 passi, e
   "Polpo in spiaggia", 25), ricavate da una pagina Etsy (solo uso
@@ -1084,10 +1090,8 @@ un sintetizzatore vocale.
    e `… install`, poi `devtools/sysroot/sysroot.sh run
    ~/.cache/tuxpaint-learn-prefix/bin/tuxpaint --windowed`.
 
-0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24): seguirne
-   almeno una su carta.
-0ter. **Gatto e volpe** (branch `lessons-cat-fox`): unirlo in `master` e
-   fare il push, se l'utente lo chiede.
+0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24 e dal
+   2026-11-25, installate in `~/.local`): seguirne almeno una su carta.
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2320,4 +2324,27 @@ direttamente in `lessons/hard`.
 
 Resta aperto: unire `lessons-cat-fox` in `master` e fare il push
 (decisione dell'utente).
+
+### 2026-11-25 — Lezioni installate, gatto e volpe uniti in master
+
+Richiesta dell'utente: capire perché non vede tutti i disegni, poi unire
+il branch in `master` e fare il push.
+
+- **Causa**: il Tux Paint installato in `~/.local` (compilato il
+  2026-11-23 da `feature/learn-to-draw`) aveva ancora le lezioni del
+  2026-11-22: 17, di cui 5 difficili. Le 14 difficili nuove erano solo
+  nel repository; prima si vedevano grazie alle copie in
+  `~/.tuxpaint/lessons`, che non c'erano più (il 2026-11-25 mancava
+  tutta `~/.tuxpaint`; la cartella `lessons/custom` con i due polpi l'ho
+  ricreata io).
+- **Rimedio**: `make install-lessons PREFIX=$HOME/.local` dal branch:
+  31 lezioni installate, identiche a quelle del repository (`diff -r`),
+  lette da `lessons.c` (`lesson_frames`) senza errori. Il programma non
+  andava ricompilato: nessun cambiamento al codice dopo la sua build.
+- Aggiornati i file di progetto sul branch, poi `master` portato avanti
+  a `lessons-cat-fox` (avanzamento rapido) e push su `origin`; il branch
+  resta solo locale.
+
+Stato alla chiusura: `master` uguale a `lessons-cat-fox` e in pari con
+`origin/master`.
 
