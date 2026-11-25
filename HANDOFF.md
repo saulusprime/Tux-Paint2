@@ -80,7 +80,14 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   per aggiungere a "Personali" un'immagine (con il suo `.txt` di passi o
   di titolo) presa da Scaricati, Immagini o Scrivania, scelta dentro Tux
   Paint (§5sexies, diario del 2026-11-25). Provato senza finestra, anche
-  con ASan e con il binario installato; manca la prova a mano.
+  con ASan e con il binario installato; provato a mano in finestra
+  dall'utente: funziona.
+- **Ultimo lavoro** (2026-11-25, branch `feature/lesson-rename`, unito
+  in `master`, caricato su `origin` e installato in `~/.local`): pulsante
+  "Rinomina" (e tasto F2) nella scheda "Personali" di Impara, per dare un
+  altro nome a un disegno dell'utente, scritto sulla sua scheda
+  (§5sexies, diario del 2026-11-25). Provato senza finestra, anche con
+  ASan, a 1600×1200 e con il binario installato; manca la prova a mano.
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -107,9 +114,10 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 
 | Branch | Commit | Contenuto |
 |--------|--------|-----------|
-| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` e il 2026-11-25 a `lessons-cat-fox` e a `feature/lesson-import` (tutti caricati su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
+| `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` e il 2026-11-25 a `lessons-cat-fox`, a `feature/lesson-import` e a `feature/lesson-rename` (tutti caricati su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
 | `lessons-hard-ten` | come `master`, solo locale | dieci lezioni difficili nuove in `lessons/hard`, il loro script (`devtools/content/lessonkit/`), documentazione (27 lezioni) e file di progetto; già unito in `master` (2026-11-24) |
 | `lessons-cat-fox` | come `master`, solo locale | gatto e volpe con gli amici (quattro lezioni difficili), livello Difficile da 7 a 100 passi, documentazione (31 lezioni) e file di progetto; già unito in `master` (2026-11-25) |
+| `feature/lesson-rename` | come `master`, solo locale | pulsante "Rinomina" di Impara (`lesson_rename()`, scrittura del nome sulla scheda), icona, etichette di Impara un po' più strette, testi in italiano, comando `type` di `headless.c`, documentazione e file di progetto; già unito in `master` (2026-11-25) |
 | `feature/lesson-import` | come `master`, solo locale | pulsante "Aggiungi" di Impara (`lessons_in_folder()`, `lesson_import()`), icona, testi in italiano, documentazione e file di progetto; già unito in `master` (2026-11-25) |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
@@ -1094,6 +1102,34 @@ un sintetizzatore vocale.
   nuovo selezionato, e Tux lo dice. Esc e "Indietro" tornano alle lezioni.
   Un'immagine illeggibile ha una miniatura vuota (1×1 trasparente), così
   non si rilegge a ogni ridisegno.
+- **Rinominare** (2026-11-25, branch `feature/lesson-rename`): pulsante
+  "Rinomina" (`img_learn_rename`, icona `ui/learn_rename`), solo nella
+  scheda "Personali" (`learn_rename_shown()`), accanto ad "Aggiungi";
+  anche il tasto F2. Il nome si scrive sulla scheda selezionata
+  (`learn_edit`, `learn_draw_edit()`): una casella al posto del titolo,
+  un po' più in alto per non coprire la cornice, col vecchio nome tutto
+  selezionato (il primo tasto lo sostituisce; Backspace e Canc lo
+  cancellano; frecce, Inizio e Fine tolgono la selezione), cursore in
+  fondo che lampeggia (ridisegnata solo la casella), al più 60 caratteri
+  (`LEARN_NAME_MAX`), senza spazio o "#" all'inizio; se non ci sta se ne
+  vede la fine. Caratteri da `keysym.unicode` (SDL 1.2: 16 bit, al più 3
+  byte UTF-8). Invio, un clic ovunque o di nuovo "Rinomina" salvano (il
+  clic non fa altro); Esc lascia com'era; un nome vuoto o uguale non
+  cambia niente. `lesson_rename()` scrive in `NOME.txt` (creato se
+  manca, solo se manca davvero: ENOENT) la riga del titolo mostrata,
+  scelta come `pick_text()` (ora `pick_line()` in comune): la traduzione
+  della lingua dell'interfaccia o quella inglese; il resto del file
+  resta identico byte per byte (commenti, passi, BOM, CRLF); scrive su
+  `NOME.txt.tmp` e poi `rename()`. Poi le lezioni si rileggono (l'ordine
+  cambia col titolo), con quella selezionata, e Tux dice il nuovo nome.
+  I file non cambiano nome. Le etichette dei pulsanti di Impara (Inizia,
+  Precedente, Ripeti, Voce, Aggiungi, Rinomina) sono ora strette
+  `button_w - SCALED(4)` (`do_render_learn_label()`): "Aggiungi" e
+  "Rinomina" si toccavano.
+- **Insidia delle prove**: con `LANGUAGE=` (impostata ma vuota)
+  `i18n.c` non ha lingue desiderate e le lezioni ricadono sull'inglese,
+  mentre l'interfaccia (gettext, da `LANG`) è in italiano. Nelle prove
+  senza finestra usare `LANGUAGE=it`.
 - **Build misto** (2026-11-25): per le prove `tuxpaint.o`, `lessons.o` e
   `i18n.o` erano stati compilati con il prefisso di prova
   (`~/.cache/tuxpaint-learn-prefix`, dove il catalogo `it` e l'icona
@@ -1131,8 +1167,11 @@ un sintetizzatore vocale.
 0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24 e dal
    2026-11-25, installate in `~/.local`): seguirne almeno una su carta.
 0ter. **Pulsante "Aggiungi"** (in `master` dal 2026-11-25, installato in
-   `~/.local`): provarlo a mano in finestra (anche a schermo intero e a
-   1600×1200).
+   `~/.local`): provato a mano in finestra dall'utente, funziona; restano
+   schermo intero e 1600×1200.
+0quater. **Pulsante "Rinomina"** (in `master` dal 2026-11-25, installato
+   in `~/.local`): provarlo a mano in finestra (anche con una tastiera
+   con accenti).
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2426,3 +2465,45 @@ Stato alla chiusura: `master` uguale a `feature/lesson-import` e in pari
 con `origin/master`. Restano la prova a mano in finestra e l'idea, nel
 TODO, di togliere un disegno da "Personali" dall'interno.
 
+### 2026-11-25 — Impara: rinominare un disegno dell'utente
+
+Prova a mano dell'utente del pulsante "Aggiungi" in finestra: funziona.
+Richiesta dell'utente: poter cambiare nome a un disegno. Scelte fatte
+senza chiedere (dette all'utente): solo i disegni di "Personali" (quelli
+di Tux Paint no); cambia il titolo (in `NOME.txt`), non i nomi dei file;
+si scrive sulla scheda, Invio o un clic salvano, Esc annulla.
+
+- Fatto sul branch `feature/lesson-rename` (da `master`), **non
+  committato**: `lessons.c/.h` (`pick_line()`, `read_file()`,
+  `title_lines()`, `lesson_rename()`), `tuxpaint.c` (§5sexies,
+  "Rinominare"), icona `ui/learn_rename`, 3 testi nuovi tradotti in
+  `it.po` (`POTFILES.in` rimesso com'era dopo `update-po.sh`: l'ordine
+  di `rain.c`/`rainbow.c` dipende dalla locale), manuale inglese e
+  italiano (anche [F2] nell'elenco dei tasti), `lessons/README.txt`;
+  `devtools/ui-test/headless.c`: comando `type TESTO` (caratteri con il
+  loro Unicode; coda di eventi portata a 512).
+- Difetto trovato scrivendo le prove e corretto prima: un `NOME.txt`
+  illeggibile (permessi 000) sembrava mancante e sarebbe stato
+  sostituito dal solo titolo; ora si crea solo se `fopen()` dà ENOENT.
+- Prove: programma di prova di `lesson_rename()` con ASan e UBSan
+  (immagine senza `.txt`; BOM e CRLF con commento, riga `it`, poi `fr`;
+  senza riga `it` → riga inglese; solo commenti senza a capo finale;
+  lezione con passi → cambia solo la riga `it`; titoli non validi;
+  `.txt` illeggibile; cartella in sola lettura; nessun `.tmp` lasciato):
+  tutto come atteso. Prova senza finestra a 800×600 con il binario ASan
+  (Personali, Rinomina, scrittura con "è" e Backspace, Invio, F2 + Esc,
+  aggiunta in fondo + clic altrove, F2 + Invio senza cambiare, lezione
+  con passi salvata col pulsante, nome troppo lungo, nessun pulsante in
+  Facile) e a 1600×1200: file giusti, nessun errore, perdite solo delle
+  librerie. Corretti dopo la prima prova: etichette "Aggiungi" e
+  "Rinomina" attaccate, casella sopra la cornice della scheda.
+- Non provato: in finestra vera, con un metodo di input (IME).
+- Su richiesta dell'utente: commit sul branch (`17031ea` funzione,
+  `f6a9184` `headless.c`, `25675e7` documentazione, poi i file di
+  progetto), installazione in `~/.local` con `sysroot.sh install`
+  (avvisi solo quelli noti), prova senza finestra del binario installato
+  (stesso giro, stessi file, stessi risultati), unione in `master`
+  (avanzamento rapido) e push.
+
+Stato alla chiusura: `master` uguale a `feature/lesson-rename` e in pari
+con `origin/master`. Resta la prova a mano in finestra.

@@ -486,3 +486,11 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   installazione in `~/.local` — avanzamento rapido e push, su richiesta
   dell'utente; ricompilato da capo, binario installato provato senza
   finestra.
+- [x] 2026-11-25 — Impara: pulsante "Rinomina" (branch
+  `feature/lesson-rename`) — nella scheda "Personali",
+  anche con F2: il nome si scrive sulla scheda e va in `NOME.txt` (la
+  riga del titolo mostrata); provato con un programma di prova (ASan,
+  UBSan) e senza finestra, anche con ASan e a 1600×1200.
+- [x] 2026-11-25 — Unione in `master` di `feature/lesson-rename` e
+  installazione in `~/.local` — avanzamento rapido e push, su richiesta
+  dell'utente; binario installato provato senza finestra.

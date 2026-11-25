@@ -135,7 +135,10 @@ Fatto, provato senza finestra e rivisto (vedi [ASIS.md](ASIS.md) e
 - [ ] [P3] Testi di lezioni e interfaccia di Impara anche in `ca`, `de`,
   `es`, `fr` (oggi ricadono sull'inglese).
 - [ ] [P2] Pulsante "Aggiungi" di Impara (in `master` e installato dal
-  2026-11-25): prova a mano in finestra, a schermo intero e a 1600×1200.
+  2026-11-25): provato a mano in finestra dall'utente, funziona; restano
+  schermo intero e 1600×1200.
+- [ ] [P2] Pulsante "Rinomina" di Impara (in `master` e installato dal
+  2026-11-25): prova a mano in finestra.
 - [ ] [P3] Togliere un disegno da "Personali" dall'interno di Impara (oggi
   si aggiunge con "Aggiungi", ma si toglie solo dalla cartella
   `~/.tuxpaint/lessons/custom/`).
