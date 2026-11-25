@@ -386,8 +386,8 @@ Available Tools
 
                  You can also use the keyboard: [1], [2] and [3] pick a
                  level, the arrow keys (or [F11], [F12], [F8] and [F7]) move
-                 between the lessons, [Enter] starts the selected lesson, and
-                 [Escape] goes back.
+                 between the lessons, [Enter] starts the selected lesson,
+                 [F2] renames it (in "Mine"), and [Escape] goes back.
 
                  The lesson is shown on a sheet of paper drawn on the screen,
                  with its title at the top left and, at the top right, dots
@@ -476,6 +476,14 @@ Available Tools
                               steps whose groups aren't in the SVG, are not
                               added. Nothing is replaced: if the name is
                               taken, the copy gets another ("cat-2").
+
+                              In the "Mine" tab, the "Rename" button (or the
+                              [F2] key) gives the chosen picture another
+                              name: type it on its card and press [Enter]
+                              ([Escape] leaves it as it was; a click
+                              elsewhere keeps what was typed). The name goes in its
+                              "NAME.txt" file (made if missing), in place of
+                              the title shown; the files keep their names.
 
                       The Voice
 

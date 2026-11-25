@@ -30,6 +30,9 @@ place for credits. EPS files aren't read: convert them to SVG first.
 The Learn dialog's "Add" button copies a picture there, with the NAME.txt
 next to it, from the user's Downloads, Pictures or Desktop folder, after
 checking that it can be shown (and under another name if its name is taken).
+Its "Rename" button (in "Mine") writes a new title in NAME.txt (made if
+missing): in the title's line shown, the translation for the interface's
+language or the English one; the rest of the file stays as it is.
 
 
 A lesson is two files with the same name

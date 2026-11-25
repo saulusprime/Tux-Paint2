@@ -407,8 +407,8 @@ Gli strumenti
 
           Si può usare anche la tastiera: [1], [2] e [3] scelgono il
           livello, le frecce (o [F11], [F12], [F8] e [F7]) passano da una
-          lezione all'altra, [Invio] inizia la lezione scelta ed [Esc]
-          torna indietro.
+          lezione all'altra, [Invio] inizia la lezione scelta, [F2] la
+          rinomina (in "Personali") ed [Esc] torna indietro.
 
           La lezione compare su un foglio di carta disegnato sullo
           schermo, con il titolo in alto a sinistra e, in alto a destra,
@@ -492,6 +492,13 @@ Gli strumenti
                 cui gruppi non sono nell'SVG, non vengono aggiunti.
                 Non si sostituisce niente: se il nome è già usato, la
                 copia ne prende un altro ("gatto-2").
+
+                Nella scheda "Personali" il pulsante "Rinomina" (o il
+                tasto [F2]) dà un altro nome all'immagine scelta: lo si
+                scrive sulla sua scheda e si preme [Invio] (con [Esc]
+                resta com'era; un clic altrove tiene quello scritto). Il nome
+                va nel suo file "NOME.txt" (creato se manca), al posto
+                del titolo mostrato; i file restano con il loro nome.
 
         La voce
                 Le istruzioni vengono lette ad alta voce da eSpeak NG,
