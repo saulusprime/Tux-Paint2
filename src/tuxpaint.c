@@ -1460,7 +1460,7 @@ static SDL_Surface *img_black, *img_grey;
 static SDL_Surface *img_yes, *img_no;
 static SDL_Surface *img_sfx, *img_speak;
 static SDL_Surface *img_learn_prev, *img_learn_next, *img_learn_voice, *img_learn_mute;
-static SDL_Surface *img_learn_add;
+static SDL_Surface *img_learn_add, *img_learn_rename;
 static SDL_Surface *img_open, *img_erase, *img_back, *img_trash;
 static SDL_Surface *img_slideshow, *img_play, *img_select_digits;
 static SDL_Surface *img_printer, *img_printer_wait;
@@ -1766,7 +1766,8 @@ static SDL_Surface *img_shapes_small[NUM_SHAPES];
 static SDL_Surface *img_openlabels_open, *img_openlabels_erase,
   *img_openlabels_slideshow, *img_openlabels_back, *img_openlabels_play,
   *img_openlabels_next, *img_openlabels_start, *img_openlabels_previous,
-  *img_openlabels_repeat, *img_openlabels_voice, *img_openlabels_add;
+  *img_openlabels_repeat, *img_openlabels_voice, *img_openlabels_add,
+  *img_openlabels_rename;
 
 static SDL_Surface *img_tux[NUM_TIP_TUX];
 
@@ -2036,6 +2037,7 @@ static char *uppercase(const char *restrict const str);
 static wchar_t *uppercase_w(const wchar_t *restrict const str);
 static char *textdir(const char *const str);
 static SDL_Surface *do_render_button_label(const char *const label);
+static SDL_Surface *do_render_learn_label(const char *const label);
 static SDL_Surface *do_render_tool_label(const char *const label);
 static SDL_Surface *make_small_icon(SDL_Surface * icon, SDL_Surface * label, int room);
 static void create_button_labels(void);
@@ -8238,7 +8240,8 @@ static SDL_Surface *render_label_text(TuxPaint_Font * font, const char *const st
 }
 
 /* Render a button label using the appropriate string/font: */
-static SDL_Surface *do_render_button_label(const char *const label)
+/* A button's label, squeezed to max_w at most */
+static SDL_Surface *render_button_label_in(const char *const label, int max_w)
 {
   SDL_Surface *tmp_surf, *surf;
   TuxPaint_Font *myfont = small_font;
@@ -8246,10 +8249,23 @@ static SDL_Surface *do_render_button_label(const char *const label)
   if (need_own_font && strcmp(gettext(label), label))
     myfont = locale_font;
   tmp_surf = render_label_text(myfont, gettext(label));
-  surf = thumbnail(tmp_surf, min(button_w, tmp_surf->w), min(SCALED(18 + button_label_y_nudge), tmp_surf->h), 0);
+  surf = thumbnail(tmp_surf, min(max_w, tmp_surf->w), min(SCALED(18 + button_label_y_nudge), tmp_surf->h), 0);
   SDL_FreeSurface(tmp_surf);
 
   return surf;
+}
+
+static SDL_Surface *do_render_button_label(const char *const label)
+{
+  return render_button_label_in(label, button_w);
+}
+
+/* A label of the Learn dialog's buttons, which sit side by side: a little
+   narrower than the button, so that long ones (e.g. "Aggiungi" and
+   "Rinomina") don't run into each other */
+static SDL_Surface *do_render_learn_label(const char *const label)
+{
+  return render_button_label_in(label, max(button_w - SCALED(4), 1));
 }
 
 /* Put the dark text of a label's line into the label's surface (made with
@@ -8426,20 +8442,24 @@ static void create_button_labels(void)
   img_openlabels_play = do_render_button_label(gettext_noop("Play"));
 
   /* Learn dialog: 'Start' button, to begin the chosen lesson */
-  img_openlabels_start = do_render_button_label(gettext_noop("Start"));
+  img_openlabels_start = do_render_learn_label(gettext_noop("Start"));
 
   /* Learn dialog: 'Previous' button, to go back to the step before */
-  img_openlabels_previous = do_render_button_label(gettext_noop("Previous"));
+  img_openlabels_previous = do_render_learn_label(gettext_noop("Previous"));
 
   /* Learn dialog: 'Repeat' button, to hear the step's instructions again */
-  img_openlabels_repeat = do_render_button_label(gettext_noop("Repeat"));
+  img_openlabels_repeat = do_render_learn_label(gettext_noop("Repeat"));
 
   /* Learn dialog: 'Voice' button, to read the instructions aloud or not */
-  img_openlabels_voice = do_render_button_label(gettext_noop("Voice"));
+  img_openlabels_voice = do_render_learn_label(gettext_noop("Voice"));
 
   /* Learn dialog: 'Add' button, to add a picture of the user's (and its
      steps, if it has some) to the lessons */
-  img_openlabels_add = do_render_button_label(gettext_noop("Add"));
+  img_openlabels_add = do_render_learn_label(gettext_noop("Add"));
+
+  /* Learn dialog: 'Rename' button, to give a picture of the user's another
+     name */
+  img_openlabels_rename = do_render_learn_label(gettext_noop("Rename"));
 }
 
 
@@ -20998,8 +21018,16 @@ cleanup_and_return:
 /* Learn dialog: a picture can't be added */
 #define TIP_LEARN_ADD_BROKEN gettext_noop("Sorry! This one can’t be added: its picture can’t be read, or its steps don’t match it.")
 
-/* Learn dialog: a picture couldn't be copied to the user's folder */
+/* Learn dialog: a picture couldn't be copied to the user's folder, or its
+   new name couldn't be saved */
 #define TIP_LEARN_ADD_CANT_SAVE gettext_noop("Sorry! It couldn’t be saved.")
+
+/* Learn dialog: giving a picture of the user's another name (typed on its
+   card) */
+#define TIP_LEARN_RENAME gettext_noop("Type the new name, then press Enter. Escape leaves it as it was.")
+
+/* Learn dialog: a picture of the user's has a new name; %s is that name */
+#define TIP_LEARN_RENAMED gettext_noop("Done! Now it’s called “%s”.")
 
 static const char *const learn_level_names[NUM_LESSON_LEVELS] = {
   /* Learn dialog: the tab with the easiest lessons */
@@ -21035,6 +21063,19 @@ static int learn_adding;
 static int learn_add_num;
 static char *learn_add_paths[LEARN_ADD_FOLDERS];
 static const char *learn_add_names[LEARN_ADD_FOLDERS];	/* (in learn_add_paths) */
+
+/* Renaming a picture of the user's (in "Mine"): the name typed on its
+   card, in UTF-8 */
+#define LEARN_NAME_MAX 60	/* (characters) */
+typedef struct learn_edit
+{
+  int on;
+  char text[LEARN_NAME_MAX * 3 + 1];	/* (SDL 1.2 gives 16-bit characters: 3 bytes at most) */
+  int all;			/* all selected: the first key replaces it */
+  int changed;
+  int cursor;			/* shown (it blinks) */
+  Uint32 blink;			/* (when it last did) */
+} learn_edit;
 
 /* Where the selector's parts go (they follow the screen's size) */
 typedef struct learn_layout
@@ -21197,19 +21238,29 @@ static const char *learn_tab_name(int i)
 /* The lessons to choose from (and learn_num_tabs): Tux Paint's, then the
    user's own; or, when adding, the pictures in the user's folders (each
    one's "level" is the tab of its folder) */
+/* The languages to read the lessons in, best first (e.g. "it_IT", "it");
+   how many */
+static int learn_langs(const char **langs, int max)
+{
+  int i, num = 0;
+
+  for (i = 0; i < num_wished_langs && num < max - 1; i++)
+    if (wished_langs[i].lang_prefix != NULL)
+      langs[num++] = wished_langs[i].lang_prefix;
+  if (num == 0)
+    langs[num++] = lang_prefix;
+
+  return num;
+}
+
 static lesson **learn_load(int *num)
 {
   const char *dirs[2], *langs[256];
   char *personal;
   lesson **lessons = NULL, **more, **bigger;
-  int num_langs = 0, i, k, n;
+  int num_langs, i, k, n;
 
-  for (i = 0; i < num_wished_langs && num_langs < 255; i++)
-    if (wished_langs[i].lang_prefix != NULL)
-      langs[num_langs++] = wished_langs[i].lang_prefix;
-  if (num_langs == 0)
-    langs[num_langs++] = lang_prefix;
-
+  num_langs = learn_langs(langs, 256);
   *num = 0;
 
   if (learn_adding)
@@ -21378,11 +21429,219 @@ static void learn_draw_text(const char *text, SDL_Rect * r)
   SDL_FreeSurface(s);
 }
 
+/* Whether there is a "Rename" button: for the user's own, in "Mine" */
+static int learn_rename_shown(void)
+{
+  return !learn_adding && learn_level == LESSON_CUSTOM;
+}
+
+/* Where a card's title goes (k: the card's place in the grid) */
+static void learn_title_rect(const learn_layout * lay, int k, SDL_Rect * r)
+{
+  r->x = lay->grid.x + (k % LEARN_COLS) * lay->card_w + SCALED(8);
+  r->y = lay->grid.y + (k / LEARN_COLS) * lay->card_h + SCALED(10) + lay->thumb_h;
+  r->w = lay->card_w - SCALED(16);
+  r->h = lay->card_h - SCALED(14) - lay->thumb_h;
+}
+
+/* Start typing a new name: the old one, all selected (cut, if too long,
+   where a character starts) */
+static void learn_edit_start(learn_edit * e, const char *title)
+{
+  size_t len = 0, n;
+  int chars = 0;
+
+  while (title[len] != '\0')
+  {
+    n = 1;
+    while ((title[len + n] & 0xc0) == 0x80)
+      n++;
+    if (chars >= LEARN_NAME_MAX || len + n >= sizeof(e->text))
+      break;
+    len += n;
+    chars++;
+  }
+  memcpy(e->text, title, len);
+  e->text[len] = '\0';
+
+  e->on = 1;
+  e->all = 1;
+  e->changed = 0;
+  e->cursor = 1;
+  e->blink = SDL_GetTicks();
+}
+
+/* A key pressed while typing a name: 1 if it is done (Enter), -1 if it
+   stays as it was (Escape), else 0. The cursor stays at the end. */
+static int learn_edit_key(learn_edit * e, const SDL_keysym * ks)
+{
+  Uint16 u = ks->unicode;
+  size_t len = strlen(e->text);
+  char buf[3];
+  int n, chars;
+
+  e->cursor = 1;
+  e->blink = SDL_GetTicks();
+
+  switch (ks->sym)
+  {
+  case SDLK_RETURN:
+  case SDLK_KP_ENTER:
+    return 1;
+  case SDLK_ESCAPE:
+    return -1;
+  case SDLK_BACKSPACE:
+  case SDLK_DELETE:
+    if (e->all)
+      len = 0;
+    else if (ks->sym == SDLK_BACKSPACE && len > 0)
+    {
+      /* (The last character, not just its last byte) */
+      len--;
+      while (len > 0 && (e->text[len] & 0xc0) == 0x80)
+	len--;
+    }
+    e->text[len] = '\0';
+    e->all = 0;
+    e->changed = 1;
+    return 0;
+  case SDLK_LEFT:
+  case SDLK_RIGHT:
+  case SDLK_HOME:
+  case SDLK_END:
+    e->all = 0;
+    return 0;
+  default:
+    break;
+  }
+
+  /* A character (not a control one, nor half of one) */
+  if (u < 32 || u == 127 || (u >= 0xd800 && u <= 0xdfff))
+    return 0;
+
+  /* (A name doesn't start with a space, nor with "#": that would be a
+     comment in NAME.txt) */
+  if ((e->all || len == 0) && (u == ' ' || u == '#'))
+    return 0;
+
+  if (e->all)
+  {
+    len = 0;
+    e->text[0] = '\0';
+    e->all = 0;
+  }
+
+  chars = 0;
+  for (n = 0; e->text[n] != '\0'; n++)
+    if ((e->text[n] & 0xc0) != 0x80)
+      chars++;
+  if (chars >= LEARN_NAME_MAX)
+    return 0;
+
+  if (u < 0x80)
+  {
+    buf[0] = (char) u;
+    n = 1;
+  }
+  else if (u < 0x800)
+  {
+    buf[0] = (char) (0xc0 | (u >> 6));
+    buf[1] = (char) (0x80 | (u & 0x3f));
+    n = 2;
+  }
+  else
+  {
+    buf[0] = (char) (0xe0 | (u >> 12));
+    buf[1] = (char) (0x80 | ((u >> 6) & 0x3f));
+    buf[2] = (char) (0x80 | (u & 0x3f));
+    n = 3;
+  }
+  if (len + n >= sizeof(e->text))
+    return 0;
+
+  memcpy(e->text + len, buf, n);
+  e->text[len + n] = '\0';
+  e->changed = 1;
+  return 0;
+}
+
+/* The name being typed, in a box over the card's title: selected, or
+   with the cursor after it (only its end, if it doesn't fit). Shown at
+   once if `show` (else at the next SDL_Flip()). */
+static void learn_draw_edit(const learn_edit * e, const SDL_Rect * r, int show)
+{
+  SDL_Surface *s = NULL;
+  SDL_Rect outer, box, src, dest;
+  int line = max(SCALED(2), 1), pad = SCALED(6), avail, text_w = 0, cut = 0, x0, h;
+
+  /* (A little higher than the title: clear of the card's frame below) */
+  outer = *r;
+  outer.y -= SCALED(4);
+  box = outer;
+  SDL_FillRect(screen, &box, SDL_MapRGB(screen->format, 58, 134, 255));
+  box.x += line;
+  box.y += line;
+  box.w -= line * 2;
+  box.h -= line * 2;
+  SDL_FillRect(screen, &box, SDL_MapRGB(screen->format, 255, 255, 255));
+
+  if (e->text[0] != '\0')
+    s = learn_render_text(e->text);
+
+  avail = max(box.w - pad * 2 - line, 1);
+  if (s != NULL)
+  {
+    text_w = s->w;
+    if (text_w > avail)
+    {
+      cut = text_w - avail;
+      text_w = avail;
+    }
+  }
+  x0 = (cut > 0 ? box.x + pad : box.x + (box.w - text_w - line) / 2);
+
+  if (s != NULL)
+  {
+    h = min(s->h, (int) box.h);
+    if (e->all)
+    {
+      dest.x = x0;
+      dest.y = box.y;
+      dest.w = text_w;
+      dest.h = box.h;
+      SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 190, 215, 255));
+    }
+    src.x = cut;
+    src.y = (s->h - h) / 2;
+    src.w = text_w;
+    src.h = h;
+    dest.x = x0;
+    dest.y = box.y + (box.h - h) / 2;
+    SDL_BlitSurface(s, &src, screen, &dest);
+    SDL_FreeSurface(s);
+  }
+
+  if (e->cursor && !e->all)
+  {
+    h = min(TuxPaint_Font_FontHeight(medium_font), (int) box.h);
+    dest.x = x0 + text_w;
+    dest.y = box.y + (box.h - h) / 2;
+    dest.w = line;
+    dest.h = h;
+    SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 0, 0, 0));
+  }
+
+  if (show)
+    SDL_UpdateRect(screen, outer.x, outer.y, outer.w, outer.h);
+}
+
 
 /* Draw the selector: level tabs, lessons of the level, buttons. When
-   adding, folder tabs and the pictures in the folder. */
+   adding, folder tabs and the pictures in the folder. While renaming, the
+   name typed instead of that lesson's title. */
 static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int which,
-			       int scroll, SDL_Surface ** thumbs, learn_layout * lay)
+			       int scroll, SDL_Surface ** thumbs, const learn_edit * edit,
+			       learn_layout * lay)
 {
   SDL_Rect dest, r;
   SDL_Surface *s, *tmp;
@@ -21458,14 +21717,15 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
       SDL_BlitSurface(s, NULL, screen, &dest);
     }
 
-    r.x = x + SCALED(8);
-    r.y = y + SCALED(10) + lay->thumb_h;
-    r.w = lay->card_w - SCALED(16);
-    r.h = lay->card_h - SCALED(14) - lay->thumb_h;
-    learn_draw_text(l->title, &r);
+    learn_title_rect(lay, k, &r);
+    if (edit->on && n == which)
+      learn_draw_edit(edit, &r, 0);
+    else
+      learn_draw_text(l->title, &r);
   }
 
-  /* "Start" ("Add" when adding), "Voice", "Add", the arrows and "Back" */
+  /* "Start" ("Add" when adding), "Voice", "Add", "Rename" (in "Mine"),
+     the arrows and "Back" */
   if (learn_adding)
     learn_button(r_canvas.x, lay->buttons_y, img_learn_add, img_openlabels_add, count > 0);
   else if (count > 0)
@@ -21480,6 +21740,10 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
 
   if (!learn_adding)
     learn_button(r_canvas.x + button_w * 2, lay->buttons_y, img_learn_add, img_openlabels_add, 1);
+
+  if (learn_rename_shown())
+    learn_button(r_canvas.x + button_w * 3, lay->buttons_y, img_learn_rename, img_openlabels_rename,
+		 count > 0 ? (edit->on ? 2 : 1) : 0);
 
   if (count > LEARN_COLS * LEARN_ROWS)
   {
@@ -21750,14 +22014,18 @@ static int learn_play(lesson * l)
 
 /* The Learn dialog: choose a lesson (by level), then follow it; or add a
    picture of the user's (from their Downloads, Pictures or Desktop folder,
-   with its steps if it has some) to the "Mine" tab */
+   with its steps if it has some) to the "Mine" tab, or rename one there */
 static void do_learn(void)
 {
   lesson **lessons, *l;
   SDL_Surface **thumbs;
   SDL_Event event;
   SDLKey key;
+  SDL_Rect r;
   learn_layout lay;
+  learn_edit edit;
+  const char *langs[256];
+  int num_langs, rename_start = 0, rename_end = 0;
   int num_lessons, i, count = 0, which = -1, scroll = 0, done = 0;
   int *in_level = NULL, update = 1, reload_level = 1, start = 0, redraws, was_wiped;
   int thumb_w = -1, thumb_h = -1, n, k, x, y, pick, quit_wanted = 0;
@@ -21774,6 +22042,7 @@ static void do_learn(void)
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;
+  memset(&edit, 0, sizeof(edit));
 
   was_wiped = screen_wiped_for_dialog;
   screen_wiped_for_dialog = 1;
@@ -21841,15 +22110,40 @@ static void do_learn(void)
 
     if (update)
     {
-      learn_draw_chooser(lessons, in_level, count, which, scroll, thumbs, &lay);
+      learn_draw_chooser(lessons, in_level, count, which, scroll, thumbs, &edit, &lay);
       update = 0;
+    }
+
+    /* (The cursor of the name being typed blinks) */
+    if (edit.on && !edit.all && SDL_GetTicks() - edit.blink >= 500)
+    {
+      edit.cursor = !edit.cursor;
+      edit.blink = SDL_GetTicks();
+      learn_title_rect(&lay, which - scroll, &r);
+      learn_draw_edit(&edit, &r, 1);
     }
 
     while (!done && !start && poll_event_dialog(&event))
     {
       pick = -2;		/* (the lesson clicked, if any) */
 
-      if (event.type == SDL_QUIT)
+      /* Typing a name: the keys are for it; a click anywhere ends it (the
+         wheel does nothing) */
+      if (edit.on && event.type == SDL_KEYDOWN)
+      {
+	rename_end = learn_edit_key(&edit, &event.key.keysym);
+	if (rename_end == 0)
+	{
+	  learn_title_rect(&lay, which - scroll, &r);
+	  learn_draw_edit(&edit, &r, 1);
+	}
+      }
+      else if (edit.on && event.type == SDL_MOUSEBUTTONDOWN)
+      {
+	if (valid_click(event.button.button))
+	  rename_end = 1;
+      }
+      else if (event.type == SDL_QUIT)
       {
 	done = 1;
 	quit_wanted = 1;
@@ -21877,6 +22171,8 @@ static void do_learn(void)
 	}
 	else if ((key == SDLK_RETURN || key == SDLK_KP_ENTER) && which >= 0)
 	  start = 1;
+	else if (key == SDLK_F2 && learn_rename_shown() && which >= 0)
+	  rename_start = 1;
 	else if (key >= SDLK_1 && (int) key < SDLK_1 + learn_num_tabs && !keymouse)
 	{
 	  learn_level = key - SDLK_1;
@@ -21944,6 +22240,11 @@ static void do_learn(void)
 	  switch_to = 1;
 	  playsound(screen, 1, SND_CLICK, 1, x, SNDDIST_NEAR);
 	}
+	else if (learn_rename_shown() && which >= 0 &&
+		 learn_hit(x, y, r_canvas.x + button_w * 3, lay.buttons_y, button_w, button_h))
+	{
+	  rename_start = 1;
+	}
 	else if (learn_hit(x, y, WINDOW_WIDTH - button_w * 3, lay.buttons_y, button_w, button_h))
 	{
 	  if (learn_adding)
@@ -22001,6 +22302,8 @@ static void do_learn(void)
 	     learn_voice_usable()) ||
 	    (!learn_adding &&
 	     learn_hit(x, y, r_canvas.x + button_w * 2, lay.buttons_y, button_w, button_h)) ||
+	    (learn_rename_shown() && which >= 0 &&
+	     learn_hit(x, y, r_canvas.x + button_w * 3, lay.buttons_y, button_w, button_h)) ||
 	    learn_hit(x, y, WINDOW_WIDTH - button_w * 3, lay.buttons_y, button_w, button_h) ||
 	    (count > LEARN_COLS * LEARN_ROWS &&
 	     learn_hit(x, y, (WINDOW_WIDTH - img_scroll_up->w) / 2, lay.buttons_y,
@@ -22034,7 +22337,7 @@ static void do_learn(void)
 	update = 1;
       }
 
-      if (reload_level || switch_to >= 0)
+      if (reload_level || switch_to >= 0 || rename_start || rename_end)
 	break;
     }
 
@@ -22090,6 +22393,66 @@ static void do_learn(void)
       do_setcursor(cursor_arrow);
     }
     start = 0;
+
+    /* Renaming the lesson chosen: its name, to type on its card */
+    if (rename_start && which >= 0 && !edit.on)
+    {
+      speech_stop();
+      while (which < scroll)
+	scroll -= LEARN_COLS;
+      while (which >= scroll + LEARN_COLS * LEARN_ROWS)
+	scroll += LEARN_COLS;
+      learn_edit_start(&edit, lessons[in_level[which]]->title);
+      playsound(screen, 1, SND_CLICK, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+      learn_tux_says(TUX_DEFAULT, TIP_LEARN_RENAME, NULL, 1);
+      update = 1;
+    }
+    rename_start = 0;
+
+    /* The name typed: saved (then the lessons are read again, their order
+       may change, with that one selected), or left as it was */
+    if (rename_end != 0 && edit.on)
+    {
+      l = lessons[in_level[which]];
+      edit.on = 0;
+      n = strlen(edit.text);
+      while (n > 0 && edit.text[n - 1] == ' ')
+	edit.text[--n] = '\0';
+
+      if (rename_end > 0 && edit.changed && n > 0 && strcmp(edit.text, l->title) != 0)
+      {
+	speech_stop();
+	num_langs = learn_langs(langs, 256);
+	do_setcursor(cursor_watch);
+	result = lesson_rename(l, edit.text, langs, num_langs);
+	do_setcursor(cursor_arrow);
+
+	if (result)
+	{
+	  playsound(screen, 1, SND_HARP, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	  tip = TIP_LEARN_RENAMED;
+	  tip_tux = TUX_GREAT;
+	  free(tip_arg);
+	  tip_arg = strdup(edit.text);
+	  free(select_name);
+	  select_name = strdup(l->name);
+	  lessons_level = learn_level;
+	  switch_to = 0;
+	}
+	else
+	{
+	  playsound(screen, 1, SND_YOUCANNOT, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	  learn_tux_says(TUX_OOPS, TIP_LEARN_ADD_CANT_SAVE, NULL, 1);
+	}
+      }
+      else
+      {
+	playsound(screen, 1, SND_CLICK, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	learn_tux_says(TUX_BORED, TIP_LEARN_CHOOSE, NULL, 0);
+      }
+      update = 1;
+    }
+    rename_end = 0;
 
     /* To adding a picture (if there's a folder to take it from), or back
        to the lessons: the other list */
@@ -25417,6 +25780,7 @@ static void load_ui_images(void)
   img_learn_voice = loadimagerb(DATA_PREFIX "images/ui/learn_voice.png");
   img_learn_mute = loadimagerb(DATA_PREFIX "images/ui/learn_mute.png");
   img_learn_add = loadimagerb(DATA_PREFIX "images/ui/learn_add.png");
+  img_learn_rename = loadimagerb(DATA_PREFIX "images/ui/learn_rename.png");
 
   img_black = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
 				   img_btn_off->w, img_btn_off->h,
@@ -25729,12 +26093,14 @@ static void free_ui_images(void)
   free_surface(&img_openlabels_repeat);
   free_surface(&img_openlabels_voice);
   free_surface(&img_openlabels_add);
+  free_surface(&img_openlabels_rename);
 
   free_surface(&img_learn_prev);
   free_surface(&img_learn_next);
   free_surface(&img_learn_voice);
   free_surface(&img_learn_mute);
   free_surface(&img_learn_add);
+  free_surface(&img_learn_rename);
 
   free_surface(&img_yes);
   free_surface(&img_no);

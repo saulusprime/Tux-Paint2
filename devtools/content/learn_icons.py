@@ -12,6 +12,7 @@ Writes, as SVG and as the PNG at the design size that Tux Paint uses with
   data/images/ui/learn_voice   say it again / voice on (speaker, waves)
   data/images/ui/learn_mute    voice off (speaker, cross)
   data/images/ui/learn_add     add a picture of the user's (a picture, a plus)
+  data/images/ui/learn_rename  rename a picture of the user's (a name, a pencil)
 
 All 40x30, black with transparency like the other tool icons (Tux Paint
 turns them grey when the button is off). Needs Pillow, and librsvg and
@@ -57,6 +58,13 @@ ICONS = {
   <path d="M4.5,21.5 L9.5,14 L13,18.5 L15.5,16 L18.5,21.5 Z" {LIGHT} {LINE} stroke-width="1.3"/>
   <circle cx="16" cy="10.5" r="1.8" {LIGHT} {LINE} stroke-width="1.2"/>
   <path d="M31.5,8 V22 M24.5,15 H38.5" fill="none" {LINE} stroke-width="3.4"/>''',
+
+    "ui/learn_rename": f'''
+  <rect x="1.5" y="10.5" width="25" height="13" rx="2" fill="#000000" fill-opacity="0.12" {LINE} stroke-width="1.6"/>
+  <path d="M5.5,17 H14" fill="none" {LINE} stroke-width="3"/>
+  <path d="M18,13.5 V20.5 M16.5,13.5 H19.5 M16.5,20.5 H19.5" fill="none" {LINE} stroke-width="1.3"/>
+  <path d="M35.5,1.5 L38.5,4.5 L29,15.5 L26,12.5 Z" {LIGHT} {LINE} stroke-width="1.4"/>
+  <path d="M26,12.5 L29,15.5 L24,19 Z" fill="#000000" {LINE} stroke-width="1.2"/>''',
 }
 
 

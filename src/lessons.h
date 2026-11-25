@@ -114,6 +114,13 @@ enum
    gets the name used (to free), or NULL. */
 int lesson_import(const lesson * l, const char *dir, char **new_name);
 
+/* Give a picture or lesson of the user's (in "custom") a new title, in its
+   NAME.txt (made if missing): the line of the title shown (in the best of
+   langs, as lessons_find() picks it), or the English one; the rest of the
+   file stays as it is. The title is one line, not starting with "#", with
+   no spaces around it. 1 if done, 0 if not (the file is left as it was). */
+int lesson_rename(const lesson * l, const char *title, const char *const *langs, int num_langs);
+
 /* The finished picture, w x h at most, on white */
 SDL_Surface *lesson_thumbnail(const lesson * l, int w, int h);
 

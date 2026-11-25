@@ -28,6 +28,7 @@
 #include <string.h>
 #include <strings.h>
 #include <ctype.h>
+#include <errno.h>
 #include <math.h>
 
 #ifdef WIN32
@@ -214,25 +215,36 @@ static int translation_is(const char *line, const char *want, int loose)
   return n == want_n && strncasecmp(line, want, n) == 0;
 }
 
+/* Which of the lines (from line `from` on: English first, then the
+   translations) has the text in the best of the languages wanted: a
+   translation's, else `from` */
+static int pick_line(char *const *lines, int num, int from, const char *const *langs, int num_langs)
+{
+  int i, k, loose;
+
+  for (loose = 0; loose <= 1; loose++)
+    for (k = 0; k < num_langs; k++)
+      for (i = from + 1; i < num; i++)
+	if (translation_is(lines[i], langs[k], loose))
+	  return i;
+
+  return from;
+}
+
 /* The block's text (from line `from` on: English first, then the
    translations) in the best of the languages wanted */
 static int pick_text(const block * b, int from, const char *const *langs, int num_langs,
 		     char **text, char **lang)
 {
-  int best = -1, i, k, loose;
+  int best;
   size_t n;
 
   *text = *lang = NULL;
   if (b->num <= from)
     return 0;
 
-  for (loose = 0; loose <= 1 && best < 0; loose++)
-    for (k = 0; k < num_langs && best < 0; k++)
-      for (i = from + 1; i < b->num && best < 0; i++)
-	if (translation_is(b->lines[i], langs[k], loose))
-	  best = i;
-
-  if (best < 0)
+  best = pick_line(b->lines, b->num, from, langs, num_langs);
+  if (best == from)
   {
     *text = strdup(b->lines[from]);
     *lang = strdup("en");
@@ -850,6 +862,221 @@ int lesson_import(const lesson * l, const char *dir, char **new_name)
 
   *new_name = strdup(name);
   return LESSON_IMPORT_DONE;
+}
+
+
+/* --- Renaming a picture or lesson of the user's --- */
+
+/* A line of a file: where it starts and where its text ends (no spaces,
+   no newline) */
+typedef struct span
+{
+  size_t start, end;
+} span;
+
+/* The whole file, with a '\0' after it (*size without it); NULL if it
+   can't be read (*missing: because it isn't there) */
+static char *read_file(const char *fname, size_t * size, int *missing)
+{
+  FILE *fi;
+  char *data = NULL, *bigger;
+  size_t room = 0, n;
+  int ok;
+
+  *size = 0;
+  *missing = 0;
+  fi = fopen(fname, "rb");
+  if (fi == NULL)
+  {
+    *missing = (errno == ENOENT);
+    return NULL;
+  }
+
+  do
+  {
+    if (room - *size < 1024)
+    {
+      bigger = realloc(data, room + 16384);
+      if (bigger == NULL)
+      {
+	free(data);
+	fclose(fi);
+	return NULL;
+      }
+      data = bigger;
+      room += 16384;
+    }
+    n = fread(data + *size, 1, room - *size - 1, fi);
+    *size += n;
+  }
+  while (n > 0);
+
+  ok = !ferror(fi);
+  fclose(fi);
+  if (!ok)
+  {
+    free(data);
+    return NULL;
+  }
+
+  data[*size] = '\0';
+  return data;
+}
+
+/* The lines of the file's first block (the title, then its translations),
+   as read_blocks() finds them; how many (0 if none) */
+static int title_lines(const char *data, size_t size, span ** lines)
+{
+  size_t pos = 0, start, end, next;
+  span *bigger;
+  int num = 0;
+
+  *lines = NULL;
+  while (pos < size)
+  {
+    start = pos;
+    next = pos;
+    while (next < size && data[next] != '\n')
+      next++;
+    end = next;
+    if (next < size)
+      next++;
+    pos = next;
+
+    if (start == 0 && size >= 3 && memcmp(data, "\xef\xbb\xbf", 3) == 0)
+      start = 3;
+    while (end > start && isspace((unsigned char) data[end - 1]))
+      end--;
+
+    if (end > start && data[start] == '#')
+      continue;
+    if (end == start)
+    {
+      if (num > 0)
+	break;
+      continue;
+    }
+
+    bigger = realloc(*lines, sizeof(span) * (num + 1));
+    if (bigger == NULL)
+      break;
+    *lines = bigger;
+    (*lines)[num].start = start;
+    (*lines)[num].end = end;
+    num++;
+  }
+
+  return num;
+}
+
+int lesson_rename(const lesson * l, const char *title, const char *const *langs, int num_langs)
+{
+  char txt[1024], tmp[1040], **texts = NULL;
+  const char *slash, *eq, *gap = "";
+  char *data;
+  span *lines = NULL;
+  size_t size = 0, cut_from, cut_to, len;
+  int num, i, best, ok, missing;
+  FILE *fo;
+
+  if (l == NULL || l->svg_fname == NULL || title == NULL)
+    return 0;
+
+  /* One line, not a comment, no spaces around it */
+  len = strlen(title);
+  if (len == 0 || len > 1000 || title[0] == '#' || isspace((unsigned char) title[0]) ||
+      isspace((unsigned char) title[len - 1]) || strpbrk(title, "\r\n") != NULL)
+    return 0;
+
+  slash = strrchr(l->svg_fname, '/');
+  if (slash == NULL ||
+      snprintf(txt, sizeof(txt), "%.*s/%s.txt", (int) (slash - l->svg_fname),
+	       l->svg_fname, l->name) >= (int) sizeof(txt) ||
+      snprintf(tmp, sizeof(tmp), "%s.tmp", txt) >= (int) sizeof(tmp))
+    return 0;
+
+  /* (No NAME.txt yet: a picture's title is its file's name) */
+  data = read_file(txt, &size, &missing);
+  if (data == NULL)
+  {
+    if (!missing)
+      return 0;
+    data = calloc(1, 1);
+    if (data == NULL)
+      return 0;
+  }
+
+  num = title_lines(data, size, &lines);
+  if (num > 0)
+  {
+    /* The line shown (as pick_text() chose it), whose text changes */
+    texts = calloc(num, sizeof(char *));
+    for (i = 0; texts != NULL && i < num; i++)
+    {
+      texts[i] = malloc(lines[i].end - lines[i].start + 1);
+      if (texts[i] == NULL)
+	break;
+      memcpy(texts[i], data + lines[i].start, lines[i].end - lines[i].start);
+      texts[i][lines[i].end - lines[i].start] = '\0';
+    }
+    if (texts == NULL || i < num)
+    {
+      for (i = 0; texts != NULL && i < num; i++)
+	free(texts[i]);
+      free(texts);
+      free(lines);
+      free(data);
+      return 0;
+    }
+
+    best = pick_line(texts, num, 0, langs, num_langs);
+    cut_from = lines[best].start;
+    cut_to = lines[best].end;
+    if (best > 0)
+    {
+      /* ("it.utf8=Title": after the "=") */
+      eq = strchr(texts[best], '=');
+      cut_from += eq - texts[best] + 1;
+    }
+
+    for (i = 0; i < num; i++)
+      free(texts[i]);
+    free(texts);
+    free(lines);
+  }
+  else
+  {
+    /* No title yet: one, after the comments there may be */
+    cut_from = cut_to = size;
+    if (size > 0 && data[size - 1] != '\n')
+      gap = "\n";
+  }
+
+  fo = fopen(tmp, "wb");
+  ok = (fo != NULL);
+  if (ok)
+  {
+    if (fwrite(data, 1, cut_from, fo) != cut_from ||
+	fputs(gap, fo) == EOF || fputs(title, fo) == EOF ||
+	(num == 0 && fputs("\n", fo) == EOF) ||
+	fwrite(data + cut_to, 1, size - cut_to, fo) != size - cut_to)
+      ok = 0;
+    if (fclose(fo) != 0)
+      ok = 0;
+  }
+  free(data);
+
+#ifdef WIN32
+  /* (rename() doesn't replace a file there) */
+  if (ok)
+    remove(txt);
+#endif
+  if (ok && rename(tmp, txt) != 0)
+    ok = 0;
+  if (!ok)
+    remove(tmp);
+
+  return ok;
 }
 
 
