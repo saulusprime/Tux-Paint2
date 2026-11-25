@@ -467,3 +467,9 @@ Formato: `- [x] AAAA-MM-GG — Titolo — esito/note`
   lezioni non hanno problemi.
 - [x] 2026-11-24 — Unione in `master` di `lessons-hard-ten` — avanzamento
   rapido, su richiesta dell'utente; caricato su `origin`.
+- [x] 2026-11-25 — Gatto e volpe con gli amici nel repository (branch
+  `lessons-cat-fox`) — quattro lezioni difficili dalle immagini
+  dell'utente (10, 10, 22 e 20 passi); livello Difficile da 7 a 100
+  passi; libreria a 31 lezioni. I due polpi (pagina Etsy, solo uso
+  personale) restano fuori, in `~/.tuxpaint/lessons/custom/`. Non ancora
+  in `master`.

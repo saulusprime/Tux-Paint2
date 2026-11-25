@@ -52,7 +52,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
    italiano. Codice, commenti e messaggi di commit sono in inglese, come il
    resto del sorgente.
 
-## 1. Stato attuale (al 2026-11-24)
+## 1. Stato attuale (al 2026-11-25)
 
 - **Ultimo lavoro**: lo strumento **Impara** (lezioni per imparare a
   disegnare e colorare su carta, passo passo, con la voce), dal branch
@@ -68,6 +68,11 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   in `master`** il 2026-11-24 con avanzamento rapido, su richiesta
   dell'utente (§5sexies, diario del 2026-11-23 e del 2026-11-24), e
   caricato su `origin` lo stesso giorno.
+- **Poi** (2026-11-25, branch `lessons-cat-fox`, **non ancora unito in
+  `master`**): quattro lezioni difficili dalle immagini dell'utente
+  (gatto e volpe con gli amici, una breve e una lunga ciascuno); il
+  livello Difficile va ora da 7 a 100 passi; 31 lezioni (§5sexies,
+  diario del 2026-11-25).
 
 - **Progetto**: Tux Paint, programma di disegno per bambini (3+ anni), GPL v2.
 - **Versione del codice**: 0.9.22 (upstream del 5 agosto 2014),
@@ -96,6 +101,7 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
 |--------|--------|-----------|
 | `master` | ultimo commit | tutto, fino allo strumento Impara: avanzamento rapido del 2026-11-01 a `feature/tools`, poi, lo stesso giorno, a `feature/dialog-resize`; il 2026-11-23 a `feature/learn-to-draw`; il 2026-11-24 a `lessons-hard-ten` (caricato su `origin`). Il lavoro nuovo parte da qui, su un branch nuovo |
 | `lessons-hard-ten` | come `master`, solo locale | dieci lezioni difficili nuove in `lessons/hard`, il loro script (`devtools/content/lessonkit/`), documentazione (27 lezioni) e file di progetto; già unito in `master` (2026-11-24) |
+| `lessons-cat-fox` | ultimo commit, solo locale | gatto e volpe con gli amici (quattro lezioni difficili), livello Difficile da 7 a 100 passi, documentazione (31 lezioni) e file di progetto; da unire in `master` se l'utente lo chiede |
 | `feature/learn-to-draw` | come `master` | strumento Impara con lezioni e voce; correzione per GCC 15 (C23); prove senza finestra; build senza pacchetti `-dev`; documentazione (§5sexies); già unito in `master` (2026-11-23) |
 | `docs/authors` | come `master` | Paolo Pierno tra i contributori (`docs/AUTHORS.txt`, intestazione di `crossstitch.c`); già unito in `master` |
 | `feature/dialog-resize` | `fc88915` | i dialoghi si rifanno alla nuova dimensione (`6bfe48f`, `41af788`) e file di progetto; già unito in `master` |
@@ -128,18 +134,13 @@ Per chi riparte, anche dopo una pausa o una compressione del contesto:
   9 librerie che il sistema non ha sono copiate in
   `~/.local/lib/tuxpaint/sysroot-libs` (RPATH). Senza la raccolta
   completa dei timbri. Nella cartella personale dell'utente
-  (`~/.tuxpaint/lessons/`, fuori dal repository, al 2026-11-23):
-  - `hard/`: le dieci lezioni di `lessons-hard-ten` (stesso livello e
-    stesso nome di quelle del repository, quindi vincono loro: vanno tolte
-    da lì se si cambiano quelle del repository);
-  - `custom/`: tre lezioni complete fatte dalle immagini dell'utente
-    ("Gatto e amici", 22 passi; "Polpo al mare", 25; "Volpe e amici", 20;
-    file con il nome dell'immagine) e dodici immagini insegnate con la
-    griglia, tra cui dieci pagine scaricate dall'utente da crayola.com
-    (solo uso personale), con un `.txt` di solo titolo "… (Crayola)";
-  - accanto, `~/.tuxpaint/lessons-riserva-2026-11-23/`: tre vecchie
-    versioni semplificate di gatto, volpe e polpo, che Tux Paint non
-    legge.
+  (`~/.tuxpaint/lessons/`, fuori dal repository), al 2026-11-25, c'è solo
+  `custom/` con le due lezioni del polpo ("Polpo al mare", 10 passi, e
+  "Polpo in spiaggia", 25), ricavate da una pagina Etsy (solo uso
+  personale): **non vanno nel repository**. Il resto (le copie delle
+  dieci lezioni difficili, le pagine Crayola, le altre immagini, la
+  cartella di riserva) l'utente l'ha tolto il 2026-11-25; gatto e volpe
+  sono passati nel repository.
 - **Modifiche rispetto a 0.9.22**:
 
 | Area | Commit | Cosa |
@@ -974,7 +975,7 @@ un sintetizzatore vocale.
   (`num_lessons_found`, contate all'avvio).
 - **Lezioni** (`lessons/`, installate in `DATA_PREFIX/lessons`, e quelle
   dell'utente in `~/.tuxpaint/lessons`, che vincono a parità di livello e
-  nome): cartelle `easy/` (3-5 passi), `medium/` (5-7), `hard/` (7-10);
+  nome): cartelle `easy/` (3-5 passi), `medium/` (5-7), `hard/` (7-100, dal 2026-11-25; prima 7-10);
   un SVG 640×480 colorato con un gruppo di primo livello per passo, e un
   `.txt` con titolo e passi (`draw ID`, `guide ID`, `color ID`, `erase`),
   inglese più `LANG.utf8=`. Regole complete in `lessons/README.txt`;
@@ -1000,7 +1001,14 @@ un sintetizzatore vocale.
   tutte), non a mano nell'SVG. `check_areas.py`, nella stessa cartella,
   controlla i colori di qualunque lezione (vuoti bianchi dentro le linee,
   due colori senza una linea in mezzo): al 2026-11-24 le 27 lezioni non
-  hanno problemi.
+  hanno problemi. Dal 2026-11-25 (branch `lessons-cat-fox`) le difficili
+  sono 19 e le lezioni 31: gatto e volpe con gli amici, ciascuno in una
+  versione breve (10 passi: `cat-friends`, `fox-friends`) e in una lunga
+  (`kitty-and-friends`, 22 passi; `little-fox-and-friends`, 20), dalle
+  immagini dell'utente fatte con Qwen, che l'utente ha voluto pubblicare.
+  Le lunghe hanno le linee ricalcate dalle immagini; gli script che le
+  hanno fatte erano nella cartella temporanea della sessione e non ci
+  sono più: queste quattro si correggono a mano.
 - **Disegno** (`src/lessons.c`, con librsvg ≥ 2.46 e cairo; senza, Impara
   non c'è): `rsvg_handle_render_layer()` disegna ogni gruppo da solo una
   volta, alla misura dell'area; ogni fotogramma si compone con cairo:
@@ -1078,6 +1086,8 @@ un sintetizzatore vocale.
 
 0bis. **Lezioni difficili nuove** (in `master` dal 2026-11-24): seguirne
    almeno una su carta.
+0ter. **Gatto e volpe** (branch `lessons-cat-fox`): unirlo in `master` e
+   fare il push, se l'utente lo chiede.
 
 Le prove a mano 0, 1 e 2 riguardano lavoro già in `master`, unito su
 richiesta dell'utente prima di farle: un difetto trovato lì si corregge su
@@ -2278,4 +2288,36 @@ lezioni difficili e unire il branch in `master`.
 
 Stato alla chiusura: `master` uguale a `lessons-hard-ten` e in pari con
 `origin/master`; il lavoro nuovo parte da `master` su un branch nuovo.
+
+### 2026-11-25 — Gatto e volpe con gli amici nel repository
+
+Richiesta dell'utente: controllare e acquisire i "disegni nuovi" messi
+direttamente in `lessons/hard`.
+
+- Non erano disegni nuovi: erano le sei lezioni di gatto, volpe e polpo
+  fatte nei giorni prima dalle immagini dell'utente, spostate da
+  `~/.tuxpaint/lessons` (tre complete con nomi di file in italiano e
+  spazi, tre semplificate della cartella di riserva). L'utente aveva anche
+  portato in `lessons/README.txt` il livello Difficile a "7 to 100 steps".
+- Controlli: `lesson_preview.py` avvisava dei passi oltre 10 nelle tre
+  complete; `check_areas.py` trovava un problema in tutti e due i polpi
+  (mare e sabbia che finiscono al bordo dell'immagine, senza una linea).
+- **Polpi**: vengono da una pagina Etsy (solo uso personale), quindi
+  restano fuori dal repository; su scelta dell'utente sono tornati in
+  `~/.tuxpaint/lessons/custom/`, il lungo con il titolo "Polpo in
+  spiaggia" per non avere due "Polpo al mare".
+- **Gatto e volpe** (immagini dell'utente fatte con Qwen): su scelta
+  dell'utente tutte e quattro nel repository (`590cdbb`), le lunghe con
+  nomi di file del repository e i titoli dei nomi scelti dall'utente
+  ("Micio e i suoi amici", "Volpina e amici"); tolte le note "uso
+  personale" da intestazioni e `<desc>`. `lesson_preview.py` accetta ora
+  da 7 a 100 passi per Difficile, come il README. Documentazione a 31
+  lezioni (`ea24bd7`).
+- Verifiche: `lesson_preview.py` "ok" per tutte le 31; `check_areas.py`
+  senza problemi per le quattro nuove; `lesson_frames` (ricompilato con
+  ASan: la cartella temporanea era stata svuotata) legge le 31 lezioni del
+  repository e le 2 personali senza errori né perdite.
+
+Resta aperto: unire `lessons-cat-fox` in `master` e fare il push
+(decisione dell'utente).
 
