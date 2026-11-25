@@ -91,6 +91,29 @@ lesson **lessons_find(const char *const *dirs, int num_dirs,
 		      const char *const *langs, int num_langs, const char *ui_lang, int *num);
 void lessons_free(lesson ** lessons, int num);
 
+/* The pictures and lessons in one folder of the user's (e.g. Downloads),
+   read as in "custom" (their level is LESSON_CUSTOM), to choose one to add
+   with lesson_import(); sorted by title. NULL if none. */
+lesson **lessons_in_folder(const char *path, const char *const *langs, int num_langs,
+			   const char *ui_lang, int *num);
+
+/* What lesson_import() did */
+enum
+{
+  LESSON_IMPORT_DONE,		/* copied */
+  LESSON_IMPORT_THERE,		/* the same files are there already */
+  LESSON_IMPORT_BROKEN,		/* the picture can't be read, or a step's group isn't in it */
+  LESSON_IMPORT_CANT_SAVE	/* the files couldn't be written */
+};
+
+/* Copy a picture or lesson found by lessons_in_folder() into the "custom"
+   subfolder of dir (e.g. ~/.tuxpaint/lessons; made if missing): the
+   picture, and the NAME.txt next to it if there is one, both under a name
+   not taken there yet (NAME, NAME-2, NAME-3...). It checks first that the
+   picture can be read, and that every step's group is in it. *new_name
+   gets the name used (to free), or NULL. */
+int lesson_import(const lesson * l, const char *dir, char **new_name);
+
 /* The finished picture, w x h at most, on white */
 SDL_Surface *lesson_thumbnail(const lesson * l, int w, int h);
 

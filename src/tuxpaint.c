@@ -1460,6 +1460,7 @@ static SDL_Surface *img_black, *img_grey;
 static SDL_Surface *img_yes, *img_no;
 static SDL_Surface *img_sfx, *img_speak;
 static SDL_Surface *img_learn_prev, *img_learn_next, *img_learn_voice, *img_learn_mute;
+static SDL_Surface *img_learn_add;
 static SDL_Surface *img_open, *img_erase, *img_back, *img_trash;
 static SDL_Surface *img_slideshow, *img_play, *img_select_digits;
 static SDL_Surface *img_printer, *img_printer_wait;
@@ -1765,7 +1766,7 @@ static SDL_Surface *img_shapes_small[NUM_SHAPES];
 static SDL_Surface *img_openlabels_open, *img_openlabels_erase,
   *img_openlabels_slideshow, *img_openlabels_back, *img_openlabels_play,
   *img_openlabels_next, *img_openlabels_start, *img_openlabels_previous,
-  *img_openlabels_repeat, *img_openlabels_voice;
+  *img_openlabels_repeat, *img_openlabels_voice, *img_openlabels_add;
 
 static SDL_Surface *img_tux[NUM_TIP_TUX];
 
@@ -8435,6 +8436,10 @@ static void create_button_labels(void)
 
   /* Learn dialog: 'Voice' button, to read the instructions aloud or not */
   img_openlabels_voice = do_render_button_label(gettext_noop("Voice"));
+
+  /* Learn dialog: 'Add' button, to add a picture of the user's (and its
+     steps, if it has some) to the lessons */
+  img_openlabels_add = do_render_button_label(gettext_noop("Add"));
 }
 
 
@@ -20974,6 +20979,28 @@ cleanup_and_return:
 #define PROMPT_LEARN_BROKEN_TXT gettext_noop("Sorry! This lesson can’t be shown.")
 #define PROMPT_LEARN_BROKEN_YES gettext_noop("OK")
 
+/* Learn dialog, adding a picture of the user's to the "Mine" tab: what to
+   do (a picture's steps are in a .txt file with the same name) */
+#define TIP_LEARN_ADD_CHOOSE gettext_noop("Pick a picture to add to “Mine”. If a .txt file with the same name is next to it, its steps come too.")
+
+/* Learn dialog, adding a picture: there are none in the chosen folder */
+#define TIP_LEARN_ADD_EMPTY gettext_noop("No pictures here. Put your pictures (SVG, PNG, JPEG or WebP), with their .txt files, in this folder.")
+
+/* Learn dialog: there is no folder to take pictures from */
+#define TIP_LEARN_ADD_NO_FOLDERS gettext_noop("There is no Downloads, Pictures or Desktop folder to take pictures from.")
+
+/* Learn dialog: a picture was added to the "Mine" tab; %s is its name */
+#define TIP_LEARN_ADDED gettext_noop("Done! “%s” is in “Mine” now.")
+
+/* Learn dialog: the picture chosen is in the "Mine" tab already; %s is its name */
+#define TIP_LEARN_ADD_THERE gettext_noop("“%s” is in “Mine” already.")
+
+/* Learn dialog: a picture can't be added */
+#define TIP_LEARN_ADD_BROKEN gettext_noop("Sorry! This one can’t be added: its picture can’t be read, or its steps don’t match it.")
+
+/* Learn dialog: a picture couldn't be copied to the user's folder */
+#define TIP_LEARN_ADD_CANT_SAVE gettext_noop("Sorry! It couldn’t be saved.")
+
 static const char *const learn_level_names[NUM_LESSON_LEVELS] = {
   /* Learn dialog: the tab with the easiest lessons */
   gettext_noop("Easy"),
@@ -20999,6 +21026,15 @@ static const char *const learn_level_names[NUM_LESSON_LEVELS] = {
 static int learn_level;		/* the level chosen last */
 static int learn_voice_on = 1;	/* the "Voice" button */
 static int learn_num_tabs = LESSON_CUSTOM;	/* (+1 with the user's own) */
+
+/* Adding a picture of the user's: the selector shows, instead of the
+   levels, the folders it can come from (one tab each, at most
+   NUM_LESSON_LEVELS), and the pictures in them */
+#define LEARN_ADD_FOLDERS 3
+static int learn_adding;
+static int learn_add_num;
+static char *learn_add_paths[LEARN_ADD_FOLDERS];
+static const char *learn_add_names[LEARN_ADD_FOLDERS];	/* (in learn_add_paths) */
 
 /* Where the selector's parts go (they follow the screen's size) */
 typedef struct learn_layout
@@ -21039,6 +21075,181 @@ static void learn_get_layout(learn_layout * lay)
     lay->thumb_h = 1;
 
   lay->buttons_y = r_canvas.h - button_h;
+}
+
+/* One of the user's folders, as in ~/.config/user-dirs.dirs (key is e.g.
+   "XDG_DOWNLOAD_DIR"), else fallback in the home folder; NULL if it isn't
+   there. To free. */
+static char *learn_user_folder(const char *key, const char *fallback)
+{
+  char cfg[1024], line[1024], path[1024], *p, *end;
+  const char *home, *conf_home;
+  size_t key_len = strlen(key), len;
+  struct stat st;
+  FILE *fi;
+
+  home = getenv("HOME");
+#ifdef WIN32
+  if (home == NULL)
+    home = getenv("USERPROFILE");
+#endif
+  if (home == NULL || home[0] == '\0')
+    return NULL;
+
+  path[0] = '\0';
+  conf_home = getenv("XDG_CONFIG_HOME");
+  if (conf_home != NULL && conf_home[0] != '\0')
+    snprintf(cfg, sizeof(cfg), "%s/user-dirs.dirs", conf_home);
+  else
+    snprintf(cfg, sizeof(cfg), "%s/.config/user-dirs.dirs", home);
+
+  /* Lines like XDG_DOWNLOAD_DIR="$HOME/Downloads" */
+  fi = fopen(cfg, "r");
+  if (fi != NULL)
+  {
+    while (fgets(line, sizeof(line), fi) != NULL)
+    {
+      if (strncmp(line, key, key_len) != 0 || line[key_len] != '=')
+	continue;
+      p = line + key_len + 1;
+      if (*p == '"')
+	p++;
+      end = p + strcspn(p, "\"\r\n");
+      *end = '\0';
+      if (strncmp(p, "$HOME", 5) == 0)
+	snprintf(path, sizeof(path), "%s%s", home, p + 5);
+      else if (p[0] == '/')
+	snprintf(path, sizeof(path), "%s", p);
+    }
+    fclose(fi);
+  }
+
+  if (path[0] == '\0')
+    snprintf(path, sizeof(path), "%s/%s", home, fallback);
+
+  /* (No slash at the end: the tab shows the last part) */
+  len = strlen(path);
+  while (len > 1 && path[len - 1] == '/')
+    path[--len] = '\0';
+
+  if (stat(path, &st) != 0 || !S_ISDIR(st.st_mode))
+    return NULL;
+  return strdup(path);
+}
+
+static void learn_free_folders(void)
+{
+  int i;
+
+  for (i = 0; i < learn_add_num; i++)
+  {
+    free(learn_add_paths[i]);
+    learn_add_paths[i] = NULL;
+  }
+  learn_add_num = 0;
+}
+
+/* The folders to take pictures from (Downloads, Pictures, Desktop: those
+   there, each once); how many */
+static int learn_find_folders(void)
+{
+  static const char *const keys[LEARN_ADD_FOLDERS][2] = {
+    {"XDG_DOWNLOAD_DIR", "Downloads"},
+    {"XDG_PICTURES_DIR", "Pictures"},
+    {"XDG_DESKTOP_DIR", "Desktop"}
+  };
+  char *path, *slash;
+  int i, k, twice;
+
+  learn_free_folders();
+
+  for (i = 0; i < LEARN_ADD_FOLDERS; i++)
+  {
+    path = learn_user_folder(keys[i][0], keys[i][1]);
+    if (path == NULL)
+      continue;
+
+    twice = 0;
+    for (k = 0; k < learn_add_num; k++)
+      if (strcmp(learn_add_paths[k], path) == 0)
+	twice = 1;
+    if (twice)
+    {
+      free(path);
+      continue;
+    }
+
+    slash = strrchr(path, '/');
+    learn_add_paths[learn_add_num] = path;
+    learn_add_names[learn_add_num] = (slash != NULL && slash[1] != '\0') ? slash + 1 : path;
+    learn_add_num++;
+  }
+
+  return learn_add_num;
+}
+
+/* A tab's name: a level's, or, when adding, a folder's */
+static const char *learn_tab_name(int i)
+{
+  return learn_adding ? learn_add_names[i] : gettext(learn_level_names[i]);
+}
+
+/* The lessons to choose from (and learn_num_tabs): Tux Paint's, then the
+   user's own; or, when adding, the pictures in the user's folders (each
+   one's "level" is the tab of its folder) */
+static lesson **learn_load(int *num)
+{
+  const char *dirs[2], *langs[256];
+  char *personal;
+  lesson **lessons = NULL, **more, **bigger;
+  int num_langs = 0, i, k, n;
+
+  for (i = 0; i < num_wished_langs && num_langs < 255; i++)
+    if (wished_langs[i].lang_prefix != NULL)
+      langs[num_langs++] = wished_langs[i].lang_prefix;
+  if (num_langs == 0)
+    langs[num_langs++] = lang_prefix;
+
+  *num = 0;
+
+  if (learn_adding)
+  {
+    for (i = 0; i < learn_add_num; i++)
+    {
+      more = lessons_in_folder(learn_add_paths[i], langs, num_langs, lang_prefix, &n);
+      if (n == 0)
+	continue;
+      bigger = realloc(lessons, sizeof(lesson *) * (*num + n));
+      if (bigger == NULL)
+      {
+	lessons_free(more, n);
+	continue;
+      }
+      lessons = bigger;
+      for (k = 0; k < n; k++)
+      {
+	more[k]->level = i;
+	lessons[(*num)++] = more[k];
+      }
+      free(more);
+    }
+    learn_num_tabs = learn_add_num;
+    return lessons;
+  }
+
+  personal = get_fname("lessons", DIR_DATA);
+  dirs[0] = DATA_PREFIX "lessons";
+  dirs[1] = personal;
+  lessons = lessons_find(dirs, 2, langs, num_langs, lang_prefix, num);
+  free(personal);
+
+  /* The "Mine" tab only when the user has pictures or lessons there */
+  learn_num_tabs = LESSON_CUSTOM;
+  for (i = 0; i < *num; i++)
+    if (lessons[i]->level == LESSON_CUSTOM)
+      learn_num_tabs = LESSON_CUSTOM + 1;
+
+  return lessons;
 }
 
 /* Whether lessons can be read aloud now */
@@ -21168,7 +21379,8 @@ static void learn_draw_text(const char *text, SDL_Rect * r)
 }
 
 
-/* Draw the selector: level tabs, lessons of the level, buttons */
+/* Draw the selector: level tabs, lessons of the level, buttons. When
+   adding, folder tabs and the pictures in the folder. */
 static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int which,
 			       int scroll, SDL_Surface ** thumbs, learn_layout * lay)
 {
@@ -21183,10 +21395,11 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
   dest.h = r_canvas.h;
   SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
 
-  /* Tabs */
+  /* Tabs (a heart on the folders', like on the user's own lessons) */
   for (i = 0; i < learn_num_tabs; i++)
   {
-    s = lesson_level_tab(i, lay->tabs[i].w, lay->tabs[i].h, i == learn_level, &text_x);
+    s = lesson_level_tab(learn_adding ? LESSON_CUSTOM : i, lay->tabs[i].w, lay->tabs[i].h,
+			 i == learn_level, &text_x);
     if (s == NULL)
       continue;
     dest = lay->tabs[i];
@@ -21197,7 +21410,7 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
     r.y = lay->tabs[i].y;
     r.w = lay->tabs[i].w - text_x - lay->tabs[i].h / 4;
     r.h = lay->tabs[i].h;
-    learn_draw_text(gettext(learn_level_names[i]), &r);
+    learn_draw_text(learn_tab_name(i), &r);
   }
 
   /* Lessons: a card with the finished picture and the title */
@@ -21208,7 +21421,8 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
     x = lay->grid.x + (k % LEARN_COLS) * lay->card_w;
     y = lay->grid.y + (k / LEARN_COLS) * lay->card_h;
 
-    s = lesson_card(learn_level, lay->card_w, lay->card_h, n == which);
+    s = lesson_card(learn_adding ? LESSON_CUSTOM : learn_level, lay->card_w, lay->card_h,
+		    n == which);
     if (s != NULL)
     {
       dest.x = x;
@@ -21224,6 +21438,15 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
       {
 	thumbs[in_level[n]] = SDL_DisplayFormat(tmp);
 	SDL_FreeSurface(tmp);
+      }
+      else
+      {
+	/* (A picture that can't be read, e.g. among the user's files when
+	   adding one: an empty thumbnail, not to read it again at each redraw) */
+	thumbs[in_level[n]] = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, 1, 1, 32,
+						   0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+	if (thumbs[in_level[n]] != NULL)
+	  SDL_FillRect(thumbs[in_level[n]], NULL, 0);	/* (transparent) */
       }
     }
 
@@ -21242,8 +21465,10 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
     learn_draw_text(l->title, &r);
   }
 
-  /* "Start", "Voice", the arrows and "Back" */
-  if (count > 0)
+  /* "Start" ("Add" when adding), "Voice", "Add", the arrows and "Back" */
+  if (learn_adding)
+    learn_button(r_canvas.x, lay->buttons_y, img_learn_add, img_openlabels_add, count > 0);
+  else if (count > 0)
     learn_image_button(r_canvas.x, lay->buttons_y, img_play, img_openlabels_start);
   else
     learn_button(r_canvas.x, lay->buttons_y, NULL, img_openlabels_start, 0);
@@ -21252,6 +21477,9 @@ static void learn_draw_chooser(lesson ** lessons, int *in_level, int count, int 
     learn_button(r_canvas.x + button_w, lay->buttons_y,
 		 learn_voice_on ? img_learn_voice : img_learn_mute,
 		 img_openlabels_voice, learn_voice_on ? 2 : 1);
+
+  if (!learn_adding)
+    learn_button(r_canvas.x + button_w * 2, lay->buttons_y, img_learn_add, img_openlabels_add, 1);
 
   if (count > LEARN_COLS * LEARN_ROWS)
   {
@@ -21520,22 +21748,29 @@ static int learn_play(lesson * l)
 }
 
 
-/* The Learn dialog: choose a lesson (by level), then follow it */
+/* The Learn dialog: choose a lesson (by level), then follow it; or add a
+   picture of the user's (from their Downloads, Pictures or Desktop folder,
+   with its steps if it has some) to the "Mine" tab */
 static void do_learn(void)
 {
-  const char *dirs[2], *langs[256];
-  char *personal;
-  lesson **lessons;
+  lesson **lessons, *l;
   SDL_Surface **thumbs;
   SDL_Event event;
   SDLKey key;
   learn_layout lay;
-  int num_lessons, num_langs = 0, i, count = 0, which = -1, scroll = 0, done = 0;
+  int num_lessons, i, count = 0, which = -1, scroll = 0, done = 0;
   int *in_level = NULL, update = 1, reload_level = 1, start = 0, redraws, was_wiped;
   int thumb_w = -1, thumb_h = -1, n, k, x, y, pick, quit_wanted = 0;
   int last_click_which = -1, last_click_button = -1;
   Uint32 last_click_time = 0;
   int val_x, val_y, motioner, valhat_x, valhat_y, hatmotioner;
+  int switch_to = -1;		/* 1: to adding a picture; 0: back to the lessons */
+  int lessons_level = 0;	/* (the lessons' level, while adding) */
+  int speak_tip = 0, result;
+  char *select_name = NULL;	/* (the lesson to select after loading them) */
+  char *tip_arg = NULL, *dir;
+  const char *tip = NULL;	/* (Tux's next tip, if not the usual one) */
+  int tip_tux = TUX_BORED;
 
   val_x = val_y = motioner = 0;
   valhat_x = valhat_y = hatmotioner = 0;
@@ -21544,25 +21779,9 @@ static void do_learn(void)
   screen_wiped_for_dialog = 1;
 
   /* The lessons: Tux Paint's, then the user's own */
-  for (i = 0; i < num_wished_langs && num_langs < 255; i++)
-    if (wished_langs[i].lang_prefix != NULL)
-      langs[num_langs++] = wished_langs[i].lang_prefix;
-  if (num_langs == 0)
-    langs[num_langs++] = lang_prefix;
-
-  personal = get_fname("lessons", DIR_DATA);
-  dirs[0] = DATA_PREFIX "lessons";
-  dirs[1] = personal;
-
+  learn_adding = 0;
   do_setcursor(cursor_watch);
-  lessons = lessons_find(dirs, 2, langs, num_langs, lang_prefix, &num_lessons);
-  free(personal);
-
-  /* The "Mine" tab only when the user has pictures or lessons there */
-  learn_num_tabs = LESSON_CUSTOM;
-  for (i = 0; i < num_lessons; i++)
-    if (lessons[i]->level == LESSON_CUSTOM)
-      learn_num_tabs = LESSON_CUSTOM + 1;
+  lessons = learn_load(&num_lessons);
   if (learn_level >= learn_num_tabs)
     learn_level = 0;
 
@@ -21602,6 +21821,19 @@ static void do_learn(void)
 	  in_level[count++] = i;
       which = (count > 0 ? 0 : -1);
       scroll = 0;
+
+      /* (After adding a picture: that one) */
+      if (select_name != NULL)
+      {
+	for (n = 0; n < count; n++)
+	  if (strcmp(lessons[in_level[n]]->name, select_name) == 0)
+	    which = n;
+	while (which >= scroll + LEARN_COLS * LEARN_ROWS)
+	  scroll += LEARN_COLS;
+	free(select_name);
+	select_name = NULL;
+      }
+
       reload_level = 0;
       update = 1;
       last_click_which = -1;	/* (a click on another level's card isn't half a double click) */
@@ -21637,7 +21869,10 @@ static void do_learn(void)
 
 	if (key == SDLK_ESCAPE)
 	{
-	  done = 1;
+	  if (learn_adding)
+	    switch_to = 0;
+	  else
+	    done = 1;
 	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
 	}
 	else if ((key == SDLK_RETURN || key == SDLK_KP_ENTER) && which >= 0)
@@ -21670,8 +21905,8 @@ static void do_learn(void)
 	    learn_level = i;
 	    reload_level = 1;
 	    playsound(screen, 1, SND_CLICK, 1, x, SNDDIST_NEAR);
-	    learn_say(gettext(learn_level_names[i]),
-		      strcmp(gettext(learn_level_names[i]), learn_level_names[i]) ? lang_prefix : "en");
+	    learn_say(learn_tab_name(i), (learn_adding || strcmp(gettext(learn_level_names[i]),
+							       learn_level_names[i])) ? lang_prefix : "en");
 	  }
 	}
 
@@ -21703,9 +21938,18 @@ static void do_learn(void)
 	  playsound(screen, 1, SND_CLICK, 1, x, SNDDIST_NEAR);
 	  update = 1;
 	}
+	else if (!learn_adding &&
+		 learn_hit(x, y, r_canvas.x + button_w * 2, lay.buttons_y, button_w, button_h))
+	{
+	  switch_to = 1;
+	  playsound(screen, 1, SND_CLICK, 1, x, SNDDIST_NEAR);
+	}
 	else if (learn_hit(x, y, WINDOW_WIDTH - button_w * 3, lay.buttons_y, button_w, button_h))
 	{
-	  done = 1;
+	  if (learn_adding)
+	    switch_to = 0;
+	  else
+	    done = 1;
 	  playsound(screen, 1, SND_CLICK, 1, SNDPOS_RIGHT, SNDDIST_NEAR);
 	}
 	else if (count > LEARN_COLS * LEARN_ROWS &&
@@ -21755,6 +21999,8 @@ static void do_learn(void)
 	    (learn_hit(x, y, r_canvas.x, lay.buttons_y, button_w, button_h) && which >= 0) ||
 	    (learn_hit(x, y, r_canvas.x + button_w, lay.buttons_y, button_w, button_h) &&
 	     learn_voice_usable()) ||
+	    (!learn_adding &&
+	     learn_hit(x, y, r_canvas.x + button_w * 2, lay.buttons_y, button_w, button_h)) ||
 	    learn_hit(x, y, WINDOW_WIDTH - button_w * 3, lay.buttons_y, button_w, button_h) ||
 	    (count > LEARN_COLS * LEARN_ROWS &&
 	     learn_hit(x, y, (WINDOW_WIDTH - img_scroll_up->w) / 2, lay.buttons_y,
@@ -21788,7 +22034,7 @@ static void do_learn(void)
 	update = 1;
       }
 
-      if (reload_level)
+      if (reload_level || switch_to >= 0)
 	break;
     }
 
@@ -21796,9 +22042,38 @@ static void do_learn(void)
       handle_motioners(oldpos_x, oldpos_y, motioner, hatmotioner, old_hat_ticks, val_x, val_y,
 		       valhat_x, valhat_y);
 
-    if (start && which >= 0)
+    if (start && which >= 0 && learn_adding)
     {
-      start = 0;
+      /* Add the picture chosen: back to the lessons, on it, in "Mine" */
+      speech_stop();
+      l = lessons[in_level[which]];
+      do_setcursor(cursor_watch);
+      dir = get_fname("lessons", DIR_DATA);
+      free(select_name);
+      result = lesson_import(l, dir, &select_name);
+      free(dir);
+      do_setcursor(cursor_arrow);
+
+      if (result == LESSON_IMPORT_DONE || result == LESSON_IMPORT_THERE)
+      {
+	playsound(screen, 1, result == LESSON_IMPORT_DONE ? SND_HARP : SND_BLEEP, 1,
+		  SNDPOS_CENTER, SNDDIST_NEAR);
+	tip = (result == LESSON_IMPORT_DONE ? TIP_LEARN_ADDED : TIP_LEARN_ADD_THERE);
+	tip_tux = (result == LESSON_IMPORT_DONE ? TUX_GREAT : TUX_DEFAULT);
+	free(tip_arg);
+	tip_arg = strdup(l->title);
+	lessons_level = LESSON_CUSTOM;
+	switch_to = 0;
+      }
+      else
+      {
+	playsound(screen, 1, SND_YOUCANNOT, 1, SNDPOS_CENTER, SNDDIST_NEAR);
+	learn_tux_says(TUX_OOPS, result == LESSON_IMPORT_BROKEN ?
+		       TIP_LEARN_ADD_BROKEN : TIP_LEARN_ADD_CANT_SAVE, NULL, 1);
+      }
+    }
+    else if (start && which >= 0)
+    {
       speech_stop();
       playsound(screen, 1, SND_HARP, 1, SNDPOS_CENTER, SNDDIST_NEAR);
 
@@ -21816,14 +22091,75 @@ static void do_learn(void)
     }
     start = 0;
 
-    if (reload_level)
+    /* To adding a picture (if there's a folder to take it from), or back
+       to the lessons: the other list */
+    if (switch_to == 1 && learn_find_folders() == 0)
     {
-      /* (The tip for the new level: is it empty?) */
-      n = 0;
-      for (i = 0; i < num_lessons; i++)
-	if (lessons[i]->level == learn_level)
-	  n++;
-      learn_tux_says(TUX_BORED, n > 0 ? TIP_LEARN_CHOOSE : TIP_LEARN_EMPTY, NULL, n == 0);
+      learn_tux_says(TUX_OOPS, TIP_LEARN_ADD_NO_FOLDERS, NULL, 1);
+      switch_to = -1;
+    }
+    if (switch_to >= 0 && !done)
+    {
+      speech_stop();
+      do_setcursor(cursor_watch);
+      free_surface_array(thumbs, num_lessons);
+      free(thumbs);
+      free(in_level);
+      lessons_free(lessons, num_lessons);
+
+      if (switch_to == 1)
+      {
+	lessons_level = learn_level;
+	learn_level = 0;
+      }
+      else
+      {
+	learn_free_folders();
+	learn_level = lessons_level;
+      }
+      learn_adding = switch_to;
+      switch_to = -1;
+
+      lessons = learn_load(&num_lessons);
+      if (learn_level >= learn_num_tabs)
+	learn_level = 0;
+      thumbs = calloc(num_lessons > 0 ? num_lessons : 1, sizeof(SDL_Surface *));
+      in_level = calloc(num_lessons > 0 ? num_lessons : 1, sizeof(int));
+      if (thumbs == NULL || in_level == NULL)
+      {
+	free(thumbs);
+	free(in_level);
+	thumbs = NULL;
+	in_level = NULL;
+	done = 1;
+      }
+      reload_level = 1;
+      speak_tip = 1;
+      do_setcursor(cursor_arrow);
+    }
+
+    if (reload_level && !done)
+    {
+      if (tip != NULL)
+      {
+	learn_tux_says(tip_tux, tip, tip_arg, 1);
+	tip = NULL;
+      }
+      else
+      {
+	/* (The tip for the new level, or folder: is it empty?) */
+	n = 0;
+	for (i = 0; i < num_lessons; i++)
+	  if (lessons[i]->level == learn_level)
+	    n++;
+	if (learn_adding)
+	  learn_tux_says(TUX_BORED, n > 0 ? TIP_LEARN_ADD_CHOOSE : TIP_LEARN_ADD_EMPTY, NULL,
+			 speak_tip || n == 0);
+	else
+	  learn_tux_says(TUX_BORED, n > 0 ? TIP_LEARN_CHOOSE : TIP_LEARN_EMPTY, NULL,
+			 speak_tip || n == 0);
+      }
+      speak_tip = 0;
     }
 
     speech_poll();
@@ -21837,6 +22173,14 @@ static void do_learn(void)
   free(thumbs);
   free(in_level);
   lessons_free(lessons, num_lessons);
+  free(select_name);
+  free(tip_arg);
+
+  /* (Closed while adding: next time, the lessons' level) */
+  if (learn_adding)
+    learn_level = lessons_level;
+  learn_adding = 0;
+  learn_free_folders();
 
   /* The canvas again, under where the dialog was */
   update_canvas(0, 0, canvas->w, canvas->h);
@@ -25072,6 +25416,7 @@ static void load_ui_images(void)
   img_learn_next = loadimagerb(DATA_PREFIX "images/ui/learn_next.png");
   img_learn_voice = loadimagerb(DATA_PREFIX "images/ui/learn_voice.png");
   img_learn_mute = loadimagerb(DATA_PREFIX "images/ui/learn_mute.png");
+  img_learn_add = loadimagerb(DATA_PREFIX "images/ui/learn_add.png");
 
   img_black = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE,
 				   img_btn_off->w, img_btn_off->h,
@@ -25383,11 +25728,13 @@ static void free_ui_images(void)
   free_surface(&img_openlabels_previous);
   free_surface(&img_openlabels_repeat);
   free_surface(&img_openlabels_voice);
+  free_surface(&img_openlabels_add);
 
   free_surface(&img_learn_prev);
   free_surface(&img_learn_next);
   free_surface(&img_learn_voice);
   free_surface(&img_learn_mute);
+  free_surface(&img_learn_add);
 
   free_surface(&img_yes);
   free_surface(&img_no);

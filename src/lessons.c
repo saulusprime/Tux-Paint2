@@ -32,8 +32,12 @@
 
 #ifdef WIN32
 #include "win32_dirent.h"
+#include <direct.h>
+#define mkdir(path, access) _mkdir(path)
 #else
 #include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #endif
 
 #include "SDL.h"
@@ -507,16 +511,92 @@ static lesson *picture_lesson(const char *dir_path, const char *fname, const cha
   return l;
 }
 
+/* The lessons of one level's folder (path) added to the list. In "custom",
+   also the pictures with no steps of their own. */
+static void find_in(const char *path, int level, const char *const *langs, int num_langs,
+		    const char *ui_lang, lesson *** found, int *num)
+{
+  lesson *l;
+  int i, rank, best, here_first;
+  DIR *dir;
+  struct dirent *ent;
+  char txt_fname[1024], svg_fname[1024], name[256];
+  size_t len, ext_len = 0;
+  FILE *fi;
+
+  dir = opendir(path);
+  if (dir == NULL)
+    return;
+
+  /* (Lessons found in this folder start here in the list) */
+  here_first = *num;
+
+  /* Lessons: NAME.txt with the steps of NAME.svg */
+  while ((ent = readdir(dir)) != NULL)
+  {
+    len = strlen(ent->d_name);
+    if (len <= 4 || len - 4 >= sizeof(name) || strcasecmp(ent->d_name + len - 4, ".txt") != 0 ||
+	strcasecmp(ent->d_name, "README.txt") == 0 || ent->d_name[0] == '.')
+      continue;
+
+    memcpy(name, ent->d_name, len - 4);
+    name[len - 4] = '\0';
+    if (snprintf(txt_fname, sizeof(txt_fname), "%s/%s", path, ent->d_name) >=
+	(int) sizeof(txt_fname) ||
+	snprintf(svg_fname, sizeof(svg_fname), "%s/%s.svg", path, name) >= (int) sizeof(svg_fname))
+      continue;			/* (too long) */
+
+    fi = fopen(svg_fname, "r");
+    if (fi == NULL)
+      continue;
+    fclose(fi);
+
+    l = lesson_load(txt_fname, svg_fname, name, level, langs, num_langs);
+    if (l != NULL)
+      add_lesson(found, num, l);
+  }
+
+  /* In "custom", also the pictures with no steps of their own: one per
+     name, the best kind of file (SVG, then PNG, then JPEG or WebP) */
+  if (level == LESSON_CUSTOM)
+  {
+    rewinddir(dir);
+    while ((ent = readdir(dir)) != NULL)
+    {
+      rank = picture_rank(ent->d_name, &ext_len);
+      len = strlen(ent->d_name);
+      if (rank == 0 || ent->d_name[0] == '.' || len - ext_len >= sizeof(name))
+	continue;
+      memcpy(name, ent->d_name, len - ext_len);
+      name[len - ext_len] = '\0';
+
+      /* (A lesson, or a better file, of that name in this folder?) */
+      best = 1;
+      for (i = here_first; i < *num && best; i++)
+      {
+	if ((*found)[i]->level != LESSON_CUSTOM || strcmp((*found)[i]->name, name) != 0)
+	  continue;
+	if (!(*found)[i]->picture || picture_rank((*found)[i]->svg_fname, &ext_len) >= rank)
+	  best = 0;
+      }
+      if (!best)
+	continue;
+
+      l = picture_lesson(path, ent->d_name, name, langs, num_langs, ui_lang);
+      if (l != NULL)
+	add_lesson(found, num, l);
+    }
+  }
+
+  closedir(dir);
+}
+
 lesson **lessons_find(const char *const *dirs, int num_dirs,
 		      const char *const *langs, int num_langs, const char *ui_lang, int *num)
 {
-  lesson **found = NULL, *l;
-  int d, level, i, rank, best, here_first;
-  DIR *dir;
-  struct dirent *ent;
-  char path[1024], txt_fname[1024], svg_fname[1024], name[256];
-  size_t len, ext_len = 0;
-  FILE *fi;
+  lesson **found = NULL;
+  int d, level;
+  char path[1024];
 
   *num = 0;
 
@@ -530,80 +610,41 @@ lesson **lessons_find(const char *const *dirs, int num_dirs,
 
     for (level = 0; level < NUM_LESSON_LEVELS; level++)
     {
-      if (snprintf(path, sizeof(path), "%s/%s", dirs[d], lesson_level_dirs[level]) >=
+      if (snprintf(path, sizeof(path), "%s/%s", dirs[d], lesson_level_dirs[level]) <
 	  (int) sizeof(path))
-	continue;
-      dir = opendir(path);
-      if (dir == NULL)
-	continue;
-
-      /* (Lessons found in this folder start here in the list) */
-      here_first = *num;
-
-      /* Lessons: NAME.txt with the steps of NAME.svg */
-      while ((ent = readdir(dir)) != NULL)
-      {
-	len = strlen(ent->d_name);
-	if (len <= 4 || len - 4 >= sizeof(name) || strcasecmp(ent->d_name + len - 4, ".txt") != 0 ||
-	    strcasecmp(ent->d_name, "README.txt") == 0 || ent->d_name[0] == '.')
-	  continue;
-
-	memcpy(name, ent->d_name, len - 4);
-	name[len - 4] = '\0';
-	if (snprintf(txt_fname, sizeof(txt_fname), "%s/%s", path, ent->d_name) >=
-	    (int) sizeof(txt_fname) ||
-	    snprintf(svg_fname, sizeof(svg_fname), "%s/%s.svg", path, name) >=
-	    (int) sizeof(svg_fname))
-	  continue;		/* (too long) */
-
-	fi = fopen(svg_fname, "r");
-	if (fi == NULL)
-	  continue;
-	fclose(fi);
-
-	l = lesson_load(txt_fname, svg_fname, name, level, langs, num_langs);
-	if (l != NULL)
-	  add_lesson(&found, num, l);
-      }
-
-      /* In "custom", also the pictures with no steps of their own: one
-         per name, the best kind of file (SVG, then PNG, then JPEG or WebP) */
-      if (level == LESSON_CUSTOM)
-      {
-	rewinddir(dir);
-	while ((ent = readdir(dir)) != NULL)
-	{
-	  rank = picture_rank(ent->d_name, &ext_len);
-	  len = strlen(ent->d_name);
-	  if (rank == 0 || ent->d_name[0] == '.' || len - ext_len >= sizeof(name))
-	    continue;
-	  memcpy(name, ent->d_name, len - ext_len);
-	  name[len - ext_len] = '\0';
-
-	  /* (A lesson, or a better file, of that name in this folder?) */
-	  best = 1;
-	  for (i = here_first; i < *num && best; i++)
-	  {
-	    if (found[i]->level != LESSON_CUSTOM || strcmp(found[i]->name, name) != 0)
-	      continue;
-	    if (!found[i]->picture || picture_rank(found[i]->svg_fname, &ext_len) >= rank)
-	      best = 0;
-	  }
-	  if (!best)
-	    continue;
-
-	  l = picture_lesson(path, ent->d_name, name, langs, num_langs, ui_lang);
-	  if (l != NULL)
-	    add_lesson(&found, num, l);
-	}
-      }
-
-      closedir(dir);
+	find_in(path, level, langs, num_langs, ui_lang, &found, num);
     }
   }
 
   if (*num > 0)
     qsort(found, *num, sizeof(lesson *), compare_lessons);
+
+  return found;
+}
+
+static int compare_titles(const void *a, const void *b)
+{
+  const lesson *la = *(const lesson * const *) a;
+  const lesson *lb = *(const lesson * const *) b;
+  int c = strcasecmp(la->title, lb->title);
+
+  return c != 0 ? c : strcmp(la->name, lb->name);
+}
+
+lesson **lessons_in_folder(const char *path, const char *const *langs, int num_langs,
+			   const char *ui_lang, int *num)
+{
+  lesson **found = NULL;
+
+  *num = 0;
+
+  if (!lessons_supported() || path == NULL)
+    return NULL;
+
+  find_in(path, LESSON_CUSTOM, langs, num_langs, ui_lang, &found, num);
+
+  if (*num > 0)
+    qsort(found, *num, sizeof(lesson *), compare_titles);
 
   return found;
 }
@@ -615,6 +656,200 @@ void lessons_free(lesson ** lessons, int num)
   for (i = 0; i < num; i++)
     lesson_free(lessons[i]);
   free(lessons);
+}
+
+
+/* --- Adding a picture or lesson of the user's --- */
+
+static int lesson_readable(const lesson * l);
+
+/* Whether two files have the same bytes (0 if one can't be read) */
+static int same_files(const char *a, const char *b)
+{
+  FILE *fa, *fb;
+  char buf_a[4096], buf_b[4096];
+  size_t na, nb;
+  int same = 0;
+
+  fa = fopen(a, "rb");
+  fb = fopen(b, "rb");
+  if (fa != NULL && fb != NULL)
+  {
+    do
+    {
+      na = fread(buf_a, 1, sizeof(buf_a), fa);
+      nb = fread(buf_b, 1, sizeof(buf_b), fb);
+      same = (na == nb && memcmp(buf_a, buf_b, na) == 0);
+    }
+    while (same && na == sizeof(buf_a));
+  }
+  if (fa != NULL)
+    fclose(fa);
+  if (fb != NULL)
+    fclose(fb);
+
+  return same;
+}
+
+static int file_exists(const char *fname)
+{
+  FILE *fi = fopen(fname, "rb");
+
+  if (fi == NULL)
+    return 0;
+  fclose(fi);
+  return 1;
+}
+
+/* Copy a file; 0 (and nothing left at dst) if it can't be done */
+static int copy_file(const char *src, const char *dst)
+{
+  FILE *fi, *fo;
+  char buf[8192];
+  size_t n;
+  int ok = 1;
+
+  fi = fopen(src, "rb");
+  if (fi == NULL)
+    return 0;
+  fo = fopen(dst, "wb");
+  if (fo == NULL)
+  {
+    fclose(fi);
+    return 0;
+  }
+
+  while ((n = fread(buf, 1, sizeof(buf), fi)) > 0)
+  {
+    if (fwrite(buf, 1, n, fo) != n)
+    {
+      ok = 0;
+      break;
+    }
+  }
+  if (ferror(fi))
+    ok = 0;
+  fclose(fi);
+  if (fclose(fo) != 0)
+    ok = 0;
+
+  if (!ok)
+    remove(dst);
+  return ok;
+}
+
+/* A folder and the ones it is in, made if missing */
+static void make_folders(const char *path)
+{
+  char buf[1024];
+  size_t i, len = strlen(path);
+  char c;
+
+  if (len >= sizeof(buf))
+    return;
+  memcpy(buf, path, len + 1);
+
+  for (i = 1; i <= len; i++)
+  {
+    if (buf[i] == '/' || buf[i] == '\0')
+    {
+      c = buf[i];
+      buf[i] = '\0';
+      mkdir(buf, 0755);
+      buf[i] = c;
+    }
+  }
+}
+
+/* Whether a picture, or a .txt file, of that name is in the folder */
+static int name_used(const char *folder, const char *name)
+{
+  DIR *dir;
+  struct dirent *ent;
+  size_t len = strlen(name), ext_len = 0;
+  int used = 0;
+
+  dir = opendir(folder);
+  if (dir == NULL)
+    return 0;
+
+  while (!used && (ent = readdir(dir)) != NULL)
+  {
+    if (strncmp(ent->d_name, name, len) != 0)
+      continue;
+    if (strcasecmp(ent->d_name + len, ".txt") == 0 ||
+	(picture_rank(ent->d_name, &ext_len) && strlen(ent->d_name) == len + ext_len))
+      used = 1;
+  }
+
+  closedir(dir);
+  return used;
+}
+
+int lesson_import(const lesson * l, const char *dir, char **new_name)
+{
+  char folder[1024], src_txt[1024], dst_pic[1024], dst_txt[1024], name[256], ext[8];
+  const char *slash;
+  size_t ext_len = 0, len, i;
+  int n, has_txt = 0;
+
+  *new_name = NULL;
+
+  if (l == NULL || l->svg_fname == NULL || dir == NULL ||
+      !picture_rank(l->svg_fname, &ext_len) || ext_len >= sizeof(ext) || !lesson_readable(l))
+    return LESSON_IMPORT_BROKEN;
+
+  /* The picture's extension, in lowercase ("Cat.PNG" becomes "cat.png"
+     only in its extension) */
+  len = strlen(l->svg_fname);
+  for (i = 0; i < ext_len; i++)
+    ext[i] = tolower((unsigned char) l->svg_fname[len - ext_len + i]);
+  ext[ext_len] = '\0';
+
+  /* NAME.txt next to it: the steps, or just the title */
+  slash = strrchr(l->svg_fname, '/');
+  if (slash != NULL &&
+      snprintf(src_txt, sizeof(src_txt), "%.*s/%s.txt", (int) (slash - l->svg_fname),
+	       l->svg_fname, l->name) < (int) sizeof(src_txt))
+    has_txt = file_exists(src_txt);
+
+  if (snprintf(folder, sizeof(folder), "%s/%s", dir, lesson_level_dirs[LESSON_CUSTOM]) >=
+      (int) sizeof(folder))
+    return LESSON_IMPORT_CANT_SAVE;
+  make_folders(folder);
+
+  /* A name not taken yet, unless the same files are there already */
+  for (n = 1; n < 100; n++)
+  {
+    if ((n == 1 ? snprintf(name, sizeof(name), "%s", l->name) :
+	 snprintf(name, sizeof(name), "%s-%d", l->name, n)) >= (int) sizeof(name) ||
+	snprintf(dst_pic, sizeof(dst_pic), "%s/%s%s", folder, name, ext) >= (int) sizeof(dst_pic) ||
+	snprintf(dst_txt, sizeof(dst_txt), "%s/%s.txt", folder, name) >= (int) sizeof(dst_txt))
+      return LESSON_IMPORT_CANT_SAVE;
+
+    if (!name_used(folder, name))
+      break;
+
+    if (same_files(l->svg_fname, dst_pic) &&
+	(has_txt ? same_files(src_txt, dst_txt) : !file_exists(dst_txt)))
+    {
+      *new_name = strdup(name);
+      return LESSON_IMPORT_THERE;
+    }
+  }
+  if (n == 100)
+    return LESSON_IMPORT_CANT_SAVE;
+
+  if (!copy_file(l->svg_fname, dst_pic))
+    return LESSON_IMPORT_CANT_SAVE;
+  if (has_txt && !copy_file(src_txt, dst_txt))
+  {
+    remove(dst_pic);
+    return LESSON_IMPORT_CANT_SAVE;
+  }
+
+  *new_name = strdup(name);
+  return LESSON_IMPORT_DONE;
 }
 
 
@@ -1674,12 +1909,56 @@ SDL_Surface *lesson_thumbnail(const lesson * l, int w, int h)
   return s;
 }
 
+/* Whether a lesson can be shown: its picture can be read, and every step's
+   group is in it */
+static int lesson_readable(const lesson * l)
+{
+  picture_src ps;
+  RsvgHandle *handle;
+  char sub[130];
+  int i, ok = 1;
+
+  if (l->picture)
+  {
+    if (!picture_open(l->svg_fname, &ps))
+      return 0;
+    picture_close(&ps);
+    return 1;
+  }
+
+  handle = open_svg(l->svg_fname);
+  if (handle == NULL)
+    return 0;
+
+  for (i = 0; i < l->num_steps && ok; i++)
+  {
+    if (l->steps[i].layer == NULL)
+      continue;
+    snprintf(sub, sizeof(sub), "#%s", l->steps[i].layer);
+    if (!rsvg_handle_has_sub(handle, sub))
+    {
+      fprintf(stderr, "Lesson %s: no group \"%s\" in %s\n", l->name, l->steps[i].layer,
+	      l->svg_fname);
+      ok = 0;
+    }
+  }
+
+  g_object_unref(handle);
+  return ok;
+}
+
 #else
 
 /* No librsvg, or one older than 2.46 (no rsvg_handle_render_layer()) */
 
 int lessons_supported(void)
 {
+  return 0;
+}
+
+static int lesson_readable(const lesson * l)
+{
+  (void) l;
   return 0;
 }
 
