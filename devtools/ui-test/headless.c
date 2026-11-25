@@ -14,6 +14,10 @@
     move X Y         mouse moved to X, Y
     key NAME         a key pressed and released (SDL 1.2 name: "right",
                      "escape", "return", "space", "1", …)
+    type TEXT        the characters of TEXT (UTF-8, all of it after "type ",
+                     spaces too) typed, each a key pressed and released
+                     with its Unicode value, as SDL gives it after
+                     SDL_EnableUNICODE(1)
     resize W H       the window manager resized the window to W x H
     shot FILE        save the screen as FILE (BMP)
     exit             end Tux Paint at once (_exit(0), no clean-up)
@@ -34,6 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <dlfcn.h>
 
@@ -47,7 +52,8 @@ static int num_lines, cur_line, loaded;
 static Uint32 wait_until;
 
 /* Events still to hand out for the current command */
-static SDL_Event queue[4];
+#define QUEUE_LEN 512
+static SDL_Event queue[QUEUE_LEN];
 static int queued, queue_pos;
 
 static void load_script(void)
@@ -105,10 +111,72 @@ static void mouse_event(int type, int x, int y)
   }
 }
 
+/* A character typed: a key pressed and released, the press with the
+   character's Unicode value (and, for ASCII, its key) */
+static void char_event(Uint16 c)
+{
+  SDL_Event *e = &queue[queued++];
+
+  memset(e, 0, sizeof(*e));
+  e->type = SDL_KEYDOWN;
+  e->key.state = SDL_PRESSED;
+  e->key.keysym.unicode = c;
+  if (c < 128)
+  {
+    e->key.keysym.sym = (SDLKey) tolower(c);
+    if (isupper(c))
+      e->key.keysym.mod = KMOD_LSHIFT;
+  }
+  queue[queued] = *e;
+  queue[queued].type = SDL_KEYUP;
+  queue[queued].key.state = SDL_RELEASED;
+  queue[queued].key.keysym.unicode = 0;
+  queued++;
+}
+
+/* The characters of a UTF-8 text typed (those beyond 16 bits skipped, as
+   SDL 1.2 can't give them) */
+static void type_text(const char *text)
+{
+  const unsigned char *p = (const unsigned char *) text;
+  Uint32 c;
+  int more;
+
+  while (*p != '\0' && queued + 2 <= QUEUE_LEN)
+  {
+    if (*p < 0x80)
+    {
+      c = *p++;
+      more = 0;
+    }
+    else if ((*p & 0xe0) == 0xc0)
+    {
+      c = *p++ & 0x1f;
+      more = 1;
+    }
+    else if ((*p & 0xf0) == 0xe0)
+    {
+      c = *p++ & 0x0f;
+      more = 2;
+    }
+    else
+    {
+      c = *p++ & 0x07;
+      more = 3;
+    }
+    while (more-- > 0 && (*p & 0xc0) == 0x80)
+      c = (c << 6) | (*p++ & 0x3f);
+
+    if (c <= 0xffff)
+      char_event((Uint16) c);
+  }
+}
+
 /* Run the script's commands that are due; 1 if events were queued */
 static int run_script(void)
 {
   char cmd[32], arg[1000];
+  const char *text;
   int x, y;
   SDL_Surface *screen;
   SDL_Event *e;
@@ -141,6 +209,12 @@ static int run_script(void)
       queue[queued].type = SDL_KEYUP;
       queue[queued].key.state = SDL_RELEASED;
       queued++;
+    }
+    else if (strcmp(cmd, "type") == 0)
+    {
+      /* (All of the text after "type ", spaces at its start too) */
+      text = strstr(lines[cur_line - 1], "type") + 4;
+      type_text(*text == ' ' ? text + 1 : text);
     }
     else if (strcmp(cmd, "resize") == 0 && sscanf(arg, "%d %d", &x, &y) == 2)
     {

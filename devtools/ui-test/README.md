@@ -177,6 +177,7 @@ Comandi dello script, uno per riga (`#` per i commenti):
 | `click X Y` | movimento, pressione e rilascio del tasto sinistro in X, Y |
 | `move X Y` | movimento del mouse |
 | `key NOME` | pressione e rilascio di un tasto (nome di SDL 1.2: `right`, `escape`, `return`, `space`, `1`, `r`…) |
+| `type TESTO` | i caratteri di TESTO (UTF-8, tutto quello che segue `type `, spazi compresi) scritti uno per uno, ognuno con il suo valore Unicode come lo dà SDL dopo `SDL_EnableUNICODE(1)` (oltre i 16 bit saltati) |
 | `resize L A` | il gestore delle finestre porta la finestra a L×A (`SDL_VIDEORESIZE`) |
 | `shot FILE` | salva lo schermo in FILE (BMP) |
 | `exit` | chiude subito Tux Paint (`_exit(0)`, senza pulizie) |
