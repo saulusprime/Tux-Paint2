@@ -1,0 +1,91 @@
+# Tux Paint lesson: steps for kitty-and-friends.svg (see ../README.txt)
+Kitty and friends
+it.utf8=Micio e i suoi amici
+
+guide guides
+With a light pencil, softly draw a circle and an oval under it for each animal. The cat's are the biggest!
+it.utf8=Con la matita leggera disegna piano un cerchio e sotto un ovale per ogni animale: i più grandi sono del gatto.
+
+draw cat-head
+In the middle, draw the cat's head: two pointy ears with a small triangle inside, and fluffy cheeks.
+it.utf8=In mezzo disegna la testa del gatto: due orecchie a punta con un triangolino dentro e le guance pelose.
+
+draw cat-face
+Draw the cat's face: two round eyes, a little nose, a smile like a W and long whiskers.
+it.utf8=Disegna il muso del gatto: due occhi tondi, un nasino, un sorriso a forma di W e i baffi lunghi.
+
+draw cat-body
+Draw the cat's body under its head, two long legs in the middle and three round paws.
+it.utf8=Sotto la testa disegna il corpo del gatto, due zampe lunghe in mezzo e tre zampine tonde.
+
+draw cat-tail
+Draw the cat's big fluffy tail, curled up next to its paws on the right.
+it.utf8=Disegna la grande coda pelosa del gatto, arrotolata vicino alle zampe, a destra.
+
+draw puppy-head
+On the left, draw the puppy's round head with two floppy ears, like long drops.
+it.utf8=A sinistra disegna la testa tonda del cagnolino con due orecchie a penzoloni, come gocce lunghe.
+
+draw puppy-face
+Draw the puppy's face: two dark eyes, a big nose and a smiling mouth with its tongue.
+it.utf8=Disegna il muso del cagnolino: due occhi scuri, un nasone e la bocca sorridente con la lingua.
+
+draw puppy-body
+Draw the puppy's body sitting down, three paws and a fluffy tail on the left.
+it.utf8=Disegna il corpo del cagnolino seduto, tre zampine e una coda pelosa a sinistra.
+
+draw bunny-head
+On the right, draw the bunny's head with two long ears, an eye, a little nose and whiskers.
+it.utf8=A destra disegna la testa del coniglietto con due orecchie lunghe, un occhio, il nasino e i baffi.
+
+draw bunny-body
+Draw the bunny's body, a front paw, a long foot and a little round tail.
+it.utf8=Disegna il corpo del coniglietto, una zampina davanti, un piede lungo e la codina tonda.
+
+draw butterfly
+Up on the left, draw a butterfly: a thin body, four wings and two antennae.
+it.utf8=In alto a sinistra disegna una farfalla: un corpo sottile, quattro ali e due antenne.
+
+draw bird
+Up on the right, draw a branch and a little bird sitting on it.
+it.utf8=In alto a destra disegna un ramo e un uccellino seduto sopra.
+
+draw meadow
+Draw some tufts of grass on the ground and three little flowers.
+it.utf8=Disegna qualche ciuffo d'erba per terra e tre fiorellini.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color cat-orange
+Color the cat orange. Leave its eyes white!
+it.utf8=Colora il gatto di arancione. Lascia bianchi gli occhi!
+
+color puppy-brown
+Color the puppy light brown.
+it.utf8=Colora il cagnolino di marrone chiaro.
+
+color bunny-gray
+Color the bunny gray.
+it.utf8=Colora il coniglietto di grigio.
+
+color pink
+Color pink the inside of the ears, the puppy's tongue and the flowers.
+it.utf8=Colora di rosa l'interno delle orecchie, la lingua del cagnolino e i fiori.
+
+color butterfly-purple
+Color the butterfly's wings purple.
+it.utf8=Colora di viola le ali della farfalla.
+
+color bird-blue
+Color the little bird blue.
+it.utf8=Colora l'uccellino di blu.
+
+color branch-brown
+Color the branch brown.
+it.utf8=Colora il ramo di marrone.
+
+color grass-green
+Color the grass green.
+it.utf8=Colora l'erba di verde.

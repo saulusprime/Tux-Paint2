@@ -27,7 +27,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
 KINDS = ("draw", "guide", "color", "erase")
-LEVELS = {"easy": (3, 5), "medium": (5, 7), "hard": (7, 10)}
+LEVELS = {"easy": (3, 5), "medium": (5, 7), "hard": (7, 100)}
 MAX_TEXT = 110
 
 # As in src/lessons.c

@@ -11,7 +11,7 @@ Lessons live in three folders, one per difficulty level:
 
   easy/     3 to 5 steps, only basic shapes (circle, oval, line, triangle)
   medium/   5 to 7 steps
-  hard/     7 to 10 steps; may use light guide shapes, erased at the end
+  hard/     7 to 100 steps; may use light guide shapes, erased at the end
 
 Tux Paint looks for them in its data folder (e.g. /usr/share/tuxpaint/lessons)
 and in the user's own folder (~/.tuxpaint/lessons/easy, …). Within a level,

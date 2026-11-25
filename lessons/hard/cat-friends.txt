@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for cat-friends.svg (see ../README.txt)
+Cat and friends
+it.utf8=Gatto e amici
+
+guide guides
+With a light pencil, softly draw a circle and an oval under it for each animal. The biggest go in the middle!
+it.utf8=Con la matita leggera disegna piano un cerchio e sotto un ovale per ogni animale. I più grandi in mezzo!
+
+draw heads
+Go over the circles for the heads: pointy cat ears, floppy puppy ears, long bunny ears with an oval inside.
+it.utf8=Ripassa i cerchi delle teste. Al gatto orecchie a punta, al cane a penzoloni, al coniglio lunghe con un ovale.
+
+draw bodies
+Go over the ovals for the bodies. Give each animal two legs like long letters U, and a tail.
+it.utf8=Ripassa gli ovali per i corpi. Poi a ogni animale fai due zampe, come due U allungate, e la coda.
+
+draw faces
+Draw the faces: two dots for the eyes, a little nose and a smile. The cat also gets long whiskers!
+it.utf8=Disegna i musetti: due puntini per gli occhi, un nasino e un sorriso. Al gatto fai anche i baffi!
+
+draw ground
+Draw the grass: a line behind the animals with two tufts, a line at the bottom, and two flowers.
+it.utf8=Disegna il prato: una linea dietro gli animali con due ciuffi d'erba, una linea sotto e due fiorellini.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color cat-orange
+Color the cat orange.
+it.utf8=Colora il gatto di arancione.
+
+color puppy-brown
+Color the puppy brown.
+it.utf8=Colora il cagnolino di marrone.
+
+color ears-flowers-pink
+Color the inside of the bunny's ears and the flowers pink. The bunny stays white!
+it.utf8=Colora di rosa l'interno delle orecchie del coniglietto e i fiori. Il coniglietto resta bianco!
+
+color grass-green
+Color the grass green, all around the animals.
+it.utf8=Colora il prato di verde, tutto intorno agli animali.

@@ -1,0 +1,43 @@
+# Tux Paint lesson: steps for fox-friends.svg (see ../README.txt)
+Fox and friends
+it.utf8=Volpe e amici
+
+guide guides
+With a light pencil, softly draw a circle in the middle and a big oval under it. They are only helpers!
+it.utf8=Con la matita leggera disegna piano un cerchio in mezzo e sotto un grande ovale. Ci servono solo d'aiuto!
+
+draw fox-head
+Draw the head around the circle, with pointy cheeks and big pointy ears. Add smiling eyes and a black nose.
+it.utf8=Intorno al cerchio disegna la testa, con guance e orecchie a punta, poi gli occhi sorridenti e il nasino nero.
+
+draw fox-body
+Go over the oval for the body, with two long legs in front, and draw a big fluffy tail on the right.
+it.utf8=Ripassa l'ovale per il corpo, con due lunghe zampe davanti, e a destra disegna una grande coda soffice.
+
+draw white-parts
+Draw a line like two hills on the face, a U on the chest and a zigzag near the tip of the tail.
+it.utf8=Sul muso fai una linea come due collinette, sul petto una U e vicino alla punta della coda uno zig-zag.
+
+draw mouse
+Down on the left, draw a little mouse: a half oval with two round ears, an eye, a nose and a curly tail.
+it.utf8=In basso a sinistra fai un topolino: mezzo ovale con due orecchie tonde, l'occhio, il naso e la coda riccia.
+
+draw bird-branch
+Up on the right, draw a round bird with a wing, a beak and a tail, sitting on a long branch.
+it.utf8=In alto a destra disegna un uccellino tondo con l'ala, il becco e la coda, seduto su un lungo ramo.
+
+erase
+Now erase the light lines with the eraser.
+it.utf8=Adesso cancella con la gomma le linee leggere.
+
+color fox-orange
+Color the fox orange, but leave white the face under the hills, the chest and the tip of the tail.
+it.utf8=Colora la volpe di arancione, ma lascia bianchi il muso sotto le collinette, il petto e la punta della coda.
+
+color mouse-gray
+Color the little mouse gray.
+it.utf8=Colora il topolino di grigio.
+
+color bird-light-blue
+Color the bird light blue.
+it.utf8=Colora l'uccellino di azzurro.
